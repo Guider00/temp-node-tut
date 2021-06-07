@@ -3,10 +3,33 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter } from "react-router-dom";
+
+/**
+ *  Allow -redux
+ */
+ import { createStore, applyMiddleware, compose } from "redux";
+ import { Provider } from "react-redux";
+ import thunk from "redux-thunk";
+
+ 
+/**
+ * 
+ * @returns 
+ */
+ import theme from "./theme/themes.module.css";
+
+ const AppWithRouter = () => (
+  <BrowserRouter>
+    <div className={theme.font}>
+      <App />
+    </div>
+  </BrowserRouter>
+);
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <AppWithRouter />
   </React.StrictMode>,
   document.getElementById('root')
 );

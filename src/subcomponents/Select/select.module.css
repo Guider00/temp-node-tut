@@ -1,0 +1,27 @@
+.div{
+    
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+
+}
+.div>.divlabel{
+    flex-basis: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+.div>.divselect{
+    flex-basis: 50%;
+    margin: 1em;
+    display: flex;
+    
+}
+.div>.divselect>select{
+    margin-left: 0.5em;
+    min-width: 150px;
+    width: 100%;
+}
+

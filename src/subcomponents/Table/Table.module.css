@@ -1,0 +1,50 @@
+.div{
+    display: flex;
+    overflow-x: auto;
+
+    justify-content: center;
+    
+}
+.table{
+   
+    border: 1px solid #dddd;
+    margin: 1em;
+    max-width: 800px;
+ 
+}
+ th {
+     
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  text-align: center;
+  background-color: #04AA6D;
+  color: white;
+}
+td {
+   
+    border: 1px solid #ddd;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    text-align: center;
+    color: white;
+  }
+  td>div {
+      
+      display: flex;
+
+  
+  }
+  td>div>input {
+      width: 100%;
+    display: flex;
+
+
+}
+
+
+.table>tbody>tr:hover {background-color: #ddd;}
+.table>tbody>tr:nth-child(odd){background-color: #dddd;}
+.table>tbody{
+
+ 
+}

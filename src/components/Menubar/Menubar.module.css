@@ -1,0 +1,21 @@
+.menu{
+    display: flex;
+    
+
+    background-color: #ddd;
+    padding: 0.5em;
+    box-shadow: 0px 1px 1px rgb(0 0 0 / 15%);
+
+    
+}
+.menu>.logo{
+    width: 10vw;
+    text-align: center;
+    padding: 1.0em;
+}
+.menu>div{
+    align-items: center;
+}
+.menu>div>a>button{
+   height: 100%;
+}
