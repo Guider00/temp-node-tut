@@ -52,16 +52,7 @@ export const createRoom = (data) =>{
             member:"${data.member}"
           }){
             id
-            name
-            status
-            type
-            floor{
-              id
-            }
-            member {
-              id
-            }
-            version
+            errors
           }
       }
     `
