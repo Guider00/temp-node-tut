@@ -72,6 +72,18 @@
     background-color: red;
     border-radius: 5px;
 }
+.rowmenu >.optionright>.cornflowerblue{
+    width: 30px;
+    height: 30px;
+    display: flex;
+    font-weight: bolder;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    background-color: cornflowerblue;
+    border-radius: 5px;
+}
 .rowmenu >.optionright>.gray{
     width: 30px;
     height: 30px;
@@ -163,9 +175,12 @@
     display: flex;
     background-color: rgb(90, 90, 90);
 }
-.card>div>.topic>.back:hover{
-    display: flex;
+.card>div>.topic>.back>.btn{
+    background-color: rgb(90, 90, 90);
+}
+.card>div>.topic>.back>.btn:hover{
     background-color: rgb(138, 138, 138);
+
 }
 
 .card>div>.body{

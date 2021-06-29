@@ -21,27 +21,31 @@ export const queryBuildings =  () =>{
 }
 export const createBuilding = (input) =>{
     return {query:`
-    mutation(input:{
+    mutation{
+        createBuilding(input:{
         name:"${input.name}"
-    }){
-        id
-        name
+        }){
+            id
+            errors
+        }
     }
     `
     }
 }
 export const updateBuilding = (id , input) =>{
     return { query:`
-    mutation(id:"${id}",
-    input:{
-        name:"${input.name}"
-    }
-    )
-    {
-        n
-        nModified
-        ok
-    }
+    mutation{
+        updateBuilding(id:"${id}",
+                        input:{
+                            name:"${input.name}"
+                        }
+                        )
+                        {
+                            n
+                            nModified
+                            ok
+                        }
+        }
     `
 
     }

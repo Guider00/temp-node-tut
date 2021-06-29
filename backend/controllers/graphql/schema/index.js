@@ -1,10 +1,17 @@
 // schema.js
  const { Roomschema , queryRoom ,queryRoomByid , createRoom ,deleteRoom, updateRoom} = require('./Room/Room')
- const { Buildingschema , queryBuilding , queryBuildingByid ,
-  createBuilding, deleteBuilding, updateBuilding } = require('./Building/Building')
+
+ const { Buildingschema , queryBuilding , queryBuildingByid , createBuilding, deleteBuilding, updateBuilding } = require('./Building/Building')
+
+ const { Memberschema , queryMembers , queryMemberByid , createMember, deleteMember, updateMember } = require('./Member/Member')
+
  const { Floorschema , queryFloor ,queryFloorByid, createFloor, deleteFloor, updateFloor } = require('./Floor/Floor')
 
  const { RoomPriceschema , queryRoomPrice , createRoomPrice, deletRoomPrice, updateRoomPrice } = require('./RoomPrice/RoomPrice')
+
+ const { MeterRoomschema , queryMeterRooms , queryMeterRoomByid , createMeterRoom , deleteMeterRoom,updateMeterRoom,  }  = require('./MeterRoom/MeterRoom')
+
+ const { Portmeterschema ,queryPortmeters, queryPortmeterByid , createPortmeter ,deletePortmeter , updatePortmeter }  = require('./PortMeter/Portmeter')
 
 const { buildSchema } = require( 'graphql');
 
@@ -16,11 +23,18 @@ const { buildSchema } = require( 'graphql');
  const schema = buildSchema(  `
 
 
+  ${Memberschema}
   ${Buildingschema}
   ${Floorschema}
   ${Roomschema}
   ${RoomPriceschema}
-  
+  ${MeterRoomschema}
+  ${Portmeterschema}
+
+  type MessageCreate{
+    id:String
+    errors:String
+  }
 
   type MessageUpdate {
       n:Int
@@ -56,9 +70,17 @@ const { buildSchema } = require( 'graphql');
     Buildings: [Building],
 
     FloorByid(id:ID!):Floor,
-    Floors:[Floor]
+    Floors:[Floor],
 
-    
+    MemberByid(id:ID!):Member,
+    Members:[Member],
+
+    MeterRoomByid(id:ID!):MeterRoom,
+    MeterRooms:[MeterRoom],
+
+    PortmeterByid(id:ID!):Portmeter,
+    Portmeters:[Portmeter]
+
   }
   type Mutation {
     updatesoftware(input:softwareversionInput):softwareversion,
@@ -67,17 +89,33 @@ const { buildSchema } = require( 'graphql');
     updateroomprice(id: ID!, input: RoompriceInput): MessageUpdate,
     deleteroomprice(id: ID!): MessageDelete,
 
-    createRoom(input: RoomInput):Room,
+    createRoom(input: RoomInput):MessageCreate,
     updateRoom(id: ID!, input: RoomInput): MessageUpdate,
     deleteRoom(id: ID!): MessageDelete,
 
-    createBuilding (input: BuildingInput):Building,
+    createBuilding (input: BuildingInput):MessageCreate,
     updateBuilding(id: ID!, input: BuildingInput): MessageUpdate,
     deleteBuilding(id: ID!): MessageDelete,
 
-    createFloor(input: FloorInput):Floor,
+    createFloor(input: FloorInput):MessageCreate,
     updateFloor(id: ID!, input: FloorInput): MessageUpdate,
     deleteFloor(id: ID!): MessageDelete,
+
+    createMember(input: MemberInput):MessageCreate,
+    updateMember(id: ID!,input :MemberInput):MessageUpdate,
+    deleteMember(id: ID!): MessageDelete,
+
+    createMeterRoom(input: MeterRoomInput):MessageCreate,
+    updateMeterRoom(id: ID!, input: BuildingInput): MessageUpdate,
+    deleteMeterRoom(id: ID!): MessageDelete
+
+    createPortmeter(input: PortmeterInput):MessageCreate,
+    updatePortmeter(id: ID!, input: PortmeterInput): MessageUpdate,
+    deletePortmeter(id: ID!): MessageDelete
+
+
+
+
 
   }
 
@@ -99,10 +137,10 @@ const { buildSchema } = require( 'graphql');
        })
     },
 
-    roomprices : queryRoomPrice,
-    createroomprice:createRoomPrice,
-    updateroomprice:updateRoomPrice,
-    deleteroomprice:deletRoomPrice,
+    roomprices      : queryRoomPrice,
+    createroomprice : createRoomPrice,
+    updateroomprice : updateRoomPrice,
+    deleteroomprice : deletRoomPrice,
 
     roomByid : queryRoomByid,
     rooms : queryRoom,
@@ -111,17 +149,34 @@ const { buildSchema } = require( 'graphql');
     deleteRoom : deleteRoom,
 
     BuildingByid : queryBuildingByid,
-    Buildings :queryBuilding,
+    Buildings : queryBuilding,
     createBuilding : createBuilding,
     updateBuilding : updateBuilding,
     deleteBuilding : deleteBuilding,
 
     FloorByid : queryFloorByid,
-    Floors: queryFloor,
+    Floors : queryFloor,
     createFloor : createFloor,
     updateFloor : updateFloor,
-    deleteFloor : deleteFloor
+    deleteFloor : deleteFloor,
 
+    MemberByid   : queryMemberByid,
+    Members      : queryMembers,
+    createMember : createMember,
+    updateMember : updateMember,
+    deleteMember : deleteMember,
+
+    MeterRoomByid : queryMeterRoomByid,
+    MeterRooms : queryMeterRooms,
+    createMeterRoom: createMeterRoom,
+    updateMeterRoom : updateMeterRoom,
+    deleteMeterRoom : deleteMeterRoom,
+
+    PortmeterByid : queryPortmeterByid,
+    Portmeters :queryPortmeters,
+    createPortmeter : createPortmeter,
+    updatePortmeter : updatePortmeter,
+    deletePortmeter : deletePortmeter
 
   };
 

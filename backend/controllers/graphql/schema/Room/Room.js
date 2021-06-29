@@ -1,12 +1,13 @@
-const  { dbroom: db  }  = require('../../../models/Rooms/Rooms')
+const  {  db  }  = require('../../../models/Rooms/Rooms')
 const { queryFloorByid }  = require('../Floor/Floor')
+const { queryMemberByid } =require('../Member/Member')
  const _updateRoom = async (payload) =>{
     try{
         if(!payload){return null}
         if(!payload.id){return null}
         if(!payload.input){return null}
-        let  resulte = await db.updateOne({_id:payload.id},payload.input)
-        return resulte
+        let  resulted = await db.updateOne({_id:payload.id},payload.input)
+        return resulted
     }catch(error){
         return error
     }
@@ -15,8 +16,8 @@ const _deleteRoom = async (payload ) =>{
     try{
         if(!payload){return null}
         if(!payload.id){return null}
-        let resulte = await db.deleteOne({_id:payload.id})
-         return resulte
+        let resulted = await db.deleteOne({_id:payload.id})
+         return resulted
      }catch(error){
          return error
      }
@@ -24,15 +25,16 @@ const _deleteRoom = async (payload ) =>{
 const _createRoom = async ( payload ) =>{
     try {
         if(payload && payload.input ) {
-            let resulte = await  db.create(payload.input) 
-            if(!resulte) { return null}
-            let data  = resulte._doc
+            let resulted = await  db.create(payload.input) 
+            if(!resulted) { return null}
+            let data  = resulted._doc
             return {
                 id:data._id.toString() ,
                 name:  data.name ,
                 type:  data.type,
                 status: data.status,
                 floor : await queryFloorByid( {id:data.floor}),
+                member : await queryMemberByid( {id:data.member}),
                 version :data.version 
             }
             
@@ -45,11 +47,11 @@ const _createRoom = async ( payload ) =>{
  }
  const _queryRoom = async ( filter ) =>{
     try{
-        let resulte =  await db.find(filter ? filter:{})
-
-        let data = resulte.map(payload => payload._doc).map(async (payload) => {
+        let resulted =  await db.find(filter ? filter:{})
+        let data = resulted.map(payload => payload._doc).map(async (payload) => {
             payload.id = payload._id.toString()
             payload.floor =  await queryFloorByid( {id:payload.floor})
+            payload.member =  await queryMemberByid ( {id:payload.member})
             return (payload)
         })
         return (
@@ -62,8 +64,8 @@ const _createRoom = async ( payload ) =>{
 
  const _queryRoomByid = async (payload) =>{
     try {
-        let resulte = await db.findById({_id:payload.id})
-        let data  = resulte._doc
+        let resulted = await db.findById({_id:payload.id})
+        let data  = resulted._doc
         return ({
             id : data._id,
             name: data.name,
@@ -81,7 +83,9 @@ const _createRoom = async ( payload ) =>{
     name:  String ,
     type: String,
     status: String,
+    building: String,
     floor : String,
+    member : String,
     version:String 
 
   }
@@ -91,6 +95,7 @@ const _createRoom = async ( payload ) =>{
     type: String,
     status: String,
     floor : Floor,
+    member : Member,
     version:String 
   }
         `

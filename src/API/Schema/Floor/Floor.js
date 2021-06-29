@@ -29,35 +29,32 @@ export const queryFloors =  () =>{
 }
 export const createFloor = (input) =>{
     return {query:`
-    mutation(input:{
-        name:"${input.name}"
-        building : "${input.building}"
-    }){
-        id
-        name
-        building{
+    mutation{
+        createFloor(input:{
+            name:"${input.name}",
+            building:"${input.building}"
+          }){
             id
-            name
-        }
+            errors
+          }
     }
     `
     }
 }
 export const updateFloor = (id , input) =>{
     return { query:`
-    mutation(id:"${id}",
-    input:{
-        name:"${input.name}"
-        building:{
-            id
-            name
+    mutation{
+        updateFloor(id:"${id}",
+        input:{
+            name:"${input.name}"
+            building:"${input.building}"
             }
+        )
+        {
+            n
+            nModified
+            ok
         }
-    )
-    {
-        n
-        nModified
-        ok
     }
     `
     }

@@ -1,0 +1,115 @@
+.modal{
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: rgba(0,0,0,0.4);
+    }
+    .modal>.body{
+        height: 100%;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+       
+    }
+    .modal>.body>.card{
+        max-width: 50vw;
+        min-width: 320px;
+
+
+        background-color: white;
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .modal>.body>.card>.header{
+        flex-basis: 100%;
+        font-weight: bolder;
+        font-size: 2rem;
+        background-color: #ddd;
+        margin-bottom: 0.5em;
+    }
+    .modal>.body>.card>.header>.text{
+        float: left;
+        margin-left: 1em;
+    }
+    .modal>.body>.card>.header>.closebtn{
+      
+        float: right;
+        display: flex;
+        align-items: center;
+        
+    }
+    
+    .modal>.body>.card>.body{
+        flex-basis: 100%;
+        text-align: center;
+        justify-content: center;
+        margin-bottom: 1em;
+    }
+    .modal>.body>.card>.body>.row{
+        margin: 0.5em;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+    }
+    .modal>.body>.card>.body>.row>.label{
+        display: flex;
+        font-size: 1.5rem;
+        margin: 0.5rem;
+    
+    }
+    .modal>.body>.card>.body>.row>.input{
+        margin: 0.5rem;
+        display: flex;
+    }
+    
+    
+    
+    
+    
+    .modal>.body>.card>.footer{
+        flex-basis: 100%;
+        width: 100%;
+        background-color: #ddd;
+        align-items: center;
+        display: flex;
+        justify-content: flex-end;
+    }
+    .modal>.body>.card>.footer>.menubtn{
+        margin: 0.5em;
+        background-color: #ddd;
+        align-items: center;
+        display: flex;
+        justify-content: flex-end;
+    }
+    .modal>.body>.card>.footer>.menubtn>.btnsave{
+      
+        display: flex;
+        align-items: center;
+    }
+    .modal>.body>.card>.footer>.menubtn>.btnsave>.label{
+        margin-right: 0.5em;
+    }
+    .modal>.body>.card>.footer>.menubtn>.btnsave>.icon{
+        margin-left: 0.5em;
+    }
+    
+    .modal>.body>.card>.footer>.menubtn>.btnclose{
+        margin: 1em;
+        display: flex;
+        align-items: center;
+    }
+    .modal>.body>.card>.footer>.menubtn>.btnclose>.label{
+        margin-right: 0.5em;
+    }
+    .modal>.body>.card>.footer>.menubtn>.btnclose>.icon{
+        margin-left: 0.5em;
+    }
+    
+    

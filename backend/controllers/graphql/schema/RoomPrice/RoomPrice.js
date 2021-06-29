@@ -3,17 +3,17 @@ const  { db }  =  require( "../../../models/RoomPrice/RoomPrice");
 const _createRoomPrice = async (payload)=> {
     try {
         if(!payload){ return null }
-        if(!payload.data){ return null }
-       let resulte = await  db.create(payload.data) // findOrCreate(dbroomprice, {}, data)
-       return resulte
+        if(!payload.input){ return null }
+       let resulted = await  db.create(payload.input) // findOrCreate(dbroomprice, {}, data)
+       return resulted
     } catch (error) {
       return error
     }
 }
 const _queryRoomPrice =async (filter) =>{
     try{
-        let resulte =  await db.find(filter)
-        let _rooms = resulte.map(payload => payload._doc).map(payload => {
+        let resulted =  await db.find(filter)
+        let _rooms = resulted.map(payload => payload._doc).map(payload => {
             payload.id = payload._id.toString()
             return (payload)
         })
@@ -30,8 +30,8 @@ const _updateRoomPrice = async (payload) =>{
         if(!payload){return null}
         if(!payload.id){return null}
         if(!payload.input){return null}
-        let  resulte = await db.updateOne({_id:payload.id},payload.data)
-        return resulte
+        let  resulted = await db.updateOne({_id:payload.id},payload.input)
+        return resulted
     }catch(error){
         return error
     }
@@ -41,8 +41,8 @@ const _deleteRoomPrice = async (payload) =>{
     try{
         if(!payload){return null}
         if(!payload.id){return null}
-       let resulte = await db.deleteOne({_id:payload.id})
-        return resulte
+       let resulted = await db.deleteOne({_id:payload.id})
+        return resulted
     }catch(error){
         return error
     }

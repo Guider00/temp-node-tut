@@ -1,6 +1,8 @@
 import styles from './Overview.module.css'
 
 import SettingsIcon from '@material-ui/icons/Settings';
+import DeleteIcon from '@material-ui/icons/Delete'
+
 import AcUnitIcon from '@material-ui/icons/AcUnit';
 import ToysIcon from '@material-ui/icons/Toys';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
@@ -9,27 +11,32 @@ import Add from '@material-ui/icons/Add';
 import { Topic } from '../../subcomponents/Topic/Topic'
 import { useEffect, useState } from 'react';
 
-import Createroommodal from './Createroommodal'
+import { Floormodal } from '../Setting/Floor/Floormodal'
+import Table from '../../subcomponents/Table/Table'
 
-import { API_createroomprice ,API_queryroomprice , API_deleteroomprice , API_editroomprice } from  '../../API/index'
 
+import { API_createroomprice ,API_queryroomprice , API_deleteroomprice , API_editroomprice, API_queryBuildings , API_queryFloors, API_updateRoom, API_deleteRoom, API_queryMembers, API_queryRooms, API_createRoom} from  '../../API/index'
 
+import  { Inputconfig }  from './config'
 
 const color_roomstatur = (status) =>{
     switch (status)
     {
+        case "จอง" :
+        return 'cornflowerblue'   
+        break;
         case "ว่าง" :
         return 'rgb(90,90,90)'
         break;
         case"ไม่ว่าง" :
-        case"แจ้งออก" :
+        case"ย้ายออก" :
         return 'red'
         break;
-        case"จอง" :
+        case"ย้ายเข้า" :
         return 'yellow'
         break
         case"เช่า" :
-        case"ย้ายเข้า" :
+        case"มีคนอยู่" :
         return 'green'
         break
         default:
@@ -38,6 +45,7 @@ const color_roomstatur = (status) =>{
     }
 
 }
+
 const get_option = (Rooms, key) => {
     let arr = []
     if (key) {
@@ -49,6 +57,10 @@ const get_option = (Rooms, key) => {
     }
     return (arr)
 }
+
+
+
+
 
 const Rooms = [
     {
@@ -203,64 +215,296 @@ console.log(group_by_floor)
 
 
 export const Overview = () => {
+
+    const [_optionbuilding,setoptionbuilding] = useState([])
+    const [_optionfloor,setoptionfloor] = useState([])
     const [_optionprice,setoptionprice] = useState([])
+    const [_optionmember,setoptionmember] = useState([])
+    const [_optionstatus,setoptionstatus] = useState([])
 
-    const [_showcreatemodal,setshowcreatemodal] = useState(false)
+    const [_showmodal,setshowmodal] = useState(false)
+    const [_load,setload] = useState(false)
+    const [_modalaction,setmodalaction] = useState("");
+    const [_modaldata,setmodaldata] = useState({});
 
-    const create_room =() =>{
-        setshowcreatemodal(true)
-        console.log('create')
+    const [_groupbyfloor,setgroupbyfloor] = useState([]);
+
+
+    const [_rooms,setroom] =useState({
+        topic:[],
+        body:[],
+        inputs:[]
+    })
+
+    const Onclick_create =(data) =>{
+
+
+        setmodalaction('Create')
+        setshowmodal(true)
+        
+
+    }
+    const onClickEdit =(id ,data) =>{
+        console.log("Update",id,data)
+   
+        _rooms.inputs = _rooms.inputs.map( (item,_index) => 
+        {
+                if(data.hasOwnProperty(item.property) && data.hasOwnProperty(item.property) ){
+                    if( data[item.property] && typeof data[item.property] === 'object' && data[item.property].hasOwnProperty("id")  ){
+                        return {...item, form: {...item.form , "value": data[item.property].id} }; //gets everything that was already in item, and updates "done"
+                    }else{
+                        return {...item, form: {...item.form , "value": data[item.property]} }; //gets everything that was already in item, and updates "done"
+                    }
+                }else{
+                    return {...item,}
+                }
+        });
+
+  
+         let catch_value = _rooms
+        setroom({...catch_value} )
+        setmodaldata({...data})  // <<set id input
+        setmodalaction("Update") // << action type
+        setshowmodal(true)
+
+    }
+    const handleronchange = (value ,index)=>{
+        _rooms.inputs = _rooms.inputs.map( (item,_index) => 
+           {
+             if (_index === index){
+               return {...item, form: {...item.form , "value": value} }; //gets everything that was already in item, and updates "done"
+             }
+             return item; // else return unmodified item 
+       });
+       let catch_value = _rooms
+       setroom({...catch_value} )
+       
+   }
+    const Save = async (id,inputs,action) =>{
+       
+      let  data =  inputs.map(item => {
+             return { [item.property]: item.form.value}
+        }).reduce((accumulator, currentValue)=>{
+            return {...accumulator , ...currentValue}
+        })
+       
+        console.log('Update id data',id ,action,data)
+
+        let res
+        if(action === "Update" && id){
+            res  = await API_updateRoom(id,data)
+        }else if(action === "Create"){
+            res =  await API_createRoom(data)
+        }
+        
+        if(res && res.status === 200){
+            setshowmodal(false)
+        }else{
+            setshowmodal(false) // Alert
+        }
+        setload(false)
     }
     
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    useEffect( async ()=>{
-        let res =  await API_queryroomprice()
-        console.log(res)
-        if( res && res.status === 200){
-           let option =   get_option(res.data.roomprices,'name')
-           setoptionprice(option)
+    const onClick_Delete = (id) =>{
+       
+        API_deleteRoom(id)
+        setload(false)
+    }
+    
+    const get_API_Inputoption = async () =>{
+        return new Promise( async (resolve,rejcet) =>{
+            let building = [],floor = [] ,member = [],type=[],status =[] 
+            let res_building = await API_queryBuildings()
+            if(res_building && res_building.status === 200)
+            {
+            
+                 building =  res_building.data.Buildings.map(e =>  ({label:e.name , value:e.id})  )
+            }
+            let res_floor =  await API_queryFloors()
+            if(res_floor && res_floor.status === 200)
+            {
+                floor =  res_floor.data.Floors.map(e =>  ({label:e.name , value:e.id})  )
+            }
+
+            let res_member = await API_queryMembers()
+            if(res_member && res_member.status === 200){
+                member =  res_member.data.Members.map(e =>  ({label:e.name , value:e.id})  )
+            }
+            let res =  await API_queryroomprice()
+            if( res && res.status === 200){
+                type =   get_option(res.data.roomprices,'name')
+               type = type.map(e =>  ({label:e , value:e})  )
+            }
+             // set Option form input
+            status = [{value:"จอง",label:"จอง"},{value:"ย้ายเข้า",label:"ย้ายเข้า"},{value:"ย้ายออก",label:"ย้ายออก"},{value:"ห้องว่าง",label:"ห้องว่าง"},{value:"มีคนอยู่",label:"มีคนอยู่"} ]
+            resolve({'building':building,'floor':floor,'member':member,'type':type,status:status})
+        }).catch(e=>{
+            console.log('Promis Error',e);
+           return({building:[],floor:[],member:[],type:[],status:[]})
+        })
+    }
+    const getRooms = async () =>{
+        return new Promise(async (resolve,reject)=>{
+            let res = await API_queryRooms()
+            let table =[]
+            if(res && res.status === 200){
+                table =  res.data.rooms.map((data) =>{
+                    let _data = data
+                    return {
+                        id:data.id ,data:_data ,
+                        building:data.building ? data.building.name:"---",
+                        floor:data.floor ? data.floor.name:'---',
+                        name:data.name, 
+                        status:data.status ? data.status:'---',
+                        metername:"metername"
+                    }
+                } )
+            }
+
+            resolve(table)
+        }).catch(e =>{
+            console.log('Promise Error',e)
+            return []
+        })
+    }
+  
+   
+    useEffect(  ()=>{
+        const inital_data = async ()=>{
+            let option  =  await  get_API_Inputoption();
+            let table = await getRooms()
+       
+            setoptionbuilding(option.building)
+            setoptionfloor(option.floor)
+            setoptionmember(option.member)
+            setoptionstatus(option.status)
+            
+            let inputconfig = Inputconfig();
+            inputconfig.inputs = inputconfig.inputs.map( (ele,_index)=>{
+                switch (ele.property) {
+                    case "building":
+                        ele.form.options = option.building
+                        ele.form.value =   option.building.length > 0 ? option.building[0].value : 'All'
+                        break;
+                    case "floor":
+                        ele.form.options = option.floor
+                        ele.form.value =  option.floor.length > 0 ? option.floor[0].value :'All'
+                        break;
+                    case "member":
+                        ele.form.options = option.member
+                        ele.form.value =  option.member.length > 0 ? option.member[0].value :'All'
+                        break;
+                    case "status":
+                        ele.form.options = option.status
+                        ele.form.value = option.status.length > 0 ? option.status[0].value : 'All'
+                        break;
+                    case "meter":
+
+                        break;
+                    default:
+                        break;
+                }
+                return ele
+            })
+            console.log( inputconfig.inputs)
+
+            setroom({
+                showindex: true,
+                topic:inputconfig.topic,
+                body:table,
+                inputs:inputconfig.inputs
+             })
+
+
+             setload(true)
+             let uniqe_floors = get_option(table, 'floor')
+             console.log('uniqe_floors',uniqe_floors)
+              let group_by_floor = uniqe_floors.map(floor => {
+                return table.filter(room => room.floor === floor)
+             })
+             setgroupbyfloor(group_by_floor)
+             console.log('_groupbyfloor',group_by_floor)
+
         }
-    },[])
-    console.log( _showcreatemodal)
+        inital_data()
+        
+    },[_load])
+        console.log(_optionbuilding )
     return (
         <> 
-            { _showcreatemodal? <Createroommodal CloseEvent={()=>{setshowcreatemodal(false)} }></Createroommodal> :null }
+            { _showmodal? <Floormodal  onClose={ ()=>setshowmodal(false) } 
+
+            Data={_modaldata}
+            onSave={Save}  
+            onchange={handleronchange}
+
+            Action={_modalaction} 
+            Inputs={_rooms.inputs}  
+
+            ></Floormodal> :null }
+
+            {/* <div className={styles.main} >
+                    <div className={styles.header}>
+                         <lable> Floor </lable> 
+                    </div>
+                   
+                    <div className={styles.body}>
+
+                        <div  className={styles.row}  >
+                             <Table Data={_rooms}  onClickDelete={Delete} onClickEdit={onClickEdit}></Table> 
+                        </div>
+
+                    </div>
+            </div> */}
+
             <div className={styles.body}>
+             { _optionbuilding && _optionfloor && _optionprice ?
                 <div className={styles.rowmenu}>
                     <div className={styles.option}>
                         <label> อาคาร</label>
-                        <select>
+                        <select onchange={(e)=>{console.log(e.target.value)}}>
                             <option> All </option>
-                            {get_option(Rooms, 'building').map(build => <option>{build}</option>)}
+                            {_optionbuilding.map(item => <option>{item.label}</option> )}
                         </select>
                     </div>
+                    <div className={styles.option}>
+                        <label> ชั้น</label>
+                        <select onchange={(e)=>{console.log(e.target.value)}}>
+                            <option> All </option>
+                            {_optionfloor.map(item => <option>{item.label}</option>)}
+                        </select>
+                    </div>
+
                     <div className={styles.option} >
                         <label> ประเภทห้อง </label>
-                        <select>
+                        <select onchange={(e)=>{console.log(e.target.value)}}>
                              <option> All </option>
-                            {_optionprice.map(build => <option>{build}</option>)}
+                            {_optionprice.map(item => <option>{item.label}</option>)}
                         </select>
                     </div>
+
                     <div className={styles.option} >
                         <label> สถานะห้อง </label>
-                        <select>
+                        <select  onchange={(e)=>{console.log(e.target.value)}}>
                             <option> All </option>
                             {get_option(Rooms, 'status').map(build => <option>{build}</option>)}
                         </select>
                     </div>
 
                      <div className={styles.optionright} >
-                        <div className={styles.red} > {5} </div>
+                        <div className={styles.cornflowerblue} > {   _rooms.body.filter(room=> room.status === 'จอง').length} </div>
+                        <div>จอง </div>
+                        <div className={styles.red} > {   _rooms.body.filter(room=> room.status === 'ย้ายออก').length} </div>
                         <div>ย้ายออก </div>
-                        <div className={styles.green} > {20} </div>
+                        <div className={styles.green} > { _rooms.body.filter(room=> room.status === 'มีคนอยู่').length } </div>
                         <div>มีคนอยู่</div>
-                        <div className={styles.gray} > {3} </div>
+                        <div className={styles.gray} > { _rooms.body.filter(room=> room.status === 'ห้องว่าง').length } </div>
                         <div>ห้องว่าง</div>
-                        <div className={styles.yellow} > {1} </div>
+                        <div className={styles.yellow} > {  _rooms.body.filter(room=> room.status === 'ย้ายเข้า').length } </div>
                         <div>ย้ายเข้า</div>
                      </div>
                      <div className={styles.optionbtn} >
-                        <button onClick={()=> create_room()}> 
+                        <button onClick={()=> Onclick_create()}> 
                             <div> สร้างห้อง </div>
                              <div><Add/> </div> 
                         </button>
@@ -269,8 +513,10 @@ export const Overview = () => {
 
                    
                 </div>
+                 :
+                 null }
                 {
-                    group_by_floor.map( (group_floor ,index) => < >
+                    _groupbyfloor.map( (group_floor ,index) => < >
                         <div key={ `floor_${index}}`}className={styles.line}> ชั้น {group_floor[0]['floor']} </div>
                         <div className={styles.row}>
                             {group_floor.map( (room,index) =>
@@ -281,7 +527,19 @@ export const Overview = () => {
                                             }}>
                                             <div className={styles.front} >  </div>
                                             <div className={styles.text} >{room.name} </div>
-                                            <div className={styles.back} ><SettingsIcon /></div>
+                                            
+                                    
+                                            <div className={styles.back}   >
+                                                <div  className={styles.btn} onClick={()=>{ onClickEdit(room.id,room.data)  }} >
+                                                <SettingsIcon />
+                                                </div  >
+                                                 
+                                                <div  className={styles.btn} onClick={()=>{ onClick_Delete(room.id)  }} >
+                                                    <DeleteIcon/>
+                                                </div>
+                                              
+                                            </div>
+
                                         </div>
                                         
                                         <div className={styles.body} >
@@ -294,14 +552,17 @@ export const Overview = () => {
                                            
                                         </div>
                                         <div className={styles.footer}>
-                                            <div className={styles.front}> {(room.type === "fan") ? <ToysIcon /> : <AcUnitIcon />} </div>
+                                            <div className={styles.front}> {(room.type === "fan") ? 
+                                           
+                                                                                       null     :  <img src="./image/powermeter.jpg" alt="Trulli" width="24" height="24"/>} 
+                                            </div>
                                             <div className={styles.text} ></div>
                                             <div className={styles.back} > <MonetizationOnIcon /></div>
                                         </div>
                                     </div>
                                 </div>
                             )}
-                        </div>
+                        </div> 
                     </>)
                 }
 

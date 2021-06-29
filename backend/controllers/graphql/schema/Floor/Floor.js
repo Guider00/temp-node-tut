@@ -11,15 +11,16 @@ input FloorInput {
    building : Building
  }
        `
+
 const _queryFloorByid = async (payload) =>{
     try {
         if(!payload){ return null }
         if(!payload.id){ return null }
         if(!payload.id.match(/^[0-9a-fA-F]{24}$/)) { return "Error Format ID"}
-        let resulte = await db.findById({_id:payload.id})
-        if(!resulte) { return null}
+        let resulted = await db.findById({_id:payload.id})
+        if(!resulted) { return null}
         
-        let data  = resulte._doc
+        let data  = resulted._doc
         return ({
             id : data._id,
             name: data.name,
@@ -31,9 +32,9 @@ const _queryFloorByid = async (payload) =>{
 }
 const _queryFloor = async () => {
     try {
-        let resulte = await db.find({})
+        let resulted = await db.find({})
 
-        let data = resulte.map(payload => payload._doc).map( async (payload) => {
+        let data = resulted.map(payload => payload._doc).map( async (payload) => {
             payload.id = payload._id.toString()
             payload.building =  await queryBuildingByid({id:payload.building})
             return (payload)
@@ -48,9 +49,9 @@ const _queryFloor = async () => {
 const _createFloor = async (payload) => {
     try {
         if (payload && payload.input) {
-            let resulte = await db.create(payload.input)
-            if (!resulte) { return null }
-            let data = resulte._doc
+            let resulted = await db.create(payload.input)
+            if (!resulted) { return null }
+            let data = resulted._doc
             return {
                 id: data._id.toString(),
                 name: data.name,
@@ -68,8 +69,8 @@ const _deleteFloor = async (payload) => {
     try {
         if (!payload) { return null }
         if (!payload.id) { return null }
-        let resulte = await db.deleteOne({ _id: payload.id })
-        return resulte
+        let resulted = await db.deleteOne({ _id: payload.id })
+        return resulted
     } catch (error) {
         return error
     }
@@ -79,8 +80,8 @@ const _updateFloor = async (payload) => {
         if (!payload) { return null }
         if (!payload.id) { return null }
         if (!payload.input) { return null }
-        let resulte = await db.updateOne({ _id: payload.id }, payload.input)
-        return resulte
+        let resulted = await db.updateOne({ _id: payload.id }, payload.input)
+        return resulted
     } catch (error) {
         return error
     }

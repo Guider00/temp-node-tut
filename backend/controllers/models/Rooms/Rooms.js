@@ -7,10 +7,11 @@ const schemaDefinition = new mongoose.Schema({
     status :{ type : String },
     meterid: {type :String },
     type: { type: String },
+    member:{ type:String},
     version:{ type: String },
    
 
 })
 module.exports = {
-    dbroom: mongoose.model("room", schemaDefinition)
+    db: mongoose.model("room", schemaDefinition)
 }

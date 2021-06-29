@@ -2,18 +2,18 @@ import ThrowError from "../errors/basic"
 
 export const findAndUpdate = async (repo, filter, data) => {
   let obj
-  let resulte
+  let resulted
   try {
     obj = await repo.findOne(filter)
     if (data && obj && obj._doc) {
       obj._doc = { ...obj._doc, ...data }
-      resulte = await repo.updateOne(filter, obj._doc)
+      resulted = await repo.updateOne(filter, obj._doc)
     }
   } catch (e) {
     console.log("error", e)
-    resulte = e
+    resulted = e
   }
-  return resulte
+  return resulted
 }
 
 export const findAndUpdateOrCreate = async (repo, filter, data) => {

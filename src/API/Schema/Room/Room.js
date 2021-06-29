@@ -21,57 +21,50 @@ export const queryRoomByid = (id) =>{
 
 export const queryRooms = () =>{
     return { query:`
-        query{
-            rooms{
+    query{
+        rooms{
+            id
+            name
+            status
+
+            floor{
                 id
                 name
-                status
-                floor{
-                    id
-                    name
-                    buiding{
-                        id
-                        name
-                    }
-                }
+            }
+            member{
+                id
+                name
             }
         }
+    }
     `
-
     }
 }
 export const createRoom = (data) =>{
+    console.log('createRoom',data)
     return {query:`
-        mutation{
-            createRoom(input:{
-                name:"${data.input}",
-                type:"${data.type},
-                status:"${data.status}",
-                floor:"${data.floor}"
-                version:"0.0.1"
-
-            })
-            {
-               id
-               name
-               type
-               status
-               floor{
-                   id
-                   name
-                   floor{
-                       id
-                       name
-                       building{
-                           id
-                           name
-                       }
-                   }
-               }
-               version
+    mutation{
+        createRoom(input:{
+            name:"${data.name}"
+            status:"${data.status}"
+            type:"${data.type}"
+            floor:"${data.floor}"
+            member:"${data.member}"
+          }){
+            id
+            name
+            status
+            type
+            floor{
+              id
             }
-        }
-        `
+            member {
+              id
+            }
+            version
+          }
+      }
+    `
     }
 }
 
@@ -80,12 +73,15 @@ export const updateRoom = (id ,data )=>{
     mutation{
         updateRoom(id:"${id}",
         input:{
-            name
-            status
-            floor
+            name :"${data.name}"
+            status:"${data.status}"
+            floor:"${data.floor}"
+            member:"${data.member}"
         })
         {
-            
+         n
+         ok
+         nModified   
         }
     }
 
@@ -96,12 +92,11 @@ export const updateRoom = (id ,data )=>{
 export const deleteRoom = (id) =>{
     return {query:`
         mutation{
-            deleteFloor(id:"${id}")
-            {
+            deleteRoom(id:"${id}"){
                 n
                 ok
                 deletedCount
-            }
+              }
         }
         `
     }

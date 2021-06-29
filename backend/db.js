@@ -17,6 +17,7 @@ const _mongodb_initial = () => {
         })
         db.on("connected", function () {
           console.log("MongoDB connected!")
+
         })
         db.once("open", function () {
           console.log("MongoDB connection opened!")
@@ -64,6 +65,7 @@ const _mongodb_initial = () => {
             console.log('error from db.on("disconnected")', error)
           }
         })
+  
 
 }
 

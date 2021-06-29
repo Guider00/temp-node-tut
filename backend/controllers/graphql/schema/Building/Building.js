@@ -16,11 +16,11 @@ const _queryBuildingByid = async(payload) =>{
         if(!payload){ return null }
         if(!payload.id){ return null }
         if(!payload.id.match(/^[0-9a-fA-F]{24}$/)) { return "Error Format ID"}
-        let resulte = await db.findById({_id:payload.id})
-        if(!resulte) { return null}
+        let resulted = await db.findById({_id:payload.id})
+        if(!resulted) { return null}
 
         return (
-            resulte
+            resulted
         )
     } catch (error) {
         return error
@@ -28,9 +28,9 @@ const _queryBuildingByid = async(payload) =>{
 }
 const _queryBuilding = async () => {
     try {
-        let resulte = await db.find({})
+        let resulted = await db.find({})
 
-        let data = resulte.map(payload => payload._doc).map(payload => {
+        let data = resulted.map(payload => payload._doc).map(payload => {
             payload.id = payload._id.toString()
             return (payload)
         })
@@ -44,9 +44,9 @@ const _queryBuilding = async () => {
 const _createBuilding = async ( payload ) =>{
     try {
         if(payload && payload.input ) {
-            let resulte = await  db.create(payload.input) 
-            if(!resulte) { return null}
-            let data  = resulte._doc
+            let resulted = await  db.create(payload.input) 
+            if(!resulted) { return null}
+            let data  = resulted._doc
             return {
                 id:data._id.toString() ,
                 name:  data.name ,
@@ -63,8 +63,8 @@ const _deleteBuilding = async (payload ) =>{
     try{
         if(!payload){return null}
         if(!payload.id){return null}
-        let resulte = await db.deleteOne({_id:payload.id})
-         return resulte
+        let resulted = await db.deleteOne({_id:payload.id})
+         return resulted
      }catch(error){
          return error
      }
@@ -74,8 +74,8 @@ const _updateBuilding = async (payload ) =>{
         if(!payload){return null}
         if(!payload.id){return null}
         if(!payload.input){return null}
-        let  resulte = await db.updateOne({_id:payload.id},payload.input)
-        return resulte
+        let  resulted = await db.updateOne({_id:payload.id},payload.input)
+        return resulted
     }catch(error){
         return error
     }

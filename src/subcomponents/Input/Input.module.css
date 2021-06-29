@@ -7,6 +7,14 @@
     justify-content: space-between;
     
 }
+.uploadimage{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;
+    justify-content: center;
+}
 .input>.divlabel{
     flex-basis: 50%;
     justify-content: center;
@@ -19,8 +27,38 @@
     justify-content: center;
     display: flex;
 }
+.input>.divimage{
+    flex-basis: 100%;
+    margin: 1em;
+    justify-content: center;
+    display: flex;
+}
 .input>.divinput>input{
  margin-left: 0.5em;
  min-width: 150px;
  width: 100%;
 }
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+  }
+.dropbtn:hover, .dropbtn:focus {
+    background-color: #2980B9;
+}
+.dropbtn {
+    background-color: #3498DB;
+    color: white;
+
+    border: none;
+    cursor: pointer;
+  }
+    
+.dropdown_content {
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }

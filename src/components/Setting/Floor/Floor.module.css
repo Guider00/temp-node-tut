@@ -1,0 +1,61 @@
+
+.main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 2em;
+    border: 1px solid black;
+}
+.main>.header{
+    display: flex;
+    margin: 1em;
+    width: 100%;
+    justify-content: center;
+}
+.main>.header>lable {
+    font-size: xx-large;
+    color: #04AA6D;
+}
+
+.main>.body{
+    display: flex;
+    font-size: 24;
+    margin: 1em;
+    width: 100%;
+    flex-flow: wrap;
+    justify-content: center;
+
+}
+.main>.body>.row{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    flex-basis: 100%;
+}
+.main>.body>.row>.base40{
+    display: flex;
+    justify-content: center;
+    flex-basis: 40%;
+}
+.main>.body>.row>.base60{
+    display: flex;
+    justify-content: center;
+    flex-basis: 66%;
+}
+.main>.body>.row>.base60>.text{ 
+    display: flex;
+    margin: 0.2em;
+    align-items: center;
+    font-size: 24px;
+}
+.main>.body>.row>.base60>.button{
+    display: flex;
+    margin: 0.2em;
+    align-content: center;
+    align-items: center;
+}
+.main>.body>.row>.base60>.button>button:hover{
+    background-color: rgb(138, 138, 138);
+
+}

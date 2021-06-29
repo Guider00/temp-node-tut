@@ -11,11 +11,18 @@
 .menu>.logo{
     width: 10vw;
     text-align: center;
-    padding: 1.0em;
+   
 }
 .menu>div{
-    align-items: center;
+    display: flex;
+
 }
+.menu>div>div{
+    display: flex;
+    align-items: center;
+    height: 100%;
+ }
+
 .menu>div>a>button{
    height: 100%;
 }
