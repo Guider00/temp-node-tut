@@ -11,3 +11,5 @@
 # npm run server 
 Start backend service by GRAPHQL
 Open [http://localhost:4000](http://localhost:4000)
+
+Hope you enjoy with project
