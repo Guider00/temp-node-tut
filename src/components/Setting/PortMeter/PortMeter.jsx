@@ -137,9 +137,10 @@ export const Portmeter = () => {
             setportmeters({
                 showindex: true,
                 topic: [ "name", "protocol",
-                        "comport","baudrate","readtimeout","writetimeout","stopbits","databits","autoreconnect",
+                        "comport","baudrate","stopbits","databits","autoreconnect",
                         "ipaddress","tcp_port",
                         "topic",
+                        "readtimeout","writetimeout",
                         "version"
                        ],
                 body: table,
@@ -158,41 +159,49 @@ export const Portmeter = () => {
                         label: "protocol",
                         property: "protocol",
                         form: {
-                            displayform: "textbox",
-                            type: "text",
-                            value: ""
+                            displayform:"select",
+                            options:[
+
+                                {value:`Modbus_Serial`,label:"Modbus_Serial"},
+                                {value:`Modbus_TCP/IP`,label:`Modbus_TCP/IP`},
+                                {value:`MQTT/Lora`,label:`MQTT/Lora`},
+                             ],
+                            value: "Modbus_TCP/IP"
                         }
                     },
                     {
                         label: "comport",
                         property: "comport",
                         form: {
-                            displayform: "textbox",
-                            type: "text",
+                            displayform: "select",
+                            options:[
+                                {value:`COM1`,label:"COM1"},
+                                {value:`COM2`,label:`COM2`},
+                                {value:`COM3`,label:`COM3`},
+                                {value:`COM4`,label:`COM4`},
+                                {value:`COM5`,label:`COM5`},
+                                {value:`COM6`,label:`COM6`},
+                                {value:`COM7`,label:`COM7`},
+                                {value:`COM8`,label:`COM8`},
+                                {value:`COM9`,label:`COM9`},
+                                {value:`COM10`,label:`COM10`},
+                                {value:`COM11`,label:`COM11`},
+                                {value:`COM12`,label:`COM12`},
+                                {value:`COM13`,label:`COM13`},
+                                {value:`COM14`,label:`COM14`},
+                                {value:`COM15`,label:`COM15`},
+                                {value:`COM16`,label:`COM16`},
+                                {value:`COM17`,label:`COM17`},
+                                {value:`COM18`,label:`COM18`},
+                                {value:`COM19`,label:`COM19`},
+                                {value:`COM20`,label:`COM20`},
+                             ],
                             value: ""
                         }
                     },
                     {
                         label: "baudrate",
                         property: "baudrate",
-                        form: {
-                            displayform: "textbox",
-                            type: "text",
-                            value: ""
-                        }
-                    },
-                    {
-                        label: "readtimeout",
-                        property: "readtimeout",
-                        form: {
-                            displayform: "textbox",
-                            type: "text",
-                            value: ""
-                        }
-                    },
-                    {
-                        label: "writetimeout",
-                        property: "writetimeout",
                         form: {
                             displayform: "textbox",
                             type: "text",
@@ -246,13 +255,41 @@ export const Portmeter = () => {
                     },
                     {
                         label: "topic",
-                        property: "tcp_port",
+                        property: "topic",
                         form: {
                             displayform: "textbox",
                             type: "text",
                             value: ""
                         }
                     },
+                    {
+                        label: "readtimeout",
+                        property: "readtimeout",
+                        form: {
+                            displayform: "textbox",
+                            type: "text",
+                            value: ""
+                        }
+                    },
+                    {
+                        label: "writetimeout",
+                        property: "writetimeout",
+                        form: {
+                            displayform: "textbox",
+                            type: "text",
+                            value: ""
+                        }
+                    },
+                    {
+                        label: "version",
+                        property: "version",
+                        form: {
+                            displayform: "textbox",
+                            type: "text",
+                            value: ""
+                        }
+                    },
+
                 ]
             })
             setload(true)

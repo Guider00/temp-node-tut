@@ -71,7 +71,7 @@ export const  Table = ({Data,onClickDelete , onClickEdit , maxWidth}) =>{
                              {
                                   
                              Data.inputs.map( (input,index)=>
-                             (  index >=  page_index*(width > 800? (6) : (4))     &&  index <=   ((page_index+1)*(width > 800? (6) : (4)))    ) ?
+                             (  index >=  page_index*(width > 800? (6) : (4))     &&  index <=   ((page_index+1)*(width > 800? (6) : (4)))-1    ) ?
 
                           
                                 <>

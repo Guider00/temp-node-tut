@@ -13,6 +13,9 @@
 
  const { Portmeterschema ,queryPortmeters, queryPortmeterByid , createPortmeter ,deletePortmeter , updatePortmeter }  = require('./PortMeter/Portmeter')
 
+
+const { DBstatusschema ,queryDBstatus }  = require('./System/DBstatus/DBstatus')
+
 const { buildSchema } = require( 'graphql');
 
 
@@ -22,7 +25,7 @@ const { buildSchema } = require( 'graphql');
 
  const schema = buildSchema(  `
 
-
+  ${DBstatusschema}
   ${Memberschema}
   ${Buildingschema}
   ${Floorschema}
@@ -79,7 +82,9 @@ const { buildSchema } = require( 'graphql');
     MeterRooms:[MeterRoom],
 
     PortmeterByid(id:ID!):Portmeter,
-    Portmeters:[Portmeter]
+    Portmeters:[Portmeter],
+
+    queryDBstatus:DBstatus
 
   }
   type Mutation {
@@ -137,6 +142,8 @@ const { buildSchema } = require( 'graphql');
        })
     },
 
+    queryDBstatus : queryDBstatus,
+
     roomprices      : queryRoomPrice,
     createroomprice : createRoomPrice,
     updateroomprice : updateRoomPrice,
@@ -177,6 +184,8 @@ const { buildSchema } = require( 'graphql');
     createPortmeter : createPortmeter,
     updatePortmeter : updatePortmeter,
     deletePortmeter : deletePortmeter
+
+
 
   };
 
