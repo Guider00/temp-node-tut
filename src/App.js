@@ -8,6 +8,7 @@ import { Building } from './components/Setting/Building/Building';
 import { Floor } from './components/Setting/Floor/Floor';
 import { Member } from './components/Setting/Member/Member';
 import { Portmeter } from './components/Setting/PortMeter/PortMeter';
+import { Overviewmeter } from './components/Setting/Overviewmeter/Overviewmeter';
 
 
 
@@ -49,6 +50,12 @@ const _Portmeter =() =>(
     <Portmeter/>
   </>
 )
+const _OverviewMeter =() =>(
+  <>
+    <Overviewmeter/>
+  </>
+)
+
 
 
 function App() {
@@ -56,6 +63,7 @@ function App() {
     <BrowserRouter>
      <Menubar></Menubar>
     <Switch>
+
        <Route exact path="/home" component={_Overview} />
        <Route exact path="/building" component={_Building} />
        <Route exact path="/floor" component={_Floor} />
@@ -63,6 +71,11 @@ function App() {
        <Route exact path="/profilepriceroom" component={_Setting_roomprice} />
        <Route exact path="/meterroom" component={_Setting_roomprice} />
        <Route exact path="/portmeter" component={_Portmeter} />
+       <Route exact path="/overviewmeter" component={_OverviewMeter} />
+
+        {/*  ยังไม่ได้ทำ */}
+       <Route exact path="/overallnote" component={_OverviewMeter} />
+       
 
 
        <Route exact path="/*" component={_Overview} />

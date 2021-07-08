@@ -1,0 +1,37 @@
+.menu_top{
+    margin: 1em;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.table_body{
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: center;
+   
+    
+    overflow-y: auto;
+}
+.table_body>div{
+    display: flex;
+    padding: 1em;
+    max-height: 60vh;
+}
+.menu_end{
+    display: flex;
+    margin: 1em;
+    width: auto;
+    justify-content: flex-end;
+}
+.menu_end>.zone_right{
+ 
+    display: flex;
+    padding-left: 1em;
+    padding-right: 1em;
+    width: 30vw;
+    justify-content: space-around;
+}
+.menu_end>.zone_right>div>button{
+    display: flex;
+    align-items: center;
+}

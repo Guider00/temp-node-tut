@@ -70,7 +70,8 @@ export const Menubar = () => {
                             {label: "Member" , href:"/Member",icon:"person"},
                             {label: "RoomType" , href:"/profilepriceroom",icon:"settings"},
                             {label: "Meter" , href:"/Member",icon:"settings"},
-                            {label: "Portmeter" , href:"/Portmeter",icon:"settings"}
+                            {label: "Portmeter" , href:"/Portmeter",icon:"settings"},
+                            {label: "overviewmeter" , href:"/overviewmeter",icon:"settings"}
 
                             ] }/>
                     </div>
