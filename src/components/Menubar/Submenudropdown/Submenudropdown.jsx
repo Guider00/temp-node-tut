@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import styles from './Submenudropdown.module.css'
 import Icon from '@material-ui/core/Icon'
 

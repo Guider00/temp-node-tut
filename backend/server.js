@@ -15,7 +15,6 @@ const { mqtt_server_aedes_initial , mqtt_server_mosca_initial  } = require('./MQ
 
 
 
-
 mqtt_server_mosca_initial(1883, 'zung', 'zeny')
 mqtt_server_aedes_initial()
 
@@ -23,6 +22,12 @@ mongodb_initial()
 
 const app = express();
 app.use(cors())
+
+let path = require('path')
+app.use(express.static(path.join(__dirname, '/public/build')));
+app.get('*', function(req, res) {
+  res.sendFile('index.html', {root: path.join(__dirname, '/public/build')});
+});
 
 app.use(
   '/graphqlexpress',

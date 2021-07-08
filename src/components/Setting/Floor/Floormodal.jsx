@@ -2,7 +2,6 @@
 import styles from "./Floormodal.module.css"
 import Save from '@material-ui/icons/Save';
 
-import { useEffect, useState } from "react"
 
 
 export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs , Mobalname }) => {

@@ -1,6 +1,5 @@
 import styls from './Table.module.css'
 
-import Save from '@material-ui/icons/Save';
 import Delete from '@material-ui/icons/Delete';
 
 import SettingsIcon from '@material-ui/icons/Settings';

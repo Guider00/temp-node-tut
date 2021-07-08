@@ -1,11 +1,9 @@
 import styles from './Menubar.module.css'
 import Home from '@material-ui/icons/Home';
-import Settings from '@material-ui/icons/Settings';
-import Assignment from '@material-ui/icons/Assignment';
+
 import ListAlt from '@material-ui/icons/ListAlt';
 import Book from '@material-ui/icons/Book'
-import  Person from '@material-ui/icons/Person'
-import Icon from '@material-ui/core/Icon'
+
 
 
 import { Submenudropdown } from './Submenudropdown/Submenudropdown'

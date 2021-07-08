@@ -8,9 +8,9 @@ import { BrowserRouter } from "react-router-dom";
 /**
  *  Allow -redux
  */
- import { createStore, applyMiddleware, compose } from "redux";
- import { Provider } from "react-redux";
- import thunk from "redux-thunk";
+//  import { createStore, applyMiddleware, compose } from "redux";
+//  import { Provider } from "react-redux";
+//  import thunk from "redux-thunk";
 /**
  * 
  * @returns 
@@ -23,9 +23,6 @@ import { BrowserRouter } from "react-router-dom";
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
-  useSubscription,
-  useMutation,
-  gql,
 } from "@apollo/client";
 
 

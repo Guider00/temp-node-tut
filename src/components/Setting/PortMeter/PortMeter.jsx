@@ -7,7 +7,7 @@ import Table from '../../../subcomponents/Table/Table'
 import { Floormodal } from '../Floor/Floormodal'
 
 
-import {  API_createPortmeter, API_updatePortmeter, API_deletePortmeter,  API_queryPortmeterByid, API_queryPortmeters } from '../../../API/index'
+import {  API_createPortmeter, API_updatePortmeter, API_deletePortmeter,   API_queryPortmeters } from '../../../API/index'
 
 
 export const Portmeter = () => {

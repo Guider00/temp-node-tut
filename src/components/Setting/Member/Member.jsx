@@ -7,7 +7,7 @@ import Table from '../../../subcomponents/Table/Table'
 import { Floormodal } from '../Floor/Floormodal'
 
 
-import {  API_createMember, API_updateMember, API_deleteMember,  API_queryMemberByid, API_queryMembers } from '../../../API/index'
+import {  API_createMember, API_updateMember, API_deleteMember,   API_queryMembers } from '../../../API/index'
 
 
 export const Member = () => {

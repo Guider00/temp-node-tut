@@ -1,13 +1,13 @@
 import styles from './Input.module.css'
-import theme from '../../theme/themes.module.css'
-import { useEffect, useRef, useState } from 'react'
+// import theme from '../../theme/themes.module.css'
+import { useEffect,  useState } from 'react'
 
 import { Menudropdown } from './menudropdown/menudropdown'
 
 
 export const Input = ({ label, type, key, onChange, defaultValue, value }) => {
 
-    let _label = useRef(label ? label : "label")
+    // let _label = useRef(label ? label : "label")
     const [uploadimg, setuploadimg] = useState(null)
 
 
@@ -57,7 +57,7 @@ export const Input = ({ label, type, key, onChange, defaultValue, value }) => {
             {
                 type === 'image' && uploadimg !== null ?
                     <div className={styles.uploadimage} >
-                        <img src={uploadimg} width="64px" height="64px" />
+                        <img src={uploadimg} width="64px" height="64px"  alt='' />
                     </div>
                     : null
             }
