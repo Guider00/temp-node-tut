@@ -36,11 +36,13 @@
 .main>.body>.row>.base40{
     display: flex;
     justify-content: center;
+    align-items: center;
     flex-basis: 40%;
 }
 .main>.body>.row>.base60{
     display: flex;
     justify-content: center;
+    align-items: center;
     flex-basis: 66%;
 }
 .main>.body>.row>.base60>.text{ 

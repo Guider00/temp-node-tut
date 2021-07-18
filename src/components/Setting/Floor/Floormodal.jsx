@@ -3,15 +3,16 @@ import styles from "./Floormodal.module.css"
 import Save from '@material-ui/icons/Save';
 
 
-
-export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs , Mobalname }) => {
+export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs, Mobalname }) => {
 
 
     const close = onClose ? onClose : () => { console.log('close') }
-    const save = onSave ? onSave : (id, data,action) => { console.log(`${action} save`, id, data) }
+    const save = onSave ? onSave : (id, data, action) => { console.log(`${action} save`, id, data) }
+
+    
 
 
-  
+
 
     return (
         <div className={styles.modal}>
@@ -22,7 +23,7 @@ export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs , M
                             <button onClick={() => { close() }}  >X</button>
                         </div>
                         <div className={styles.text}>
-                            <label>{`${Action} ${Mobalname?Mobalname:""}`}</label>
+                            <label>{`${Action} ${Mobalname ? Mobalname : ""}`}</label>
                         </div>
 
                     </div>
@@ -30,7 +31,7 @@ export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs , M
                     {
                         Inputs ? <>
                             {
-                                Inputs.map( (e,index) => <>
+                                Inputs.map((e, index) => <>
                                     <div key={`Flooor_Inputs_map${index}`} className={styles.body}>
                                         <div className={styles.row}>
                                             <div className={styles.label}>
@@ -38,18 +39,51 @@ export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs , M
                                             </div>
                                             {e.form.displayform === "textbox" ?
                                                 <div className={styles.input}>
-                                                    <input type={e.form.type ? e.form.type:"text"} value={e.form.value} onChange={(event) => { onchange(event.target.value ,index) }} />
+                                               
+                                                    <input type={e.form.type ? e.form.type : "text"} value={e.form.value}
+                                                    style={{border: (e.form.validate ?   
+                                                        e.form.validate(e.form.value) ||   // validate pass or disable  not red border
+
+                                                        ((e.form.disablecondition === undefined ||
+                                                            e.form.fn_compare === undefined)
+                                                            ? false : e.form.disablecondition(
+                                                                (e.form.compaer_property) ? Inputs.find(x => x.property === e.form.compaer_property).form.value : null
+                                                                , e.form.fn_compare))
+                                                   
+                                                        
+                                                        ?"":" 1px solid #FF0000" : "")   }}
+                                                   
+                                                        disabled=
+                                                        {
+                                                            ((e.form.disablecondition === undefined ||
+                                                                e.form.fn_compare === undefined)
+                                                                ? false : e.form.disablecondition(
+                                                                    (e.form.compaer_property) ? Inputs.find(x => x.property === e.form.compaer_property).form.value : null
+                                                                    , e.form.fn_compare))
+                                                        }
+                                                        onChange={(event) => { onchange(event.target.value, index) }
+                                                        } />
+
                                                 </div> : null
                                             }
                                             {e.form.displayform === "select" ?
                                                 <div className={styles.input}>
-                                                    <select value={e.form.value} onChange={event => onchange(event.target.value , index)} >
+                                                    <select value={e.form.value}
+                                                        disabled=
                                                         {
-                                                          e.form.options.map( (opt,index) =>
-                                                            <option value={opt.value} >
-                                                                {opt.label}
-                                                            </option>
-                                                          )
+                                                            ((e.form.disablecondition === undefined ||
+                                                                e.form.fn_compare === undefined)
+                                                                ? false : e.form.disablecondition(
+                                                                    (e.form.compaer_property) ? Inputs.find(x => x.property === e.form.compaer_property).form.value : null
+                                                                    , e.form.fn_compare))
+                                                        }
+                                                        onChange={event =>  {console.log('event.target.value',e.form.options) ; onchange(event.target.value, index) } } >
+                                                        {
+                                                            e.form.options.map((opt, index) =>
+                                                                <option value={opt.value} >
+                                                                    {opt.label}
+                                                                </option>
+                                                            )
                                                         }
                                                     </select>
                                                 </div> : null
@@ -66,7 +100,7 @@ export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs , M
 
                     <div className={styles.footer}>
                         <div className={styles.menubtn}>
-                            <button className={styles.btnsave} onClick={() => { save(Data.id,  Inputs , Action) }}>
+                            <button className={styles.btnsave} onClick={() => { save(Data.id, Inputs, Action) }}>
                                 <div className={styles.label}>
                                     <label>Save</label>
                                 </div>

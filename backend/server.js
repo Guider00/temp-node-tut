@@ -25,9 +25,7 @@ app.use(cors())
 
 let path = require('path')
 app.use(express.static(path.join(__dirname, '/public/build')));
-app.get('*', function(req, res) {
-  res.sendFile('index.html', {root: path.join(__dirname, '/public/build')});
-});
+
 
 app.use(
   '/graphqlexpress',
@@ -37,6 +35,10 @@ app.use(
     graphiql: true,
   }),
 );
+
+// app.get('*', function(req, res) {
+//   res.sendFile('index.html', {root: path.join(__dirname, '/public/build')});
+// });
 
 startApolloServer( app )
 

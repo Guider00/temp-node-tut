@@ -47,7 +47,6 @@ export const queryPortmeters =  () =>{
     }
 }
 
-
 export const createPortmeter= (input) =>{
     console.log('create custome',input)
     return {query:`
@@ -83,8 +82,8 @@ export const updatePortmeter = (id , input) =>{
                         input:{
                             name: "${input.name}",
                             protocol: "${input.protocol}",
-                            comport: "${input.comport},
-                            baudrate: ${input.baudrate},
+                            comport: "${input.comport}",
+                            baudrate: "${input.baudrate}",
                             readtimeout: "${input.readtimeout}",
                             writetimeout: "${input.writetimeout}",
                             stopbits: "${input.stopbits}",
@@ -93,7 +92,7 @@ export const updatePortmeter = (id , input) =>{
                             ipaddress: "${input.ipaddress}",
                             tcp_port: "${input.tcp_port}",
                             topic: "${input.topic}",
-                            version:  "${input.topic}",
+                            version:  "${input.version}",
                         }
                         )
                         {

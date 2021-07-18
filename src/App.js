@@ -7,6 +7,9 @@ import { RoomPrice } from './components/Setting/RoomPrice/RoomPrice';
 import { Building } from './components/Setting/Building/Building';
 import { Floor } from './components/Setting/Floor/Floor';
 import { Member } from './components/Setting/Member/Member';
+
+import { MeterRoom } from './components/Setting/MeterRoom/MeterRoom';
+
 import { Portmeter } from './components/Setting/PortMeter/PortMeter';
 import { Overviewmeter } from './components/Setting/Overviewmeter/Overviewmeter';
 
@@ -18,6 +21,11 @@ import { Overview } from './components/Overview/Overview'
 import { BrowserRouter ,Switch , Route  } from "react-router-dom";
 
 
+const _MeterRoom =() =>(
+  <>
+    <MeterRoom></MeterRoom>
+  </>
+)
 
 const _Setting_roomprice =() =>(
   <>
@@ -69,7 +77,7 @@ function App() {
        <Route exact path="/floor" component={_Floor} />
        <Route exact path="/member" component={_Member} />
        <Route exact path="/profilepriceroom" component={_Setting_roomprice} />
-       <Route exact path="/meterroom" component={_Setting_roomprice} />
+       <Route exact path="/meterroom" component={_MeterRoom} />
        <Route exact path="/portmeter" component={_Portmeter} />
        <Route exact path="/overviewmeter" component={_OverviewMeter} />
 

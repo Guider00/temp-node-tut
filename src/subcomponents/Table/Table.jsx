@@ -6,6 +6,9 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { useState, useEffect } from "react";
 
 
+import  { data_display } from '../../subcomponents/Universal_function'
+
+
 export const  Table = ({Data,onClickDelete , onClickEdit , maxWidth}) =>{
 
     const [page_index,setpage_index] = useState(0);
@@ -76,7 +79,12 @@ export const  Table = ({Data,onClickDelete , onClickEdit , maxWidth}) =>{
                                 <>
                                    <td  key={`tbl_${input.property}_index`}>
                                         <div>
-                                             <input value={ele_body[input.property] } type="text"/> 
+                                             {
+                                              input.idtolabel ? 
+                                              <input value={  input.idtolabel( data_display(ele_body,input.property) )  } type="text"/>  :
+                                              <input value={ data_display(ele_body,input.property)} type="text"/> 
+                                             }
+                                           
                                         </div>
                                        
                                      </td>

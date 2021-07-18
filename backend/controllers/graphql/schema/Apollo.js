@@ -1,22 +1,25 @@
-
-
 const { ApolloServer, PubSub ,gql } = require('apollo-server-express');
 const  http = require('http');
 const pubsub = new PubSub();
 
 
 const {  aedes_clients ,aedes_history_packets  } = require('../../../MQTT/server/index')
-
+const { readyState } = require('../../../db')
 
 
 let test = ""
+let dbstatus = ""
 setInterval(() => {
-  if(test !== JSON.stringify( aedes_history_packets()))
+
+  if(test !== JSON.stringify( aedes_history_packets())  ||  dbstatus !== readyState())
   {
     test = JSON.stringify( aedes_history_packets())
+    dbstatus = readyState()
 
    // sub_abes_history_packets.forEach((sub_id) => pubsub.publish(sub_id,  { mqtthistory_packets: resulte_history_packets   }   ) )
    onMessagesBroadcast( sub_abes_history_packets )
+   onMessagesBroadcast( sub_databasestatus )
+
 
   }else{
 
@@ -29,6 +32,7 @@ const messages = [];
 
 const submqtt =[];
 const sub_abes_history_packets = []
+const sub_databasestatus  = [] 
 const resulte_history_packets = () => aedes_history_packets().map ( (item)=>({payload:   String.fromCharCode.apply(null, (JSON.parse(JSON.stringify(item.payload)).data) ).replace(/(?:\r\n|\r|\n)/g, '')  ,topic:item.topic}) ) 
 const subscribers = [];
  
@@ -59,7 +63,6 @@ type Message {
   content: String!
 }
   type Query {
-    messages: [Message]
     submqttserverstatus:[SubMQTTServerstatus]
     mqtthistory_packets:[MQTTHistory_packets]
   }
@@ -72,6 +75,7 @@ type Message {
     messages: [Message!]
     submqttserverstatus:[SubMQTTServerstatus!]
     mqtthistory_packets:[MQTTHistory_packets!]
+    subdatabasestatus:String
   }
 `;
 const resolvers = {
@@ -108,6 +112,17 @@ const resolvers = {
           setTimeout(() => pubsub.publish(channel,  { mqtthistory_packets: resulte_history_packets   } ), 0); // <<  update ข้อมูล มายัง id ปัจจุบัน 
           return pubsub.asyncIterator(channel);  // << return data to  s
         }
+      },
+      subdatabasestatus:{
+        subscribe : (parent,args) =>{
+          const channel = Math.random().toString(36).slice(2, 15); // generate  subscription id
+          
+          registersub(sub_databasestatus ,() => pubsub.publish(channel, {subdatabasestatus: readyState}  )); // << update new user  subscription
+          setTimeout(() => pubsub.publish(channel,  {subdatabasestatus: readyState}  ), 0); // <<  update ข้อมูล มายัง id ปัจจุบัน 
+
+          return pubsub.asyncIterator(channel);  // << return data to  s
+        }
+
       }
     },
 
@@ -142,3 +157,4 @@ const resolvers = {
 }
 
 exports.startApolloServer = startApolloServer
+

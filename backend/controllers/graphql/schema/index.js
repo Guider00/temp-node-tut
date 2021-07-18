@@ -120,7 +120,7 @@ const schema = buildSchema(`
     deleteMember(id: ID!): MessageDelete,
 
     createMeterRoom(input: MeterRoomInput):MessageCreate,
-    updateMeterRoom(id: ID!, input: BuildingInput): MessageUpdate,
+    updateMeterRoom(id: ID!, input: MeterRoomInput): MessageUpdate,
     deleteMeterRoom(id: ID!): MessageDelete
 
     createPortmeter(input: PortmeterInput):MessageCreate,

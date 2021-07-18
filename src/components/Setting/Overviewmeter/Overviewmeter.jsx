@@ -9,7 +9,7 @@ import styles from "./Overviewmeter.module.css"
 
 import Icon from '@material-ui/core/Icon/'
 
-  const GET_MESSAGES = gql`
+const GET_MESSAGES = gql`
   subscription {
     mqtthistory_packets{
         topic
@@ -178,7 +178,7 @@ export const Overviewmeter = () => {
             </div>
         </div>
 
-            <p> OverView Meter </p>
+          
             
         {
          mqtthistory_packets ? mqtthistory_packets.map( ({topic,payload},index)=>(
