@@ -1,4 +1,4 @@
-const { ApolloServer, PubSub ,gql } = require('apollo-server-express');
+const { ApolloServer, PubSub ,gql , AuthenticationError } = require('apollo-server-express');
 const  http = require('http');
 const pubsub = new PubSub();
 
@@ -56,6 +56,23 @@ type MQTTHistory_packets{
   payload:String
 }
 
+type MessageCreate{
+  id:String
+  errors:String
+}
+type User{
+  id           : String
+  username     : String
+  tel          : String
+  level        : String
+  email        : String
+  password     : String
+  lock_user    : String
+  reset_password : String 
+  error:String
+}
+
+
 
 type Message {
   id: ID!
@@ -65,10 +82,12 @@ type Message {
   type Query {
     submqttserverstatus:[SubMQTTServerstatus]
     mqtthistory_packets:[MQTTHistory_packets]
+    login(email:String!,password:String!):User
   }
 
   type Mutation {
     postMessage(user: String!, content: String!): ID!
+    signup (email:String! , password:String! ) : MessageCreate
   }
 
   type Subscription {
@@ -95,6 +114,10 @@ const resolvers = {
     //     subscribers.forEach((fn) => fn()); // << update all to  user subscripttion
     //     return id;
     //   },
+       signup : (parent , { email , password } ,context ,info  )  =>{
+          console.log('email')
+          return { id : 'id',error:'error'}
+       }
     },
     Subscription: {
       submqttserverstatus :{
@@ -131,7 +154,14 @@ const resolvers = {
  const startApolloServer = async ( app ) => {
 
 
-    const server = new ApolloServer({ typeDefs, resolvers , subscriptions: {
+    const server = new ApolloServer({ typeDefs, resolvers , 
+      context:({req,res}) =>{
+        const token = req.headers.authorization || null ;
+        const user =   token ?   token : null ;
+        if (!user) throw new AuthenticationError('you must be logged in');
+        return { user  ,req , res };
+      },
+      subscriptions: { 
         path: '/graphqlsub',
         onConnect: (connectionParams, webSocket, context) => {
           console.log('Sub Connected!')
@@ -140,7 +170,8 @@ const resolvers = {
           console.log('Sub Disconnected!')
         },
         // ...other options...
-      },tracing: true });
+      },tracing: true 
+    });
     
       server.applyMiddleware({ app });
     
