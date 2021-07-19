@@ -13,7 +13,6 @@ const router = express.Router()
 const { v4: uuidv4 } = require('uuid');
 
 
-
 const isLogin  = (req, res, next) => {
     if(req.isAuthenticated()){
      //   console.log(`${req.method} ${req.originalUrl}`)
@@ -52,7 +51,7 @@ router.use(session({
   }));
 router.use(passport.initialize());
 router.use(passport.session()); 
-router.use('/graphql1548',isLogin)
+// router.use('/graphql1548',isLogin)
 
 
 module.exports ={

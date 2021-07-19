@@ -7,6 +7,12 @@ const {  aedes_clients ,aedes_history_packets  } = require('../../../MQTT/server
 const { readyState } = require('../../../db')
 
 
+
+var jwt = require('jsonwebtoken');
+const {  User } = require('../../models/User/User')
+
+
+
 let test = ""
 let dbstatus = ""
 setInterval(() => {
@@ -82,12 +88,13 @@ type Message {
   type Query {
     submqttserverstatus:[SubMQTTServerstatus]
     mqtthistory_packets:[MQTTHistory_packets]
-    login(email:String!,password:String!):User
+    login(email:String!,password:String!):String
   }
 
   type Mutation {
     postMessage(user: String!, content: String!): ID!
-    signup (email:String! , password:String! ) : MessageCreate
+    signup (email:String! , password:String! ,level:String!) : MessageCreate
+    login (email:String! , password:String!): String!
   }
 
   type Subscription {
@@ -114,9 +121,30 @@ const resolvers = {
     //     subscribers.forEach((fn) => fn()); // << update all to  user subscripttion
     //     return id;
     //   },
-       signup : (parent , { email , password } ,context ,info  )  =>{
-          console.log('email')
-          return { id : 'id',error:'error'}
+       login : async  (parent , { email , password } ,context ,info  )  =>{
+     
+        const  user = await User.findOne( { "email":email })
+        console.log(user.id , user.email)
+        if( user.lock_user === "true"){
+          return(" account has been lock ")
+        }
+        if( user.validPassword(password) ) {
+         let token =  jwt.sign( { user : user } , 'secret',{ expiresIn: 60 * 60 });
+          
+        // 
+          return(token)
+        }else{
+          return(" wrong username or password ")
+        }
+
+       },
+       signup :  async (parent , { email , password ,level } ,context ,info  )  =>{
+         try{
+          const docs  =   await User.create({email , password , level  })
+          return docs
+         }catch( e ){
+          return  { id:"",errors: e }
+         }
        }
     },
     Subscription: {
@@ -156,9 +184,12 @@ const resolvers = {
 
     const server = new ApolloServer({ typeDefs, resolvers , 
       context:({req,res}) =>{
-        const token = req.headers.authorization || null ;
-        const user =   token ?   token : null ;
-        if (!user) throw new AuthenticationError('you must be logged in');
+        
+        const token = req.headers ? req.headers.authorization ?  req.headers.authorization : null : null ;
+        const user =   token ?    jwt.verify(token, 'secret')  : null ;
+        console.log( user )
+      
+        // if (!user) throw new AuthenticationError('you must be logged in');
         return { user  ,req , res };
       },
       subscriptions: { 

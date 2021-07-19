@@ -28,6 +28,8 @@ mongodb_initial()
 
 const app = express();
 app.use(cors())
+
+
 app.use('/',router_auth)
 
 
