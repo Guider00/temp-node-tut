@@ -2,7 +2,7 @@ import axios from "axios";
 
 // import { getToken } from "../../storage/index";
 
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 
 /**
  *

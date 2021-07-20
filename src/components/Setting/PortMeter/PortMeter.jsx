@@ -5,9 +5,10 @@ import Add from '@material-ui/icons/Add';
 import Table from '../../../subcomponents/Table/Table'
 
 import { Floormodal } from '../Floor/Floormodal'
+import { Validate } from '../../../subcomponents/Regex/Regex'
 
 
-import {  API_createPortmeter, API_updatePortmeter, API_deletePortmeter,  API_queryPortmeterByid, API_queryPortmeters } from '../../../API/index'
+import {  API_createPortmeter, API_updatePortmeter, API_deletePortmeter,   API_queryPortmeters } from '../../../API/index'
 
 
 export const Portmeter = () => {
@@ -137,9 +138,10 @@ export const Portmeter = () => {
             setportmeters({
                 showindex: true,
                 topic: [ "name", "protocol",
-                        "comport","baudrate","readtimeout","writetimeout","stopbits","databits","autoreconnect",
+                        "comport","baudrate","stopbits","databits","autoreconnect",
                         "ipaddress","tcp_port",
                         "topic",
+                        "readtimeout","writetimeout",
                         "version"
                        ],
                 body: table,
@@ -150,6 +152,7 @@ export const Portmeter = () => {
                         property: "name",
                         form: {
                             displayform: "textbox",
+                            validate :  (x)=>(typeof x === 'string' && x.length < 16),
                             type: "text",
                             value: ""
                         }
@@ -158,17 +161,47 @@ export const Portmeter = () => {
                         label: "protocol",
                         property: "protocol",
                         form: {
-                            displayform: "textbox",
-                            type: "text",
-                            value: ""
+                            displayform:"select",
+                            validate :  (x)=>(x === 'Modbus_Serial' || x === 'Modbus_TCP/IP' || x=== 'MQTT/Lora'),
+                            options:[
+                                {value:`Modbus_Serial`,label:"Modbus_Serial"},
+                                {value:`Modbus_TCP/IP`,label:`Modbus_TCP/IP`},
+                                {value:`MQTT/Lora`,label:`MQTT/Lora`},
+                             ],
+                            value: "Modbus_TCP/IP"
                         }
                     },
                     {
                         label: "comport",
                         property: "comport",
                         form: {
-                            displayform: "textbox",
-                            type: "text",
+                            validate :  (x)=>(typeof x === 'string' &&  x.search("COM") !== -1 ),
+                            displayform: "select",
+                            compaer_property : 'protocol',
+                            fn_compare: (value)=>{ return(  value  !== 'Modbus_Serial' )},
+                            disablecondition: (x, fn)  =>( fn(x) ),
+                            options:[
+                                {value:`COM1`,label:"COM1"},
+                                {value:`COM2`,label:`COM2`},
+                                {value:`COM3`,label:`COM3`},
+                                {value:`COM4`,label:`COM4`},
+                                {value:`COM5`,label:`COM5`},
+                                {value:`COM6`,label:`COM6`},
+                                {value:`COM7`,label:`COM7`},
+                                {value:`COM8`,label:`COM8`},
+                                {value:`COM9`,label:`COM9`},
+                                {value:`COM10`,label:`COM10`},
+                                {value:`COM11`,label:`COM11`},
+                                {value:`COM12`,label:`COM12`},
+                                {value:`COM13`,label:`COM13`},
+                                {value:`COM14`,label:`COM14`},
+                                {value:`COM15`,label:`COM15`},
+                                {value:`COM16`,label:`COM16`},
+                                {value:`COM17`,label:`COM17`},
+                                {value:`COM18`,label:`COM18`},
+                                {value:`COM19`,label:`COM19`},
+                                {value:`COM20`,label:`COM20`},
+                             ],
                             value: ""
                         }
                     },
@@ -176,54 +209,62 @@ export const Portmeter = () => {
                         label: "baudrate",
                         property: "baudrate",
                         form: {
-                            displayform: "textbox",
-                            type: "text",
-                            value: ""
-                        }
-                    },
-                    {
-                        label: "readtimeout",
-                        property: "readtimeout",
-                        form: {
-                            displayform: "textbox",
-                            type: "text",
-                            value: ""
-                        }
-                    },
-                    {
-                        label: "writetimeout",
-                        property: "writetimeout",
-                        form: {
-                            displayform: "textbox",
-                            type: "text",
-                            value: ""
+                            validate :  (x)=>(typeof x === 'string' &&  (x ==='4800' || x === '9600'  || x === '19200' || x === '38400' || x === '57600') ),
+                            displayform: "select",
+                            compaer_property : 'protocol',
+                            fn_compare: (value)=>{ return(  value  !== 'Modbus_Serial' )},
+                            disablecondition: (x, fn)  =>( fn(x) ),
+                            options:[
+                                {value:`4800`,label:"4800"},
+                                {value:`9600`,label:"9600"},
+                                {value:`19200`,label:"19200"},
+                                {value:`38400`,label:"38400"},
+                                {value:`57600`,label:"57600"},
+                             ],
+                            value: "9600"
                         }
                     },
                     {
                         label: "stopbits",
                         property: "stopbits",
                         form: {
-                            displayform: "textbox",
-                            type: "text",
-                            value: ""
+                            displayform: "select",
+                            compaer_property : 'protocol',
+                            fn_compare: (value)=>{ return(  value  !== 'Modbus_Serial' )},
+                            disablecondition: (x, fn)  =>( fn(x) ),
+                            options:[
+                                {value:`1`,label:"1"},
+                                {value:`1`,label:"2"},
+                             ],
+                            value: "1"
                         }
                     },
                     {
                         label: "databits",
                         property: "databits",
                         form: {
-                            displayform: "textbox",
-                            type: "text",
-                            value: ""
+                            displayform: "select",
+                            compaer_property : 'protocol',
+                            fn_compare: (value)=>{ return(  value  !== 'Modbus_Serial' )},
+                            disablecondition: (x, fn)  =>( fn(x) ),
+                            options:[
+                                {value:`7`,label:"7"},
+                                {value:`8`,label:"8"},
+                             ],
+                            value: "8"
                         }
                     },
                     {
                         label: "autoreconnect",
                         property: "autoreconnect",
                         form: {
-                            displayform: "textbox",
+                            displayform: "select",
+                            options:[
+                                {value:`enable`,label:"enable"},
+                                {value:`disable`,label:"disable"},
+                             ],
                             type: "text",
-                            value: ""
+                            value: "enable"
                         }
                     },
                     {
@@ -231,6 +272,10 @@ export const Portmeter = () => {
                         property: "ipaddress",
                         form: {
                             displayform: "textbox",
+                            validate :  (x)=>( typeof x === 'string' && Validate('ipaddress',x) ),
+                            compaer_property : 'protocol',
+                            fn_compare: (value)=>{ return(  value  !== 'Modbus_TCP/IP' )},
+                            disablecondition: (x, fn)  =>( fn(x) ),
                             type: "text",
                             value: ""
                         }
@@ -240,19 +285,59 @@ export const Portmeter = () => {
                         property: "tcp_port",
                         form: {
                             displayform: "textbox",
+                            validate :  (x)=>(  typeof x === 'string' &&  Number(x) <= 20000  && Number (x) >= 1   ),
+                            compaer_property : 'protocol',
+                            fn_compare: (value)=>{ return(  value  !== 'Modbus_TCP/IP' )},
+                            disablecondition: (x, fn)  =>( fn(x) ),
                             type: "text",
                             value: ""
                         }
                     },
                     {
                         label: "topic",
-                        property: "tcp_port",
+                        property: "topic",
+                  
+
+                        form: {
+                            displayform: "textbox",
+                            validate :  (x)=>(typeof x === 'string' ),
+                            compaer_property : 'protocol',
+                            fn_compare: (value)=>{ return(  value  !== 'MQTT/Lora' )},
+                            disablecondition: (x, fn)  =>( fn(x) ),
+                            type: "text",
+                            value: ""
+                        }
+                    },
+                    {
+                        label: "readtimeout",
+                        property: "readtimeout",
+                        form: {
+                            displayform: "textbox",
+                            validate :  (x)=>(typeof x === 'string' &&  Number(x) <= 10000  && Number (x) >= 100 ),
+                            type: "text",
+                            value: "100"
+                        }
+                    },
+                    {
+                        label: "writetimeout",
+                        property: "writetimeout",
+                        form: {
+                            displayform: "textbox",
+                            validate :  (x)=>(typeof x === 'string' &&  Number(x) <= 10000  && Number (x) >= 100 ),
+                            type: "text",
+                            value: "100"
+                        }
+                    },
+                    {
+                        label: "version",
+                        property: "version",
                         form: {
                             displayform: "textbox",
                             type: "text",
                             value: ""
                         }
                     },
+
                 ]
             })
             setload(true)

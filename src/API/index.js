@@ -14,63 +14,66 @@ import { createPortmeter ,  updatePortmeter , deletePortmeter , queryPortmeterBy
 
 
 
+
 import fetchData from '../cores/axios/index'
 
-
+const PATH = 'graphqlexpress'
+const METHOD = 'POST'
 
 export const API_queryMeterRoomByid = async(id)=>{
-    let  res = await fetchData('POST','graphql',queryMeterRoomByid(id) )
+    let  res = await fetchData(METHOD,PATH,queryMeterRoomByid(id) )
     if(!res.data) return null
     res.data = res.data.data;
     return res
 }
 export const API_queryMeterRooms = async() =>{
-    let  res = await fetchData('POST','graphql',queryMeterRooms() )
+    let  res = await fetchData(METHOD,PATH,queryMeterRooms() )
     if(!res.data) return null
     res.data = res.data.data;
     return res
 }
 export const API_createMeterRoom = async (data) => {
-    let  res = await fetchData('POST','graphql',createMeterRoom(data) )
+ 
+    let  res = await fetchData(METHOD,PATH,createMeterRoom(data) )
     if(!res.data) return null
     return res
 }
 export const API_updateMeterRoom = async (id,data) =>{
-    let  res = await fetchData('POST','graphql',updateMeterRoom(id,data) )
+    let  res = await fetchData(METHOD,PATH,updateMeterRoom(id,data) )
     if(!res.data) return null
     return res
 }
 export const API_deleteMeterRoom = async (id) =>{
-    let  res = await fetchData('POST','graphql',deleteMeterRoom(id) )
+    let  res = await fetchData(METHOD,PATH,deleteMeterRoom(id) )
     if(!res.data) return null
     return res
 }
 
 
 export const API_queryPortmeterByid = async(id) =>{
-    let  res = await fetchData('POST','graphql',queryPortmeterByid(id) )
+    let  res = await fetchData(METHOD,PATH,queryPortmeterByid(id) )
     if(!res.data) return null
     res.data = res.data.data;
     return res
 }
 export const API_queryPortmeters = async()=>{
-    let  res = await fetchData('POST','graphql',queryPortmeters() )
+    let  res = await fetchData(METHOD,PATH,queryPortmeters() )
     if(!res.data) return null
     res.data = res.data.data;
     return res
 }
 export const API_createPortmeter  = async(data) =>{
-    let  res = await fetchData('POST','graphql',createPortmeter(data) )
+    let  res = await fetchData(METHOD,PATH,createPortmeter(data) )
     if(!res.data) return null
     return res
 }
 export const API_updatePortmeter = async(id,data)=>{
-    let  res = await fetchData('POST','graphql',updatePortmeter(id,data) )
+    let  res = await fetchData(METHOD,PATH,updatePortmeter(id,data) )
     if(!res.data) return null
     return res
 }
 export const API_deletePortmeter = async(id)=>{
-    let  res = await fetchData('POST','graphql',deletePortmeter(id) )
+    let  res = await fetchData(METHOD,PATH,deletePortmeter(id) )
     if(!res.data) return null
     return res
 }
@@ -81,142 +84,142 @@ export const API_deletePortmeter = async(id)=>{
 
 
 export const API_queryMemberByid = async (id)=>{
-    let  res = await fetchData('POST','graphql',queryMemberByid(id) )
+    let  res = await fetchData(METHOD,PATH,queryMemberByid(id) )
     if(!res.data) return null
     res.data = res.data.data;
     return res
 }
 export const API_queryMembers = async () =>{
-    let  res = await fetchData('POST','graphql',queryMembers() )
+    let  res = await fetchData(METHOD,PATH,queryMembers() )
     if(!res.data) return null
     res.data = res.data.data;
     return res
 }
 export const API_createMember = async (data) =>{
-    let  res = await fetchData('POST','graphql',createMember(data) )
+    let  res = await fetchData(METHOD,PATH,createMember(data) )
     if(!res.data) return null
     return res
 }
 export const API_deleteMember = async (id) =>{
-    let  res = await fetchData('POST','graphql',deleteMember(id) )
+    let  res = await fetchData(METHOD,PATH,deleteMember(id) )
     if(!res.data) return null
     return res
 }
 export const API_updateMember = async (id,data) =>{
 
-    let  res = await fetchData('POST','graphql',updateMember(id,data) )
+    let  res = await fetchData(METHOD,PATH,updateMember(id,data) )
     if(!res.data) return null
     return res
 }
 
 
 export const API_queryRoomByid = async (id) =>{
-    let  res = await fetchData('POST','graphql',queryRoomByid(id) )
+    let  res = await fetchData(METHOD,PATH,queryRoomByid(id) )
     if(!res.data) return null
     res.data = res.data.data;
     return res
 }
 export const API_queryRooms = async () =>{
-    let  res = await fetchData('POST','graphql',queryRooms() )
+    let  res = await fetchData(METHOD,PATH,queryRooms() )
     if(!res.data) return null
     res.data = res.data.data;
     return res
 }
 export const API_createRoom = async (data) =>{
-    let  res = await fetchData('POST','graphql',createRoom(data) )
+    let  res = await fetchData(METHOD,PATH,createRoom(data) )
     if(!res.data) return null
     return res
 }
 export const API_deleteRoom = async (id) =>{
-    let  res = await fetchData('POST','graphql',deleteRoom(id) )
+    let  res = await fetchData(METHOD,PATH,deleteRoom(id) )
     if(!res.data) return null
     return res
 }
 export const API_updateRoom = async (id,data) =>{
   
-    let  res = await fetchData('POST','graphql',updateRoom(id,data) )
+    let  res = await fetchData(METHOD,PATH,updateRoom(id,data) )
     if(!res.data) return null
     return res
 }
 
 export const API_queryFloorByid = async (id) =>{
-    let  res = await fetchData('POST','graphql',queryFloorByid(id) )
+    let  res = await fetchData(METHOD,PATH,queryFloorByid(id) )
     if(!res.data) return null
     res.data = res.data.data;
     return res
 }
 export const API_queryFloors = async () =>{
-    let  res = await fetchData('POST','graphql',queryFloors() )
+    let  res = await fetchData(METHOD,PATH,queryFloors() )
     if(!res.data) return null
     res.data = res.data.data;
     return res
 }
 export const API_createFloor = async (data) =>{
-    let  res = await fetchData('POST','graphql',createFloor(data) )
+    let  res = await fetchData(METHOD,PATH,createFloor(data) )
     if(!res.data) return null
     return res
 }
 export const API_deleteFloor = async (id) =>{
-    let  res = await fetchData('POST','graphql',deleteFloor(id) )
+    let  res = await fetchData(METHOD,PATH,deleteFloor(id) )
     if(!res.data) return null
     return res
 }
 export const API_updateFloor = async (id,data) =>{
   
-    let  res = await fetchData('POST','graphql',updateFloor(id,data) )
+    let  res = await fetchData(METHOD,PATH,updateFloor(id,data) )
     if(!res.data) return null
     return res
 }
 
 export const API_queryBuildingByid = async (id) =>{
-    let  res = await fetchData('POST','graphql',queryBuildingByid(id) )
+    let  res = await fetchData(METHOD,PATH,queryBuildingByid(id) )
     if(!res.data) return null
     res.data = res.data.data;
     return res
 }
 export const API_queryBuildings = async () =>{
-    let  res = await fetchData('POST','graphql',queryBuildings() )
+    let  res = await fetchData(METHOD,PATH,queryBuildings() )
     if(!res.data) return null
     res.data = res.data.data;
     return res
 }
 export const API_createBuilding = async (data) =>{
    
-    let  res = await fetchData('POST','graphql',createBuilding(data) )
+    let  res = await fetchData(METHOD,PATH,createBuilding(data) )
     if(!res.data) return null
     return res
 }
 export const API_deleteBuilding = async (id) =>{
-    let  res = await fetchData('POST','graphql',deleteBuilding(id) )
+    let  res = await fetchData(METHOD,PATH,deleteBuilding(id) )
     if(!res.data) return null
     return res
 }
 export const API_updateBuilding = async (id,data) =>{
     console.log(id,data)
-    let  res = await fetchData('POST','graphql',updateBuilding(id,data) )
+    let  res = await fetchData(METHOD,PATH,updateBuilding(id,data) )
     if(!res.data) return null
     return res
 }
 
 export const API_queryroomprice = async () =>{
-    let  res = await fetchData('POST','graphql',queryroomprice() )
+    let  res = await fetchData(METHOD,PATH,queryroomprice() )
     if(!res.data) return null
     res.data = res.data.data;
     return res
 }
 export const API_deleteroomprice = async (id) =>{
-    let res  =   await  fetchData('POST','graphql',deleteroomprice(id) )
+    let res  =   await  fetchData(METHOD,PATH,deleteroomprice(id) )
     if(!res.data) return null
     return res
 }
 export const API_createroomprice = async ( data ) =>{
     
-    let req  =   await  fetchData('POST','graphql',createroomprice(data) )
+    let req  =   await  fetchData(METHOD,PATH,createroomprice(data) )
     if(!req.data) return null
     return req
 }
 export const API_editroomprice =async (id,data) =>{
-    let req  =   await  fetchData('POST','graphql',editroomprice(id,data) )
+    let req  =   await  fetchData(METHOD,PATH,editroomprice(id,data) )
     if(!req.data) return null
     return req
 }

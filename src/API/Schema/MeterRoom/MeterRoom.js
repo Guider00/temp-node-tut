@@ -5,7 +5,10 @@ export const queryMeterRoomByid = (id) =>{
             MeterRoomByid(id:"${id}"){
                 id
                 name
-                port
+                device_model
+                portmeter{
+                    name
+                }
                 device_address
                 inmemory_kwh
                 inmemory_kwh_date
@@ -13,7 +16,6 @@ export const queryMeterRoomByid = (id) =>{
                 inmemory_water
                 inmemory_water_date
                 realtime_water
-                device_model
                 version
             }
         }
@@ -26,7 +28,13 @@ export const queryMeterRooms =  () =>{
         MeterRooms{
             id
             name
-            port
+            device_model
+            portmeter{
+                id
+                autoreconnect
+                protocol
+                name
+            }
             device_address
             inmemory_kwh
             inmemory_kwh_date
@@ -34,7 +42,11 @@ export const queryMeterRooms =  () =>{
             inmemory_water
             inmemory_water_date
             realtime_water
-            device_model
+            
+            deveui,
+            appeui,
+            appkey,
+
             version
         }
     }
@@ -43,20 +55,27 @@ export const queryMeterRooms =  () =>{
 }
 
 export const createMeterRoom= (input) =>{
+    console.log('create meter room ',input)
     return {query:`
     mutation{
         createMeterRoom(input:{
-            name:${input.name},
-            port: ${input.port},
-            device_address: ${input.device_address},
-            inmemory_kwh: ${input.inmemory_kwh},
-            inmemory_kwh_date: ${input.inmemory_kwh_date},
-            realtime_kwh: ${input.realtime_kwh},
-            inmemory_water: ${input.inmemory_water},
-            inmemory_water_date: ${input.inmemory_water_date},
-            realtime_water: ${input.realtime_water},
-            device_model: ${input.device_model},
-            version: ${input.version}
+            name: "${input.name}",
+            device_model: "${input.device_model}",
+            portmeter: "${input.portmeter}",
+            device_address: "${input.device_address}",
+            inmemory_kwh: "${input.inmemory_kwh}",
+            inmemory_kwh_date: "${input.inmemory_kwh_date}",
+            realtime_kwh: "${input.realtime_kwh}",
+            inmemory_water: "${input.inmemory_water}",
+            inmemory_water_date: "${input.inmemory_water_date}",
+            realtime_water: "${input.realtime_water}",
+
+            deveui:"${input.deveui}",
+            appeui:"${input.appeui}",
+            appkey:"${input.appkey}",
+
+
+            version: "${input.version}"
         }){
             id
             errors
@@ -67,21 +86,27 @@ export const createMeterRoom= (input) =>{
 }
 
 export const updateMeterRoom = (id , input) =>{
+    console.log('updateMeterRoom data',id,input)
     return { query:`
     mutation{
         updateMeterRoom(id:"${id}",
                         input:{
-                            name:${input.name},
-                            port: ${input.port},
-                            device_address: ${input.device_address},
-                            inmemory_kwh: ${input.inmemory_kwh},
-                            inmemory_kwh_date: ${input.inmemory_kwh_date},
-                            realtime_kwh: ${input.realtime_kwh},
-                            inmemory_water: ${input.inmemory_water},
-                            inmemory_water_date: ${input.inmemory_water_date},
-                            realtime_water: ${input.realtime_water},
-                            device_model: ${input.device_model},
-                            version: ${input.version}
+                            name: "${input.name}",
+                            device_model: "${input.device_model}",
+                            portmeter: "${input.portmeter}",
+                            device_address: "${input.device_address}",
+                            inmemory_kwh: "${input.inmemory_kwh}",
+                            inmemory_kwh_date: "${input.inmemory_kwh_date}",
+                            realtime_kwh: "${input.realtime_kwh}",
+                            inmemory_water: "${input.inmemory_water}",
+                            inmemory_water_date: "${input.inmemory_water_date}",
+                            realtime_water: "${input.realtime_water}",
+
+                            deveui:"${input.deveui}",
+                            appeui:"${input.appeui}",
+                            appkey:"${input.appkey}",
+
+                            version: "${input.version}"
                         }
                         )
                         {

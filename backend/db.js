@@ -1,10 +1,16 @@
 const mongoose = require ('mongoose')
 const {dbname} = require('./config/config')
+
+
+const  _readyState  = ()=>{return mongoose.connection.readyState}
+
+
 const options = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
   }
+
 
 const _mongodb_initial = () => {
 
@@ -71,4 +77,4 @@ const _mongodb_initial = () => {
 
 
   exports.mongodb_initial = _mongodb_initial
-  exports.readyState = mongoose.connection.readyState
+  exports.readyState = _readyState

@@ -8,21 +8,48 @@ import { BrowserRouter } from "react-router-dom";
 /**
  *  Allow -redux
  */
- import { createStore, applyMiddleware, compose } from "redux";
- import { Provider } from "react-redux";
- import thunk from "redux-thunk";
-
- 
+//  import { createStore, applyMiddleware, compose } from "redux";
+//  import { Provider } from "react-redux";
+//  import thunk from "redux-thunk";
 /**
  * 
  * @returns 
  */
+/**
+ *  
+ */
+
+ import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+} from "@apollo/client";
+
+
  import theme from "./theme/themes.module.css";
+
+ import { WebSocketLink } from "@apollo/client/link/ws";
+
+
+ const link = new WebSocketLink({
+  uri: `ws://localhost:4000/graphqlsub`,
+  options: {
+    reconnect: true,
+  },
+});
+ const client = new ApolloClient({
+  link,
+  uri: "http://localhost:4000/graphqlsub",
+  cache: new InMemoryCache(),
+});
 
  const AppWithRouter = () => (
   <BrowserRouter>
     <div className={theme.font}>
+    <ApolloProvider client={client}>
+
       <App />
+    </ApolloProvider>
     </div>
   </BrowserRouter>
 );

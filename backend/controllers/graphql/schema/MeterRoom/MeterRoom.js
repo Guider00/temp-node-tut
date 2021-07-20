@@ -1,23 +1,29 @@
 const  {  db  }  = require('../../../models/MeterRoom/MeterRoom')
-const queryPortByid = require('../PortMeter/Portmeter')
+const { queryPortmeterByid } = require('../PortMeter/Portmeter')
 const _MeterRoomschema = `
 input MeterRoomInput {
     name :String,
-    port : String ,
+    portmeter: String,
     device_address: String,
+    device_model : String,
     inmemory_kwh: String,
     inmemory_kwh_date: String,
     realtime_kwh: String,
     inmemory_water: String,
     inmemory_water_date: String,
     realtime_water:String,
-    device_model : String,
+
+    deveui:String,
+    appeui:String,
+    appkey:String,
+
     version: String
  }
  type MeterRoom {
     id: String,
     name :String,
-    port : String ,
+    portmeter: Portmeter,
+    device_model : String,
     device_address: String,
     inmemory_kwh: String,
     inmemory_kwh_date: String,
@@ -25,7 +31,11 @@ input MeterRoomInput {
     inmemory_water: String,
     inmemory_water_date: String,
     realtime_water:String,
-    device_model : String,
+    
+    deveui:String,
+    appeui:String,
+    appkey:String,
+
     version: String
  }
        `
@@ -40,7 +50,7 @@ const _queryMeterRoomByid = async (payload) =>{
         
         let data  = resulted._doc
         data.id = data._id
-        data.port = await queryPortByid({id:data.building})
+
         return (data)
     } catch (error) {
         return error
@@ -51,7 +61,7 @@ const _queryMeterRooms = async () => {
         let resulted = await db.find({})
         let data = resulted.map(payload => payload._doc).map( async (payload) => {
             payload.id = payload._id.toString()
-            payload.port =  await queryPortByid({id:data.building})
+            payload.portmeter  = await queryPortmeterByid({id:payload.portmeter })
             return (payload)
         })
         return (

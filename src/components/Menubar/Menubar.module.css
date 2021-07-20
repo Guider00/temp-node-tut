@@ -17,6 +17,31 @@
     display: flex;
 
 }
+.menu>.menu_right{
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+}
+.menu>.menu_right>.db_status{
+    
+    flex-flow: column wrap
+}
+.menu>.menu_right>.db_status >div{
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+@media screen and (max-width: 600px) {
+    .menu>.menu_right>.db_status{
+    
+      display: none;
+    }
+}
+
+
+
+
 .menu>div>div{
     display: flex;
     align-items: center;

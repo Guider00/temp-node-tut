@@ -3,19 +3,15 @@ import styles from './Overview.module.css'
 import SettingsIcon from '@material-ui/icons/Settings';
 import DeleteIcon from '@material-ui/icons/Delete'
 
-import AcUnitIcon from '@material-ui/icons/AcUnit';
-import ToysIcon from '@material-ui/icons/Toys';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import Add from '@material-ui/icons/Add';
 
-import { Topic } from '../../subcomponents/Topic/Topic'
 import { useEffect, useState } from 'react';
 
 import { Floormodal } from '../Setting/Floor/Floormodal'
-import Table from '../../subcomponents/Table/Table'
 
 
-import { API_createroomprice ,API_queryroomprice , API_deleteroomprice , API_editroomprice, API_queryBuildings , API_queryFloors, API_updateRoom, API_deleteRoom, API_queryMembers, API_queryRooms, API_createRoom} from  '../../API/index'
+import { API_queryroomprice  , API_queryBuildings , API_queryFloors, API_updateRoom, API_deleteRoom, API_queryMembers, API_queryRooms, API_createRoom} from  '../../API/index'
 
 import  { Inputconfig }  from './config'
 
@@ -24,24 +20,19 @@ const color_roomstatur = (status) =>{
     {
         case "จอง" :
         return 'cornflowerblue'   
-        break;
         case "ว่าง" :
         return 'rgb(90,90,90)'
-        break;
         case"ไม่ว่าง" :
+        return 'red'
         case"ย้ายออก" :
         return 'red'
-        break;
         case"ย้ายเข้า" :
         return 'yellow'
-        break
         case"เช่า" :
         case"มีคนอยู่" :
         return 'green'
-        break
         default:
         return 'gray'
-        break
     }
 
 }
@@ -51,7 +42,7 @@ const get_option = (Rooms, key) => {
     if (key) {
         arr = Rooms.map(room => room[key])
         arr = arr.filter(function (value, index, array) {    //<< uniqe type 
-            return array.indexOf(value) == index;
+            return array.indexOf(value).toString() === index.toString();
         });
         arr.sort()
     }
@@ -218,9 +209,13 @@ export const Overview = () => {
 
     const [_optionbuilding,setoptionbuilding] = useState([])
     const [_optionfloor,setoptionfloor] = useState([])
-    const [_optionprice,setoptionprice] = useState([])
+    const [_optionprice] = useState([])
+    // const [_optionprice,setoptionprice] = useState([])
     const [_optionmember,setoptionmember] = useState([])
     const [_optionstatus,setoptionstatus] = useState([])
+    console.log('_optionmember :',_optionmember)
+    console.log('_optionstatus :',_optionstatus)
+
 
     const [_showmodal,setshowmodal] = useState(false)
     const [_load,setload] = useState(false)

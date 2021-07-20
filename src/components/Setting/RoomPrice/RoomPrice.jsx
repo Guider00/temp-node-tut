@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Input } from "../../../subcomponents/Input/Input"
-import { Select } from "../../../subcomponents/Select/select"
+// import { Select } from "../../../subcomponents/Select/select"
 import { Table } from "../../../subcomponents/Table/Table"
 import { Topic } from '../../../subcomponents/Topic/Topic'
 import { EndButton } from "../../../subcomponents/EndButton/EndButton"
@@ -14,8 +14,8 @@ import styles from "./RoomPrice.module.css"
 
 import { API_createroomprice ,API_queryroomprice , API_deleteroomprice , API_editroomprice } from  '../../../API/index'
 
-const opt_type_rent = ["รายเดือน","รายวัน"]
-const opt_type_utilities = ["ตามหน่วยการใช้งาน","เหมา"]
+// const opt_type_rent = ["รายเดือน","รายวัน"]
+// const opt_type_utilities = ["ตามหน่วยการใช้งาน","เหมา"]
 
 const default_data = {
     showindex: true,

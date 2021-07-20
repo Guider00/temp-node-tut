@@ -1,27 +1,32 @@
 // schema.js
- const { Roomschema , queryRoom ,queryRoomByid , createRoom ,deleteRoom, updateRoom} = require('./Room/Room')
+const { Roomschema, queryRoom, queryRoomByid, createRoom, deleteRoom, updateRoom } = require('./Room/Room')
 
- const { Buildingschema , queryBuilding , queryBuildingByid , createBuilding, deleteBuilding, updateBuilding } = require('./Building/Building')
+const { Buildingschema, queryBuilding, queryBuildingByid, createBuilding, deleteBuilding, updateBuilding } = require('./Building/Building')
 
- const { Memberschema , queryMembers , queryMemberByid , createMember, deleteMember, updateMember } = require('./Member/Member')
+const { Memberschema, queryMembers, queryMemberByid, createMember, deleteMember, updateMember } = require('./Member/Member')
 
- const { Floorschema , queryFloor ,queryFloorByid, createFloor, deleteFloor, updateFloor } = require('./Floor/Floor')
+const { Floorschema, queryFloor, queryFloorByid, createFloor, deleteFloor, updateFloor } = require('./Floor/Floor')
 
- const { RoomPriceschema , queryRoomPrice , createRoomPrice, deletRoomPrice, updateRoomPrice } = require('./RoomPrice/RoomPrice')
+const { RoomPriceschema, queryRoomPrice, createRoomPrice, deletRoomPrice, updateRoomPrice } = require('./RoomPrice/RoomPrice')
 
- const { MeterRoomschema , queryMeterRooms , queryMeterRoomByid , createMeterRoom , deleteMeterRoom,updateMeterRoom,  }  = require('./MeterRoom/MeterRoom')
+const { MeterRoomschema, queryMeterRooms, queryMeterRoomByid, createMeterRoom, deleteMeterRoom, updateMeterRoom, } = require('./MeterRoom/MeterRoom')
 
- const { Portmeterschema ,queryPortmeters, queryPortmeterByid , createPortmeter ,deletePortmeter , updatePortmeter }  = require('./PortMeter/Portmeter')
+const { Portmeterschema, queryPortmeters, queryPortmeterByid, createPortmeter, deletePortmeter, updatePortmeter } = require('./PortMeter/Portmeter')
 
-const { buildSchema } = require( 'graphql');
-
-
-
-
+ // real time system status 
+const { DBstatusschema, queryDBstatus } = require('./System/DBstatus/DBstatus')
+const { MQTTServerschema , queryMQTTServerstatus}   = require('./System/MQTTserver/MQTTserver')
 
 
- const schema = buildSchema(  `
 
+
+const { buildSchema } = require('graphql');
+
+
+const schema = buildSchema(`
+
+  ${MQTTServerschema}
+  ${DBstatusschema}
 
   ${Memberschema}
   ${Buildingschema}
@@ -60,6 +65,11 @@ const { buildSchema } = require( 'graphql');
     database:String
   }
   type Query {
+
+    DBstatus:DBstatus,
+    MQTTServerstatus:MQTTServerstatus,
+
+
     softwareversion : softwareversion,
     roomprices: [Roomprice],
 
@@ -79,7 +89,11 @@ const { buildSchema } = require( 'graphql');
     MeterRooms:[MeterRoom],
 
     PortmeterByid(id:ID!):Portmeter,
-    Portmeters:[Portmeter]
+    Portmeters:[Portmeter],
+
+ 
+
+
 
   }
   type Mutation {
@@ -106,7 +120,7 @@ const { buildSchema } = require( 'graphql');
     deleteMember(id: ID!): MessageDelete,
 
     createMeterRoom(input: MeterRoomInput):MessageCreate,
-    updateMeterRoom(id: ID!, input: BuildingInput): MessageUpdate,
+    updateMeterRoom(id: ID!, input: MeterRoomInput): MessageUpdate,
     deleteMeterRoom(id: ID!): MessageDelete
 
     createPortmeter(input: PortmeterInput):MessageCreate,
@@ -120,68 +134,75 @@ const { buildSchema } = require( 'graphql');
   }
 
 
+
+
 `);
 
 
- const rootValue = {
-    updatesoftware: (payload) =>{
-        if(!payload){ return null }
-        const {backend,frontend,database}  = payload.input
-        return {backend,frontend,database}
-    },
-    softwareversion : ()=>{  
-      return ({
-         backend:'String',
-         frontend:'String',
-         database:'String'
-       })
-    },
+const rootValue = {
+  updatesoftware: (payload) => {
+    if (!payload) { return null }
+    const { backend, frontend, database } = payload.input
+    return { backend, frontend, database }
+  },
+  softwareversion: () => {
+    return ({
+      backend: 'String',
+      frontend: 'String',
+      database: 'String'
+    })
+  },
 
-    roomprices      : queryRoomPrice,
-    createroomprice : createRoomPrice,
-    updateroomprice : updateRoomPrice,
-    deleteroomprice : deletRoomPrice,
+  DBstatus: queryDBstatus,
+  MQTTServerstatus: queryMQTTServerstatus,
 
-    roomByid : queryRoomByid,
-    rooms : queryRoom,
-    createRoom : createRoom,
-    updateRoom : updateRoom,
-    deleteRoom : deleteRoom,
+  roomprices: queryRoomPrice,
+  createroomprice: createRoomPrice,
+  updateroomprice: updateRoomPrice,
+  deleteroomprice: deletRoomPrice,
 
-    BuildingByid : queryBuildingByid,
-    Buildings : queryBuilding,
-    createBuilding : createBuilding,
-    updateBuilding : updateBuilding,
-    deleteBuilding : deleteBuilding,
+  roomByid: queryRoomByid,
+  rooms: queryRoom,
+  createRoom: createRoom,
+  updateRoom: updateRoom,
+  deleteRoom: deleteRoom,
 
-    FloorByid : queryFloorByid,
-    Floors : queryFloor,
-    createFloor : createFloor,
-    updateFloor : updateFloor,
-    deleteFloor : deleteFloor,
+  BuildingByid: queryBuildingByid,
+  Buildings: queryBuilding,
+  createBuilding: createBuilding,
+  updateBuilding: updateBuilding,
+  deleteBuilding: deleteBuilding,
 
-    MemberByid   : queryMemberByid,
-    Members      : queryMembers,
-    createMember : createMember,
-    updateMember : updateMember,
-    deleteMember : deleteMember,
+  FloorByid: queryFloorByid,
+  Floors: queryFloor,
+  createFloor: createFloor,
+  updateFloor: updateFloor,
+  deleteFloor: deleteFloor,
 
-    MeterRoomByid : queryMeterRoomByid,
-    MeterRooms : queryMeterRooms,
-    createMeterRoom: createMeterRoom,
-    updateMeterRoom : updateMeterRoom,
-    deleteMeterRoom : deleteMeterRoom,
+  MemberByid: queryMemberByid,
+  Members: queryMembers,
+  createMember: createMember,
+  updateMember: updateMember,
+  deleteMember: deleteMember,
 
-    PortmeterByid : queryPortmeterByid,
-    Portmeters :queryPortmeters,
-    createPortmeter : createPortmeter,
-    updatePortmeter : updatePortmeter,
-    deletePortmeter : deletePortmeter
+  MeterRoomByid: queryMeterRoomByid,
+  MeterRooms: queryMeterRooms,
+  createMeterRoom: createMeterRoom,
+  updateMeterRoom: updateMeterRoom,
+  deleteMeterRoom: deleteMeterRoom,
 
-  };
+  PortmeterByid: queryPortmeterByid,
+  Portmeters: queryPortmeters,
+  createPortmeter: createPortmeter,
+  updatePortmeter: updatePortmeter,
+  deletePortmeter: deletePortmeter
 
-  module.exports ={
-    schema:schema,
-    rootValue:rootValue
-  }
+
+
+};
+
+module.exports = {
+  schema: schema,
+  rootValue: rootValue
+}
 

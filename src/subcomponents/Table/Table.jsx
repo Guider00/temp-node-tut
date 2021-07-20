@@ -1,10 +1,12 @@
 import styls from './Table.module.css'
 
-import Save from '@material-ui/icons/Save';
 import Delete from '@material-ui/icons/Delete';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 import { useState, useEffect } from "react";
+
+
+import  { data_display } from '../../subcomponents/Universal_function'
 
 
 export const  Table = ({Data,onClickDelete , onClickEdit , maxWidth}) =>{
@@ -71,13 +73,18 @@ export const  Table = ({Data,onClickDelete , onClickEdit , maxWidth}) =>{
                              {
                                   
                              Data.inputs.map( (input,index)=>
-                             (  index >=  page_index*(width > 800? (6) : (4))     &&  index <=   ((page_index+1)*(width > 800? (6) : (4)))    ) ?
+                             (  index >=  page_index*(width > 800? (6) : (4))     &&  index <=   ((page_index+1)*(width > 800? (6) : (4)))-1    ) ?
 
                           
                                 <>
                                    <td  key={`tbl_${input.property}_index`}>
                                         <div>
-                                             <input value={ele_body[input.property] } type="text"/> 
+                                             {
+                                              input.idtolabel ? 
+                                              <input value={  input.idtolabel( data_display(ele_body,input.property) )  } type="text"/>  :
+                                              <input value={ data_display(ele_body,input.property)} type="text"/> 
+                                             }
+                                           
                                         </div>
                                        
                                      </td>
