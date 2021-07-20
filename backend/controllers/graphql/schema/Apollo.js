@@ -1,4 +1,4 @@
-const { ApolloServer, PubSub ,gql , AuthenticationError } = require('apollo-server-express');
+const { ApolloServer, PubSub ,gql , AuthenticationError , ApolloError } = require('apollo-server-express');
 const  http = require('http');
 const pubsub = new PubSub();
 
@@ -66,13 +66,24 @@ type MessageCreate{
   id:String
   errors:String
 }
+type MessageUpdate {
+  n:Int
+  nModified:Int
+  ok:Int
+}
+type MessageDelete{
+  n:Int
+  ok:Int
+  deletedCount:Int
+}
+
+
 type User{
   id           : String
   username     : String
   tel          : String
   level        : String
   email        : String
-  password     : String
   lock_user    : String
   reset_password : String 
   error:String
@@ -89,12 +100,21 @@ type Message {
     submqttserverstatus:[SubMQTTServerstatus]
     mqtthistory_packets:[MQTTHistory_packets]
     login(email:String!,password:String!):String
+    users:[User]
   }
 
   type Mutation {
     postMessage(user: String!, content: String!): ID!
     signup (email:String! , password:String! ,level:String!) : MessageCreate
     login (email:String! , password:String!): String!
+    deleteUser (id:String!) : MessageDelete
+    updateUser (id:String! ,
+                email:String,
+                password:String,
+                level:String,
+                lock_user:String,
+                reset_password:String 
+                ) : MessageUpdate
   }
 
   type Subscription {
@@ -109,6 +129,14 @@ const resolvers = {
     //   messages: () => messages,
     //   submqttserverstatus : () => messages,
     //   mqtthistory_packets : () => messages
+     users : async( parent , args  , {user} ,info) =>{
+       if(user &&  user.level  === 'admin' ){
+          const  users = await User.find( {  })
+          return users
+       }else{
+            throw new AuthenticationError('permission denied');
+       }  
+     }
     },
     Mutation: {
     //   postMessage: (parent, { user, content }) => {
@@ -121,6 +149,28 @@ const resolvers = {
     //     subscribers.forEach((fn) => fn()); // << update all to  user subscripttion
     //     return id;
     //   },
+        updateUser: async (parent , payload ,{user}) =>{
+          if(user && user.level === 'admin')
+          {
+            if(payload.id){
+              const  user = await User.updateOne( { "_id":payload.id } , payload )
+              return user
+            }else{
+              throw new Error('payload Error ');
+            }
+          }else{
+            throw new AuthenticationError('permission denied');
+          }
+        },
+        deleteUser: async (parent , {id } , {user } , info ) =>{
+          if(user && user.level === 'admin')
+          {
+            const  user = await User.deleteOne( { "_id":id })
+            return user
+          }else{
+            throw new AuthenticationError('permission denied');
+          }
+        },
        login : async  (parent , { email , password } ,context ,info  )  =>{
      
         const  user = await User.findOne( { "email":email })
@@ -149,7 +199,7 @@ const resolvers = {
     },
     Subscription: {
       submqttserverstatus :{
-        subscribe: (parent, args) =>{
+        subscribe: (parent, args ,{user} ) =>{
           const channel = Math.random().toString(36).slice(2, 15); // generate  subscription id
           onMqttUpdate(() => pubsub.publish(channel, {submqttserverstatus: aedes_clients().map ( (client)=>({name:client})  )  } )); // << update new user  subscription
           setTimeout(() => pubsub.publish(channel,  { submqttserverstatus:aedes_clients().map ( (client)=>({name:client})  )  } ), 0); // <<  update ข้อมูล มายัง id ปัจจุบัน 
@@ -157,7 +207,8 @@ const resolvers = {
         },
       },
       mqtthistory_packets:{
-        subscribe:(parent, args) =>{
+        subscribe:(parent, args , {user} ) =>{
+
           const channel = Math.random().toString(36).slice(2, 16); // generate  subscription id
           registersub(sub_abes_history_packets ,() => pubsub.publish(channel, { mqtthistory_packets: resulte_history_packets   } )); // << update new user  subscription
           setTimeout(() => pubsub.publish(channel,  { mqtthistory_packets: resulte_history_packets   } ), 0); // <<  update ข้อมูล มายัง id ปัจจุบัน 
@@ -165,7 +216,8 @@ const resolvers = {
         }
       },
       subdatabasestatus:{
-        subscribe : (parent,args) =>{
+        subscribe : (parent,args , {user}) =>{
+          console.log('sub user',user )
           const channel = Math.random().toString(36).slice(2, 15); // generate  subscription id
           
           registersub(sub_databasestatus ,() => pubsub.publish(channel, {subdatabasestatus: readyState}  )); // << update new user  subscription
@@ -185,12 +237,21 @@ const resolvers = {
     const server = new ApolloServer({ typeDefs, resolvers , 
       context:({req,res}) =>{
         
-        const token = req.headers ? req.headers.authorization ?  req.headers.authorization : null : null ;
-        const user =   token ?    jwt.verify(token, 'secret')  : null ;
-        console.log( user )
-      
-        // if (!user) throw new AuthenticationError('you must be logged in');
-        return { user  ,req , res };
+        const authorization = req ? req.headers ? req.headers.authorization ?  req.headers.authorization : null : null :null ;
+        const token  =   authorization ? authorization.replace('Bearer ',"") : null
+        let _user = null 
+        if(token){
+          try{
+
+           const { user }  =  jwt.verify(token, 'secret')  ;
+           _user = user
+
+          }catch(e){
+           // throw new AuthenticationError('you must be logged in');
+          }
+        }
+
+        return { "user":_user ,req , res };
       },
       subscriptions: { 
         path: '/graphqlsub',
