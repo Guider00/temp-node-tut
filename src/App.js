@@ -15,79 +15,140 @@ import { Overviewmeter } from './components/Setting/Overviewmeter/Overviewmeter'
 
 
 
-import { Overview } from './components/Overview/Overview' 
+import { Overview } from './components/Overview/Overview'
 
 
-import { BrowserRouter ,Switch , Route  } from "react-router-dom";
+import { FormLogin } from './components/Login/Login'
+import { FormSignup } from './components/Signup/Signup'
 
 
-const _MeterRoom =() =>(
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+
+
+import { useQuery, useMutation, gql, } from '@apollo/client';
+
+const API_GET_USER = gql`
+query{
+  getuser{
+    _id
+    id
+    username
+    email
+    level
+    lock_user
+  }
+}
+`;
+
+const _FormLogin = () => (
+  <>
+    <FormLogin></FormLogin>
+  </>
+)
+
+const _FormSignup = () => (
+  <>
+    <FormSignup />
+
+  </>
+)
+
+
+const _MeterRoom = () => (
   <>
     <MeterRoom></MeterRoom>
   </>
 )
 
-const _Setting_roomprice =() =>(
+const _Setting_roomprice = () => (
   <>
     <RoomPrice></RoomPrice>
   </>
 )
-const _Overview =() =>(
+const _Overview = () => (
   <>
-     
-      <Overview></Overview>
+
+    <Overview></Overview>
   </>
 )
-const _Building =() =>(
+const _Building = () => (
   <>
-     <Building/>
+    <Building />
   </>
 )
-const _Floor =() =>(
+const _Floor = () => (
   <>
-     <Floor/>
+    <Floor />
   </>
 )
-const _Member =() =>(
+const _Member = () => (
   <>
-     <Member/>
+    <Member />
   </>
 )
-const _Portmeter =() =>(
+const _Portmeter = () => (
   <>
-    <Portmeter/>
+    <Portmeter />
   </>
 )
-const _OverviewMeter =() =>(
+const _OverviewMeter = () => (
   <>
-    <Overviewmeter/>
+    <Overviewmeter />
   </>
 )
+
 
 
 
 function App() {
+  const { loading, error, data } = useQuery(API_GET_USER);
+
+  // if(error){
+  //   console.log(window.location.pathname)
+  //   if(  window.location.pathname === '/login'  ){
+
+  //   }else{
+  //         window.location.href = '/login'
+  //   }
+
+  // }
   return (
     <BrowserRouter>
-     <Menubar></Menubar>
-    <Switch>
+      {(loading) ? <div>'Loading...'</div> : 
+      (error) ?
+        <>
+        <Route exact path="/*" component={_FormLogin} />
+        <Route exact path="/signup" component={_FormSignup} />
+        </>
+      :
+        <>
+          <Menubar></Menubar>
+          <Switch>
+            <Route exact path="/">
+              {error ? <FormLogin /> : <Redirect to="/home" />}
+            </Route>
+            <Route exact path="/home" component={_Overview} />
+            <Route exact path="/building" component={_Building} />
+            <Route exact path="/floor" component={_Floor} />
+            <Route exact path="/member" component={_Member} />
+            <Route exact path="/profilepriceroom" component={_Setting_roomprice} />
+            <Route exact path="/meterroom" component={_MeterRoom} />
+            <Route exact path="/portmeter" component={_Portmeter} />
+            <Route exact path="/overviewmeter" component={_OverviewMeter} />
 
-       <Route exact path="/home" component={_Overview} />
-       <Route exact path="/building" component={_Building} />
-       <Route exact path="/floor" component={_Floor} />
-       <Route exact path="/member" component={_Member} />
-       <Route exact path="/profilepriceroom" component={_Setting_roomprice} />
-       <Route exact path="/meterroom" component={_MeterRoom} />
-       <Route exact path="/portmeter" component={_Portmeter} />
-       <Route exact path="/overviewmeter" component={_OverviewMeter} />
+            {/*  ยังไม่ได้ทำ */}
+            <Route exact path="/profile" component={_OverviewMeter} />
 
-        {/*  ยังไม่ได้ทำ */}
-       <Route exact path="/overallnote" component={_OverviewMeter} />
-       
+            <Route exact path="/overallnote" component={_OverviewMeter} />
 
 
-       <Route exact path="/*" component={_Overview} />
-    </Switch>
+
+            <Route exact path="/*" >
+                <Redirect to="/home" />
+            </Route>
+          </Switch>
+        </>
+      }
     </BrowserRouter>
   );
 }

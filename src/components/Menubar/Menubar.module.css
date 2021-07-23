@@ -51,3 +51,7 @@
 .menu>div>a>button{
    height: 100%;
 }
+
+.menu>div>.logout{
+    margin-left: 0.5rem;
+}
