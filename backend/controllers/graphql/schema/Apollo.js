@@ -140,7 +140,7 @@ const resolvers = {
     //   submqttserverstatus : () => messages,
     //   mqtthistory_packets : () => messages
     users: async (parent, args, { user }, info) => {
-      if (user && user.level === 'admin') {
+      if (user && (user.level).toLowerCase() === 'admin') {
         const users = await User.find({})
         return users
       } else {
@@ -149,7 +149,7 @@ const resolvers = {
     },
     getuser: async (parent, args, { user }, info) => {
       if (user) {
-        console.log('get user ',user)
+        console.log('get user ', user)
         return user
       } else {
         throw new AuthenticationError('permission denied');
@@ -168,7 +168,7 @@ const resolvers = {
     //     return id;
     //   },
     updateUser: async (parent, payload, { user }) => {
-      if (user && user.level === 'admin') {
+      if (user && (user.level).toLowerCase() === 'admin') {
         if (payload.id) {
           const user = await User.updateOne({ "_id": payload.id }, payload)
           return user
@@ -180,7 +180,7 @@ const resolvers = {
       }
     },
     deleteUser: async (parent, { id }, { user }, info) => {
-      if (user && user.level === 'admin') {
+      if (user && (user.level).toLowerCase() === 'admin') {
         const user = await User.deleteOne({ "_id": id })
         return user
       } else {
@@ -205,16 +205,22 @@ const resolvers = {
     },
     signup: async (parent, { email, password, level }, context, info) => {
       try {
-        const user = await User.create({ email, password, level })
-        if (user.validPassword(password)) {
-          let token = jwt.sign({ user: user }, 'secret', { expiresIn: 60 * 60 });
-          return ({ token, error: null })
-        }else {
-          return ({ token: "", error: "  signup error " })
+        const user = await User.findOne({ "email": email })
+        if (user) {
+          return ({ token: "", error: "  That user is already to used " })
+        } else {
+          const create_user = await User.create({ email, password, level })
+          if (create_user.validPassword(password)) {
+            let token = jwt.sign({ user: create_user }, 'secret', { expiresIn: 60 * 60 });
+            return ({ token, error: null })
+          } else {
+            return ({ token: "", error: "  signup error " })
+          }
         }
 
+
       } catch (e) {
-        return { token: "", error: "  signup error "}
+        return { token: "", error: "  signup error " }
       }
     }
   },
@@ -240,7 +246,6 @@ const resolvers = {
       subscribe: (parent, args, { user }) => {
         console.log('user', user)
         if (user === undefined || user === null) { throw Error("Permission denied") }
-        if (user.level !== 'admin') { throw Error("Permission denied") }
         const channel = Math.random().toString(36).slice(2, 15); // generate  subscription id
         registersub(sub_databasestatus, () => pubsub.publish(channel, { subdatabasestatus: readyState })); // << update new user  subscription
         setTimeout(() => pubsub.publish(channel, { subdatabasestatus: readyState }), 0); // <<  update ข้อมูล มายัง id ปัจจุบัน 

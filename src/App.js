@@ -22,10 +22,14 @@ import { FormLogin } from './components/Login/Login'
 import { FormSignup } from './components/Signup/Signup'
 
 
+import { Profile } from './components/Profile/Profile'
+import { Usermanagement } from './components/Adminsetting/Usermanagment'
+
+
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 
 
-import { useQuery, useMutation, gql, } from '@apollo/client';
+import { useQuery,  gql, } from '@apollo/client';
 
 const API_GET_USER = gql`
 query{
@@ -102,7 +106,7 @@ const _OverviewMeter = () => (
 
 function App() {
   const { loading, error, data } = useQuery(API_GET_USER);
-
+  console.log("user :" , data);
   // if(error){
   //   console.log(window.location.pathname)
   //   if(  window.location.pathname === '/login'  ){
@@ -135,9 +139,16 @@ function App() {
             <Route exact path="/meterroom" component={_MeterRoom} />
             <Route exact path="/portmeter" component={_Portmeter} />
             <Route exact path="/overviewmeter" component={_OverviewMeter} />
+     
+
 
             {/*  ยังไม่ได้ทำ */}
-            <Route exact path="/profile" component={_OverviewMeter} />
+            <Route exact path="/profile" component={_OverviewMeter} >
+              <Profile></Profile>
+            </Route>
+            <Route exact path="/usermanagment" component={_OverviewMeter} >
+              <Usermanagement></Usermanagement>
+            </Route>
 
             <Route exact path="/overallnote" component={_OverviewMeter} />
 

@@ -4,8 +4,7 @@ import Home from '@material-ui/icons/Home';
 import ListAlt from '@material-ui/icons/ListAlt';
 import Book from '@material-ui/icons/Book'
 import Folder from '@material-ui/icons/Folder'
-import ExitToApp from '@material-ui/icons/ExitToApp'
-import Person from '@material-ui/icons/Person'
+
 
 import { Submenudropdown } from './Submenudropdown/Submenudropdown'
 
@@ -41,10 +40,6 @@ export const Menubar = () => {
 
     const { data } = useSubscription(GET_MESSAGES);
     const { subdatabasestatus } = (data !== undefined) ? data : { subdatabasestatus: null }
-    const onclick_logout = () => {
-        localStorage.clear();
-        window.location.href = '/login'
-    }
     return (
         <>
             <div className={styles.menu}>
@@ -131,6 +126,8 @@ export const Menubar = () => {
                             <Submenudropdown  id="submenuprofile"   label="username" icon="person" links={[
                                 { label: "info", href: "/Profile", icon: "person"   },
                                 { label: "Logout", href: "/login", icon: "logout" ,  middleware:()=>{ console.log("clear");localStorage.clear()}  },
+                                { label: "usermanement", href: "/menagement", icon: "settings"   },
+
                             ]} />
                         </div>
                     </div>

@@ -20,6 +20,13 @@
     align-items: center;
 
 }
+.alertmessage{
+    color: whitesmoke;
+    display: flex;
+    justify-content: center;
+    
+    font-size: 36px;
+}
 .header{
     color: whitesmoke;
     display: flex;

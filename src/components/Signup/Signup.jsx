@@ -20,6 +20,7 @@ export const FormSignup = () => {
 
 
     const [_messagealert, setmessagealert] = useState("")
+    const [_messagealert_color, setmessagealert_color] = useState("red")
 
     const [_loading, setloading] = useState(false)
     const [_user, setuser] = useState("")
@@ -61,9 +62,11 @@ export const FormSignup = () => {
                 if(data && data.signup && data.signup.error === null ){
                     localStorage.setItem('AUTH_TOKEN', data.signup.token);
                     setmessagealert('signup sucess')
+                    setmessagealert_color('green')
                     window.location.href ="/"
-                }else if(data.error ){
-                    setmessagealert(data.error)
+                }else if(data.signup.error ){
+                    setmessagealert(data.signup.error)
+                    setmessagealert_color('red')
                 }
             }catch{
                 setmessagealert('signup Error')
@@ -71,6 +74,8 @@ export const FormSignup = () => {
            
 
         } else {
+            setmessagealert('confirm password not match')
+            setmessagealert_color('red')
             setvalidateconfirmpassword(false)
         }
     }
@@ -92,9 +97,12 @@ export const FormSignup = () => {
                     <div> loading.... </div> :
                     <div className={styles.bg}>
                         <div className={styles.form}>
-
+                            <div className={styles.alertmessage}>
+                                <lable style={{color: _messagealert_color }}>  {_messagealert} </lable>
+                            </div>
                             <div className={styles.header}>
-                                <label> Signup   {_messagealert}</label>
+                                
+                                <label> Signup  </label>
                             </div>
                             <div className={styles.body}>
 
