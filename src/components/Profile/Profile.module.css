@@ -1,0 +1,22 @@
+.from {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    justify-items: center;
+    padding: 2em;
+    border: none;
+    border-radius: 15px;
+
+}
+.from>.header{
+    display: flex;
+    font-size: 32px;
+    margin: 2rem;
+    justify-content: center;
+    color :black;
+
+}
+.from>.body{
+    display: flex;
+    justify-content: center;
+}

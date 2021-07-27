@@ -1,0 +1,134 @@
+.bg{
+    background-image: url("https://i.postimg.cc/8cnYLpfc/ddddd.jpg");
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-top: 2em;
+    position: fixed;
+}
+.form{
+    max-width: 60vw;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    padding: 2rem;
+    box-sizing: border-box;
+    border-radius: 15px;
+    flex-direction: row;
+    margin: auto;
+    align-items: center;
+
+}
+.alertmessage{
+    color: whitesmoke;
+    display: flex;
+    justify-content: center;
+    
+    font-size: 36px;
+}
+.header{
+    color: whitesmoke;
+    display: flex;
+    justify-content: center;
+    
+    font-size: 36px;
+}
+.body>div{
+    margin: 2rem;
+    display: flex;
+    flex: 0 ,2 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.body>div>.first{
+    flex:  3;
+}
+.body>div>.label{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: whitesmoke;
+    flex:  2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 2rem;
+}
+.body>div>.input{
+    flex:  3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.body>div>.input>input{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 3px #ddd;
+    border-radius:  4px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+.body>div>.input>select{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 3px #ddd;
+    border-radius:  4px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+
+.body>div>.end{
+    flex:  3;
+}
+.signupbtn{
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: bold;
+    color: whitesmoke;
+    padding: 0.5rem;
+    font-size: 16px;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    border : none;
+    background-color: #04AA6D;
+    border-radius: 5px;
+}
+.signupbtn:hover{
+
+    background-color: #04AA6D;
+}
+.backbtn{
+    font-weight: bold;
+    font-family: 'Source Sans Pro', sans-serif;
+    padding: 0.5rem;
+    font-size: 16px;
+    background-color: #ddddddbd;
+    border-radius: 5px;
+}
+.backbtn:hover{
+    background-color: #ddddddff;
+}
+
+.zone_btn{
+    margin-top: 2em;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.zone_end{
+    margin-top: 2em;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.zone_end>.text{
+    color: whitesmoke;
+}
+.zone_end>.text>a{
+    color: whitesmoke;
+}
