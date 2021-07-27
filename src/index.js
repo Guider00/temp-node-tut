@@ -63,10 +63,10 @@ const authMiddleware = new ApolloLink((operation, forward) => {
   return forward(operation);
 })
 
-const httpLink = new HttpLink({ uri: 'http://localhost:4000/graphql' });
+const httpLink = new HttpLink({ uri: `http://${window.location.hostname}:${process.env.REACT_APP_PORTBACKEND}/graphql` });
 
  const wsLink = new WebSocketLink({
-  uri: `ws://localhost:4000/graphql`,
+  uri: `ws://${window.location.hostname}:${process.env.REACT_APP_PORTBACKEND}/graphql`,
   options: {
     reconnect: true,
     connectionParams: {
@@ -92,7 +92,7 @@ const splitLink = split(
   // link: authLink.concat(link),
   link: concat(authMiddleware, splitLink),
 
-  uri: "http://localhost:4000/graphqlsub",
+  uri: `http://${window.location.hostname}:${process.env.REACT_APP_PORTBACKEND}/graphqlsub`,
   
 
 });
