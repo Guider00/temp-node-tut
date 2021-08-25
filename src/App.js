@@ -143,10 +143,10 @@ function App() {
 
 
             {/*  ยังไม่ได้ทำ */}
-            <Route exact path="/profile" component={_OverviewMeter} >
+            <Route exact path="/profile"  >
               <Profile></Profile>
             </Route>
-            <Route exact path="/usermanagment" component={_OverviewMeter} >
+            <Route exact path="/usermanagment">
               <Usermanagement></Usermanagement>
             </Route>
 

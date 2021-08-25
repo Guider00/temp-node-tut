@@ -126,7 +126,7 @@ export const Menubar = () => {
                             <Submenudropdown  id="submenuprofile"   label="username" icon="person" links={[
                                 { label: "info", href: "/Profile", icon: "person"   },
                                 { label: "Logout", href: "/login", icon: "logout" ,  middleware:()=>{ console.log("clear");localStorage.clear()}  },
-                                { label: "usermanement", href: "/menagement", icon: "settings"   },
+                                { label: "usermanement", href: "/usermanagment", icon: "settings"   },
 
                             ]} />
                         </div>
