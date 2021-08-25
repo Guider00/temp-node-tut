@@ -72,12 +72,12 @@ export const Usermanagement = () => {
 
     }
 
-    const OnClickCreate = (data) => {
-        console.log('create')
-        setmodaldata({ ...data })
-        setmodalaction("Create")
-        setshowmodal(true)
-    }
+    // const OnClickCreate = (data) => {
+    //     console.log('create')
+    //     setmodaldata({ ...data })
+    //     setmodalaction("Create")
+    //     setshowmodal(true)
+    // }
 
     const onClickEdit = (id, data) => {
         console.log("Update", id, data)
@@ -154,6 +154,7 @@ export const Usermanagement = () => {
 
 
     const { data, loading, error ,refetch  }  =  useQuery(API_GET_USERS);
+    console.log(loading,error)
     const [delete_user] = useMutation(API_DELETE_USER);
     const [update_user] = useMutation(API_UPDATE_USER);
 
@@ -238,9 +239,15 @@ export const Usermanagement = () => {
                                 <div>
                                     <button>Add User </button>
                                 </div>
-                                <div>
-                                   <Table Data={_users} onClickDelete={Delete} onClickEdit={onClickEdit}></Table>
-                                </div>
+                                {
+                                    _load ? 
+                                    <></> 
+                                    :
+                                    <div>
+                                    <Table Data={_users} onClickDelete={Delete} onClickEdit={onClickEdit}></Table>
+                                    </div>
+                                }
+
                             </div>
                            
                         </>
