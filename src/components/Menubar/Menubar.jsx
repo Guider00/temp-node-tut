@@ -78,7 +78,7 @@ export const Menubar = () => {
                     </a>
                 </div>
                 <div>
-                    <a href="/Booking">
+                    <a href="/booking">
                         <button>
                             <div>
                                 <Book />

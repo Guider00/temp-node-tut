@@ -31,7 +31,7 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 
 import { useQuery,  gql, } from '@apollo/client';
 
-
+import { Booking } from './components/Booking/Booking'
 import { Check_in } from './components/Check_in/Check_in';
 import { Check_out } from './components/Check_out/Check_out';
 import { Contract } from './components/Contract/Contract';
@@ -106,7 +106,11 @@ const _OverviewMeter = () => (
     <Overviewmeter />
   </>
 )
-
+const _Booking = () =>(
+  <>
+    <Booking></Booking>
+  </>
+)
 const _Check_in = () =>(
   <>
       <Check_in />
@@ -162,6 +166,7 @@ function App() {
             <Route exact path="/portmeter" component={_Portmeter} />
             <Route exact path="/overviewmeter" component={_OverviewMeter} />
 
+            <Route exact path="/booking" component={_Booking} />
             <Route exact path="/check_in" component={_Check_in} />
             <Route exact path="/check_out" component={_Check_out} />
             <Route exact path="/contract" component={_Contract} />

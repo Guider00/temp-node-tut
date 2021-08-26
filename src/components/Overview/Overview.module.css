@@ -162,8 +162,13 @@
 }
 .card>div>.topic>.front{
     display: flex;
-    background-color: yellow;
+    background-color: rgb(90, 90, 90);
 }
+.card>div>.topic>.front>.btn:hover{
+    display: flex;
+    background-color: rgb(138, 138, 138);
+}
+
 .card>div>.topic>.text{
     font-weight: bold;
     display: flex;
