@@ -78,6 +78,63 @@ export const Menubar = () => {
                     </a>
                 </div>
                 <div>
+                    <a href="/Booking">
+                        <button>
+                            <div>
+                                <Book />
+
+                            </div>
+                            <div>
+                                จองห้อง
+                            </div>
+
+                        </button>
+                    </a>
+                </div>
+                <div>
+                    <a href="/check_in">
+                        <button>
+                            <div>
+                                <Book />
+
+                            </div>
+                            <div>
+                                ย้ายเข้า
+                            </div>
+
+                        </button>
+                    </a>
+                </div>
+                <div>
+                    <a href="/check_out">
+                        <button>
+                            <div>
+                                <Book />
+
+                            </div>
+                            <div>
+                                ย้ายออก
+                            </div>
+
+                        </button>
+                    </a>
+                </div>
+                <div>
+                <a href="/contract">
+                        <button>
+                            <div>
+                                <ListAlt />
+
+                            </div>
+                            <div>
+                                สัญญา
+                            </div>
+
+                        </button>
+                    </a>
+                </div>
+
+                <div>
                     <a href="/report">
                         <button>
                             <div>
@@ -126,7 +183,7 @@ export const Menubar = () => {
                             <Submenudropdown  id="submenuprofile"   label="username" icon="person" links={[
                                 { label: "info", href: "/Profile", icon: "person"   },
                                 { label: "Logout", href: "/login", icon: "logout" ,  middleware:()=>{ console.log("clear");localStorage.clear()}  },
-                                { label: "usermanement", href: "/menagement", icon: "settings"   },
+                                { label: "usermanement", href: "/usermanagment", icon: "settings"   },
 
                             ]} />
                         </div>

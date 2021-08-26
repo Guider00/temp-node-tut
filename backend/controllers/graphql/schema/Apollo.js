@@ -192,7 +192,7 @@ const resolvers = {
       const user = await User.findOne({ "email": email })
       console.log(user.id, user.email)
       if (user.lock_user === "true") {
-        return (" account has been lock ")
+        return ({ token: "", error: " Username is Locked plase contact Admin " })
       }
       if (user.validPassword(password)) {
         let token = jwt.sign({ user: user }, 'secret', { expiresIn: 60 * 60 });

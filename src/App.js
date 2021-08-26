@@ -31,6 +31,12 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 
 import { useQuery,  gql, } from '@apollo/client';
 
+
+import { Check_in } from './components/Check_in/Check_in';
+import { Check_out } from './components/Check_out/Check_out';
+import { Contract } from './components/Contract/Contract';
+
+
 const API_GET_USER = gql`
 query{
   getuser{
@@ -101,6 +107,22 @@ const _OverviewMeter = () => (
   </>
 )
 
+const _Check_in = () =>(
+  <>
+      <Check_in />
+  </>
+)
+const _Check_out = () =>(
+  <>
+      <Check_out />
+  </>
+)
+const _Contract = () =>(
+  <>
+      <Contract />
+  </>
+)
+
 
 
 
@@ -139,14 +161,17 @@ function App() {
             <Route exact path="/meterroom" component={_MeterRoom} />
             <Route exact path="/portmeter" component={_Portmeter} />
             <Route exact path="/overviewmeter" component={_OverviewMeter} />
-     
+
+            <Route exact path="/check_in" component={_Check_in} />
+            <Route exact path="/check_out" component={_Check_out} />
+            <Route exact path="/contract" component={_Contract} />
 
 
             {/*  ยังไม่ได้ทำ */}
-            <Route exact path="/profile" component={_OverviewMeter} >
+            <Route exact path="/profile"  >
               <Profile></Profile>
             </Route>
-            <Route exact path="/usermanagment" component={_OverviewMeter} >
+            <Route exact path="/usermanagment">
               <Usermanagement></Usermanagement>
             </Route>
 
