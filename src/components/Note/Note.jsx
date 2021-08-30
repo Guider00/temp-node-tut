@@ -1,22 +1,21 @@
-
 import { useEffect, useState } from "react"
-import styles from "./Member.module.css"
 import Add from '@material-ui/icons/Add';
-import Table from '../../../subcomponents/Table/Table'
+import styles from "./Note.module.css"
 
-import { Floormodal } from '../Floor/Floormodal'
+import { Floormodal } from '../Setting/Floor/Floormodal'
+import Table from '../../subcomponents/Table/Table'
+
+import {  API_createNote, API_updateNote, API_deleteNote,   API_queryNotes } from '../../API/index'
 
 
-import {  API_createMember, API_updateMember, API_deleteMember,   API_queryMembers } from '../../../API/index'
-
-
-export const Member = () => {
+export const Note = () =>{
     const [_members, setmember] = useState({
         topic: [],
         body: [],
         inputs: []
 
     })
+
     const [_load, setload] = useState(false);
 
     const [_showmodal, setshowmodal] = useState(false);
@@ -34,10 +33,6 @@ export const Member = () => {
         setmember({ ...catch_value })
 
     }
-
-
-
-
     const OnClickCreate = (data) => {
         let catch_value = _members
         if(catch_value && catch_value.inputs){
@@ -78,9 +73,11 @@ export const Member = () => {
         setmodalaction("Update") // << action type
         setshowmodal(true)
     }
+
     const onClose = () => {
         setshowmodal(false)
     }
+
     const onSave = async (id, inputs, action) => {
         console.log(action)
         let data = inputs.map(item => {
@@ -93,9 +90,9 @@ export const Member = () => {
 
         let res
         if (action === "Update" && id) {
-            res = await API_updateMember(id, data)
+            res = await API_updateNote(id, data)
         } else if (action === "Create") {
-            res = await API_createMember(data)
+            res = await API_createNote(data)
         }
 
         if (res && res.status === 200) {
@@ -107,13 +104,14 @@ export const Member = () => {
     }
 
     const Delete = (id) => {
-        API_deleteMember(id)
+        API_deleteNote(id)
         setload(false)
     }
 
+
     const API_query = async () =>{
         return new Promise( async (resolve , rejcet) =>{
-            let res = await API_queryMembers()
+            let res = await API_queryNotes()
             let table = []
             if (res && res.status === 200) {
                
@@ -145,21 +143,22 @@ export const Member = () => {
 
             setmember({
                 showindex: true,
-                topic: [ "ชื่อ", "นามสกุล","บัตรประชาชน","เบอร์ติดต่อ","email"],
+                topic: [ "วันที่","อาคาร","ชั้น","เลขที่ห้อง", "หัวข้อ","ข้อความ","แก้ไขล่าสุด"],
                 body: table,
                 inputs: [
 
                     {
-                        label: "ชื่อ",
+                        label: "วันที่",
                         property: "name",
                         form: {
                             displayform: "textbox",
-                            type: "text",
+                            type: "date",
                             value: ""
                         }
                     },
+
                     {
-                        label: "นามสกุล",
+                        label: "อาคาร",
                         property: "lastname",
                         form: {
                             displayform: "textbox",
@@ -168,7 +167,7 @@ export const Member = () => {
                         }
                     },
                     {
-                        label: "บัตรประชาชน",
+                        label: "ชั้น",
                         property: "personalid",
                         form: {
                             displayform: "textbox",
@@ -177,7 +176,7 @@ export const Member = () => {
                         }
                     },
                     {
-                        label: "เบอร์ติดต่อ",
+                        label: "เลขที่ห้อง",
                         property: "tel",
                         form: {
                             displayform: "textbox",
@@ -186,10 +185,19 @@ export const Member = () => {
                         }
                     },
                     {
-                        label: "email",
-                        property: "email",
+                        label: "หัวข้อ",
+                        property: "topic",
                         form: {
                             displayform: "textbox",
+                            type: "text",
+                            value: ""
+                        }
+                    },
+                    {
+                        label: "ข้อความ",
+                        property: "message",
+                        form: {
+                            displayform: "textarea",
                             type: "text",
                             value: ""
                         }
@@ -210,7 +218,7 @@ export const Member = () => {
             {_showmodal ? <Floormodal Data={_modaldata} onSave={onSave} onClose={onClose} onchange={handleronchange} Action={_modalaction} Inputs={_members.inputs}></Floormodal> : null}
             <div className={styles.main} >
                 <div className={styles.header}>
-                    <lable> Member </lable>
+                    <lable> Note  </lable>
                 </div>
 
                 <div className={styles.body}>
@@ -219,7 +227,7 @@ export const Member = () => {
                         <div className={styles.base40} ></div>
                         <div className={styles.base60} >
                             <div className={styles.text} >
-                            <label>เพิ่มจำนวนสมาชิก</label>
+                            <label> เพิ่มบันทึก</label>
                             </div>
                             <div className={styles.btn}>
                             <button onClick={OnClickCreate} ><Add /></button>
@@ -235,7 +243,6 @@ export const Member = () => {
 
 
             </div>
-
         </>
     )
 }

@@ -4,7 +4,8 @@ const schemaDefinition = new mongoose.Schema({
     name: { type: String },
     lastname:{type: String},
     personalid :{type: String},
-    tel: {type:String}
+    tel: {type:String},
+    email: {type:String}
 })
 module.exports = {
     db: mongoose.model("member", schemaDefinition)

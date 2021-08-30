@@ -1,23 +1,25 @@
-const  {  db  }  = require('../../../models/Member/Member')
+const  {  db  }  = require('../../../models/Note/Note')
 
-const _Memberschema = `
-input MemberInput {
-   name:  String ,
-   lastname: String,
-   personalid : String,
-   tel: String,
-   email :String
+const _Noteschema = `
+input NoteInput {
+
+   record_date :String,
+   event_date:String,
+   room:String,
+   topic:String,
+   message :String
+
  }
- type Member {
+ type Note {
    id: String,
-   name: String,
-   lastname: String,
-   personalid : String,
-   tel: String,
-   email :  String
+   record_date :String,
+   event_date:String,
+   room:String,
+   topic:String,
+   message :String
  }
        `
-const _queryMemberByid = async(payload) =>{
+const _queryNoteByid = async(payload) =>{
     try {
         if(!payload){ return null }
         if(!payload.id){ return null }
@@ -32,7 +34,7 @@ const _queryMemberByid = async(payload) =>{
         return error
     }
 }
-const _queryMembers = async() =>{
+const _queryNotes = async() =>{
     try {
         let resulted = await db.find({})
 
@@ -47,7 +49,7 @@ const _queryMembers = async() =>{
         return error
     }
 }
-const _updateMember = async( payload ) =>{
+const _updateNote = async( payload ) =>{
     try{
         if(!payload){return null}
         if(!payload.id){return null}
@@ -58,7 +60,7 @@ const _updateMember = async( payload ) =>{
         return error
     }
 }
-const _deleteMember = async( payload ) =>{
+const _deleteNote = async( payload ) =>{
     try{
         if(!payload){return null}
         if(!payload.id){return null}
@@ -68,7 +70,7 @@ const _deleteMember = async( payload ) =>{
          return error
      }
 }
-const _createMember = async( payload ) =>{
+const _createNote = async( payload ) =>{
     try {
         if(payload && payload.input ) {
             let resulted = await  db.create(payload.input) 
@@ -76,13 +78,11 @@ const _createMember = async( payload ) =>{
             let data  = resulted._doc
             return {
                 id:data._id.toString() ,
-                name:  data.name ,
-                lastname : data.lastname,
-                tel  : data.tel,
-                personalid : data.personalid,
-                email: data.email
+                record_date :data.record_date,
+                event_date :data.event_date,
+                room:data.room,
+                message: data.message,
             }
-            
          }else{
             return null
          }
@@ -91,9 +91,9 @@ const _createMember = async( payload ) =>{
      }
 }
 
-exports.queryMemberByid = _queryMemberByid
-exports.queryMembers    = _queryMembers
-exports.updateMember    = _updateMember
-exports.deleteMember    = _deleteMember
-exports.createMember    = _createMember
-exports.Memberschema    = _Memberschema
+exports.queryNoteByid = _queryNoteByid
+exports.queryNotes    = _queryNotes
+exports.updateNote    = _updateNote
+exports.deleteNote    = _deleteNote
+exports.createNote    = _createNote
+exports.Noteschema    = _Noteschema

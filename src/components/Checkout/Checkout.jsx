@@ -2,7 +2,7 @@
 
 
 
-export const Check_out = () => {
+export const Checkout = () => {
 
     return (
         <>

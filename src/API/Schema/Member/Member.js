@@ -4,9 +4,11 @@ export const queryMemberByid = (id) =>{
             MemberByid(id:"${id}"){
                 id
                 name
+                lastname
                 personalid
                 tel
-                personalid
+                email
+                
             }
         }
     `}
@@ -21,6 +23,7 @@ export const queryMembers =  () =>{
             lastname
             personalid
             tel
+            email
         }
     }
     `
@@ -34,7 +37,8 @@ export const createMember= (input) =>{
         name:"${input.name}",
         lastname:"${input.lastname}",
         personalid:"${input.personalid}",
-        tel:"${input.tel}"
+        tel:"${input.tel}",
+        email:"${input.email}"
 
         }){
             id

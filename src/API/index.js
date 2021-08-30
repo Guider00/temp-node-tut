@@ -12,7 +12,7 @@ import { createMeterRoom ,  updateMeterRoom, deleteMeterRoom , queryMeterRoomByi
 
 import { createPortmeter ,  updatePortmeter , deletePortmeter , queryPortmeterByid, queryPortmeters } from './Schema/PortMeter/PortMeter'
 
-
+import { createNote , updateNote ,deleteNote , queryNoteByid, queryNotes } from './Schema/Note/Note'
 
 
 import fetchData from '../cores/axios/index'
@@ -200,7 +200,7 @@ export const API_updateBuilding = async (id,data) =>{
     if(!res.data) return null
     return res
 }
-
+ //** API Roomprice  */
 export const API_queryroomprice = async () =>{
     let  res = await fetchData(METHOD,PATH,queryroomprice() )
     if(!res.data) return null
@@ -223,6 +223,43 @@ export const API_editroomprice =async (id,data) =>{
     if(!req.data) return null
     return req
 }
+
+
+/**  Note API application  */
+
+export const API_queryNotes = async () =>{
+    let  res = await fetchData(METHOD,PATH,queryNotes() )
+    if(!res.data) return null
+    res.data = res.data.data;
+    return res
+}
+
+export const API_queryNoteByid = async (id) =>{
+    let  res = await fetchData(METHOD,PATH,queryNoteByid(id) )
+    if(!res.data) return null
+    res.data = res.data.data;
+    return res
+}
+export const API_createNote = async ( data ) =>{
+    
+    let req  =   await  fetchData(METHOD,PATH,createNote(data) )
+    if(!req.data) return null
+    return req
+}
+
+export const API_deleteNote = async (id) =>{
+    let res  =   await  fetchData(METHOD,PATH,deleteNote(id) )
+    if(!res.data) return null
+    return res
+}
+
+export const API_updateNote =async (id,data) =>{
+    let req  =   await  fetchData(METHOD,PATH,updateNote(id,data) )
+    if(!req.data) return null
+    return req
+}
+
+
 
 
 
