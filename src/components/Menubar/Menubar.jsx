@@ -120,7 +120,7 @@ export const Menubar = () => {
                     </a>
                 </div>
                 <div>
-                <a href="/contract">
+                    <a href="/contract">
                         <button>
                             <div>
                                 <ListAlt />
@@ -128,6 +128,20 @@ export const Menubar = () => {
                             </div>
                             <div>
                                 สัญญา
+                            </div>
+
+                        </button>
+                    </a>
+                </div>
+                <div>
+                    <a href="/note">
+                        <button>
+                            <div>
+                                <ListAlt />
+
+                            </div>
+                            <div>
+                                Note Room
                             </div>
 
                         </button>

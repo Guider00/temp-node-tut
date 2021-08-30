@@ -11,6 +11,7 @@ const schemaDefinition = new mongoose.Schema({
         password     : String,
         lock_user    : String,
         reset_password : String ,
+        profile_image : Buffer, 
 
    
 

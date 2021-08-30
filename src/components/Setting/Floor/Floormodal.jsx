@@ -33,10 +33,21 @@ export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs, Mo
                             {
                                 Inputs.map((e, index) => <>
                                     <div key={`Flooor_Inputs_map${index}`} className={styles.body}>
+                                            
                                         <div className={styles.row}>
-                                            <div className={styles.label}>
-                                                <label>{e.label}</label>
-                                            </div>
+                                            { e.label  &&  (e.form.displayform === "textbox"  || e.form.displayform === "select")  ?
+                                                <div className={styles.label}>
+                                                    <label>{e.label}</label>
+                                                </div> : null
+                                            }
+
+                                            { e.label  &&  (e.form.displayform === "textarea" )  ?
+                                                <div className={styles.labelfullrow}>
+                                                    <label>{e.label}</label>
+                                                </div> : null
+                                            }
+
+
                                             {e.form.displayform === "textbox" ?
                                                 <div className={styles.input}>
                                                
@@ -88,6 +99,16 @@ export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs, Mo
                                                     </select>
                                                 </div> : null
                                             }
+                                            {e.form.displayform === "textarea" ? 
+                                                <div className={styles.inputfullrow}>
+                                                    <textarea 
+                                                    value={e.form.value}
+                                                    onChange={event =>  {console.log('event.target.value',e.form.options) ; onchange(event.target.value, index) } }
+                                                    >
+                                                    </textarea>
+                                                </div> : null
+                                            }
+
 
                                         </div>
                                     </div>

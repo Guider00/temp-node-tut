@@ -1,7 +1,7 @@
 
 
 
-export const Check_in = () => {
+export const Checkin = () => {
 
     return (
         <>

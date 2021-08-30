@@ -32,9 +32,11 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { useQuery,  gql, } from '@apollo/client';
 
 import { Booking } from './components/Booking/Booking'
-import { Check_in } from './components/Check_in/Check_in';
-import { Check_out } from './components/Check_out/Check_out';
+import { Checkin } from './components/Checkin/Checkin';
+import { Checkout } from './components/Checkout/Checkout';
 import { Contract } from './components/Contract/Contract';
+
+import { Note } from './components/Note/Note';
 
 
 const API_GET_USER = gql`
@@ -113,17 +115,22 @@ const _Booking = () =>(
 )
 const _Check_in = () =>(
   <>
-      <Check_in />
+      <Checkin></Checkin>
   </>
 )
 const _Check_out = () =>(
   <>
-      <Check_out />
+      <Checkout />
   </>
 )
 const _Contract = () =>(
   <>
       <Contract />
+  </>
+)
+const _Note =()=>(
+  <>
+    <Note/>
   </>
 )
 
@@ -170,6 +177,8 @@ function App() {
             <Route exact path="/check_in" component={_Check_in} />
             <Route exact path="/check_out" component={_Check_out} />
             <Route exact path="/contract" component={_Contract} />
+
+            <Route exact path="/note" component={_Note} />
 
 
             {/*  ยังไม่ได้ทำ */}

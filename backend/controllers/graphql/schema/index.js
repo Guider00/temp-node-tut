@@ -13,6 +13,10 @@ const { MeterRoomschema, queryMeterRooms, queryMeterRoomByid, createMeterRoom, d
 
 const { Portmeterschema, queryPortmeters, queryPortmeterByid, createPortmeter, deletePortmeter, updatePortmeter } = require('./PortMeter/Portmeter')
 
+
+const { Noteschema , queryNotes , queryNoteByid , createNote , deleteNote , updateNote } = require('./Note/Note')
+
+
  // real time system status 
 const { DBstatusschema, queryDBstatus } = require('./System/DBstatus/DBstatus')
 const { MQTTServerschema , queryMQTTServerstatus}   = require('./System/MQTTserver/MQTTserver')
@@ -35,6 +39,9 @@ const schema = buildSchema(`
   ${RoomPriceschema}
   ${MeterRoomschema}
   ${Portmeterschema}
+
+
+  ${Noteschema}
 
   type MessageCreate{
     id:String
@@ -91,6 +98,8 @@ const schema = buildSchema(`
     PortmeterByid(id:ID!):Portmeter,
     Portmeters:[Portmeter],
 
+    NoteByid(id:ID!):Note,
+    Notes:[Note]
  
 
 
@@ -128,7 +137,9 @@ const schema = buildSchema(`
     deletePortmeter(id: ID!): MessageDelete
 
 
-
+    createNote(input: NoteInput):MessageCreate,
+    updateNote(id: ID!, input: NoteInput): MessageUpdate,
+    deleteNote(id: ID!): MessageDelete
 
 
   }
@@ -195,7 +206,14 @@ const rootValue = {
   Portmeters: queryPortmeters,
   createPortmeter: createPortmeter,
   updatePortmeter: updatePortmeter,
-  deletePortmeter: deletePortmeter
+  deletePortmeter: deletePortmeter,
+
+
+  NoteByid : queryNoteByid,
+  Notes: queryNotes,
+  createNote : createNote,
+  updateNote : updateNote,
+  deleteNote : deleteNote,
 
 
 
