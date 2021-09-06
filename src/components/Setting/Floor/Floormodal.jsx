@@ -35,7 +35,7 @@ export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs, Mo
                                     <div key={`Flooor_Inputs_map${index}`} className={styles.body}>
                                             
                                         <div className={styles.row}>
-                                            { e.label  &&  (e.form.displayform === "textbox"  || e.form.displayform === "select")  ?
+                                            { e.label  &&  (e.form.displayform === "textbox"  ||  e.form.displayform === "datalist" || e.form.displayform === "select")  ?
                                                 <div className={styles.label}>
                                                     <label>{e.label}</label>
                                                 </div> : null
@@ -51,7 +51,10 @@ export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs, Mo
                                             {e.form.displayform === "textbox" ?
                                                 <div className={styles.input}>
                                                
-                                                    <input type={e.form.type ? e.form.type : "text"} value={e.form.value}
+                                                    <input type={e.form.type ? e.form.type : "text"}
+                                                     value={  
+                                                         e.form.value
+                                                    }
                                                     style={{border: (e.form.validate ?   
                                                         e.form.validate(e.form.value) ||   // validate pass or disable  not red border
 
@@ -88,7 +91,7 @@ export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs, Mo
                                                                     (e.form.compaer_property) ? Inputs.find(x => x.property === e.form.compaer_property).form.value : null
                                                                     , e.form.fn_compare))
                                                         }
-                                                        onChange={event =>  {console.log('event.target.value',e.form.options) ; onchange(event.target.value, index) } } >
+                                                        onChange={event =>  {console.log('event.target.value',event.target.value,e.form.options) ; onchange(event.target.value, index) } } >
                                                         {
                                                             e.form.options.map((opt, index) =>
                                                                 <option value={opt.value} >
@@ -97,6 +100,39 @@ export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs, Mo
                                                             )
                                                         }
                                                     </select>
+                                                </div> : null
+                                            }
+                                            {e.form.displayform === "datalist" ?
+                                                <div className={styles.input}>
+                                                    <input type="text"  value={ e.form.options.find(opt => opt.value === e.form.value)  ? e.form.options.find(opt => opt.value === e.form.value).label : e.form.value } 
+                                                     list={`datalist_${index}` }
+                                                     disabled=
+                                                     {
+                                                         ((e.form.disablecondition === undefined ||
+                                                             e.form.fn_compare === undefined)
+                                                             ? false : e.form.disablecondition(
+                                                                 (e.form.compaer_property) ? Inputs.find(x => x.property === e.form.compaer_property).form.value : null
+                                                                 , e.form.fn_compare))
+                                                     }
+                                                     onChange={event =>  {console.log('event.target.value',
+                                                     e.form.options.find( opt => opt.label === event.target.value ) ? 
+                                                     e.form.options.find( opt => opt.label === event.target.value ).value :
+                                                     event.target.value,
+                                                    //  event.target.value
+
+                                                     e.form.options) ; onchange(  
+                                                         e.form.options.find( opt => opt.label === event.target.value ) ? 
+                                                         e.form.options.find( opt => opt.label === event.target.value ).value   :
+                                                         event.target.value , index) } } />
+                                                     <datalist id={`datalist_${index}`}>
+                                                    {       
+                                                            e.form.options.map((opt, key) =>
+                                                                <option  value ={opt.label} >
+                                                                    
+                                                                </option>
+                                                            )
+                                                    }
+                                                    </datalist> 
                                                 </div> : null
                                             }
                                             {e.form.displayform === "textarea" ? 

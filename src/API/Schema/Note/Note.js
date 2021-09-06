@@ -54,11 +54,12 @@ export const queryNotes =  () =>{
 }
 
 export const createNote= (input) =>{
+    console.log('create Note',input)
     return {query:`
     mutation{
         createNote(input:{
 
-        record_date:"${input.record_date}",
+        record_date:"${input.record_date? input.record_date:""}",
         event_date:"${input.event_date}",
         room:"${input.room}",
         topic:"${input.topic}",
@@ -80,10 +81,11 @@ export const updateNote = (id , input) =>{
     mutation{
         updateNote(id:"${id}",
                         input:{
-                            name:"${input.name}",
-                            lastname:"${input.lastname}"
-                            personalid:"${input.personalid}",
-                            tel:"${input.tel}"
+                            record_date:"${input.record_date? input.record_date:""}",
+                            event_date:"${input.event_date}",
+                            room:"${input.room}",
+                            topic:"${input.topic}",
+                            message:"${input.message}"
                         }
                         )
                         {

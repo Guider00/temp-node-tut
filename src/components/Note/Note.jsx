@@ -5,7 +5,14 @@ import styles from "./Note.module.css"
 import { Floormodal } from '../Setting/Floor/Floormodal'
 import Table from '../../subcomponents/Table/Table'
 
-import {  API_createNote, API_updateNote, API_deleteNote,   API_queryNotes } from '../../API/index'
+import {  API_createNote, API_updateNote, API_deleteNote,   API_queryNotes  ,
+          API_queryBuildings , API_queryFloors , API_queryRooms 
+
+
+
+} from '../../API/index'
+
+import {  uniqueArrayByProperty } from '../../general_functions/array'
 
 
 export const Note = () =>{
@@ -22,7 +29,10 @@ export const Note = () =>{
     const [_modaldata, setmodaldata] = useState({});
     const [_modalaction, setmodalaction] = useState("");
 
+    const [_queryrooms,setqueryrooms] = useState([]);
+
     const handleronchange = (value, index) => {
+    
         _members.inputs = _members.inputs.map((item, _index) => {
             if (_index === index) {
                 return { ...item, form: { ...item.form, "value": value } }; //gets everything that was already in item, and updates "done"
@@ -30,6 +40,44 @@ export const Note = () =>{
             return item; // else return unmodified item 
         });
         let catch_value = _members
+         //** Filter select options */
+        if( catch_value.inputs[index].property  === 'building' )
+        {
+            console.log('change' ,value,index)
+            console.log('filter_options',catch_value  ,_queryrooms)
+
+            let options_floor = _queryrooms.rooms.map((data)=>{
+                if(data.floor.building.id === value){
+                    return   {label:data.floor.name ,value: data.floor.id } 
+                }else{
+                    return null
+                }
+             }).filter(data => data)
+
+             options_floor  = uniqueArrayByProperty(options_floor ,'label')
+             options_floor = [{label:"",value:""},...options_floor]
+             catch_value.inputs.find(x=> x.property=== 'floor').form.options = options_floor
+             console.log('new floor',catch_value.inputs.find(x=> x.property=== 'floor').form.options)
+           
+
+        }else if( catch_value.inputs[index].property  === 'floor' ){
+            let options_room = _queryrooms.rooms.map((data)=>{
+                if(data.floor.id === value){
+                    return   {label:data.name ,value: data.id } 
+                }else{
+                    return null 
+                }
+             }).filter(data => data)
+             options_room  = uniqueArrayByProperty(options_room ,'label')
+             options_room = [{label:"",value:""},...options_room]
+             catch_value.inputs.find(x=> x.property=== 'room').form.options = options_room
+        }
+        else{
+
+        }
+
+   
+        
         setmember({ ...catch_value })
 
     }
@@ -68,6 +116,22 @@ export const Note = () =>{
 
 
         let catch_value = _members
+        console.log('edit data' ,data , catch_value )
+        if(catch_value.inputs.find(x => x.property === 'building')  ){
+
+            let _building =  ( data && data.room && data.room.floor && data.room.floor.building && data.room.floor.building.id )? data.room.floor.building.id :""
+            catch_value.inputs.find(x => x.property === 'building').form.value = _building
+
+        }
+        if( catch_value.inputs.find(x => x.property === 'floor') ){
+
+            let _floor =  ( data && data.room && data.room.floor && data.room.floor.id )? data.room.floor.id :""
+            catch_value.inputs.find(x => x.property === 'floor').form.value = _floor
+
+        }
+
+    
+
         setmember({ ...catch_value })
         setmodaldata({ ...data })  // <<set id input
         setmodalaction("Update") // << action type
@@ -86,7 +150,7 @@ export const Note = () =>{
             return { ...accumulator, ...currentValue }
         })
 
-        console.log('Update id data', id, data)
+        console.log('id ', id , 'data ', data)
 
         let res
         if (action === "Update" && id) {
@@ -115,10 +179,16 @@ export const Note = () =>{
             let table = []
             if (res && res.status === 200) {
                
-                table = res.data.Members.map((data) => {
+                table = res.data.Notes.map((data) => {
                     let _data = data
-                   
-                    return {...{ data: _data},  ...data }
+                    let _room  =  (data.room  &&  data.room.name )  ? data.room.name  :""
+                    let _floor  =  (  data.room && data.room.floor && data.room.floor.name) ? data.room.floor.name  :""
+                    let _building  =  ( data.room && data.room.floor &&  data.room.floor.building && data.room.floor.building.name ) ? data.room.floor.building.name  :""
+              
+                     let _event_date  =   ( data.event_date ? new Date( parseInt( data.event_date) ).toISOString().split('T')[0] :"")
+                     _data = {..._data , ...{ event_date:_event_date }}
+                    console.log('event my data',_data)
+                    return {...{ data: _data},  ...data ,...{building :  _building , floor: _floor , room: _room  ,event_date:_event_date} }
                 })
                 console.log('data',table)
                 resolve (table)
@@ -129,17 +199,57 @@ export const Note = () =>{
             console.log(e)
            return ([])
         })
-
-
     }
+    const API_query_buildingoptions = async ( ) =>{
+        return new Promise ( async ( resolve ,reject ) => {
+            let res = await API_queryRooms()
+           
+            if(res && res.status === 200){
+                let options_building = res.data.rooms.map((data)=>{
+                    return   {label:data.floor.building.name,value: data.floor.building.id } 
+                 })
+                 options_building  = uniqueArrayByProperty(options_building ,'label')
+                 options_building = [{label:"",value:""},...options_building]
+
+                 let options_floor = res.data.rooms.map((data)=>{
+                    return   {label:data.floor.name ,value: data.floor.id } 
+                 })
+                 options_floor  = uniqueArrayByProperty(options_floor ,'label')
+                 options_floor = [{label:"",value:""},...options_floor]
+
+
+                 let options_room = res.data.rooms.map((data)=>{
+                    return   {label:data.name ,value: data.id } 
+                 })
+                 options_room  = uniqueArrayByProperty(options_room ,'label')
+                 options_room = [{label:"",value:""},...options_room]
+
+
+
+                  resolve ({options_building : options_building , options_floor: options_floor ,options_room: options_room , data:res.data  })
+            }else{
+                resolve({ options_building:[],options_floor:[],options_room:[]  , })
+            }
+            
+        }).catch(e =>{
+            return ({ options_building:[],options_floor:[],options_room:[] } )
+        })
+    }
+
+    
 
 
     useEffect(() => {
         const getAPI = async () => {
+            
+             const {options_building ,options_floor ,options_room  ,data } = await API_query_buildingoptions()
 
+
+             console.log("logmember",_members.inputs)
+           
             let table = await API_query()
-             
-
+             console.log('table',table)
+            setqueryrooms(data);
 
             setmember({
                 showindex: true,
@@ -149,7 +259,7 @@ export const Note = () =>{
 
                     {
                         label: "วันที่",
-                        property: "name",
+                        property: "event_date",
                         form: {
                             displayform: "textbox",
                             type: "date",
@@ -159,28 +269,31 @@ export const Note = () =>{
 
                     {
                         label: "อาคาร",
-                        property: "lastname",
+                        property: "building",
                         form: {
-                            displayform: "textbox",
+                            displayform: "datalist",
                             type: "text",
+                            options:options_building,
                             value: ""
                         }
                     },
                     {
                         label: "ชั้น",
-                        property: "personalid",
+                        property: "floor",
                         form: {
-                            displayform: "textbox",
+                            displayform: "datalist",
                             type: "text",
+                            options:options_floor,
                             value: ""
                         }
                     },
                     {
                         label: "เลขที่ห้อง",
-                        property: "tel",
+                        property: "room",
                         form: {
-                            displayform: "textbox",
+                            displayform: "datalist",
                             type: "text",
+                            options:options_room,
                             value: ""
                         }
                     },
