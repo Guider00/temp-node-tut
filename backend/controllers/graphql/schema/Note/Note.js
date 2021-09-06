@@ -1,4 +1,5 @@
 const  {  db  }  = require('../../../models/Note/Note')
+const { queryRoomByid } = require('../Room/Room')
 
 const _Noteschema = `
 input NoteInput {
@@ -14,7 +15,7 @@ input NoteInput {
    id: String,
    record_date :String,
    event_date:String,
-   room:String,
+   room:Room,
    topic:String,
    message :String
  }
@@ -38,8 +39,17 @@ const _queryNotes = async() =>{
     try {
         let resulted = await db.find({})
 
-        let data = resulted.map(payload => payload._doc).map(payload => {
+        let data = resulted.map(payload => payload._doc).map( async (payload) => {
             payload.id = payload._id.toString()
+            payload.room =  await queryRoomByid({id:payload.room})
+            if(payload.room.message){
+                payload.room = ""
+            }
+             
+        
+        
+
+     
             return (payload)
         })
         return (

@@ -30,6 +30,10 @@ export const queryRooms = () =>{
             floor{
                 id
                 name
+                building{
+                    id
+                    name
+                }
             }
             member{
                 id
