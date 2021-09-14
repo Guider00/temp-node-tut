@@ -164,10 +164,27 @@
     display: flex;
     background-color: rgb(90, 90, 90);
 }
+
+.card>div>.topic>.front>.dropdownmenu{
+    margin-top: 1.8rem;
+    position: absolute;
+    max-width: 120px;
+    background-color: rgb(177, 177, 177);
+}
+.card>div>.topic>.front>.dropdownmenu>div{
+    font-size: 0.8rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border: 1px solid black;
+
+}
+
 .card>div>.topic>.front>.btn:hover{
     display: flex;
     background-color: rgb(138, 138, 138);
 }
+
+
 
 .card>div>.topic>.text{
     font-weight: bold;
@@ -191,17 +208,20 @@
 .card>div>.body{
     flex-basis: 100%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 }
 .card>div>.body>.image{
     margin: 1rem;
     display: flex;
+    justify-content: center;
+   
   
 }
 .card>div>.body>.text{
     font-weight: bold;
     display: flex;
     align-items: center;
+    justify-content: center;
     
 }
 

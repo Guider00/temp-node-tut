@@ -3,6 +3,8 @@ import styles from "./Floormodal.module.css"
 import Save from '@material-ui/icons/Save';
 
 
+import { access_obj_mutilevel } from "../../../general_functions/array";
+
 export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs, Mobalname }) => {
 
 
@@ -61,7 +63,10 @@ export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs, Mo
                                                         ((e.form.disablecondition === undefined ||
                                                             e.form.fn_compare === undefined)
                                                             ? false : e.form.disablecondition(
-                                                                (e.form.compaer_property) ? Inputs.find(x => x.property === e.form.compaer_property).form.value : null
+                                                                (e.form.compaer_property) ?
+                                                               
+                                                                 Inputs.find(x =>   {console.log('x',x.property);return (x.property === e.form.compaer_property)}).form.value : null
+
                                                                 , e.form.fn_compare))
                                                    
                                                         

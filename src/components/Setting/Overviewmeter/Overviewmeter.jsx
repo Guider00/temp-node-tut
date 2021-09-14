@@ -11,10 +11,14 @@ import Icon from '@material-ui/core/Icon/'
 
 const GET_MESSAGES = gql`
   subscription {
-    mqtthistory_packets{
-        topic
-        payload
-      }
+
+    subdevicemeterrealtime{
+        id
+        port
+        device
+        tag
+        value
+    }
   }
 `;
 
@@ -24,7 +28,7 @@ export const Overviewmeter = () => {
     const { data } = useSubscription(GET_MESSAGES);
     const { mqtthistory_packets } = data? data:{ mqtthistory_packets : null}
 
-  
+  console.log(data)
 
     return (
         <>

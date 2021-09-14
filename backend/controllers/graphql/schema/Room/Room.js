@@ -1,6 +1,7 @@
 const  {  db  }  = require('../../../models/Rooms/Rooms')
 const { queryFloorByid }  = require('../Floor/Floor')
 const { queryMemberByid } =require('../Member/Member')
+const { queryMeterRoomByid } = require('../MeterRoom/MeterRoom')
  const _updateRoom = async (payload) =>{
     try{
         if(!payload){return null}
@@ -35,6 +36,7 @@ const _createRoom = async ( payload ) =>{
                 status: data.status,
                 floor : await queryFloorByid( {id:data.floor}),
                 member : await queryMemberByid( {id:data.member}),
+                meterroom : await queryMeterRoomByid ( { id: data.meterroom}),
                 version :data.version 
             }
             
@@ -52,6 +54,7 @@ const _createRoom = async ( payload ) =>{
             payload.id = payload._id.toString()
             payload.floor =  await queryFloorByid( {id:payload.floor})
             payload.member =  await queryMemberByid ( {id:payload.member})
+            payload.meterroom = await queryMeterRoomByid ( { id: payload.meterroom})
             return (payload)
         })
         return (
@@ -69,7 +72,9 @@ const _createRoom = async ( payload ) =>{
         return ({
             id : data._id,
             name: data.name,
-            floor: await queryFloorByid({id:data.floor})
+            floor: await queryFloorByid({id:data.floor}),
+            member : await queryMemberByid ( {id:payload.member}),
+            meterroom : await queryMeterRoomByid ( { id: data.meterroom})
         })
     } catch (error) {
         return error
@@ -86,7 +91,9 @@ const _createRoom = async ( payload ) =>{
     building: String,
     floor : String,
     member : String,
+    meterroom : String,
     version:String 
+
 
   }
   type Room {
@@ -96,6 +103,7 @@ const _createRoom = async ( payload ) =>{
     status: String,
     floor : Floor,
     member : Member,
+    meterroom : MeterRoom,
     version:String 
   }
         `

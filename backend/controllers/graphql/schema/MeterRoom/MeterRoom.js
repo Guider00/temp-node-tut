@@ -59,11 +59,11 @@ const _queryMeterRoomByid = async (payload) =>{
 const _queryMeterRooms = async () => {
     try {
         let resulted = await db.find({})
-        let data = resulted.map(payload => payload._doc).map( async (payload) => {
+        let data = await Promise.all( resulted.map(payload => payload._doc).map( async (payload) => {
             payload.id = payload._id.toString()
             payload.portmeter  = await queryPortmeterByid({id:payload.portmeter })
             return (payload)
-        })
+        }) )
         return (
             [...data]
         )

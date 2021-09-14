@@ -12,11 +12,21 @@ const { readyState } = require('../../../db')
 
 var jwt = require('jsonwebtoken');
 const { User } = require('../../models/User/User')
+const { getAllMeter , adddevicelist }  = require ('../../../MQTT/server/devicemeters')
 
 
 
+ // system interval broadcast 
 let test = ""
 let dbstatus = ""
+let AllMeter  = ""
+var count = 0
+ // << Test interval event 
+setInterval(() => {
+  adddevicelist("myport","mydevice","mytag",count++)
+
+}, 5000);
+
 setInterval(() => {
 
   if (test !== JSON.stringify(aedes_history_packets()) || dbstatus !== readyState()) {
@@ -32,14 +42,23 @@ setInterval(() => {
 
   }
 
+  // << On change  meter device  >> //
+  if( AllMeter  !==  JSON.stringify(getAllMeter() ) ) {
+    AllMeter = JSON.stringify(getAllMeter() )
+    onMessagesBroadcast(sub_devicemeterrealtime)
+  }
+
 }, 1000);
 
+// ---------------------------- // 
 
 const messages = [];
 
 const submqtt = [];
 const sub_abes_history_packets = []
 const sub_databasestatus = []
+const sub_devicemeterrealtime = [] 
+
 const resulte_history_packets = () => aedes_history_packets().map((item) => ({ payload: String.fromCharCode.apply(null, (JSON.parse(JSON.stringify(item.payload)).data)).replace(/(?:\r\n|\r|\n)/g, ''), topic: item.topic }))
 const subscribers = [];
 
@@ -61,6 +80,13 @@ type SubMQTTServerstatus{
 type MQTTHistory_packets{
   topic:String!
   payload:String
+}
+type Tag{
+  id:String!
+  port :String!
+  device : String!
+  tag: String!
+  value:String
 }
 
 type MessageCreate{
@@ -132,6 +158,7 @@ type Message {
     submqttserverstatus:[SubMQTTServerstatus!]
     mqtthistory_packets:[MQTTHistory_packets!]
     subdatabasestatus:String
+    subdevicemeterrealtime:[Tag!]
   }
 `;
 const resolvers = {
@@ -253,6 +280,18 @@ const resolvers = {
         return pubsub.asyncIterator(channel);  // << return data to  s
       }
 
+    },
+     // << ยังไม่ได้ ทำ 
+    subdevicemeterrealtime:{
+      subscribe: (parent, args, { user }) => {
+        console.log('user', user)
+        if (user === undefined || user === null) { throw Error("Permission denied") }
+        const channel = Math.random().toString(36).slice(2, 15); // generate  subscription id
+        registersub(sub_devicemeterrealtime, () => pubsub.publish(channel, { subdevicemeterrealtime: getAllMeter })); // << update new user  subscription
+        setTimeout(() => pubsub.publish(channel, { subdevicemeterrealtime: getAllMeter }), 0); // <<  update ข้อมูล มายัง id ปัจจุบัน 
+
+        return pubsub.asyncIterator(channel);  // << return data to  s
+      }
     }
   },
 

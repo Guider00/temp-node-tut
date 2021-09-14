@@ -1,4 +1,4 @@
-
+const { mqtt_publich } = require('./publish')
 
 let aedes_clients = []
 let aedes_history_packets = []
@@ -55,6 +55,7 @@ const _mqtt_server_aedes_initial = () => {
 
     aedes.on('publish', async function (packet, client) {
           console.log('some one puclic', packet.topic)
+          mqtt_publich(packet,client)
           if(client && client.id){
             aedes_history_packets = [ packet , ...aedes_history_packets]
             if(aedes_history_packets.length > MAX_HISTORY_PACKET){
@@ -132,7 +133,8 @@ const _mqtt_server_mosca_initial = (port, user, password) => {
         mosca_clients = [...mosca_clients, client.id]
     });
     // Event when a message is received
-    _mqtt_mosca_server.on('published', (packet, client) => {
+    _mqtt_mosca_server.on('published', async (packet, client) => {
+        mqtt_publich(packet,client)
         if(client && client.id){
             mosca_history_packets = [packet,...mosca_history_packets]
             if(mosca_history_packets.length > MAX_HISTORY_PACKET){

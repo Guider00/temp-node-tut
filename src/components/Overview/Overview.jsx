@@ -12,9 +12,9 @@ import { useEffect, useState } from 'react';
 import { Floormodal } from '../Setting/Floor/Floormodal'
 
 
-import { API_queryroomprice  , API_queryBuildings , API_queryFloors, API_updateRoom, API_deleteRoom, API_queryMembers, API_queryRooms, API_createRoom} from  '../../API/index'
+import { API_queryroomprice  , API_queryBuildings , API_queryFloors, API_updateRoom, API_deleteRoom, API_queryMembers, API_queryRooms, API_createRoom , API_queryMeterRooms} from  '../../API/index'
 
-import  { Inputconfig }  from './config'
+import  { Inputconfig  , drowdownmenuroomconfig }  from './config'
 
 const color_roomstatur = (status) =>{
     switch (status)
@@ -214,8 +214,14 @@ export const Overview = () => {
     // const [_optionprice,setoptionprice] = useState([])
     const [_optionmember,setoptionmember] = useState([])
     const [_optionstatus,setoptionstatus] = useState([])
+    const [_optionmeterroom,setoptionmeterroom] = useState([])
     console.log('_optionmember :',_optionmember)
     console.log('_optionstatus :',_optionstatus)
+    console.log('_optionmeterroom :',_optionmeterroom)
+
+     // drop dowm menu //
+     const [_dropdowmmenu , setdropdownmenu] = useState(null)
+ 
 
 
     const [_showmodal,setshowmodal] = useState(false)
@@ -309,7 +315,7 @@ export const Overview = () => {
     
     const get_API_Inputoption = async () =>{
         return new Promise( async (resolve,rejcet) =>{
-            let building = [],floor = [] ,member = [],type=[],status =[] 
+            let building = [],floor = [] ,member = [] , meterroom = [] ,type=[],status =[] 
             let res_building = await API_queryBuildings()
             if(res_building && res_building.status === 200)
             {
@@ -331,9 +337,17 @@ export const Overview = () => {
                 type =   get_option(res.data.roomprices,'name')
                type = type.map(e =>  ({label:e , value:e})  )
             }
+
+            let res_meterroom = await API_queryMeterRooms()
+            console.log('meter room',res_meterroom)
+            if(res_meterroom && res_meterroom.status === 200){
+                meterroom =  res_meterroom.data.MeterRooms.map(e =>  ({label:e.name , value:e.id})  )
+
+            }
+
              // set Option form input
             status = [{value:"จอง",label:"จอง"},{value:"ย้ายเข้า",label:"ย้ายเข้า"},{value:"ย้ายออก",label:"ย้ายออก"},{value:"ห้องว่าง",label:"ห้องว่าง"},{value:"มีคนอยู่",label:"มีคนอยู่"} ]
-            resolve({'building':building,'floor':floor,'member':member,'type':type,status:status})
+            resolve({'building':building,'floor':floor,'member':member,'meterroom':meterroom,'type':type,status:status})
         }).catch(e=>{
             console.log('Promis Error',e);
            return({building:[],floor:[],member:[],type:[],status:[]})
@@ -342,6 +356,7 @@ export const Overview = () => {
     const getRooms = async () =>{
         return new Promise(async (resolve,reject)=>{
             let res = await API_queryRooms()
+            console.log('query Room ',res)
             let table =[]
             if(res && res.status === 200){
                 table =  res.data.rooms.map((data) =>{
@@ -352,7 +367,8 @@ export const Overview = () => {
                         floor:data.floor ? data.floor.name:'---',
                         name:data.name, 
                         status:data.status ? data.status:'---',
-                        metername:"metername"
+                        member:data.member ? data.member.name : '---',
+                        metername:data.meterroom ? data.meterroom.name : '---'
                     }
                 } )
             }
@@ -369,13 +385,15 @@ export const Overview = () => {
         const inital_data = async ()=>{
             let option  =  await  get_API_Inputoption();
             let table = await getRooms()
-       
+            console.log('table',table)
             setoptionbuilding(option.building)
             setoptionfloor(option.floor)
             setoptionmember(option.member)
             setoptionstatus(option.status)
+            setoptionmeterroom(option.meterroom)
             
             let inputconfig = Inputconfig();
+            console.log('inputconfig' ,inputconfig)
             inputconfig.inputs = inputconfig.inputs.map( (ele,_index)=>{
                 switch (ele.property) {
                     case "building":
@@ -394,8 +412,9 @@ export const Overview = () => {
                         ele.form.options = option.status
                         ele.form.value = option.status.length > 0 ? option.status[0].value : 'All'
                         break;
-                    case "meter":
-
+                    case "meterroom":
+                        ele.form.options = option.meterroom
+                        ele.form.value =  option.meterroom.length > 0 ? option.meterroom[0].value :'All'
                         break;
                     default:
                         break;
@@ -412,7 +431,6 @@ export const Overview = () => {
              })
 
 
-             setload(true)
              let uniqe_floors = get_option(table, 'floor')
              console.log('uniqe_floors',uniqe_floors)
               let group_by_floor = uniqe_floors.map(floor => {
@@ -420,6 +438,8 @@ export const Overview = () => {
              })
              setgroupbyfloor(group_by_floor)
              console.log('_groupbyfloor',group_by_floor)
+             setload(true)
+
 
         }
         inital_data()
@@ -522,9 +542,27 @@ export const Overview = () => {
                                                 backgroundColor: color_roomstatur (room.status)
                                             }}>
                                             <div className={styles.front} >  
-                                                <div  className={styles.btn} onClick={()=>{  console.log( "Room ID ",room.id , room.data )  }} >
+                                                <div  className={styles.btn} onClick={()=>{ 
+                                                    setdropdownmenu(  _dropdowmmenu === null  ? room.id :   _dropdowmmenu !== room.id  ? room.id : null  );
+                                                      console.log( "Room ID ",room.id , room.data  ) 
+                                                      console.log(" Room index",index , _dropdowmmenu) }} >
                                                     <ArrowDropDownIcon />
+                                                   
                                                 </div  >
+                                                 { _dropdowmmenu === room.id ? <div className={styles.dropdownmenu}>
+                                                    {
+                                                     drowdownmenuroomconfig.map(menu =>
+                                                     (  
+                                                        <div onClick={()=>{ window.location.href = `/${menu.link}` }}>
+                                                            <span>{menu.label}</span>
+                                                        </div>
+                                                        )
+                                                     )
+                                                    }
+                                                      
+                                                </div> :null}
+
+                           
                                             </div>
                                             <div className={styles.text} >{room.name} </div>
                                             
@@ -547,6 +585,7 @@ export const Overview = () => {
                                             <div  className={styles.image}>
                                                 <img src="./image/powermeter.jpg" alt="Trulli" width="60" height="60"/>
                                             </div>
+                                            
                                             <div className={styles.text}>
                                             {room.metername}
                                             </div>

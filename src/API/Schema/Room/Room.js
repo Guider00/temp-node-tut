@@ -39,6 +39,10 @@ export const queryRooms = () =>{
                 id
                 name
             }
+            meterroom{
+                id
+                name
+            }
         }
     }
     `
@@ -54,6 +58,7 @@ export const createRoom = (data) =>{
             type:"${data.type}"
             floor:"${data.floor}"
             member:"${data.member}"
+            meterroom:"${data.meterroom}"
           }){
             id
             errors
@@ -64,6 +69,7 @@ export const createRoom = (data) =>{
 }
 
 export const updateRoom = (id ,data )=>{
+    console.log('update Room',data)
     return {query:`
     mutation{
         updateRoom(id:"${id}",
@@ -72,6 +78,7 @@ export const updateRoom = (id ,data )=>{
             status:"${data.status}"
             floor:"${data.floor}"
             member:"${data.member}"
+            meterroom:"${data.meterroom}"
         })
         {
          n
