@@ -270,15 +270,32 @@ export const Overview = () => {
         setshowmodal(true)
 
     }
-    const handleronchange = (value ,index)=>{
+    const handleronchange = async (value ,index ,property )=>{
+      
+
+     
         _rooms.inputs = _rooms.inputs.map( (item,_index) => 
            {
              if (_index === index){
                return {...item, form: {...item.form , "value": value} }; //gets everything that was already in item, and updates "done"
              }
+
              return item; // else return unmodified item 
        });
        let catch_value = _rooms
+
+        if(property === 'building'){
+            let option  =  await  get_API_Inputoption();
+            let floor_options = option.floor.filter( floor => floor.building.id === value)
+            if(catch_value.inputs && catch_value.inputs.find(inp => inp.property === 'floor')   ){
+                 catch_value.inputs.find(inp => inp.property === 'floor').form.options = [...floor_options]
+                 if(floor_options.length > 0 ){
+                 catch_value.inputs.find(inp => inp.property === 'floor').form.value = floor_options[0].value
+                 }
+            }
+        }
+       
+
        setroom({...catch_value} )
        
    }
@@ -325,7 +342,7 @@ export const Overview = () => {
             let res_floor =  await API_queryFloors()
             if(res_floor && res_floor.status === 200)
             {
-                floor =  res_floor.data.Floors.map(e =>  ({label:e.name , value:e.id})  )
+                floor =  res_floor.data.Floors.map(e =>  ({label:e.name , value:e.id , building:e.building})  )
             }
 
             let res_member = await API_queryMembers()
@@ -421,7 +438,6 @@ export const Overview = () => {
                 }
                 return ele
             })
-            console.log( inputconfig.inputs)
 
             setroom({
                 showindex: true,

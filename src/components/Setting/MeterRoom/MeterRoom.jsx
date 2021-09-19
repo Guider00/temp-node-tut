@@ -164,8 +164,8 @@ export const MeterRoom = () => {
                 showindex: true,
                 topic: [ 
                           "metername", "port","model"," Address","deveui","appeui","appkey",
-                          "kwh start","date" ,"real time kwh" ,
-                          "water start","date" ,"real time water" ,
+                          "kwh start","date" ,"kwh finished","date"  ,"real time kwh" ,
+                          "water start","date" ,"water finished","date","real time water" ,
                           
                         ],
                 body: table,
@@ -294,6 +294,28 @@ export const MeterRoom = () => {
                             value: ""
                         }
                     },
+
+                    {
+                        label: "kwh finished",
+                        property: "inmemory_finished_kwh",
+                        form: {
+                            displayform: "textbox",
+                            type: "text",
+                            value: ""
+                        }
+                    },
+                    {
+                        label: "date finished",
+                        property: "inmemory_finished_kwh_date",
+                        form: {
+                            displayform: "textbox",
+                            type: "date",
+                            value: ""
+                        }
+                    },
+
+
+
                     {
                         label: "realtime kwh",
                         property: "realtime_kwh",
@@ -321,6 +343,28 @@ export const MeterRoom = () => {
                             value: ""
                         }
                     },
+
+                    {
+                        label: "water finished",
+                        property: "inmemory_finished_water",
+                        form: {
+                            displayform: "textbox",
+                            type: "text",
+                            value: ""
+                        }
+                    },
+                    {
+                        label: "date finished",
+                        property: "inmemory_finished_water_date",
+                        form: {
+                            displayform: "textbox",
+                            type: "date",
+                            value: ""
+                        }
+                    },
+
+
+
                     {
                         label: "realtime water",
                         property: "realtime_water",
@@ -343,7 +387,7 @@ export const MeterRoom = () => {
 
     return (
         <>
-            {_showmodal ? <Floormodal Data={_modaldata} onSave={onSave} onClose={onClose} onchange={handleronchange} Action={_modalaction} Inputs={_members.inputs}></Floormodal> : null}
+            {_showmodal ? <Floormodal  Data={_modaldata} onSave={onSave} onClose={onClose} onchange={handleronchange} Action={_modalaction} Inputs={_members.inputs} fontsize={0.5}></Floormodal> : null}
             <div className={styles.main} >
                 <div className={styles.header}>
                     <lable> Meter Room  </lable>

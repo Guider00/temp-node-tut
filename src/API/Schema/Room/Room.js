@@ -33,6 +33,7 @@ export const queryRooms = () =>{
                 building{
                     id
                     name
+
                 }
             }
             member{
@@ -42,6 +43,17 @@ export const queryRooms = () =>{
             meterroom{
                 id
                 name
+                device_model
+                inmemory_kwh
+                inmemory_kwh_date
+                inmemory_finished_kwh
+                inmemory_finished_kwh_date 
+
+                inmemory_water
+                inmemory_water_date
+                inmemory_finished_water
+                inmemory_finished_water_date
+
             }
         }
     }
