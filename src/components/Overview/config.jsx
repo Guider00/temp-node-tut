@@ -2,7 +2,7 @@
 
 export  const  Inputconfig = () => {
   return({
-    topic:["#","อาคาร","ชั้น","ห้อง"],
+    topic:["#","อาคาร","ชั้น","ห้อง","มิตเตอร์"],
     inputs:[
         {
           label:"ห้อง",
@@ -56,7 +56,7 @@ export  const  Inputconfig = () => {
           options:[{value:"1",label:"1"}],
           value:""
               } 
-        },
+      },
       { 
         label:"ชนิด",
         property:"type",
@@ -66,10 +66,34 @@ export  const  Inputconfig = () => {
           options:[{value:"1",label:"1"}],
           value:""
               } 
-        },
+      },
+      { 
+        label:"มิตเตอร์",
+        property:"meterroom",
+          form:{
+          status:"enable",
+          displayform:"select",
+          options:[{value:"1",label:"1"}],
+          value:""
+              } 
+      },
 
 
 
     ]
   })
 }
+
+export const drowdownmenuroomconfig  =
+      [
+        {label:"ย้ายเข้า" , link:"check_in" },
+        {label:"ย้ายออก" , link:"check_out" },
+        {label:"จองห้อง" , link:""},
+        {label:"ยกเลิกการจอง" , link:""},
+        {label:"แจ้งย้ายออก" , link:""},
+        {label:"ยกเลิกการย้ายออก" , link:""},
+        {label:"มิตเตอร์" , link:""},
+        {label:"ออกใบแจ้งหนี" , link:""},
+        {label:"ชำระเงิน" , link:""}
+      ]
+    

@@ -12,10 +12,16 @@ export const queryMeterRoomByid = (id) =>{
                 device_address
                 inmemory_kwh
                 inmemory_kwh_date
+                inmemory_finished_kwh
+                inmemory_finished_kwh_date 
                 realtime_kwh
+
                 inmemory_water
                 inmemory_water_date
+                inmemory_finished_water
+                inmemory_finished_water_date
                 realtime_water
+
                 version
             }
         }
@@ -38,9 +44,13 @@ export const queryMeterRooms =  () =>{
             device_address
             inmemory_kwh
             inmemory_kwh_date
+            inmemory_finished_kwh
+            inmemory_finished_kwh_date 
             realtime_kwh
             inmemory_water
             inmemory_water_date
+            inmemory_finished_water
+            inmemory_finished_water_date
             realtime_water
             
             deveui,
@@ -63,11 +73,17 @@ export const createMeterRoom= (input) =>{
             device_model: "${input.device_model}",
             portmeter: "${input.portmeter}",
             device_address: "${input.device_address}",
+
             inmemory_kwh: "${input.inmemory_kwh}",
             inmemory_kwh_date: "${input.inmemory_kwh_date}",
+            inmemory_finished_kwh: "${input.inmemory_finished_kwh}",
+            inmemory_finished_kwh_date : "${input.inmemory_finished_kwh_date}",
             realtime_kwh: "${input.realtime_kwh}",
+
             inmemory_water: "${input.inmemory_water}",
             inmemory_water_date: "${input.inmemory_water_date}",
+            inmemory_finished_water:"${input.inmemory_finished_water}",
+            inmemory_finished_water_date:"${input.inmemory_finished_water_date}",
             realtime_water: "${input.realtime_water}",
 
             deveui:"${input.deveui}",
@@ -97,9 +113,13 @@ export const updateMeterRoom = (id , input) =>{
                             device_address: "${input.device_address}",
                             inmemory_kwh: "${input.inmemory_kwh}",
                             inmemory_kwh_date: "${input.inmemory_kwh_date}",
+                            inmemory_finished_kwh: "${input.inmemory_finished_kwh}",
+                            inmemory_finished_kwh_date : "${input.inmemory_finished_kwh_date}",
                             realtime_kwh: "${input.realtime_kwh}",
                             inmemory_water: "${input.inmemory_water}",
                             inmemory_water_date: "${input.inmemory_water_date}",
+                            inmemory_finished_water:"${input.inmemory_finished_water}",
+                            inmemory_finished_water_date:"${input.inmemory_finished_water_date}",
                             realtime_water: "${input.realtime_water}",
 
                             deveui:"${input.deveui}",

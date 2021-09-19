@@ -6,7 +6,7 @@ import { Floormodal } from '../Setting/Floor/Floormodal'
 import Table from '../../subcomponents/Table/Table'
 
 import {  API_createNote, API_updateNote, API_deleteNote,   API_queryNotes  ,
-          API_queryBuildings , API_queryFloors , API_queryRooms 
+          API_queryRooms 
 
 
 
@@ -245,7 +245,7 @@ export const Note = () =>{
              const {options_building ,options_floor ,options_room  ,data } = await API_query_buildingoptions()
 
 
-             console.log("logmember",_members.inputs)
+          
            
             let table = await API_query()
              console.log('table',table)
@@ -253,7 +253,7 @@ export const Note = () =>{
 
             setmember({
                 showindex: true,
-                topic: [ "วันที่","อาคาร","ชั้น","เลขที่ห้อง", "หัวข้อ","ข้อความ","แก้ไขล่าสุด"],
+                topic: [ "วันที่","อาคาร","ชั้น","เลขที่ห้อง", "หัวข้อ","ข้อความ"],
                 body: table,
                 inputs: [
 

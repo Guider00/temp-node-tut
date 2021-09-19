@@ -128,8 +128,8 @@ export const MeterRoom = () => {
       
                 table = res.data.MeterRooms.map((data) => {
                     let _data = data
-                   
-                    return {...{ data: _data},  ...data }
+                    let _portmeter  =  (data.portmeter  &&  data.portmeter.name )  ? data.portmeter.name  :""
+                    return {...{ data: _data},  ...data , ...{portmeter:_portmeter} }
                 })
      
                 console.log('data',table)
@@ -150,21 +150,23 @@ export const MeterRoom = () => {
         const getAPI = async () => {
 
             let table = await API_query()
+            console.log('table',table)
 
         
             let  { data }           = await  API_queryPortmeters()
             let  { Portmeters }  = data ? data :{Portmeters:[] }
             let _option_ports  = Portmeters.map( _port => {
-               return ( {'value': _port.id.toString() ,'label': _port.name} )
+               return ( {'value': _port.id.toString() ,'label': _port.name , } )
             })
+            _option_ports = [ {'value': "" ,'label':"" } , ..._option_ports ]
             console.log('_option_ports',_option_ports)
             setmeterrooms({
                 showindex: true,
                 topic: [ 
-                          "metername","model", "port"," Address ",
-                          "kwh start","date" ,"real time kwh" ,
-                          "water start","date" ,"real time water" ,
-                          "deveui","appeui","appkey"
+                          "metername", "port","model"," Address","deveui","appeui","appkey",
+                          "kwh start","date" ,"kwh finished","date"  ,"real time kwh" ,
+                          "water start","date" ,"water finished","date","real time water" ,
+                          
                         ],
                 body: table,
                 inputs: [
@@ -180,22 +182,8 @@ export const MeterRoom = () => {
                         }
                     },
                     {
-                        label: "model",
-                        property: "device_model",
-                        form: {
-                            displayform: "select",
-                            type: "text",
-                            options:[
-                                {value:`KM24L`,label:"KM24L"},
-                                
-                             ],
-                            value: ""
-                        }
-                    },
-                    {
                         label: "port",
-                        property: ["portmeter","id"],
-                        idtolabel: (id) =>  _option_ports.find(x => x.value === id  ) ? _option_ports.find(x => x.value === id  ).label : '---', 
+                        property: "portmeter",
                         form: {
                             displayform: "select",
                             type: "text",
@@ -204,15 +192,90 @@ export const MeterRoom = () => {
                         }
                     },
                     {
+                        label: "model",
+                        property: "device_model",
+                        form: {
+                            displayform: "select",
+                            type: "text",
+                            options:[
+                                {value:``,label:""},
+                                {value:`KM24L`,label:"KM24L"},
+                                
+                             ],
+                            value: ""
+                        }
+                    },
+ 
+                    {
                         label: "Address",
                         property: "device_address",
                         form: {
                             displayform: "textbox",
+
+                            compaer_property : 'portmeter',
+                            disablecondition: (x, fn)  =>( fn(x) ),
+                            fn_compare: (id_portmeter)=>{   return(  
+                                 Portmeters.find(x => x.id === id_portmeter ) &&  
+                             Portmeters.find(x => x.id === id_portmeter ).protocol === 'MQTT/Lora' )},
+                       
+
                             validate :  (x)=>( typeof x === 'string' && Validate('device_address',x) ),
                             type: "text",
                             value: ""
                         }
                     },
+
+                    {
+                        label: "deveui",
+                        property: "deveui",
+                        form: {
+                            displayform: "textbox",
+                            compaer_property : 'portmeter',
+                            disablecondition: (x, fn)  =>( fn(x) ),
+                            fn_compare: (id_portmeter)=>{   return(  
+                                 Portmeters.find(x => x.id === id_portmeter ) &&  
+                             Portmeters.find(x => x.id === id_portmeter ).protocol !== 'MQTT/Lora' )},
+
+                            validate :   (x)=>( typeof x === 'string' && Validate('deveui',x) ),
+                            type: "text",
+                            value: ""
+                        }
+                    },
+                    {
+                        label: "appeui",
+                        property: "appeui",
+                        form: {
+                            displayform: "textbox",
+                            compaer_property : 'portmeter',
+                            disablecondition: (x, fn)  =>( fn(x) ),
+                            fn_compare: (id_portmeter)=>{   return(  
+                            Portmeters.find(x => x.id === id_portmeter ) &&  
+                            Portmeters.find(x => x.id === id_portmeter ).protocol !== 'MQTT/Lora' )},
+
+                            validate :  (x)=>( typeof x === 'string' && Validate('appeui',x) ),
+                            type: "text",
+                            value: ""
+                        }
+                    },
+                    {
+                        label: "appkey",
+                        property: "appkey",
+                        form: {
+                            displayform: "textbox",
+
+                            compaer_property : 'portmeter',
+                            disablecondition: (x, fn)  =>( fn(x) ),
+                            fn_compare: (id_portmeter)=>{   return(  
+                            Portmeters.find(x => x.id === id_portmeter ) &&  
+                             Portmeters.find(x => x.id === id_portmeter ).protocol !== 'MQTT/Lora' )},
+                             
+                            validate :  (x)=>( typeof x === 'string' && Validate('appkey',x) ),
+                            type: "text",
+                            value: ""
+                        }
+                    },
+
+
                     {
                         label: "kwh start",
                         property: "inmemory_kwh",
@@ -227,10 +290,32 @@ export const MeterRoom = () => {
                         property: "inmemory_kwh_date",
                         form: {
                             displayform: "textbox",
+                            type: "date",
+                            value: ""
+                        }
+                    },
+
+                    {
+                        label: "kwh finished",
+                        property: "inmemory_finished_kwh",
+                        form: {
+                            displayform: "textbox",
                             type: "text",
                             value: ""
                         }
                     },
+                    {
+                        label: "date finished",
+                        property: "inmemory_finished_kwh_date",
+                        form: {
+                            displayform: "textbox",
+                            type: "date",
+                            value: ""
+                        }
+                    },
+
+
+
                     {
                         label: "realtime kwh",
                         property: "realtime_kwh",
@@ -254,10 +339,32 @@ export const MeterRoom = () => {
                         property: "inmemory_water_date",
                         form: {
                             displayform: "textbox",
+                            type: "date",
+                            value: ""
+                        }
+                    },
+
+                    {
+                        label: "water finished",
+                        property: "inmemory_finished_water",
+                        form: {
+                            displayform: "textbox",
                             type: "text",
                             value: ""
                         }
                     },
+                    {
+                        label: "date finished",
+                        property: "inmemory_finished_water_date",
+                        form: {
+                            displayform: "textbox",
+                            type: "date",
+                            value: ""
+                        }
+                    },
+
+
+
                     {
                         label: "realtime water",
                         property: "realtime_water",
@@ -267,37 +374,7 @@ export const MeterRoom = () => {
                             value: ""
                         }
                     },
-
-                    {
-                        label: "deveui",
-                        property: "deveui",
-                        form: {
-                            displayform: "textbox",
-                            validate :  (x)=>( typeof x === 'string' && Validate('deveui',x) ),
-                            type: "text",
-                            value: ""
-                        }
-                    },
-                    {
-                        label: "appeui",
-                        property: "appeui",
-                        form: {
-                            displayform: "textbox",
-                            validate :  (x)=>( typeof x === 'string' && Validate('appeui',x) ),
-                            type: "text",
-                            value: ""
-                        }
-                    },
-                    {
-                        label: "appkey",
-                        property: "appkey",
-                        form: {
-                            displayform: "textbox",
-                            validate :  (x)=>( typeof x === 'string' && Validate('appkey',x) ),
-                            type: "text",
-                            value: ""
-                        }
-                    }
+                    
                 ]
             })
             setload(true)
@@ -310,7 +387,7 @@ export const MeterRoom = () => {
 
     return (
         <>
-            {_showmodal ? <Floormodal Data={_modaldata} onSave={onSave} onClose={onClose} onchange={handleronchange} Action={_modalaction} Inputs={_members.inputs}></Floormodal> : null}
+            {_showmodal ? <Floormodal  Data={_modaldata} onSave={onSave} onClose={onClose} onchange={handleronchange} Action={_modalaction} Inputs={_members.inputs} fontsize={0.5}></Floormodal> : null}
             <div className={styles.main} >
                 <div className={styles.header}>
                     <lable> Meter Room  </lable>
@@ -327,7 +404,6 @@ export const MeterRoom = () => {
                             <div className={styles.btn}>
                             <button onClick={OnClickCreate} ><Add /></button>
                             </div>
-
                         </div>
                     </div>
                     <div className={styles.row}  >

@@ -6,11 +6,17 @@ input MeterRoomInput {
     portmeter: String,
     device_address: String,
     device_model : String,
+
     inmemory_kwh: String,
     inmemory_kwh_date: String,
+    inmemory_finished_kwh: String,
+    inmemory_finished_kwh_date :String,
     realtime_kwh: String,
+
     inmemory_water: String,
     inmemory_water_date: String,
+    inmemory_finished_water: String,
+    inmemory_finished_water_date :String,
     realtime_water:String,
 
     deveui:String,
@@ -25,11 +31,17 @@ input MeterRoomInput {
     portmeter: Portmeter,
     device_model : String,
     device_address: String,
+
     inmemory_kwh: String,
     inmemory_kwh_date: String,
+    inmemory_finished_kwh: String,
+    inmemory_finished_kwh_date :String,
     realtime_kwh: String,
+
     inmemory_water: String,
     inmemory_water_date: String,
+    inmemory_finished_water: String,
+    inmemory_finished_water_date :String,
     realtime_water:String,
     
     deveui:String,
@@ -59,11 +71,11 @@ const _queryMeterRoomByid = async (payload) =>{
 const _queryMeterRooms = async () => {
     try {
         let resulted = await db.find({})
-        let data = resulted.map(payload => payload._doc).map( async (payload) => {
+        let data = await Promise.all( resulted.map(payload => payload._doc).map( async (payload) => {
             payload.id = payload._id.toString()
             payload.portmeter  = await queryPortmeterByid({id:payload.portmeter })
             return (payload)
-        })
+        }) )
         return (
             [...data]
         )

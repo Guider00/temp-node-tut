@@ -3,7 +3,9 @@ import styles from "./Floormodal.module.css"
 import Save from '@material-ui/icons/Save';
 
 
-export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs, Mobalname }) => {
+import { access_obj_mutilevel } from "../../../general_functions/array";
+
+export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs, Mobalname ,fontsize }) => {
 
 
     const close = onClose ? onClose : () => { console.log('close') }
@@ -32,7 +34,7 @@ export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs, Mo
                         Inputs ? <>
                             {
                                 Inputs.map((e, index) => <>
-                                    <div key={`Flooor_Inputs_map${index}`} className={styles.body}>
+                                    <div key={`Flooor_Inputs_map${index}`} className={styles.body} style={{fontSize : `${fontsize?fontsize:1}rem` }}>
                                             
                                         <div className={styles.row}>
                                             { e.label  &&  (e.form.displayform === "textbox"  ||  e.form.displayform === "datalist" || e.form.displayform === "select")  ?
@@ -61,7 +63,10 @@ export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs, Mo
                                                         ((e.form.disablecondition === undefined ||
                                                             e.form.fn_compare === undefined)
                                                             ? false : e.form.disablecondition(
-                                                                (e.form.compaer_property) ? Inputs.find(x => x.property === e.form.compaer_property).form.value : null
+                                                                (e.form.compaer_property) ?
+                                                               
+                                                                 Inputs.find(x =>   {console.log('x',x.property);return (x.property === e.form.compaer_property)}).form.value : null
+
                                                                 , e.form.fn_compare))
                                                    
                                                         
@@ -75,7 +80,7 @@ export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs, Mo
                                                                     (e.form.compaer_property) ? Inputs.find(x => x.property === e.form.compaer_property).form.value : null
                                                                     , e.form.fn_compare))
                                                         }
-                                                        onChange={(event) => { onchange(event.target.value, index) }
+                                                        onChange={(event) => {  onchange(event.target.value, index  , e.property  ) }
                                                         } />
 
                                                 </div> : null
@@ -91,7 +96,7 @@ export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs, Mo
                                                                     (e.form.compaer_property) ? Inputs.find(x => x.property === e.form.compaer_property).form.value : null
                                                                     , e.form.fn_compare))
                                                         }
-                                                        onChange={event =>  {console.log('event.target.value',event.target.value,e.form.options) ; onchange(event.target.value, index) } } >
+                                                        onChange={event =>  {console.log('event.target.value',event.target.value,e.form.options) ; onchange(event.target.value, index , e.property) } } >
                                                         {
                                                             e.form.options.map((opt, index) =>
                                                                 <option value={opt.value} >
@@ -139,7 +144,7 @@ export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs, Mo
                                                 <div className={styles.inputfullrow}>
                                                     <textarea 
                                                     value={e.form.value}
-                                                    onChange={event =>  {console.log('event.target.value',e.form.options) ; onchange(event.target.value, index) } }
+                                                    onChange={event =>  {console.log('event.target.value',e.form.options) ; onchange(event.target.value, index, e.property) } }
                                                     >
                                                     </textarea>
                                                 </div> : null

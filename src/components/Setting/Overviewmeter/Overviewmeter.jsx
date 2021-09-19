@@ -5,18 +5,149 @@ import {
   gql,
 } from "@apollo/client";
 
+import { useEffect, useState ,useRef } from 'react';
+
+
 import styles from "./Overviewmeter.module.css"
 
 import Icon from '@material-ui/core/Icon/'
 
+import { API_queryRooms ,API_queryBuildings} from  '../../../API/index'
+
+import {Rowmeter} from './Rowmeter'
+
+
+import { jsPDF } from "jspdf";
+import {AddFont_jsPDF } from './AddFont'
+import 'jspdf-autotable'
+import autoTable from 'jspdf-autotable'
+
+
+AddFont_jsPDF(jsPDF);
+const doc = new jsPDF();
+
+const export_pdf  = ( timestart , timeend , building ,unitprice , roomstart , roomend) =>{
+    console.log('export pdf ')
+     let pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
+     let pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
+     doc.setFont("angsa",'normal');
+     doc.setFontSize(36);
+    doc.text('รายงานยอดรวมการใช้ไฟฟ้า', pageWidth / 2, 24, {align: 'center'});
+    
+    doc.setFontSize(24);
+
+    doc.text(`เริ่ม ${timestart ? timestart :  "--/--/----  --:--" }`,pageWidth / 4,24*2 ,{align: 'center'})
+    doc.text(`ถึง ${timeend ? timeend :"--/--/----  --:--" }`,3*pageWidth / 4,24*2 ,{align: 'center'})
+
+
+    doc.text(`อาคาร ${building ? building :"---"}`,pageWidth / 4,24*3 ,{align: 'center'})
+    doc.text(`ราคา/หน่วย ${unitprice ? unitprice :"---"}`,3*pageWidth / 4,24*3 ,{align: 'center'})
+
+    doc.text(`ห้องเริ่มต้น ${roomstart ? roomstart:"---"}`,pageWidth / 4,24*4 ,{align: 'center'})
+    doc.text(`ห้องสิ้นสุด ${roomend ? roomend : "---"}`,3*pageWidth / 4,24*4 ,{align: 'center'})
+
+
+     let drawCell = function(data) {
+        var doc = data.doc;
+        var rows = data.table.body;
+        if (rows.length === 1) {
+        } else if (data.row.index === rows.length - 1) {
+            doc.setFont("angsa",'normal');
+            doc.setFontSize("10");
+            doc.setFillColor(255, 255, 255);
+        }
+        };
+
+    doc.autoTable({
+    headStyles: { fillColor: '#bde4d1', textColor: '#333333' , fontStyle: 'angsa' },
+    head: [['ห้อง', 'รุ่น', 'ชื่อมิตเตอร์','เริ่ม','สิ้นสุด','ผลต่าง','ราคา','อัตราส่วนต่อการใช้ไฟทั้งหมด (%)']],
+    body: [
+        ['209', 'KM-24-L', 'M209','150','200','50','250','20'],
+      
+    ],
+    willDrawCell: drawCell,
+
+    startY: 120
+    })
+
+/** Perview PDF  */
+var string = doc.output('datauristring');
+var iframe = "<iframe width='100%' height='100%' src='" + string + "'></iframe>"
+var x = window.open();
+x.document.open();
+x.document.write(iframe);
+x.document.close();
+
+  //  doc.save("สรุปค่าไฟ.pdf");
+}
+
+
+
+
 const GET_MESSAGES = gql`
   subscription {
-    mqtthistory_packets{
-        topic
-        payload
-      }
+
+    subdevicemeterrealtime{
+        id
+        port
+        device
+        tag
+        value
+    }
   }
 `;
+const getBuilding = async () =>{
+     return new Promise(async (resolve,reject)=>{
+        let res = await API_queryBuildings()
+        console.log('query Building ',res)
+        let table =[]
+        if(res && res.status === 200){
+            table =  res.data.Buildings.map((data) =>{
+                let _data = data
+                return {
+                     id:data.id ,
+                     name:data.name,
+                     data:_data ,
+
+                }
+            } )
+        }
+
+        resolve(table)
+     }).catch(e =>{
+        console.log('Promise Error',e)
+        return []
+     })
+}
+
+const getRooms = async () =>{
+    return new Promise(async (resolve,reject)=>{
+        let res = await API_queryRooms()
+        console.log('query Room ',res)
+        let table =[]
+        if(res && res.status === 200){
+            table =  res.data.rooms.map((data) =>{
+                let _data = data
+                return {
+                    id:data.id ,data:_data ,
+                    building:data.building ? data.building.name:"---",
+                    floor:data.floor ? data.floor.name:'---',
+                    name:data.name, 
+                    status:data.status ? data.status:'---',
+                    member:data.member ? data.member.name : '---',
+                    metername:data.meterroom ? data.meterroom.name : '---',
+                    meterroom:data.meterroom ? data.meterroom : '---'
+                }
+            } )
+        }
+
+        resolve(table)
+    }).catch(e =>{
+        console.log('Promise Error',e)
+        return []
+    })
+}
+
 
 
 export const Overviewmeter = () => {
@@ -24,21 +155,81 @@ export const Overviewmeter = () => {
     const { data } = useSubscription(GET_MESSAGES);
     const { mqtthistory_packets } = data? data:{ mqtthistory_packets : null}
 
-  
+    const [ _overviewmeter , setoverviewmeter] = useState([])
 
+    const [ _metertype , setmetertype] = useState('ค่าไฟ')
+    const [ _meterbuilding , setmeterbuilding] = useState('All')
+    const [ _optinbuilding , setoptionbuilding] = useState([])
+
+
+     const metertable = useRef(null);
+
+
+    const [_loading ,setloading] = useState(false)
+    useEffect(  ()=>{
+        async function fetchData(){
+         let Rooms = await getRooms()
+         let Building = await getBuilding()
+
+       console.log('Building' , Building)
+       console.log('Rooms' , Rooms)
+
+       setoverviewmeter(Rooms)
+       setoptionbuilding(Building)
+  
+        }
+        
+        fetchData();
+        setloading(true)
+    },[_loading , _metertype])
+
+    const handler_realmeter  = (id) =>{
+
+    }
+    const handler_savemeter = () =>{
+
+    }
+    const handler_onchnage =() =>{
+
+    }
+    const handler_meterid_to_value = (id , type ) =>{
+        if( type && id){
+            
+            console.log('meter id' ,id)
+            console.log('type' , type)
+            if(type === 'ค่าไฟ'){
+                console.log('data',data)
+
+            }else if(type === 'ค่าน้ำ'){
+                
+            }
+
+        }else{
+            return ""
+        }
+    }
+
+      console.log('_overviewmeter',_overviewmeter)
     return (
         <>
 
         <div className={styles.menu_top} >
             <div>
-                <select>
-                    <option>  ค่าน้ำ </option>
-                    <option> ค่าไฟ </option>
+                <label> หน่วย </label>
+                <select value= {_metertype} onChange={(e)=>(setmetertype(e.target.value))} >
+                     <option value="ค่าไฟ"> ค่าไฟ </option>
+                    <option value="ค่าน้ำ"> ค่าน้ำ </option>
                 </select>
             </div>
-            <select>
-                <option> อาคาร</option>
-            </select>
+
+            <div>
+                <label> อาคาร </label>
+                <select value={_meterbuilding} onChange={(e)=>{ setmeterbuilding(e.target.value)   }}>
+                <option value="ALL"> ทั้งหมด</option>
+                {_optinbuilding.map(building =>( <option value={building.id} > {building.name} </option> ) )}
+                </select>
+            </div>
+
             <div>
                  <button> กำหนดค่าเริ่มต้นใหม่ </button>
             </div>
@@ -51,7 +242,7 @@ export const Overviewmeter = () => {
         </div>
         <div className={styles.table_body}>
             <div>
-            <table >
+            <table   id="metertable">
                 <tr>
                     <th>ชื่อห้อง</th>
                     <th>ชื่อมิตเตอร์</th>
@@ -62,103 +253,27 @@ export const Overviewmeter = () => {
                     <th>วันสิ้นสุด</th>
                     <th>หน่วยสิ้นสุด</th>
                     <th>ผลต่าง</th>
-                    <th>ค่า CT</th>
                     <th>จำนวนหน่วย</th>
                     <th>update ค่าสิ้นสุด</th>
                     <th>วันที่</th>
                     <th>หน่วยล่าสุด</th>
                     <th>update หน่วยล่าสุด</th>
+                    <th>สถานะ</th>
                     <th></th>
                 </tr>
-                <tr>
-                    <td>
-                        <div>
-                            <input type="text"></input>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <input type="text"></input>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <input type="text"></input>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <input type="text"></input>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <input type="text"></input>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <button> {`<`} </button>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <input type="text"></input>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <input type="text"></input>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <input type="text"></input>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <input type="text"></input>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <input type="text"></input>
-                        </div>
-                    </td>
-                    <td>
-                    <div>
-                            <button> {`<`} </button>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <input type="text"></input>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <input type="text"></input>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <button> อ่านค่า </button>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <button> Save</button>
-                        </div>
-                    </td>
-                </tr>
+                 {  _overviewmeter.length > 0 ? _overviewmeter.map( (room,index) =>( 
+                        <Rowmeter   room={room} index={index} _metertype={_metertype}  handler_meterid_to_value ={handler_meterid_to_value } />
+                 )): null
+                }
+
+                
             </table>
             </div>
         </div>
         <div className={styles.menu_end}>
             <div className={styles.zone_right}>
                 <div>
-                    <button>
+                    <button  onClick={()=>{}}>
                         ตั้งค่าเริ่มต้นจากข้อมูลใบแจ้งหนี้
                     </button>
                 </div>
@@ -168,7 +283,7 @@ export const Overviewmeter = () => {
                     </button>
                 </div>
                 <div>
-                    <button>
+                    <button  onClick={()=>{ export_pdf ()}} >
                         คำนวณค่าไฟ
                         <Icon>receipt</Icon>
                     </button>
