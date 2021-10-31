@@ -1,6 +1,8 @@
-const  { db }  =  require( "../../../models/RoomPrice/RoomPrice");
 
-const _createRoomPrice = async (payload)=> {
+const  { db }  =  require( "../../../models/RoomType/RoomType");
+
+const _createRoomType = async (payload , payload2)=> {
+     if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
     try {
         if(!payload){ return null }
         if(!payload.input){ return null }
@@ -10,7 +12,7 @@ const _createRoomPrice = async (payload)=> {
       return error
     }
 }
-const _queryRoomPrice =async (filter) =>{
+const _queryRoomTypes =async (filter) =>{
     try{
         let resulted =  await db.find(filter)
         let _rooms = resulted.map(payload => payload._doc).map(payload => {
@@ -25,7 +27,8 @@ const _queryRoomPrice =async (filter) =>{
     }
 }
 
-const _queryRoomPriceByid =async (payload) =>{
+const _queryRoomTypeByid =async (payload , payload2) =>{
+    if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
     try {
         if(!payload){ return null }
         if(!payload.id){ return null }
@@ -40,7 +43,7 @@ const _queryRoomPriceByid =async (payload) =>{
         return error
     }
 }
-const _updateRoomPrice = async (payload ,payload2) =>{
+const _updateRoomType = async (payload ,payload2) =>{
       if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
     try{
         if(!payload){return null}
@@ -52,7 +55,7 @@ const _updateRoomPrice = async (payload ,payload2) =>{
         return error
     }
 }
-const _deleteRoomPrice = async (payload,payload2) =>{
+const _deleteRoomType = async (payload,payload2) =>{
      if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
     try{
         if(!payload){return null}
@@ -64,19 +67,9 @@ const _deleteRoomPrice = async (payload,payload2) =>{
     }
 }
 
-const _RoomPriceschema = `
-input OptionRoomInput{
-    topic: String,
-    price: Float,
-    type : String
-  }
-  type OptionRoom {
-    id : String
-    topic: String,
-    price: Float,
-    type : String
-  }
-  input RoompriceInput {
+const _RoomTypeschema = `
+
+  input RoomTypeInput {
     name:  String ,
     type: String,
     monthlyprice :  String,
@@ -94,7 +87,7 @@ input OptionRoomInput{
     listoptionroom:[OptionRoomInput],
     version:String 
   }
-  type Roomprice {
+  type RoomType {
     id: String,
     name:  String ,
     type: String,
@@ -114,11 +107,23 @@ input OptionRoomInput{
     version:String 
   }
 `
+const _RoomTypeschema_query =`
+    RoomTypes :[RoomType]
+    RoomTypeByid(id:ID!): RoomType
+`
+const _RoomTypeschema_mutation = `
+    createRoomType (input: RoomTypeInput):MessageCreate,
+    updateRoomType(id: ID!, input: RoomTypeInput): MessageUpdate,
+    deleteRoomType(id: ID!): MessageDelete,
+`
 
-exports.queryRoomPrice = _queryRoomPrice
-exports.queryRoomPriceByid = _queryRoomPriceByid
+exports.queryRoomTypes = _queryRoomTypes
+exports.queryRoomTypeByid = _queryRoomTypeByid
 
-exports.updateRoomPrice = _updateRoomPrice
-exports.deletRoomPrice= _deleteRoomPrice
-exports.createRoomPrice = _createRoomPrice
-exports.RoomPriceschema = _RoomPriceschema
+exports.updateRoomType = _updateRoomType
+exports.deleteRoomType= _deleteRoomType
+exports.createRoomType = _createRoomType
+
+exports.RoomTypeschema_query =_RoomTypeschema_query
+exports.RoomTypeschema_mutation = _RoomTypeschema_mutation
+exports.RoomTypeschema = _RoomTypeschema

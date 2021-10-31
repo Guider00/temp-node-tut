@@ -12,7 +12,19 @@ import Add from '@material-ui/icons/Add';
 
 import styles from "./RoomPrice.module.css"
 
-import { API_createroomprice ,API_queryroomprice , API_deleteroomprice , API_editroomprice } from  '../../../API/index'
+import {
+	API_GET_RoomType,
+	API_ADD_RoomType,
+	API_DELETE_RoomType,
+	API_UPDATE_RoomType
+} from '../../../API/Schema/setting/RoomType/RoomType';
+import {
+    API_GET_Rooms,
+   
+} from '../../../API/Schema/Room/Room'
+import { useQuery, useMutation } from '@apollo/client';
+
+
 
 // const opt_type_rent = ["รายเดือน","รายวัน"]
 // const opt_type_utilities = ["ตามหน่วยการใช้งาน","เหมา"]
@@ -45,14 +57,15 @@ inputs: [
 
 
 }
+
     let default_data_RoomType ={
         showindex: true,
         topic:["ชื่อ","จำนวน"],
-        body:[{name:"a",number:"20"},{name:"b",number:"30"}] ,
+        body:[] ,
         inputs: [
 
             {
-                label: "ชื่อ",
+                label: "name",
                 property: "name",
                 form: {
                     displayform: "textbox",
@@ -61,8 +74,8 @@ inputs: [
                 }
             },
             {
-                label: "นามสกุล",
-                property: "lastname",
+                label: "number",
+                property: "number",
                 form: {
                     displayform: "textbox",
                     type: "text",
@@ -82,15 +95,110 @@ var GB_value =  {
 
 
 export const RoomPrice = () => {
+    const GET_Rooms = useQuery(API_GET_Rooms);
+ 
+   	const GET_RoomType = useQuery(API_GET_RoomType);
+
+	const [ createRoomType, mutation_createRoomType ] = useMutation(API_ADD_RoomType);
+
+	const [ deleteRoomType, mutation_deleteRoomTyp ] = useMutation(API_DELETE_RoomType);
+
+	const [ updateRoomType, mutation_updateRoomType ] = useMutation(API_UPDATE_RoomType);
+
+    const [_roomtype , setroomtype] = useState({
+                showindex: true,
+        topic:["ชื่อ","จำนวน"],
+        body:[] ,
+        inputs: [
+
+            {
+                label: "name",
+                property: "name",
+                form: {
+                    displayform: "textbox",
+                    type: "text",
+                    value: ""
+                }
+            },
+            {
+                label: "number",
+                property: "number",
+                form: {
+                    displayform: "textbox",
+                    type: "text",
+                    value: ""
+                }
+            },
+           
+        ]
+    })
+
+    const API_createRoomType = async (payload) =>{
+
+            let  _res =  await createRoomType({
+					variables: {
+						input: {
+								name:payload.name,
+								type: payload.type,
+								monthlyprice: payload.monthlyprice,
+                                dailyprice :payload.dailyprice,
+                                deposit_rent : payload.deposit_rent,
+                                insurance: payload.insurance,
+                                type_price_electrical: payload.type_price_electrical,
+                                unit_electrical: payload.unit_electrical,
+                                rate_electrical: payload.rate_electrical,
+                                totalprice_electrical: payload.totalprice_electrical,
+                                type_price_water: payload.type_price_water,
+                                unit_water: payload.unit_water ,
+                                rate_water: payload.rate_water,
+                                totalprice_water: payload.totalprice_water
+				            }
+			}
+		});     
+         return _res
+    }
+    const API_DeleteRoomType = async (payload) =>{
+
+         let  _res  = null
+        _res  =  await deleteRoomType({
+					 variables: { id: payload.id } 
+		});
+        return _res
+    }
+    const API_updateRoomType = async (payload) =>{
+    let	_res = await updateRoomType({
+                                variables: {
+                                    id: payload.id,
+                                    input: {
+                                        name:payload.name,
+                                        type: payload.type,
+                                        monthlyprice: payload.monthlyprice,
+                                        dailyprice :payload.dailyprice,
+                                        deposit_rent : payload.deposit_rent,
+                                        insurance: payload.insurance,
+                                        type_price_electrical: payload.type_price_electrical,
+                                        unit_electrical: payload.unit_electrical,
+                                        rate_electrical: payload.rate_electrical,
+                                        totalprice_electrical: payload.totalprice_electrical,
+                                        type_price_water: payload.type_price_water,
+                                        unit_water: payload.unit_water ,
+                                        rate_water: payload.rate_water,
+                                        totalprice_water: payload.totalprice_water
+                                    }
+                                }
+                            });
+            return _res
+    }
+
     const [_id,setid] = useState("");
     const [_name,setname] = useState("");
     const [_type, setrent_type] = useState("รายเดือน");
 
     const [_monthlyprice,setmonthlyprice] = useState("");
-    const [_forehandrent,setforehandrent] = useState("");
+    const [_deposit_rent,setdeposit_rent] = useState("");
     const [_insurance,setinsurance] = useState("");
 
-    const [_dayilyprice,setdayilyprice] = useState("");
+    const [_dailyprice,setdailyprice] = useState("");
 
     const [_type_price_electrical, settype_price_electrical] = useState("ตามหน่วยการใช้งาน");
 
@@ -112,33 +220,34 @@ export const RoomPrice = () => {
 
     const [_showedit,setshowedit] = useState(false);
 
-
-    const onClickAddRoomPrice = async () =>{
-       
+    const handlerclerforminput =  (showedit) =>{
+          
         setid("")
         setname("")
-        setrent_type("รายเดือน")
-        setforehandrent("")
+        setdeposit_rent("")
         setinsurance("")
         setmonthlyprice("")
-        setdayilyprice("")
-        settype_price_electrical("ตามหน่วยการใช้งาน")
+        setdailyprice("")
         setunit_electrical("")
         setrate_electrical("")
         settotalprice_electrical("")
-
-        settype_price_water("ตามหน่วยการใช้งาน")
         setunit_water("")
         setrate_water("")
         settotalprice_water("")
-        
+        setshowedit(showedit)
+    }
 
-        setshowedit(true)
-
+    const onClickAddRoomPrice = async () =>{
+       
+       handlerclerforminput( true)
     }
     const onClickDeleteRoomPrice = async (id)=>{
-        let resulted = await API_deleteroomprice(id)
-        console.log('resulted',resulted)
+  
+        let  res = await API_DeleteRoomType({id:id})
+        if(res){
+            GET_RoomType.refetch(); // update room type
+        }
+      
         setload(false)
         setinitial(false)
      }
@@ -148,13 +257,13 @@ export const RoomPrice = () => {
         setname(data.name);
         setrent_type(data.type)
         setmonthlyprice(data.monthlyprice)
-        setforehandrent(data.forehandrent)
+        setdeposit_rent(data.deposit_rent)
         setinsurance(data.insurance)
-        setdayilyprice(data.dayilyprice)
+        setdailyprice(data.dailyprice)
         settype_price_electrical(data.type_price_electrical)
         setunit_electrical(data.unit_electrical)
         setrate_electrical(data.rate_electrical)
-        settotalprice_electrical(data._totalprice_electrical)
+        settotalprice_electrical(data.totalprice_electrical)
 
         settype_price_water(data.type_price_water)
         setunit_water(data.unit_water)
@@ -171,18 +280,61 @@ export const RoomPrice = () => {
             let  resulted
            if(_id !== "")
            {
-            console.log('Edit',GB_value)
-            resulted =  await API_editroomprice(_id,GB_value)
+            console.log('Edit',_totalprice_electrical)
+           // resulted =  await API_editroomprice(_id,GB_value)
+             resulted = await API_updateRoomType({id:_id,
+                                name:_name,
+                                type:_type,
+                                monthlyprice:_monthlyprice,
+                                deposit_rent:_deposit_rent,
+                                insurance:_insurance,
+                                dailyprice:_dailyprice,
+                                type_price_electrical:_type_price_electrical,
+                                unit_electrical:_unit_electrical,
+                                rate_electrical:_rate_electrical,
+                                totalprice_electrical:_totalprice_electrical,
+                                type_price_water:_type_price_water,
+                                unit_water:_unit_water,
+                                rate_water:_rate_water,
+                                totalprice_water:_totalprice_water
+                      
+            })
                
            }else{
-            console.log('Add',GB_value)
-             resulted  =  await API_createroomprice(GB_value)
+           // console.log('Add',GB_value)
+             //resulted  =  await API_createroomprice(GB_value)
+             // resulted =  await API_editroomprice(_id,GB_value)
+             resulted = await API_createRoomType({
+                                name:_name,
+                                type:_type,
+                                monthlyprice:_monthlyprice,
+                                deposit_rent:_deposit_rent,
+                                insurance:_insurance,
+                                dailyprice:_dailyprice,
+                                type_price_electrical:_type_price_electrical,
+                                unit_electrical:_unit_electrical,
+                                rate_electrical:_rate_electrical,
+                                totalprice_electrical:_totalprice_electrical,
+                                type_price_water:_type_price_water,
+                                unit_water:_unit_water,
+                                rate_water:_rate_water,
+                                totalprice_water:_totalprice_water
+                            
+            })
                
            }
-        
-           if(resulted.statusText === 'OK'){
+            console.log('resulted',resulted)
+           if(resulted  && resulted.data){
                 // << Edit or Save sucess 
             //  setshowedit(false) //<< close edit
+            if(_id !== ""){
+                    console.log('close edit')
+                    handlerclerforminput(false); //<< clear form and close edit
+            }else{
+                 handlerclerforminput(true); //<< clear form 
+            }
+            GET_RoomType.refetch();
+           
            }
 
             // setload(false)
@@ -201,93 +353,79 @@ export const RoomPrice = () => {
 
     
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    useEffect(async () => {
-         // initial mode 
-         let table  =[]
-        let res =  await API_queryroomprice()
-        if(res && res.status === 200){
-            table =  res.data.roomprices.map((data) =>{
-                let _data = data
-                return {id:data.id,data:_data ,รายการ:data.name,ราคา:data.monthlyprice}
-            } )
-        }
-
-        console.log('table',table)
-        default_data_RoomType.body = table
-        setload(true)
-        setinitial(true)
-    }, [_inital])
 
 
 
+    useEffect (()=>{
+        console.log('do this')
+         if(GET_RoomType.loading === false && GET_Rooms.loading === false){
+            let table  =[]
+            if(GET_RoomType && GET_RoomType.data &&  GET_RoomType.data.RoomTypes){
+                
+                    table = GET_RoomType.data.RoomTypes.map((data) =>{
+                        let _data = data
+                        return {
+                        id:data.id,data:_data ,
+                        name:data.name,
+                        number: GET_Rooms.data.Rooms.filter((room) => (room &&  room.RoomType  && room.RoomType.name === data.name) ).length
+                        }
+                    })
+            }
+            console.log('table',table)
+            let  roomtype  = _roomtype 
+            roomtype.body = [...table]
+            setroomtype (roomtype)
+            setload(true)
+            setinitial(true)
+         }
+    },[GET_RoomType ,GET_Rooms])
       
-    
-    useEffect( ()=>{
-        GB_value ={
-            name:_name,
-            type:_type,
-            monthlyprice:_monthlyprice,
-            forehandrent:_forehandrent,
-            insurance:_insurance,
-            dayilyprice:_dayilyprice,
-            type_price_electrical:_type_price_electrical,
-            unit_electrical:_unit_electrical,
-            rate_electrical:_rate_electrical,
-            totalprice_electrical:_totalprice_electrical,
-            type_price_water:_type_price_water,
-            unit_water:_unit_water,
-            rate_water:_rate_water,
-            totalprice_water:_totalprice_water
-        }
-        // code to run after every render/re-render
-    });
-   
 
-  
+
+     if (GET_RoomType.loading || GET_Rooms.loading){ return <Loader/> }
     return (
         <>
             <div className={styles.mainbody}>
 
             
-            <div  className={styles.bodytable}>
+            <div  >
                 
                
-                <>
+                <div className={styles.bodytable} >
                     <div className={styles.header}> 
                         <label>รายการประเภทห้อง</label>
+                       
                     </div>
                     <div className={styles.ontable}>
                         <button onClick={()=>{onClickAddRoomPrice()}}> <Add/></button>
                     </div>
-                   
-                   
-                    <div className={styles.table}>
-                    { (_load)?
-                        <Table Data={default_data_RoomType} onClickDelete={onClickDeleteRoomPrice} onClickEdit={onClickEditRoomPrice} >
-                        </Table> 
-                        :<Loader></Loader>}
-                    </div>
-                   
-                </>
+                     
+                    <div>
+                        <div className={styles.table}>
+                        
+                        { (_load)?
+                            <Table Data={_roomtype } onClickDelete={onClickDeleteRoomPrice} onClickEdit={onClickEditRoomPrice} >
+                            </Table> 
+                            :<Loader></Loader>}
+                        </div>
+                   </div>
+                </div>
                 
                 
             </div>
             {_showedit ?
             <div className={styles.body}>
-                <Topic label={"Room Price"} size={"larger"} fontWeight={"bolder"} ></Topic>
 
-                <Input label="ชื่อ" type="text" defaultValue={_name}  value={_name} onChange={(e)=>{setname(e.target.value) } } ></Input>
-                {/* <Select 
-                label="ชนิดการเช่า"
-                option={opt_type_rent}
-                onChange={(e) => { setrent_type(e.target.value) }}>
-                </Select> */}
+                <Topic label={"Room Price"} size={"larger"} fontWeight={"bolder"} ></Topic>
+                
+                <Input label="ชื่อ" type="text"   value={_name} onChange={(e)=>{setname(e.target.value) } } ></Input>
+           
                         <>
-                            <Input label="ค่าเช่ารายเดือน" type="text"   defaultValue={_monthlyprice}  value={_monthlyprice} onChange={(e)=>{setmonthlyprice(e.target.value)} }></Input>
-                            <Input label="ค่าเช่าล่วงหน้า" type="text"    defaultValue={_forehandrent} value={_forehandrent} onChange={(e)=>{setforehandrent(e.target.value)} }></Input>
-                            <Input label="ค่าประกัน" type="text"       defaultValue={_insurance}  value={_insurance} onChange={(e)=>{setinsurance(e.target.value)} } ></Input>
+                            <Input label="ค่าเช่ารายเดือน" type="text"   value={_monthlyprice} onChange={(e)=>{setmonthlyprice(e.target.value)} }></Input>
+                            <Input label="ค่าเช่าล่วงหน้า" type="text"   value={_deposit_rent} onChange={(e)=>{setdeposit_rent(e.target.value)} }></Input>
+                            <Input label="ค่าประกัน" type="text"       value={_insurance} onChange={(e)=>{setinsurance(e.target.value)} } ></Input>
                    
-                          <Input label="ค่าเช่ารายวัน" type="text"  defaultValue={_dayilyprice}  value={_dayilyprice} onChange={(e)=>{setdayilyprice(e.target.value)} }  ></Input>
+                          <Input label="ค่าเช่ารายวัน" type="text"    value={_dailyprice} onChange={(e)=>{setdailyprice(e.target.value)} }  ></Input>
                         </>
             
                 <Topic label={"ค่าไฟ"} size={"medium"} ></Topic>
@@ -295,26 +433,26 @@ export const RoomPrice = () => {
 
 
                     <>
-                         <Input label="อัตรา-ต่อหน่วย-รายเดือน" type="text" defaultValue={_unit_electrical}  value={_unit_electrical} onChange={(e)=>{setunit_electrical(e.target.value)}} ></Input>
-                         <Input label="ค่าบริการ" type="text" defaultValue={_rate_electrical}   value={_rate_electrical} onChange={(e)=>{setrate_electrical(e.target.value)}} ></Input>
+                         <Input label="อัตรา-ต่อหน่วย-รายเดือน" type="text"  value={_unit_electrical} onChange={(e)=>{setunit_electrical(e.target.value)}} ></Input>
+                         <Input label="ค่าบริการ" type="text"  value={_rate_electrical} onChange={(e)=>{setrate_electrical(e.target.value)}} ></Input>
                     </>
                     <>
-                     <Input label="เหมาราคา" type="text"  defaultValue={_totalprice_electrical}   value={_totalprice_electrical} onChange={(e)=>{settotalprice_electrical(e.target.value)}}  ></Input>
+                     <Input label="เหมาราคา" type="text"   value={_totalprice_electrical} onChange={(e)=>{settotalprice_electrical(e.target.value)}}  ></Input>
                     </>
                 
 
                 <Topic label={"ค่าน้ำ"} size={"medium"} ></Topic>
 
                     <>
-                         <Input label="อัตรา-ต่อหน่วย-รายเดือน" type="text" defaultValue={_unit_water}  value={_unit_water} onChange={(e)=>{setunit_water(e.target.value)}}  ></Input>
-                         <Input label="ค่าบริการ" type="text" defaultValue={_rate_water}   value={_rate_water} onChange={(e)=>{setrate_water(e.target.value)}}  ></Input>
+                         <Input label="อัตรา-ต่อหน่วย-รายเดือน" type="text"   value={_unit_water} onChange={(e)=>{setunit_water(e.target.value)}}  ></Input>
+                         <Input label="ค่าบริการ" type="text"  value={_rate_water} onChange={(e)=>{setrate_water(e.target.value)}}  ></Input>
                     </>
                     <>
-                     <Input label="เหมาราคา" type="text"   defaultValue={_totalprice_water}   value={_totalprice_water} onChange={(e)=>{settotalprice_water(e.target.value)}}  ></Input>
+                     <Input label="เหมาราคา" type="text"      value={_totalprice_water} onChange={(e)=>{settotalprice_water(e.target.value)}}  ></Input>
                     </>
                 <Topic label="การแสดงผล"/>
                     <>
-                    <Input label="Select icon" type="icon"   defaultValue={_totalprice_water}   value={_totalprice_water} onChange={(e)=>{settotalprice_water(e.target.value)}}  ></Input>
+                    <Input label="Select icon" type="icon"    value={_totalprice_water} onChange={(e)=>{settotalprice_water(e.target.value)}}  ></Input>
                     </>
                 <Topic label="รายการอื่นๆ"/>
 
@@ -322,10 +460,11 @@ export const RoomPrice = () => {
 
                 </Table> 
 
-                <EndButton buttons={_buttons}></EndButton>
+                <EndButton buttons={_buttons}></EndButton> 
 
             </div> :null}
             </div>
-        </>
+        </> 
+       
     )
 }

@@ -1,0 +1,218 @@
+
+.page{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100vw;
+}
+.tableroomselect{
+    margin-top: 1rem;
+    flex-wrap: wrap;
+
+}
+.headertable{
+    flex-basis: 100%;
+    justify-content: center;
+    display:  flex;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+    border: 1px solid black;
+    border-radius: 4px;
+    display: flex;
+    flex-wrap: wrap;
+   
+}
+.headertable>.text{
+    font-size: x-large;
+    flex-basis: 100%;
+    justify-content: center;
+    text-align: center;
+    padding-bottom: 1rem;
+}
+.headertable>.input{
+    flex-basis: 100%;
+    display: flex;
+    text-align: center;
+}
+.headertable>.input>.zonetextbox{
+    display: flex;
+    align-items: center;
+    flex-basis: 60%;
+}
+
+.headertable>.input>.zonetextbox>input{
+    width: auto;
+    font-size: initial;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+.headertable>.input>.zonebtn{
+    display: flex;
+    justify-content: space-evenly;
+    flex-basis: 40%;
+}
+.headertable>.input>.zonebtn>select{
+    font-size: initial;
+    
+}
+.headertable>.input>.zonebtn>button{
+    font-size: initial;
+    
+}
+.zonetable{
+    flex-basis: 100%;
+    justify-content: center;
+
+    border: 1px solid black;
+    border-radius: 4px;
+}
+.bodytable{
+    
+    flex-basis: 100%;
+    justify-content: center;
+    display:  flex;
+    
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+
+    
+   
+    flex-wrap: wrap;
+    /* 10 row */
+    max-height: 23rem;
+    overflow-y: auto;
+ 
+
+   
+}
+.bodytable>table{
+    width: 100%;
+   
+
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+
+
+.form_input{
+    flex :1;
+    width: 100%;
+ 
+    display: block;
+
+     border: solid black 1px;
+     border-radius: 10px;
+     flex-wrap: wrap;
+     margin-top: 1rem;
+
+}
+.form_input>.header{
+    
+     flex-basis: 100%;
+  
+     background-color: darkgray;
+     align-items: center;
+  
+     padding-left: 2rem;
+     padding-right: 2rem;
+     font-size: x-large;
+}
+.form_input>.body{
+    display: flex;
+    flex-wrap: wrap;
+    flex-basis: 100%;
+    padding-left: 2rem;
+}
+.form_input>.body>div{
+    display: flex;
+    flex-basis: 100%;
+    
+}
+.form_input>.body>div>div:nth-child(1){
+    display: flex;
+    align-items: center;
+    flex-basis: 40%;
+    font-size: initial;
+}
+.form_input>.body>div>div:nth-child(2){
+    display: flex;
+    align-items: center;
+    flex-basis: 60%;
+}
+.form_input>.body>div>div:nth-child(2)>select{
+    font-size: initial;
+   margin: 0.5rem;
+}
+.form_input>.body>div>div:nth-child(2)>input{
+    font-size: initial;
+   margin: 0.5rem;
+}
+
+
+.form_input>.body_inputroom>div{
+    display: flex;
+    flex-basis: 100%;
+    margin-left :1rem;
+    
+}
+.form_input>.body_inputroom>div>div{
+    display: flex;
+    flex-basis: 50%;
+    
+}
+.form_input>.body_inputroom>div>div>div:nth-child(1){
+    display: flex;
+    align-items: center;
+    flex-basis: 50%;
+    font-size: initial;
+}
+.form_input>.body_inputroom>div>div>div:nth-child(2){
+    display: flex;
+    align-items: center;
+    flex-basis: 50%;
+}
+.form_input>.body_inputroom>div>div>div:nth-child(2)>select{
+
+   margin: 0.5rem;
+}
+.form_input>.body_inputroom>div>div>div:nth-child(2)>input{
+  
+   margin: 0.5rem;
+}
+
+.form_input>.footer_inputroom{
+    flex-basis: 100%;
+    background-color: darkgray;
+    display: flex;
+    justify-content: right;
+    padding: 1rem;
+}
+
+
+
+.zone1{
+    width: 100vw;
+
+    display: flex;
+    flex-wrap: wrap;
+
+
+}
+
+.zone1>.bigbox{
+    flex: 1 1 40%;
+    /* max-width: 45vw; */
+    margin: 0.5rem;
+}
+.zone2 {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width:  100vw;
+
+}
+.zone2>.bigboxtable{
+    flex: 1 1 100vW;
+}

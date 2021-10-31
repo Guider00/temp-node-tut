@@ -101,6 +101,52 @@ export const createMeterRoom= (input) =>{
     }
 }
 
+
+
+export const updateMeterRoomkwh = (id ,input) =>{
+        console.log(`ค่าไฟ ${id}`,input)
+
+
+    return { query:`
+    mutation{
+      updateMeterRoomkwh(id:"${id}",input:{
+            inmemory_kwh: "${input.inmemory_kwh}",
+            inmemory_kwh_date: "${input.inmemory_kwh_date}",
+            inmemory_finished_kwh: "${input.inmemory_finished_kwh}",
+            inmemory_finished_kwh_date : "${input.inmemory_finished_kwh_date}",
+        
+      } )
+      {
+        n
+        ok
+        nModified
+      }
+    }
+    `
+    }
+}
+
+export const updateMeterRoomwater = (id ,input) =>{
+
+    return { query:`
+     mutation{
+         updateMeterRoomwater(id:"${id}",
+         input:{
+                inmemory_water: "${input.inmemory_water}",
+                inmemory_water_date: "${input.inmemory_water_date}",
+                inmemory_finished_water:"${input.inmemory_finished_water}",
+                inmemory_finished_water_date:"${input.inmemory_finished_water_date}",
+          })
+          {
+            n
+            nModified
+            ok
+        }
+    }
+    `
+    }
+}
+
 export const updateMeterRoom = (id , input) =>{
     console.log('updateMeterRoom data',id,input)
     return { query:`

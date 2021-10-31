@@ -12,6 +12,19 @@ const { readyState } = require('../../../db')
 
 var jwt = require('jsonwebtoken');
 const { User } = require('../../models/User/User')
+
+
+const { Buildingschema, Buildingschema_query , Buildingschema_mutation,queryBuilding, queryBuildingByid,createBuilding, deleteBuilding, updateBuilding } = require('./Building/Building')
+const { Floorschema ,Floorschema_query,Floorschema_mutation, queryFloor, queryFloorByid, createFloor, deleteFloor, updateFloor } = require('./Floor/Floor')
+const { Memberschema,Memberschema_query,Memberschema_mutation ,queryMembers , queryMemberByid ,createMember,deleteMember,updateMember} = require('./Member/Member')
+const { Bookingschema,Bookingschema_query,Bookingschema_mutation ,queryBookings , queryBookingByid ,createBooking,deleteBooking,updateBooking} = require('./Booking/Booking')
+
+const { RoomTypeschema,RoomTypeschema_query,RoomTypeschema_mutation ,queryRoomTypes , queryRoomTypeByid ,createRoomType,deleteRoomType,updateRoomType} = require('./RoomType/RoomType')
+const { RoomPriceschema} = require('./Roomprice/Roomprice')
+const { Portmeterschema } = require('./PortMeter/PortMeter')
+const { MeterRoomschema } = require('./MeterRoom/MeterRoom')
+const {Roomschema,Roomschema_query,Roomschema_mutation ,queryRooms , queryRoomByid ,createRoom,deleteRoom,updateRoom} = require('./Room/Room')
+
 const { getAllMeter , adddevicelist }  = require ('../../../MQTT/server/devicemeters')
 
 
@@ -72,6 +85,16 @@ const onMessagesBroadcast = (subscribers) => { subscribers.forEach((fn) => fn())
 
 
 const typeDefs = gql`
+${Floorschema}
+${Buildingschema}
+${Memberschema}
+${Bookingschema}
+
+${Portmeterschema}
+${MeterRoomschema}
+${RoomPriceschema}
+${RoomTypeschema}
+${Roomschema}
 
 type SubMQTTServerstatus{
   name:String!
@@ -132,14 +155,30 @@ type Message {
   content: String!
 }
   type Query {
+    ${Buildingschema_query}
+    ${Floorschema_query}
+    ${Memberschema_query}
+    ${Bookingschema_query}
+    ${RoomTypeschema_query}
+    ${Roomschema_query}
+
     submqttserverstatus:[SubMQTTServerstatus]
     mqtthistory_packets:[MQTTHistory_packets]
     login(email:String!,password:String!):String
     users:[User]
     getuser:User
+
+ 
   }
 
   type Mutation {
+     ${Buildingschema_mutation}
+     ${Floorschema_mutation}
+     ${Memberschema_mutation}
+     ${Bookingschema_mutation}
+     ${RoomTypeschema_mutation}
+     ${Roomschema_mutation}
+
     postMessage(user: String!, content: String!): ID!
     signup (email:String! , password:String! ,level:String!) : Signup
     login (email:String! , password:String!): Login!
@@ -151,6 +190,10 @@ type Message {
                 lock_user:String,
                 reset_password:String 
                 ) : MessageUpdate
+                
+
+
+
   }
 
   type Subscription {
@@ -181,9 +224,58 @@ const resolvers = {
       } else {
         throw new AuthenticationError('permission denied');
       }
-    }
+    },
+    // bookings: async (parent, args, { user }, info) => {
+
+    //     const bookings = await Booking.find({})
+    //     return bookings
+
+    // },
+
+    Buildings:queryBuilding,
+    BuildingByid:queryBuildingByid,
+
+ 
+    Floors: queryFloor,
+    FloorByid: queryFloorByid,
+
+    Members: queryMembers,
+    MemberByid: queryMemberByid,
+
+    Bookings : queryBookings,
+    BookingByid : queryBookingByid,
+
+    RoomTypes : queryRoomTypes,
+    RoomTypeByid : queryRoomTypeByid,
+
+    Rooms :queryRooms,
+    RoomByid : queryRoomByid,
   },
   Mutation: {
+    createBuilding:createBuilding,
+    updateBuilding:updateBuilding,
+    deleteBuilding:deleteBuilding,
+
+    createFloor: createFloor,
+    updateFloor: updateFloor,
+    deleteFloor: deleteFloor,
+
+    createMember : createMember,
+    updateMember : updateMember,
+    deleteMember : deleteMember,
+
+    createBooking : createBooking,
+    updateBooking : updateBooking,
+    deleteBooking : deleteBooking,
+
+    createRoomType : createRoomType,
+    updateRoomType : updateRoomType,
+    deleteRoomType : deleteRoomType,
+
+    createRoom : createRoom,
+    updateRoom : updateRoom,
+    deleteRoom : deleteRoom,
+
     //   postMessage: (parent, { user, content }) => {
     //     const id = messages.length;
     //     messages.push({
@@ -194,6 +286,12 @@ const resolvers = {
     //     subscribers.forEach((fn) => fn()); // << update all to  user subscripttion
     //     return id;
     //   },
+
+
+
+
+
+
     updateUser: async (parent, payload, { user }) => {
       if (user && (user.level).toLowerCase() === 'admin') {
         if (payload.id) {

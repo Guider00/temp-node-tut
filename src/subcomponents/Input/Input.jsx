@@ -10,13 +10,10 @@ export const Input = ({ label, type, key, onChange, defaultValue, value }) => {
     // let _label = useRef(label ? label : "label")
     const [uploadimg, setuploadimg] = useState(null)
 
-
     const handlefileChange = (event) => {
         setuploadimg(URL.createObjectURL(event.target.files[0]))
     }
-    useEffect(() => {
-
-    }, [])
+ 
     return (
         <>
             <div className={styles.input}>

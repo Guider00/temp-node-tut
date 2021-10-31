@@ -1,0 +1,79 @@
+
+
+.tableroomselect{
+    display: flex;
+    max-width: 50%;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    margin-left: 2rem;
+}
+.headertable{
+    flex-basis: 100%;
+    justify-content: center;
+    display:  flex;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+    border: 1px solid black;
+    border-radius: 4px;
+    display: flex;
+    flex-wrap: wrap;
+   
+}
+.headertable>.text{
+    font-size: xx-large;
+    flex-basis: 100%;
+    justify-content: center;
+    text-align: center;
+    padding-bottom: 1rem;
+}
+.headertable>.input{
+    flex-basis: 100%;
+    display: flex;
+    text-align: center;
+}
+.headertable>.input>.zonetextbox{
+    flex-basis: 60%;
+}
+
+.headertable>.input>.zonetextbox>input{
+    width: auto;
+    font-size: x-large;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+.headertable>.input>.zonebtn{
+    display: flex;
+    justify-content: space-evenly;
+    flex-basis: 40%;
+}
+.headertable>.input>.zonebtn>select{
+    font-size: x-large;
+    
+}
+.headertable>.input>.zonebtn>button{
+    font-size: x-large;
+    
+}
+.bodytable{
+    flex-basis: 100%;
+    justify-content: center;
+    display:  flex;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+    border: 1px solid black;
+    border-radius: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 200px;
+    max-height: 600px;
+    overflow-y: auto;
+   
+}
+.bodytable>table{
+    flex-basis: 100%;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}

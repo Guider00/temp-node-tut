@@ -1,5 +1,5 @@
 const { mqtt_publich } = require('./publish')
-
+const {PORT_MQTT_AEDES ,PORT_MQTTT_MOSCA } =  require('./config')
 let aedes_clients = []
 let aedes_history_packets = []
 
@@ -22,7 +22,7 @@ const removeElement = (array, elem) => {
 const _mqtt_server_aedes_initial = () => {
     const aedes = require('aedes')()
     const server = require('net').createServer(aedes.handle)
-    const port = 8883
+    const port = PORT_MQTT_AEDES  
 
 
     server.listen(port, function () {
@@ -108,15 +108,15 @@ const _mqtt_server_mosca_initial = (port, user, password) => {
     let _mosca = require('mosca');   ///<<< npm install mosca --save
 
     _mqtt_mosca_server = _mosca.Server({
-        port: port || 1883,
+        port: port || PORT_MQTTT_MOSCA,
         host: `0.0.0.0`,
         user: user || "",
         password: password || "",
-        http: {
-            port:  3800,
-            bundle: true,
-            static: './'
-            },
+        // http: {
+        //     port:  3800,
+        //     bundle: true,
+        //     static: './'
+        //     },
     });
 
     _mqtt_mosca_server.on('ready', () => {

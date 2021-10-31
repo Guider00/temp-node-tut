@@ -53,17 +53,17 @@ export  const  Inputconfig = () => {
           form:{
           status:"disable",
           displayform:"select",
-          options:[{value:"1",label:"1"}],
+          options:[{value:"",label:"---"}],
           value:""
               } 
       },
       { 
         label:"ชนิด",
-        property:"type",
+        property:"RoomType",
           form:{
           status:"enable",
           displayform:"select",
-          options:[{value:"1",label:"1"}],
+          options:[{value:"",label:"---"}],
           value:""
               } 
       },

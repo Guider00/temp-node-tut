@@ -9,6 +9,7 @@ const schemaDefinition = new mongoose.Schema({
     type: { type: String },
     member:{ type:String},
     meterroom:{ type:String},
+    RoomType : {type:String},
     version:{ type: String },
    
 

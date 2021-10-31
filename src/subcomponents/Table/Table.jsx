@@ -10,14 +10,12 @@ import  { data_display } from '../../subcomponents/Universal_function'
 
 
 export const  Table = ({Data,onClickDelete , onClickEdit , maxWidth}) =>{
-
+  
     const [page_index,setpage_index] = useState(0);
     const [width, setWidth] = useState(window.innerWidth);
       useEffect(() => {
         window.addEventListener("resize", () => setWidth(window.innerWidth));
       }, []); // Empty array ensures that effect is only run on mount
-      console.log(Data.body)
-      
     return(
         <>
            
@@ -64,6 +62,7 @@ export const  Table = ({Data,onClickDelete , onClickEdit , maxWidth}) =>{
                             */}
                          </tr>
                          
+                        
                         { Data.body.map( (ele_body,row_index) => 
              
                               <tr key={`${ele_body['id']}_${row_index}`}>

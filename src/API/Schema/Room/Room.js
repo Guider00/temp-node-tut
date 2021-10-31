@@ -1,3 +1,5 @@
+import {  gql } from '@apollo/client';
+
 export const queryRoomByid = (id) =>{
     return {query:`
         query{
@@ -12,6 +14,22 @@ export const queryRoomByid = (id) =>{
                         id
                         name
                     }
+                }
+                RoomType{
+                    id
+                    name
+                    monthlyprice
+                    dailyprice
+                    deposit_rent
+                    insurance
+                    type_price_electrical
+                    unit_electrical
+                    rate_electrical
+                    totalprice_electrical
+                    type_price_water
+                    unit_water
+                    rate_water
+                    totalprice_water
                 }
                 version
             }
@@ -39,6 +57,9 @@ export const queryRooms = () =>{
             member{
                 id
                 name
+                lastname
+                email
+                personalid
             }
             meterroom{
                 id
@@ -54,6 +75,22 @@ export const queryRooms = () =>{
                 inmemory_finished_water
                 inmemory_finished_water_date
 
+            }
+            RoomType{
+                id
+                name
+                monthlyprice
+                dailyprice
+                deposit_rent
+                insurance
+                type_price_electrical
+                unit_electrical
+                rate_electrical
+                totalprice_electrical
+                type_price_water
+                unit_water
+                rate_water
+                totalprice_water
             }
         }
     }
@@ -71,6 +108,7 @@ export const createRoom = (data) =>{
             floor:"${data.floor}"
             member:"${data.member}"
             meterroom:"${data.meterroom}"
+            RoomType:"${data.RoomType}"
           }){
             id
             errors
@@ -91,6 +129,7 @@ export const updateRoom = (id ,data )=>{
             floor:"${data.floor}"
             member:"${data.member}"
             meterroom:"${data.meterroom}"
+            RoomType:"${data.RoomType}"
         })
         {
          n
@@ -115,3 +154,23 @@ export const deleteRoom = (id) =>{
         `
     }
 }
+
+export const API_GET_Rooms = gql`
+    query{
+        Rooms{
+            id
+            name
+                floor{
+                name
+                building{
+                            name
+                    }
+                }
+            RoomType{
+            name
+            }
+        }
+    }
+`;
+
+

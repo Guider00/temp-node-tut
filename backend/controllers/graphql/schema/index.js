@@ -1,5 +1,5 @@
 // schema.js
-const { Roomschema, queryRoom, queryRoomByid, createRoom, deleteRoom, updateRoom } = require('./Room/Room')
+const { Roomschema, queryRooms, queryRoomByid, createRoom, deleteRoom, updateRoom } = require('./Room/Room')
 
 const { Buildingschema, queryBuilding, queryBuildingByid, createBuilding, deleteBuilding, updateBuilding } = require('./Building/Building')
 
@@ -9,13 +9,14 @@ const { Floorschema, queryFloor, queryFloorByid, createFloor, deleteFloor, updat
 
 const { RoomPriceschema, queryRoomPrice, createRoomPrice, deletRoomPrice, updateRoomPrice } = require('./RoomPrice/RoomPrice')
 
-const { MeterRoomschema, queryMeterRooms, queryMeterRoomByid, createMeterRoom, deleteMeterRoom, updateMeterRoom, } = require('./MeterRoom/MeterRoom')
+const { MeterRoomschema, queryMeterRooms, queryMeterRoomByid, createMeterRoom, deleteMeterRoom, updateMeterRoom, updateMeterRoomkwh , updateMeterRoomwater } = require('./MeterRoom/MeterRoom')
 
 const { Portmeterschema, queryPortmeters, queryPortmeterByid, createPortmeter, deletePortmeter, updatePortmeter } = require('./PortMeter/Portmeter')
 
 
 const { Noteschema , queryNotes , queryNoteByid , createNote , deleteNote , updateNote } = require('./Note/Note')
 
+const { RoomTypeschema  } = require('./RoomType/RoomType')
 
  // real time system status 
 const { DBstatusschema, queryDBstatus } = require('./System/DBstatus/DBstatus')
@@ -39,7 +40,7 @@ const schema = buildSchema(`
   ${RoomPriceschema}
   ${MeterRoomschema}
   ${Portmeterschema}
-
+  ${RoomTypeschema}
 
   ${Noteschema}
 
@@ -130,6 +131,8 @@ const schema = buildSchema(`
 
     createMeterRoom(input: MeterRoomInput):MessageCreate,
     updateMeterRoom(id: ID!, input: MeterRoomInput): MessageUpdate,
+    updateMeterRoomkwh(id: ID!, input: MeterRoomkwhInput): MessageUpdate,
+    updateMeterRoomwater(id: ID!, input: MeterRoomwaterInput): MessageUpdate,
     deleteMeterRoom(id: ID!): MessageDelete
 
     createPortmeter(input: PortmeterInput):MessageCreate,
@@ -173,7 +176,7 @@ const rootValue = {
   deleteroomprice: deletRoomPrice,
 
   roomByid: queryRoomByid,
-  rooms: queryRoom,
+  rooms: queryRooms,
   createRoom: createRoom,
   updateRoom: updateRoom,
   deleteRoom: deleteRoom,
@@ -200,6 +203,8 @@ const rootValue = {
   MeterRooms: queryMeterRooms,
   createMeterRoom: createMeterRoom,
   updateMeterRoom: updateMeterRoom,
+  updateMeterRoomkwh :updateMeterRoomkwh,
+  updateMeterRoomwater :updateMeterRoomwater,
   deleteMeterRoom: deleteMeterRoom,
 
   PortmeterByid: queryPortmeterByid,

@@ -11,6 +11,15 @@ input FloorInput {
    building : Building
  }
        `
+const _Floorschema_query =`
+    FloorByid(id:ID!):Floor,
+    Floors:[Floor],
+`
+const _Floorschema_mutation =`
+    createFloor(input: FloorInput):MessageCreate,
+    updateFloor(id: ID!, input: FloorInput): MessageUpdate,
+    deleteFloor(id: ID!): MessageDelete,
+`
 
 const _queryFloorByid = async (payload) =>{
     try {
@@ -46,7 +55,9 @@ const _queryFloor = async () => {
         return error
     }
 }
-const _createFloor = async (payload) => {
+const _createFloor = async (payload , payload2) => {
+     if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
+
     try {
         if (payload && payload.input) {
             let resulted = await db.create(payload.input)
@@ -65,7 +76,9 @@ const _createFloor = async (payload) => {
         return error
     }
 }
-const _deleteFloor = async (payload) => {
+const _deleteFloor = async (payload , payload2) => {
+    if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
+
     try {
         if (!payload) { return null }
         if (!payload.id) { return null }
@@ -75,7 +88,8 @@ const _deleteFloor = async (payload) => {
         return error
     }
 }
-const _updateFloor = async (payload) => {
+const _updateFloor = async (payload ,payload2) => {
+    if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
     try {
         if (!payload) { return null }
         if (!payload.id) { return null }
@@ -93,3 +107,5 @@ exports.updateFloor = _updateFloor
 exports.deleteFloor= _deleteFloor
 exports.createFloor = _createFloor
 exports.Floorschema = _Floorschema
+exports.Floorschema_query = _Floorschema_query
+exports.Floorschema_mutation = _Floorschema_mutation

@@ -12,9 +12,10 @@ import styles from "./Overviewmeter.module.css"
 
 import Icon from '@material-ui/core/Icon/'
 
-import { API_queryRooms ,API_queryBuildings} from  '../../../API/index'
+import { API_queryRooms ,API_queryBuildings , API_updateMeterRoomkwh ,API_updateMeterRoomwater } from  '../../../API/index'
 
 import {Rowmeter} from './Rowmeter'
+import {Child} from './Child'
 
 
 import { jsPDF } from "jspdf";
@@ -163,7 +164,7 @@ export const Overviewmeter = () => {
 
 
      const metertable = useRef(null);
-
+    const itemEls = useRef(new Array())
 
     const [_loading ,setloading] = useState(false)
     useEffect(  ()=>{
@@ -186,12 +187,55 @@ export const Overviewmeter = () => {
     const handler_realmeter  = (id) =>{
 
     }
-    const handler_savemeter = () =>{
+    const getmeter_data = ( fn ) =>{
+        return  (fn)
+    }
+    const handler_saveallmeter = ( meters ) =>{
+        console.log('_overviewmeter',_overviewmeter)
+        let list_meter = itemEls.current.map(item => item.getdata() )
+
+        console.log(list_meter)
+        if(meters && meters.length )
+        {
+
+        } 
 
     }
-    const handler_onchnage =() =>{
+    const handler_save = async ( meterid , data) =>
+    {
+        if(meterid  &&  data)
+        {
+            console.log('id',meterid )
+            console.log('meter data ' , data)
+             
+            
+            
+              try{
+             let input = {}
+             let resulte ; 
 
+             if(data._metertype === 'ค่าไฟ'){
+                 input = { inmemory_kwh : data.unitstart  , inmemory_kwh_date : data.datestart ,  inmemory_finished_kwh : data.unitfinished , inmemory_finished_kwh_date : data.datefinished}
+                 resulte  =   await API_updateMeterRoomkwh(meterid , input)
+             }else if(data._metertype === 'ค่าน้ำ'){
+
+                 input = { inmemory_water : data.unitstart  , inmemory_water_date : data.datestart ,  inmemory_finished_water : data.unitfinished , inmemory_finished_water_date : data.datefinished}
+                 resulte  =   await API_updateMeterRoomwater(meterid , input)
+             }
+   
+ 
+           
+         
+             console.log( 'sendupdate meter ' , resulte)
+            }catch(e){
+                console.log(e)
+            }
+
+        }else{
+            console.log('error' , 'with out meter ')
+        }
     }
+
     const handler_meterid_to_value = (id , type ) =>{
         if( type && id){
             
@@ -237,7 +281,7 @@ export const Overviewmeter = () => {
                  <button>  กำหนดค่าสิ้นสุด  </button>
             </div>
             <div>
-                <button> อ่านค่า ทั้งหมด</button>
+                <button  onClick={()=>{ console.log('read all meter ') } }> อ่านค่า ทั้งหมด</button>
             </div>
         </div>
         <div className={styles.table_body}>
@@ -262,14 +306,23 @@ export const Overviewmeter = () => {
                     <th></th>
                 </tr>
                  {  _overviewmeter.length > 0 ? _overviewmeter.map( (room,index) =>( 
-                        <Rowmeter   room={room} index={index} _metertype={_metertype}  handler_meterid_to_value ={handler_meterid_to_value } />
+                        <Rowmeter    room={room} index={index} _metertype={_metertype}  handler_meterid_to_value ={handler_meterid_to_value } handler_save={handler_save} />
                  )): null
+                 
                 }
 
                 
             </table>
             </div>
         </div>
+        {/* <div>
+             {  _overviewmeter.length > 0 ? _overviewmeter.map( (room,index) =>( 
+                        <Child  ref={(element) => itemEls.current[index] = element }  room={room} index={index} _metertype={_metertype}  handler_meterid_to_value ={handler_meterid_to_value } handler_save={handler_save} />
+                 )): null
+                 
+            }
+            
+        </div> */}
         <div className={styles.menu_end}>
             <div className={styles.zone_right}>
                 <div>
@@ -278,7 +331,7 @@ export const Overviewmeter = () => {
                     </button>
                 </div>
                 <div>
-                    <button>
+                    <button onClick={()=>{handler_saveallmeter()}}>
                         <Icon>save</Icon>
                     </button>
                 </div>

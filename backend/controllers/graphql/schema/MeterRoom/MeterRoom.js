@@ -1,6 +1,21 @@
 const  {  db  }  = require('../../../models/MeterRoom/MeterRoom')
 const { queryPortmeterByid } = require('../PortMeter/Portmeter')
 const _MeterRoomschema = `
+
+input MeterRoomwaterInput {
+    inmemory_water: String!,
+    inmemory_water_date: String!,
+    inmemory_finished_water: String!,
+    inmemory_finished_water_date :String!,
+ }
+
+input MeterRoomkwhInput {
+    inmemory_kwh: String!,
+    inmemory_kwh_date: String!,
+    inmemory_finished_kwh: String!,
+    inmemory_finished_kwh_date :String!,
+ }
+
 input MeterRoomInput {
     name :String,
     portmeter: String,
@@ -51,6 +66,8 @@ input MeterRoomInput {
     version: String
  }
        `
+
+
 
 const _queryMeterRoomByid = async (payload) =>{
     try {
@@ -120,12 +137,41 @@ const _updateMeterRoom = async (payload) => {
         return error
     }
 }
+const _updateMeterRoomkwh = async (payload) => {
+    try {
+        if (!payload) { return null }
+        if (!payload.id) { return null }
+        if (!payload.input) { return null }
+        if (!payload.id.match(/^[0-9a-fA-F]{24}$/)) { return "Error Format ID"}
+        let resulted = await db.updateOne({ _id: payload.id }, payload.input)
+        return resulted
+    } catch (error) {
+        return error
+    }
+}
+const _updateMeterRoomwater = async (payload) => {
+    try {
+        if (!payload) { return null }
+        if (!payload.id) { return null }
+        if (!payload.input) { return null }
+        if (!payload.id.match(/^[0-9a-fA-F]{24}$/)) { return "Error Format ID"}
+        let resulted = await db.updateOne({ _id: payload.id }, payload.input)
+        return resulted
+    } catch (error) {
+        return error
+    }
+}
 
 
-exports.queryMeterRoomByid = _queryMeterRoomByid
-exports.queryMeterRooms    = _queryMeterRooms
-exports.updateMeterRoom    = _updateMeterRoom
-exports.deleteMeterRoom    = _deleteMeterRoom
-exports.createMeterRoom    = _createMeterRoom
-exports.MeterRoomschema    = _MeterRoomschema
+exports.queryMeterRoomByid      = _queryMeterRoomByid
+exports.queryMeterRooms         = _queryMeterRooms
+
+exports.updateMeterRoom         = _updateMeterRoom
+exports.updateMeterRoomkwh      = _updateMeterRoomkwh
+exports.updateMeterRoomwater    = _updateMeterRoomwater
+exports.deleteMeterRoom         = _deleteMeterRoom
+exports.createMeterRoom         = _createMeterRoom
+
+exports.MeterRoomschema         = _MeterRoomschema
+
 

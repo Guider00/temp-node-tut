@@ -17,6 +17,16 @@ input MemberInput {
    email :  String
  }
        `
+
+const _Memberschema_query =`
+    MemberByid(id:ID!):Member,
+    Members:[Member],
+`
+const _Memberschema_mutation =`
+    createMember(input: MemberInput):MessageCreate,
+    updateMember(id: ID!,input :MemberInput):MessageUpdate,
+    deleteMember(id: ID!): MessageDelete
+`
 const _queryMemberByid = async(payload) =>{
     try {
         if(!payload){ return null }
@@ -97,3 +107,5 @@ exports.updateMember    = _updateMember
 exports.deleteMember    = _deleteMember
 exports.createMember    = _createMember
 exports.Memberschema    = _Memberschema
+exports.Memberschema_query = _Memberschema_query
+exports.Memberschema_mutation = _Memberschema_mutation

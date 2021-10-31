@@ -1,10 +1,12 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState ,useImperativeHandle ,forwardRef} from 'react';
 
 import {formatDate} from '../../../general_functions/convert'
 
 
-export const Rowmeter =( { room ,index , _metertype, handler_onchnage , handler_meterid_to_value  ,handler_save}) =>{
+
+
+export const Rowmeter =   ( {  ref,  room ,index , _metertype, handler_onchnage , handler_meterid_to_value  ,handler_save ,eventreadmeter , eventsave}) =>{
 
     const [name , setname] = useState("")
     const [metername , setmetername] = useState("")
@@ -17,13 +19,30 @@ export const Rowmeter =( { room ,index , _metertype, handler_onchnage , handler_
     const [datelast , setdatelast] = useState("")
     const [unitlast , setunitlast] = useState("")
 
+    // const [actioneventreadmeter , setactioneventreadmeter] = useState("")
+    // const [actioneventsave , setactioneventsave] = useState("")
+
+    // useEffect(()=>{
+    // setactioneventreadmeter(eventreadmeter)
+    // },[actioneventreadmeter])
+
+    // useEffect(()=>{
+    // setactioneventsave(eventsave)
+    // },[actioneventsave])
+    useImperativeHandle(ref, () => ({
+
+        getAlert() {
+        alert("getAlert from Child");
+        }
+
+    }));
 
     const handler_click_update_last_to_finished = () =>{
         setdatefinished(datelast)
         setunitfinished(unitlast)
     }
     const handler_click_update_finished_to_start =() =>{
-        console.log('yoyo update')
+       
         setdatestart(datefinished)
         setunitstart(unitfinished)
     }
@@ -157,7 +176,7 @@ export const Rowmeter =( { room ,index , _metertype, handler_onchnage , handler_
                         </td>
                         <td>
                             <div>
-                                <button onClick={()=>{ handler_save(room.meterroom.id) }}> Save</button>
+                                <button onClick={()=>{ handler_save(room.meterroom.id  , {_metertype, datestart , unitstart ,datefinished , unitfinished} ) }}> Save</button>
                             </div>
                         </td>
                     </tr>
