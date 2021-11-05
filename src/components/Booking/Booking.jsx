@@ -18,6 +18,14 @@ import {
 	API_UPDATE_Booking
 } from '../../API/Schema/Booking/Booking';
 
+import {
+	UploadFile,
+	SingleUpload,
+} from '../../API/Schema/UploadFile/UploadFile';
+import {
+	API_UPDATE_Room
+} from '../../API/Schema/Room/Room'
+
 const getRooms = async () => {
 	return new Promise(async (resolve, reject) => {
 		let res = await API_queryRooms();
@@ -62,6 +70,11 @@ export const Booking = () => {
 	//  const { loading, error, data } = useQuery(API_GET_Booking);
 
 	const booking = useQuery(API_GET_Booking);
+	console.log('booking',booking)
+	
+	const [ updateRoom, mutationupdateRoom ] = useMutation(API_UPDATE_Room)
+
+	const [ uploadFile, mutationuploadFile ] = useMutation(SingleUpload );
 
 	const [ createBooking, mutationcreatebook ] = useMutation(API_ADD_Booking);
 
@@ -143,7 +156,7 @@ export const Booking = () => {
 	};
 	const handleChangedformroom = (e) => {
 		let _formroom = formroom;
-		if (e.target.id && _formroom[e.target.id]) {
+		if (e.target.id && _formroom.hasOwnProperty(e.target.id) ) {
 			_formroom[e.target.id] = e.target.value;
 			setformbooking({ ..._formroom });
 		}
@@ -223,6 +236,16 @@ export const Booking = () => {
 														onClick={() => {
 															setselectedroom(room.id);
 															handleChangedALLformroom(room);
+
+															console.log('bookingnumber',formbooking,)
+															let _formbooking = formbooking
+															if(_formbooking.booking_number ){
+															}else{
+															_formbooking.booking_number = `${Math.random().toString(36).slice(2, 15)}`
+
+															}
+															setformbooking( JSON.parse( JSON.stringify( formbooking ) )  )
+														
 														}}
 														style={{
 															background: selectedroom === room.id ? 'lightgray' : 'none'
@@ -474,6 +497,7 @@ export const Booking = () => {
 													variables: {
 														id: formbooking.id,
 														input: {
+															booking_number: formbooking.booking_number,
 															customer_name: formbooking.customer_name,
 															customer_lastname: formbooking.customer_lastname,
 															customer_tel: formbooking.customer_tel,
@@ -481,8 +505,8 @@ export const Booking = () => {
 															checkin_date: formbooking.checkin_date,
 															checkin_date_exp: formbooking.checkin_date_exp,
 															note: formbooking.note,
-															status: 's',
-															receipt_number: 's',
+															status: formbooking.status ? formbooking.status : 'รอการชำระเงิน' ,
+															receipt_number: formbooking.receipt_number,
 															Room:selectedroom
 														}
 													}
@@ -491,6 +515,7 @@ export const Booking = () => {
 												_res =  await createBooking({
 													variables: {
 														input: {
+															booking_number: formbooking.booking_number,
 															customer_name: formbooking.customer_name,
 															customer_lastname: formbooking.customer_lastname,
 															customer_tel: formbooking.customer_tel,
@@ -498,8 +523,8 @@ export const Booking = () => {
 															checkin_date: formbooking.checkin_date,
 															checkin_date_exp: formbooking.checkin_date_exp,
 															note: formbooking.note,
-															status: 's',
-															receipt_number: 's',
+															status: 'รอการชำระเงิน',
+															receipt_number: '',
 															Room:selectedroom
 														}
 													}
@@ -518,11 +543,11 @@ export const Booking = () => {
 										{' '}
 										<SaveIcon />{' '}
 									</button>
-									<button onClick={() => {}}>
+									{/* <button onClick={() => {}}>
 										{' '}
 										<EditIcon />{' '}
-									</button>
-									<button onClick={() => {}}>
+									</button> */}
+									<button onClick={() => { setdefault_forminput(); }}>
 										{' '}
 										<DeleteIcon />{' '}
 									</button>
@@ -532,7 +557,6 @@ export const Booking = () => {
 					</div>
 				</div>
 			</div>
-
 			<div className={styles.zone2}>
 				<div className={styles.bigboxtable}>
 					<Tablebooking
@@ -548,12 +572,92 @@ export const Booking = () => {
 								console.log('elete Error')
 							}
 						}}
+						handleUpdatecompletestatus = { async (_booking)=>{
+								let _status =  ( (_booking && _booking.status === 'สำเร็จ' ) ? 'รอการชำระเงิน':'สำเร็จ' )
+							
+								let _res = await updateBooking({
+													variables: {
+														id: _booking.id,
+														input: {
+															booking_number: _booking.booking_number,
+															customer_name: _booking.customer_name,
+															customer_lastname: _booking.customer_lastname,
+															customer_tel: _booking.customer_tel,
+															deposit: _booking.deposit,
+															checkin_date: _booking.checkin_date,
+															checkin_date_exp: _booking.checkin_date_exp,
+															note: _booking.note,
+															status:  _status,
+															receipt_number: _booking.receipt_number,
+															Room:_booking.Room.id
+														}
+													}
+												});
+								
+									let _res_updateroom = await updateRoom({
+											variables: {
+												id: _booking.Room.id,
+												input: {
+													status: ( _status ==='สำเร็จ' ) ? "จอง" : 'ห้องว่าง'
+												}
+											}
+										});
+									if(_res_updateroom && _res_updateroom){
+										console.log('update status Room ','จอง')
+										// reface page
+									}
+									
+
+									if(_res){
+										booking.refetch();
+									}
+						}}
+						handleSaveimage = { async (_booking , file_image) =>{
+								
+								let _file_image = file_image
+								let  res
+								console.log('booking' , _booking , 'file_image',_file_image)
+								if(_file_image){
+								  res = await uploadFile({ variables : {file:_file_image} } );
+								 console.log('res upload', res)
+								}
+								if(res){
+									
+									console.log(_booking , res.data.singleUpload.url)
+									let _res = await updateBooking({
+													variables: {
+														id: _booking.id,
+														input: {
+															booking_number: _booking.booking_number,
+															customer_name: _booking.customer_name,
+															customer_lastname: _booking.customer_lastname,
+															customer_tel: _booking.customer_tel,
+															deposit: _booking.deposit,
+															checkin_date: _booking.checkin_date,
+															checkin_date_exp: _booking.checkin_date_exp,
+															note: _booking.note,
+															status: _booking.status ? _booking.status : 'รอการชำระเงิน' ,
+															receipt_number: res.data.singleUpload.url,
+															Room:_booking.Room.id
+														}
+													}
+												});
+
+									if(_res){
+										booking.refetch();
+									}
+
+								}else{
+									console.log('elete Error')
+								}
+						}}
 						handleredit={(_booking) => {
 							console.log('update', _booking);
 							//setformroom()
 					
 							setformbooking({
 								id: _booking.id,
+								booking_number : _booking.booking_number ?  _booking.booking_number: `${Math.random().toString(36).slice(2, 15)}`,
 								customer_name: _booking.customer_name,
 								customer_lastname: _booking.customer_lastname,
 								customer_tel: _booking.customer_tel,

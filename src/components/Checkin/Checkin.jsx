@@ -3,7 +3,9 @@ import { useEffect, useState } from 'react';
 import styles from './Checkin.module.css';
 import { API_queryRooms, API_queryBuildings, API_updateMeterRoomkwh, API_updateMeterRoomwater } from '../../API/index';
 import SearchIcon from '@material-ui/icons/Search';
-
+import  { TableRoomMember }  from './TableRoomMember/TableRoomMember'
+import { useQuery, useMutation } from '@apollo/client';
+import { API_UPDATE_Room ,API_GET_Rooms} from '../../API/Schema/Room/Room'
 const getRooms = async () => {
 	return new Promise(async (resolve, reject) => {
 		let res = await API_queryRooms();
@@ -23,7 +25,8 @@ const getRooms = async () => {
 					status: data.status ? data.status : '---',
 					member: data.member ? data.member.name : '---',
 					metername: data.meterroom ? data.meterroom.name : '---',
-					meterroom: data.meterroom ? data.meterroom : '---'
+					meterroom: data.meterroom ? data.meterroom : '---',
+					
 				};
 			});
 		}
@@ -34,26 +37,109 @@ const getRooms = async () => {
 		return [];
 	});
 };
+const Rooms_to_table =(Rooms) =>{
+	let table = [];
+		table =	Rooms.map((data) => {
+					let _data = data;
+					return {
+						id: data.id,
+						data: _data,
+						building:
+							data.floor && data.floor.building && data.floor.building.name
+								? data.floor.building.name
+								: '---',
+						floor: data.floor ? data.floor.name : '---',
+						name: data.name,
+						status: data.status ? data.status : '---',
+						member: data.member ? data.member.name : '---',
+						metername: data.meterroom ? data.meterroom.name : '---',
+						meterroom: data.meterroom ? data.meterroom : '---',
+						RoomType: data.RoomType ? data.RoomType.name: "---"
+					};
+				});
+	 return table
+}
 
 export const Checkin = () => {
+
 	const [ textfilter, settextfilter ] = useState('');
 	const [ rooms, setrooms ] = useState([]);
 	const [ loading, setloading ] = useState(false);
 	const [ selectedroom, setselectedroom ] = useState(null);
-	useEffect(
-		() => {
-			async function fetchData() {
-				let Rooms = await getRooms();
+
+	const GET_Rooms = useQuery(API_GET_Rooms);
+	console.log('GET_Rooms',GET_Rooms)
+	const [ updateRoom, mutationuploadFile ] = useMutation(API_UPDATE_Room)
+
+
+	const [ formcheckin , setformcheckin] = useState({
+		checkinnumber:"",
+		checkintype:"",
+		rental_period:"",
+		rental_deposit:"",
+		rental_period_day:""
+	})
+	const [ formmember, setformmember ] = useState({
+		 nametitle:"",
+		 name:"",
+		 lastname:"",
+		 personalid:"",
+		 taxnumber:"",
+		 branch:"",
+		 address:"",
+		 tel:"",
+		 car_registration:"",
+		 note:""
+
+	});
+	const handlechangeformmember = (e) =>{
+	
+		let _formmember = formmember
+			console.log('change',e.target.id , _formmember)
+		if (e.target.id && _formmember.hasOwnProperty(e.target.id) ) {
+			_formmember[e.target.id] = e.target.value;
+			setformmember({ ..._formmember });
+		}
+	}
+	const handlechangeformcheckin =(e) =>{
+			let _formcheckin = formmember
+			console.log('change',e.target.id , _formcheckin)
+		if (e.target.id && _formcheckin.hasOwnProperty(e.target.id) ) {
+			_formcheckin[e.target.id] = e.target.value;
+			setformcheckin({ ..._formcheckin });
+		}
+	}
+	useEffect( ()=>{
+		
+				console.log('update Rooms')
+				if( GET_Rooms.data ){
+				let Rooms = Rooms_to_table(GET_Rooms.data.Rooms)
+
 				console.log('Rooms', Rooms);
+				
 				setrooms(Rooms);
-			}
-			fetchData();
-			setloading(true);
-		},
-		[ loading ]
-	);
-	console.log('rooms', rooms);
-	console.log('selectedroom', selectedroom);
+				setloading(true);
+				}
+	
+	},[GET_Rooms.data])
+	// useEffect(
+	// 	() => {
+	// 		async function fetchData() {
+	// 			//let Rooms = await getRooms();
+	// 			if( GET_Rooms.loading ===false ){
+	// 			let Rooms = Rooms_to_table(GET_Rooms.data.Rooms)
+
+	// 			console.log('Rooms', Rooms);
+	// 			setrooms(Rooms);
+	// 			}
+	// 		}
+	// 		fetchData();
+	// 		setloading(true);
+	// 	},
+	// 	[ loading ]
+	// );
+	 console.log('rooms', rooms);
+	// console.log('selectedroom', selectedroom);
 	return (
 		<div>
 			<div className={styles.zone1}>
@@ -99,16 +185,20 @@ export const Checkin = () => {
 											room ? (
 												<tr
 													onClick={() => {
-														setselectedroom(room.id);
+														setselectedroom(room);
+														
+
+
+														
 													}}
 													style={{
-														background: selectedroom === room.id ? 'lightgray' : 'none'
+														background:  (selectedroom && selectedroom.id === room.id) ? 'lightgray' : 'none'
 													}}
 												>
 													<td>{room.name ? room.name : '---'}</td>
 													<td>{room.building ? room.building : '---'}</td>
 													<td>{room.floor ? room.floor : '---'}</td>
-													<td>{room.type ? room.type : '---'}</td>
+													<td>{room.RoomType ? room.RoomType : '---'}</td>
 													<td>{room.status ? room.status : '---'}</td>
 												</tr>
 											) : null
@@ -129,7 +219,7 @@ export const Checkin = () => {
 									<label>เลขที่สัญญา</label>
 								</div>
 								<div className={styles.input}>
-									<input type="text" />
+									<input type="text" id="checkinnumber"  onChange={handlechangeformcheckin}/>
 								</div>
 							</div>
 							<div className={styles.row}>
@@ -137,7 +227,7 @@ export const Checkin = () => {
 									<label>วันที่ทำสัญญา</label>
 								</div>
 								<div className={styles.input}>
-									<input type="date" />
+									<input type="date"  id="checkindate" onChange={handlechangeformcheckin}/>
 								</div>
 							</div>
 							<div className={styles.row}>
@@ -145,7 +235,7 @@ export const Checkin = () => {
 									<label>ประเภทการเช่า</label>
 								</div>
 								<div className={styles.input}>
-									<select>
+									<select id="checkintype" onChange={handlechangeformcheckin} >
 										<option>รายวัน</option>
 										<option>รายเดือน</option>
 									</select>
@@ -156,7 +246,7 @@ export const Checkin = () => {
 									<label>ระยะเวลาเช่า</label>
 								</div>
 								<div className={styles.input}>
-									<input type="text" />
+									<input type="text"   id="rental_period" />
 								</div>
 							</div>
 							<div className={styles.row}>
@@ -164,7 +254,7 @@ export const Checkin = () => {
 									<label>เงินจองห้อง</label>
 								</div>
 								<div className={styles.input}>
-									<input type="text" />
+									<input type="text"  id="rental_deposit"/>
 								</div>
 							</div>
 							<div className={styles.row}>
@@ -172,7 +262,7 @@ export const Checkin = () => {
 									<label>จำนวนวัน</label>
 								</div>
 								<div className={styles.input}>
-									<input type="text" />
+									<input type="text" id="rental_period_day" />
 								</div>
 							</div>
 						</div>
@@ -188,7 +278,7 @@ export const Checkin = () => {
 									<label>คำนำหน้า</label>
 								</div>
 								<div className={styles.input}>
-									<select>
+									<select  id="nametitle" value={formmember.nametitle}  onChange={handlechangeformmember}>
 										<option>นาย</option>
 										<option>นาง</option>
 										<option>นางสาว</option>
@@ -200,7 +290,7 @@ export const Checkin = () => {
 									<label>ชื่อ</label>
 								</div>
 								<div className={styles.input}>
-									<input type="text" />
+									<input id="name" type="text" value={formmember.name}  onChange={handlechangeformmember} />
 								</div>
 							</div>
 							<div className={styles.row}>
@@ -208,7 +298,7 @@ export const Checkin = () => {
 									<label>นามสกุล</label>
 								</div>
 								<div className={styles.input}>
-									<input type="text" />
+									<input type="text" id="lastname" value={formmember.lastname}  onChange={handlechangeformmember} />
 								</div>
 							</div>
 							<div className={styles.row}>
@@ -216,7 +306,7 @@ export const Checkin = () => {
 								    <label>บัตรประชาชน</label>
                                 </div>
 								<div className={styles.input}>
-									<input type="text" />
+									<input type="text" id="personalid" value={formmember.personalid}   onChange={handlechangeformmember} />
 								</div>
 							</div>
 							<div className={styles.row}>
@@ -224,7 +314,7 @@ export const Checkin = () => {
 								    <label>เลขประจำตัวผู้เสียภาษี</label>
                                 </div>
 								<div className={styles.input}>
-									<input type="text" />
+									<input type="text" id="taxnumber"  value={formmember.taxnumber}   onChange={handlechangeformmember}/>
 								</div>
 							</div>
 							<div className={styles.row}>
@@ -232,7 +322,7 @@ export const Checkin = () => {
 								    <label>สาขา</label>
                                 </div>
 								<div className={styles.input}>
-									<input type="text" />
+									<input type="text" id="branch"  value={formmember.branch}   onChange={handlechangeformmember}/>
 								</div>
 							</div>
 							<div className={styles.row}>
@@ -240,7 +330,7 @@ export const Checkin = () => {
 								    <label>ที่อยู่ตามบัตรประชาชน</label>
                                 </div>
                                 <div className={styles.input}>
-								    <input type="text" />
+								    <input type="text"  id="address" value={formmember.address}   onChange={handlechangeformmember} />
                                 </div>
 							</div>
 							<div className={styles.row}>
@@ -248,7 +338,7 @@ export const Checkin = () => {
 								    <label>เบอร์ติดต่อ</label>
                                 </div>
                                 <div className={styles.input}>
-								    <input type="text" />
+								    <input type="text"  id="tel" value={formmember.tel}   onChange={handlechangeformmember} />
                                 </div>
 							</div>
 							<div className={styles.row}>
@@ -256,7 +346,7 @@ export const Checkin = () => {
 								    <label>ทะเบียนรถ</label>
                                 </div>
                                 <div className={styles.input}>
-								    <input type="text" />
+								    <input type="text"  id="car_registration" value={formmember.car_registration}   onChange={handlechangeformmember} />
                                 </div>
 							</div>
 							<div className={styles.row}>
@@ -264,7 +354,7 @@ export const Checkin = () => {
 								    <label>หมายเหตุ</label>
                                 </div>
                                 <div className={styles.input}>
-								    <input type="text" />
+								    <input type="text"  id="note" value={formmember.note}   onChange={handlechangeformmember} />
                                 </div>
 							</div>
 						</div>
@@ -274,11 +364,33 @@ export const Checkin = () => {
 							<label>ผู้อาศัย</label>
 						</div>
                         <div className={styles.body}>
-                            <div className={styles.row}>
-                                <div className={styles.table}>Table Member</div>
+                            <div className={styles.rowtable}>
+                                <div className={styles.tableroommember}>
+									<TableRoomMember  data={selectedroom}/> 
+								</div>
+							
                             </div>
                             <div  className={styles.rowmenu} >
                                 <button>เพิ่ม</button>
+								<button onClick={ async ()=>{ 
+									// upload Room status
+									let _room = selectedroom
+									if(_room && _room.id){
+										let _res = await updateRoom({
+												variables: {
+													id: _room.id,
+													input: {
+														status:"มีคนอยู่"
+													}
+												}
+											});
+										if(_res){
+											console.log('update status Room ')
+											// reface page
+										}
+									}
+					
+								} }>บันทึก</button>
                             </div>
                         </div>
 						

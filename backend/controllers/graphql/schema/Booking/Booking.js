@@ -8,6 +8,7 @@ const _Bookingschema =
 `
 type Booking{
   id: String
+  booking_number:String
   customer_name :String
   customer_lastname :String
   customer_tel :String
@@ -20,6 +21,7 @@ type Booking{
   Room : Room
 }
 input BookingInput {
+  booking_number :String
   customer_name :String
   customer_lastname :String
   customer_tel :String
@@ -71,7 +73,8 @@ const _queryBookings = async () =>{
 
         let data = resulted.map(payload => payload._doc).map(async payload => {
             payload.id = payload._id.toString()
-            payload.Room  = await queryRoomByid ({id:payload.Room})
+            let _room = await queryRoomByid ({id:payload.Room})
+            payload.Room  = _room
             return (payload)
         })
 
@@ -92,6 +95,7 @@ const _createBooking = async (payload , payload2) =>{
             let data  = resulted._doc
             return {
                 id: data._id.toString(),
+                booking_number : data.booking_number,
                 customer_name :data.customer_name,
                 customer_lastname :data.customer_lastname,
                 customer_tel :data.customer_tel,

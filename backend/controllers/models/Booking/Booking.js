@@ -3,6 +3,7 @@ const mongoose = require("mongoose")
 const schemaDefinition = new mongoose.Schema({
 
   Room: {type:String},
+  booking_number:{type:String},
   customer_name :{type:String},
   customer_lastname :{type:String},
   customer_tel :{type:String},

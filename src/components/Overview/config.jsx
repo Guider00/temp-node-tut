@@ -1,5 +1,5 @@
 
-
+export const option_status_room = [{value:"ห้องว่าง",label:"ห้องว่าง"},{value:"จอง",label:"จอง"},{value:"ย้ายเข้า",label:"ย้ายเข้า"},{value:"ย้ายออก",label:"ย้ายออก"},{value:"มีคนอยู่",label:"มีคนอยู่"} ] 
 export  const  Inputconfig = () => {
   return({
     topic:["#","อาคาร","ชั้น","ห้อง","มิตเตอร์"],
@@ -43,7 +43,7 @@ export  const  Inputconfig = () => {
           form:{
           status:"disable",
           displayform:"select",
-          options:[{value:"จอง",label:"จอง"},{value:"ย้ายเข้า",label:"ย้ายเข้า"},{value:"ย้ายออก",label:"ย้ายออก"},{value:"ห้องว่าง",label:"ห้องว่าง"},{value:"มีคนอยู่",label:"มีคนอยู่"} ],
+          options:option_status_room,
           value:""
               } 
         },

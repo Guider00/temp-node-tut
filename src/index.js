@@ -50,6 +50,7 @@ import { getMainDefinition } from '@apollo/client/utilities';
 
  import { WebSocketLink } from "@apollo/client/link/ws";
 
+import { createUploadLink } from "apollo-upload-client";
 
 
 const authMiddleware = new ApolloLink((operation, forward) => {
@@ -64,6 +65,10 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 })
 
 const httpLink = new HttpLink({ uri: `http://${window.location.hostname}:${process.env.REACT_APP_PORTBACKEND}/graphql` });
+
+
+const uploadlink = createUploadLink({ uri: `http://${window.location.hostname}:${process.env.REACT_APP_PORTBACKEND}/graphql` });
+
 
  const wsLink = new WebSocketLink({
   uri: `ws://${window.location.hostname}:${process.env.REACT_APP_PORTBACKEND}/graphql`,
@@ -85,17 +90,24 @@ const splitLink = split(
     );
   },
   wsLink,
-  httpLink,
+  uploadlink,
+  httpLink,  // httpLink ต้องเป็น  link สุดท้าย 
+  
 );
  const client = new ApolloClient({
   cache: new InMemoryCache(),
   // link: authLink.concat(link),
-  link: concat(authMiddleware, splitLink),
-
+   link: concat(authMiddleware, splitLink),
+ 
   uri: `http://${window.location.hostname}:${process.env.REACT_APP_PORTBACKEND}/graphqlsub`,
   
 
 });
+
+// const client =  new ApolloClient({
+//   link,
+//   cache: new InMemoryCache()
+// });
 
  const AppWithRouter = () => (
   <BrowserRouter>

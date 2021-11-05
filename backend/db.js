@@ -23,6 +23,10 @@ const _mongodb_initial = () => {
         })
         db.on("connected", function () {
           console.log("MongoDB connected!")
+        //   mongoose.connection.db.listCollections().toArray(function (err, names) {
+        //     console.log(names); // [{ name: 'dbname.myCollection' }]
+        //     module.exports.Collection = names;
+        // });
 
         })
         db.once("open", function () {

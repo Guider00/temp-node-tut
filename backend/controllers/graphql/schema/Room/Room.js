@@ -131,7 +131,8 @@ const _deleteRoom = async (payload,payload2 ) =>{
             RoomType : await queryRoomTypeByid({id:data.RoomType})
         })
     } catch (error) {
-        return error
+        console.error(error)
+        return null
     }
 }
 

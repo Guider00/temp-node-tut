@@ -65,7 +65,18 @@
     flex-basis: 60%;
 }
 
+.rowtable{
+    display: flex;
+    flex-basis: 100%;
+    justify-content: center;
+}
 
+.tableroommember{
+    text-align: center;
+    justify-content: center;
+    margin-top:2rem;
+    margin-bottom: 1rem;
+}
 
 
 .tableroomselect{

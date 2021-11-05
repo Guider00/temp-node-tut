@@ -1,4 +1,6 @@
 const { ApolloServer, PubSub, gql, AuthenticationError, ApolloError } = require('apollo-server-express');
+
+
 const http = require('http');
 const pubsub = new PubSub();
 
@@ -24,6 +26,9 @@ const { RoomPriceschema} = require('./Roomprice/Roomprice')
 const { Portmeterschema } = require('./PortMeter/PortMeter')
 const { MeterRoomschema } = require('./MeterRoom/MeterRoom')
 const {Roomschema,Roomschema_query,Roomschema_mutation ,queryRooms , queryRoomByid ,createRoom,deleteRoom,updateRoom} = require('./Room/Room')
+
+
+const { Fileschema ,  UploadFile_query  ,  UploadFileschema_mutation  , UploadFile , singleUpload }  = require('./UploadFile/UploadFile') 
 
 const { getAllMeter , adddevicelist }  = require ('../../../MQTT/server/devicemeters')
 
@@ -95,6 +100,7 @@ ${MeterRoomschema}
 ${RoomPriceschema}
 ${RoomTypeschema}
 ${Roomschema}
+${Fileschema}
 
 type SubMQTTServerstatus{
   name:String!
@@ -161,6 +167,7 @@ type Message {
     ${Bookingschema_query}
     ${RoomTypeschema_query}
     ${Roomschema_query}
+ 
 
     submqttserverstatus:[SubMQTTServerstatus]
     mqtthistory_packets:[MQTTHistory_packets]
@@ -178,6 +185,7 @@ type Message {
      ${Bookingschema_mutation}
      ${RoomTypeschema_mutation}
      ${Roomschema_mutation}
+     ${UploadFileschema_mutation}
 
     postMessage(user: String!, content: String!): ID!
     signup (email:String! , password:String! ,level:String!) : Signup
@@ -275,6 +283,8 @@ const resolvers = {
     createRoom : createRoom,
     updateRoom : updateRoom,
     deleteRoom : deleteRoom,
+    UploadFile : UploadFile , 
+    singleUpload: singleUpload,
 
     //   postMessage: (parent, { user, content }) => {
     //     const id = messages.length;

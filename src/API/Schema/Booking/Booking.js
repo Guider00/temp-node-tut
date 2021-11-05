@@ -5,6 +5,7 @@ export const API_GET_Booking = gql`
 	query {
 		Bookings {
 			id
+			booking_number
 			customer_name
 			customer_lastname
 			customer_tel
@@ -12,6 +13,8 @@ export const API_GET_Booking = gql`
 			checkin_date_exp
 			deposit
 			note
+			receipt_number
+			status
 			Room {
 				id
 				name

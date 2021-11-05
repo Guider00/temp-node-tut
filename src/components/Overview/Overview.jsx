@@ -21,7 +21,7 @@ import {
 import { useQuery, useMutation } from '@apollo/client';
 
 
-import  { Inputconfig  , drowdownmenuroomconfig }  from './config'
+import  { Inputconfig  , drowdownmenuroomconfig , option_status_room }  from './config'
 
 const color_roomstatur = (status) =>{
     switch (status)
@@ -389,7 +389,7 @@ export const Overview = () => {
             }
 
              // set Option form input
-            status = [{value:"จอง",label:"จอง"},{value:"ย้ายเข้า",label:"ย้ายเข้า"},{value:"ย้ายออก",label:"ย้ายออก"},{value:"ห้องว่าง",label:"ห้องว่าง"},{value:"มีคนอยู่",label:"มีคนอยู่"} ]
+            status = option_status_room
             resolve({'building':building,'floor':floor,'member':member,'meterroom':meterroom,'RoomType':_RoomType,status:status})
         }).catch(e=>{
             console.log('Promis Error',e);

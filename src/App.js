@@ -30,7 +30,9 @@ import { Usermanagement } from './components/Adminsetting/Usermanagment'
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 
 
-import { useQuery,  gql, } from '@apollo/client';
+import { useQuery ,  gql } from '@apollo/client';
+
+
 
 import { Booking } from './components/Booking/Booking'
 import { Checkin } from './components/Checkin/Checkin';
@@ -157,10 +159,13 @@ function App() {
   // }
   return (
     <BrowserRouter>
-      {(loading) ? <div>'Loading...'</div> : 
+      {(loading) ? <div>
+      'Loading...'
+      }
+      </div> : 
       (error) ?
         <>
-        <Route exact path="/*" component={_FormLogin} />
+        <Route exact path="/*" component={ _FormLogin } />
         <Route exact path="/signup" component={_FormSignup} />
         </>
       :

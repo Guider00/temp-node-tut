@@ -160,17 +160,71 @@ export const API_GET_Rooms = gql`
         Rooms{
             id
             name
-                floor{
+             status
+            member{
+                id
+                name
+                lastname
+                email
+                personalid
+            }
+            floor{
+                id
                 name
                 building{
-                            name
-                    }
+                    id
+                    name
+
                 }
+            }
+            member{
+                id
+                name
+                lastname
+                email
+                personalid
+            }
+            meterroom{
+                id
+                name
+                device_model
+                inmemory_kwh
+                inmemory_kwh_date
+                inmemory_finished_kwh
+                inmemory_finished_kwh_date 
+
+                inmemory_water
+                inmemory_water_date
+                inmemory_finished_water
+                inmemory_finished_water_date
+
+            }
             RoomType{
-            name
+                id
+                name
+                monthlyprice
+                dailyprice
+                deposit_rent
+                insurance
+                type_price_electrical
+                unit_electrical
+                rate_electrical
+                totalprice_electrical
+                type_price_water
+                unit_water
+                rate_water
+                totalprice_water
             }
         }
     }
 `;
 
+export const API_UPDATE_Room = gql`
+    mutation updateRoom($id:ID! , $input:RoomInput!){
+        updateRoom(id:$id,input:$input){
+            n
+            nModified
+        }
+    }
+`
 

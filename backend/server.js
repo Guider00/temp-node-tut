@@ -36,6 +36,8 @@ app.use('/',router_auth)
 let path = require('path')
 app.use(express.static(path.join(__dirname, '/public/build')));
 
+app.use('uploadimages',express.static(path.join(__dirname, '../public/uploadimages')));
+
 
 app.use(
   '/graphqlexpress',
