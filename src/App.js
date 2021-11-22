@@ -4,6 +4,7 @@ import './App.css';
 import { Menubar } from './components/Menubar/Menubar';
 
 import { RoomPrice } from './components/Setting/RoomPrice/RoomPrice';
+import { RoomType } from './components/Setting/RoomType/RoomType'
 import { Building } from './components/Setting/Building/Building';
 import { Floor } from './components/Setting/Floor/Floor';
 import { Member } from './components/Setting/Member/Member';
@@ -29,12 +30,17 @@ import { Usermanagement } from './components/Adminsetting/Usermanagment'
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 
 
-import { useQuery,  gql, } from '@apollo/client';
+import { useQuery ,  gql } from '@apollo/client';
+
+
 
 import { Booking } from './components/Booking/Booking'
 import { Checkin } from './components/Checkin/Checkin';
 import { Checkout } from './components/Checkout/Checkout';
 import { Contract } from './components/Contract/Contract';
+
+import { Receipt } from './components/Receipt/Receipt';
+import { Invoice } from './components/Invoice/Invoice';
 
 import { Note } from './components/Note/Note';
 
@@ -75,6 +81,11 @@ const _MeterRoom = () => (
 const _Setting_roomprice = () => (
   <>
     <RoomPrice></RoomPrice>
+  </>
+)
+const _RoomType = () =>(
+  <>
+    <RoomType></RoomType>
   </>
 )
 const _Overview = () => (
@@ -128,6 +139,18 @@ const _Contract = () =>(
       <Contract />
   </>
 )
+const _Receipt = () =>(
+  <>
+      <Receipt />
+  </>
+)
+const _Invoice = () =>(
+  <>
+      <Invoice />
+  </>
+)
+
+
 const _Note =()=>(
   <>
     <Note/>
@@ -151,11 +174,11 @@ function App() {
   // }
   return (
     <BrowserRouter>
-      {(loading) ? <div>'Loading...'</div> : 
-      (error) ?
+      {loading ? 'loading...':<>
+      {(error) ?
         <>
-        <Route exact path="/*" component={_FormLogin} />
-        <Route exact path="/signup" component={_FormSignup} />
+          <Route exact path="/*" component={ _FormLogin } />
+          <Route exact path="/signup" component={_FormSignup} />
         </>
       :
         <>
@@ -169,6 +192,7 @@ function App() {
             <Route exact path="/floor" component={_Floor} />
             <Route exact path="/member" component={_Member} />
             <Route exact path="/profilepriceroom" component={_Setting_roomprice} />
+            <Route exact path="/roomtype" component={_RoomType} />
             <Route exact path="/meterroom" component={_MeterRoom} />
             <Route exact path="/portmeter" component={_Portmeter} />
             <Route exact path="/overviewmeter" component={_OverviewMeter} />
@@ -176,7 +200,11 @@ function App() {
             <Route exact path="/booking" component={_Booking} />
             <Route exact path="/check_in" component={_Check_in} />
             <Route exact path="/check_out" component={_Check_out} />
+             
             <Route exact path="/contract" component={_Contract} />
+            <Route exact path="/receipt" component={_Receipt} />
+            <Route exact path="/invoice" component={_Invoice} />
+           
 
             <Route exact path="/note" component={_Note} />
 
@@ -199,6 +227,7 @@ function App() {
           </Switch>
         </>
       }
+    </>}
     </BrowserRouter>
   );
 }

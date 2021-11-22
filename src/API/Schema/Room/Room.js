@@ -1,3 +1,5 @@
+import {  gql } from '@apollo/client';
+
 export const queryRoomByid = (id) =>{
     return {query:`
         query{
@@ -13,6 +15,22 @@ export const queryRoomByid = (id) =>{
                         name
                     }
                 }
+                RoomType{
+                    id
+                    name
+                    monthlyprice
+                    dailyprice
+                    deposit_rent
+                    insurance
+                    type_price_electrical
+                    unit_electrical
+                    rate_electrical
+                    totalprice_electrical
+                    type_price_water
+                    unit_water
+                    rate_water
+                    totalprice_water
+                }
                 version
             }
         }
@@ -26,7 +44,8 @@ export const queryRooms = () =>{
             id
             name
             status
-
+            checkin_date
+            checkout_date
             floor{
                 id
                 name
@@ -39,6 +58,18 @@ export const queryRooms = () =>{
             member{
                 id
                 name
+                lastname
+                email
+                personalid
+            }
+            members{
+                id
+                name
+                lastname
+                tel
+                email
+                personalid
+                carid
             }
             meterroom{
                 id
@@ -54,6 +85,22 @@ export const queryRooms = () =>{
                 inmemory_finished_water
                 inmemory_finished_water_date
 
+            }
+            RoomType{
+                id
+                name
+                monthlyprice
+                dailyprice
+                deposit_rent
+                insurance
+                type_price_electrical
+                unit_electrical
+                rate_electrical
+                totalprice_electrical
+                type_price_water
+                unit_water
+                rate_water
+                totalprice_water
             }
         }
     }
@@ -71,6 +118,7 @@ export const createRoom = (data) =>{
             floor:"${data.floor}"
             member:"${data.member}"
             meterroom:"${data.meterroom}"
+            RoomType:"${data.RoomType}"
           }){
             id
             errors
@@ -91,6 +139,7 @@ export const updateRoom = (id ,data )=>{
             floor:"${data.floor}"
             member:"${data.member}"
             meterroom:"${data.meterroom}"
+            RoomType:"${data.RoomType}"
         })
         {
          n
@@ -115,3 +164,104 @@ export const deleteRoom = (id) =>{
         `
     }
 }
+
+export const API_GET_Rooms = gql`
+    query{
+        Rooms{
+            id
+            name
+            status
+            checkin_date
+            checkout_date
+            member{
+                id
+                name
+                lastname
+                email
+                personalid
+            }
+            floor{
+                id
+                name
+                building{
+                    id
+                    name
+
+                }
+            }
+            member{
+                id
+                name
+                lastname
+                email
+                personalid
+            }
+            members{
+                id
+                name
+                lastname
+                tel
+                email
+                personalid
+                carid
+            }
+            meterroom{
+                id
+                name
+                device_model
+                inmemory_kwh
+                inmemory_kwh_date
+                inmemory_finished_kwh
+                inmemory_finished_kwh_date 
+
+                inmemory_water
+                inmemory_water_date
+                inmemory_finished_water
+                inmemory_finished_water_date
+
+            }
+            RoomType{
+                id
+                name
+                monthlyprice
+                dailyprice
+                deposit_rent
+                insurance
+                type_price_electrical
+                unit_electrical
+                rate_electrical
+                totalprice_electrical
+                type_price_water
+                unit_water
+                rate_water
+                totalprice_water
+            }
+        }
+    }
+`;
+
+export const API_UPDATE_Room = gql`
+    mutation updateRoom($id:ID! , $input:RoomInput!){
+        updateRoom(id:$id,input:$input){
+            n
+            nModified
+        }
+    }
+`
+
+export const API_UPDATE_MemberInRoom = gql`
+    mutation addmemberinRoom($id:ID! , $input:MemberID!){
+        addmemberinRoom(id:$id,input:$input){
+            n
+            nModified
+        }
+    }
+`
+export const API_DELET_MemberInRoom = gql`
+    mutation deletememberinRoom($id:ID! , $input:MemberID!){
+        deletememberinRoom(id:$id,input:$input){
+            n
+            nModified
+        }
+    }
+`

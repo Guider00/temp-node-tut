@@ -1,0 +1,9 @@
+const PORT_MQTT_AEDES = 8883
+const PORT_MQTTT_MOSCA = 1884
+
+module.exports ={
+    PORT_MQTT_AEDES : PORT_MQTT_AEDES,
+    PORT_MQTTT_MOSCA : PORT_MQTTT_MOSCA
+}
+
+

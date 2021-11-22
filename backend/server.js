@@ -21,7 +21,7 @@ const  { router_auth }  = require('./controllers/passport/auth')
 
 
 
-mqtt_server_mosca_initial(1883, 'zung', 'zeny')
+mqtt_server_mosca_initial(1884, 'zung', 'zeny')
 mqtt_server_aedes_initial()
 
 mongodb_initial()
@@ -35,6 +35,8 @@ app.use('/',router_auth)
 
 let path = require('path')
 app.use(express.static(path.join(__dirname, '/public/build')));
+
+app.use('uploadimages',express.static(path.join(__dirname, '../public/uploadimages')));
 
 
 app.use(

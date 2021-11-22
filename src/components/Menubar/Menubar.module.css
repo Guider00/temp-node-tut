@@ -55,3 +55,93 @@
 .menu>div>.logout{
     margin-left: 0.5rem;
 }
+
+
+
+.optionright{
+   
+    float: right;
+    align-items: center;
+    margin-left: auto;
+    margin-right: 1em;
+    justify-content: center;
+    display: flex;
+
+    font-size: 0.8rem;
+}
+.optionright>.red{
+    width: 2rem;
+    height: 1.5rem;
+    display: flex;
+    font-weight: bolder;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+    background-color: red;
+    border-radius: 5px;
+}
+.optionright>.cornflowerblue{
+    width: 2rem;
+    height: 1.5rem;
+    display: flex;
+    font-weight: bolder;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+    background-color: cornflowerblue;
+    border-radius: 5px;
+}
+.optionright>.gray{
+    width: 2rem;
+    height: 1.5rem;
+    display: flex;
+    font-weight: bolder;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+    background-color: gray;
+    border-radius: 5px;
+
+}
+.optionright>.green{
+    width: 2rem;
+    height: 1.5rem;
+    display: flex;
+    font-weight: bolder;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+    background-color: green;
+    border-radius: 5px;
+
+}
+.optionright>.yellow{
+    width: 2rem;
+    height: 1.5rem;
+    display: flex;
+    font-weight: bolder;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+    background-color: yellow;
+    border-radius: 5px;
+
+}
+.optionright>.orange{
+    width: 2rem;
+    height: 1.5rem;
+    display: flex;
+    font-weight: bolder;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+    background-color: orange;
+    border-radius: 5px;
+
+}

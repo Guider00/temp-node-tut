@@ -8,7 +8,7 @@ import { createRoom ,  updateRoom , deleteRoom , queryRoomByid, queryRooms } fro
 
 import { createMember ,  updateMember , deleteMember , queryMemberByid, queryMembers } from './Schema/Member/Member'
 
-import { createMeterRoom ,  updateMeterRoom, deleteMeterRoom , queryMeterRoomByid, queryMeterRooms } from './Schema/MeterRoom/MeterRoom'
+import { createMeterRoom ,  updateMeterRoom ,updateMeterRoomkwh , updateMeterRoomwater, deleteMeterRoom , queryMeterRoomByid, queryMeterRooms } from './Schema/MeterRoom/MeterRoom'
 
 import { createPortmeter ,  updatePortmeter , deletePortmeter , queryPortmeterByid, queryPortmeters } from './Schema/PortMeter/PortMeter'
 
@@ -19,7 +19,7 @@ import fetchData from '../cores/axios/index'
 
 const PATH = 'graphqlexpress'
 const METHOD = 'POST'
-
+  //* Meter Application  */
 export const API_queryMeterRoomByid = async(id)=>{
     let  res = await fetchData(METHOD,PATH,queryMeterRoomByid(id) )
     if(!res.data) return null
@@ -43,11 +43,27 @@ export const API_updateMeterRoom = async (id,data) =>{
     if(!res.data) return null
     return res
 }
+export const API_updateMeterRoomkwh = async (id,data) =>{
+    let  res = await fetchData(METHOD,PATH,updateMeterRoomkwh(id,data) )
+    if(!res.data) return null
+    return res
+}
+export const API_updateMeterRoomwater = async (id,data) =>{
+    let  res = await fetchData(METHOD,PATH,updateMeterRoomwater(id,data) )
+    if(!res.data) return null
+    return res
+}
+
+
 export const API_deleteMeterRoom = async (id) =>{
     let  res = await fetchData(METHOD,PATH,deleteMeterRoom(id) )
     if(!res.data) return null
     return res
 }
+
+
+
+  //*  ------  */
 
 
 export const API_queryPortmeterByid = async(id) =>{

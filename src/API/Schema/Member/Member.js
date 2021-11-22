@@ -1,3 +1,5 @@
+import {  gql } from '@apollo/client';
+
 export const queryMemberByid = (id) =>{
     return {query:`
         query{
@@ -8,6 +10,8 @@ export const queryMemberByid = (id) =>{
                 personalid
                 tel
                 email
+                carid
+                note
                 
             }
         }
@@ -24,6 +28,8 @@ export const queryMembers =  () =>{
             personalid
             tel
             email
+            carid
+            note
         }
     }
     `
@@ -38,8 +44,9 @@ export const createMember= (input) =>{
         lastname:"${input.lastname}",
         personalid:"${input.personalid}",
         tel:"${input.tel}",
-        email:"${input.email}"
-
+        email:"${input.email}",
+        carid:"${input.carid}",
+        note:"${input.note}"
         }){
             id
             errors
@@ -56,9 +63,12 @@ export const updateMember = (id , input) =>{
         updateMember(id:"${id}",
                         input:{
                             name:"${input.name}",
-                            lastname:"${input.lastname}"
+                            lastname:"${input.lastname}",
                             personalid:"${input.personalid}",
-                            tel:"${input.tel}"
+                            tel:"${input.tel}",
+                            email:"${input.email}",
+                            carid:"${input.carid}",
+                            note:"${input.note}"
                         }
                         )
                         {
@@ -85,3 +95,37 @@ export const deleteMember = (id) =>{
     `
     }
 }
+
+
+
+export const API_GET_Members = gql`
+    query{
+        Members{
+            id
+            name
+            lastname
+            personalid
+            tel
+            email
+            carid
+            note
+        }
+    }
+`;
+
+export const API_createMember = gql`
+    mutation createMember( $input:MemberInput!){
+        createMember(input:$input){
+            id
+        }
+    }
+`
+export const API_updateMember = gql`
+    mutation updateMember( $id:ID! , $input:MemberInput!){
+        updateMember(id:$id,input:$input){
+            n
+            nModified
+        }
+    }
+`
+

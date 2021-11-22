@@ -8,12 +8,22 @@ import Folder from '@material-ui/icons/Folder'
 
 import { Submenudropdown } from './Submenudropdown/Submenudropdown'
 
-import { useSubscription, gql, } from '@apollo/client';
+import { useSubscription, gql } from '@apollo/client';
+
 const GET_MESSAGES = gql`
   subscription {
     subdatabasestatus
   }
 `;
+
+const API_SUBROOMS = gql`
+    subscription {
+        subRooms{
+            status
+        }
+    }
+`
+
 const dbstatustotext = (status) => {
     let _text = ""
     let _color = ""
@@ -40,6 +50,8 @@ export const Menubar = () => {
 
     const { data } = useSubscription(GET_MESSAGES);
     const { subdatabasestatus } = (data !== undefined) ? data : { subdatabasestatus: null }
+    const api_subrooms = useSubscription(API_SUBROOMS);
+
     return (
         <>
             <div className={styles.menu}>
@@ -120,6 +132,34 @@ export const Menubar = () => {
                     </a>
                 </div>
                 <div>
+                    <a href="/receipt">
+                        <button>
+                            <div>
+                                <Book />
+
+                            </div>
+                            <div>
+                                ใบเสร็จ
+                            </div>
+
+                        </button>
+                    </a>
+                </div>
+                <div>
+                    <a href="/invoice">
+                        <button>
+                            <div>
+                                <Book />
+
+                            </div>
+                            <div>
+                                ใบแจ้งหนี้
+                            </div>
+
+                        </button>
+                    </a>
+                </div>
+                <div>
                     <a href="/contract">
                         <button>
                             <div>
@@ -180,6 +220,23 @@ export const Menubar = () => {
 
                 <div className={styles.menu_right}>
 
+                    {api_subrooms && api_subrooms.data && api_subrooms.data.subRooms ? 
+                      <div className={styles.optionright} >
+                        <div className={styles.cornflowerblue} > {   api_subrooms.data.subRooms.filter(room=> room.status === 'จอง').length} </div>
+                        <div>จอง </div>
+                        <div className={styles.red} > {   api_subrooms.data.subRooms.filter(room=> room.status === 'ย้ายออก').length} </div>
+                        <div>ย้ายออก </div>
+                        <div className={styles.green} > { api_subrooms.data.subRooms.filter(room=> room.status === 'มีคนอยู่').length } </div>
+                        <div>มีคนอยู่</div>
+                        <div className={styles.gray} > { api_subrooms.data.subRooms.filter(room=> room.status === 'ห้องว่าง').length } </div>
+                        <div>ห้องว่าง</div>
+                        <div className={styles.yellow} > {  api_subrooms.data.subRooms.filter(room=> room.status === 'ย้ายเข้า').length } </div>
+                        <div>ย้ายเข้า</div>
+                        <div className={styles.orange} > { api_subrooms.data.subRooms.filter(room=> room.status === 'ปรับปรุง').length } </div>
+                        <div>ปรับปรุง</div>
+                     </div>
+                      :null
+                    }
 
                     <div className={styles.db_status}>
                         <div>

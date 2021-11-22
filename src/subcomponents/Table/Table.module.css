@@ -3,7 +3,7 @@
     overflow-x: auto;
 
     justify-content: center;
-    
+    max-height: 800px;
 }
 .table{
    

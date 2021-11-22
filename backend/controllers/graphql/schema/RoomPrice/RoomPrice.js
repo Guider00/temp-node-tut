@@ -24,8 +24,24 @@ const _queryRoomPrice =async (filter) =>{
         return error
     }
 }
-const _updateRoomPrice = async (payload) =>{
-    
+
+const _queryRoomPriceByid =async (payload) =>{
+    try {
+        if(!payload){ return null }
+        if(!payload.id){ return null }
+        if(!payload.id.match(/^[0-9a-fA-F]{24}$/)) { return "Error Format ID"}
+        let resulted = await db.findById({_id:payload.id})
+        if(!resulted) { return null}
+
+        return (
+            resulted
+        )
+    } catch (error) {
+        return error
+    }
+}
+const _updateRoomPrice = async (payload ,payload2) =>{
+      if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
     try{
         if(!payload){return null}
         if(!payload.id){return null}
@@ -36,8 +52,8 @@ const _updateRoomPrice = async (payload) =>{
         return error
     }
 }
-const _deleteRoomPrice = async (payload) =>{
-   
+const _deleteRoomPrice = async (payload,payload2) =>{
+     if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
     try{
         if(!payload){return null}
         if(!payload.id){return null}
@@ -64,7 +80,8 @@ input OptionRoomInput{
     name:  String ,
     type: String,
     monthlyprice :  String,
-    forehandrent : String,
+    dailyprice :String,
+    deposit_rent : String,
     insurance :  String,
     type_price_electrical : String , 
     unit_electrical: String,
@@ -82,7 +99,8 @@ input OptionRoomInput{
     name:  String ,
     type: String,
     monthlyprice :  String,
-    forehandrent : String,
+    dailyprice :String,
+    deposit_rent : String,
     insurance :  String,
     type_price_electrical : String , 
     unit_electrical: String,
@@ -98,6 +116,8 @@ input OptionRoomInput{
 `
 
 exports.queryRoomPrice = _queryRoomPrice
+exports.queryRoomPriceByid = _queryRoomPriceByid
+
 exports.updateRoomPrice = _updateRoomPrice
 exports.deletRoomPrice= _deleteRoomPrice
 exports.createRoomPrice = _createRoomPrice

@@ -14,7 +14,14 @@ import { Floormodal } from '../Setting/Floor/Floormodal'
 
 import { API_queryroomprice  , API_queryBuildings , API_queryFloors, API_updateRoom, API_deleteRoom, API_queryMembers, API_queryRooms, API_createRoom , API_queryMeterRooms} from  '../../API/index'
 
-import  { Inputconfig  , drowdownmenuroomconfig }  from './config'
+
+import {
+	API_GET_RoomType
+} from '../../API/Schema/setting/RoomType/RoomType';
+import { useQuery, useMutation } from '@apollo/client';
+
+
+import  { Inputconfig  , drowdownmenuroomconfig , option_status_room }  from './config'
 
 const color_roomstatur = (status) =>{
     switch (status)
@@ -32,6 +39,8 @@ const color_roomstatur = (status) =>{
         case"เช่า" :
         case"มีคนอยู่" :
         return 'green'
+        case"ปรับปรุง":
+        return 'orange'
         default:
         return 'gray'
     }
@@ -208,10 +217,23 @@ console.log(group_by_floor)
 
 export const Overview = () => {
 
+     const GET_RoomType  = useQuery(API_GET_RoomType)
+  
+    useEffect( ()=>{
+        // let option_roomtype = [];
+         
+        // if(GET_RoomType.loading === false){
+           
+        //         option_roomtype =  GET_RoomType.data.RoomTypes.map(e =>  ({label:e.name , value:e.id})  )
+        //        console.log('option_roomtype',option_roomtype)
+        //         setoptionRoomType(option_roomtype)
+        // }
+    },[GET_RoomType])
+
+
     const [_optionbuilding,setoptionbuilding] = useState([])
     const [_optionfloor,setoptionfloor] = useState([])
-    const [_optionprice] = useState([])
-    // const [_optionprice,setoptionprice] = useState([])
+    const [_optionRoomType,setoptionRoomType] = useState([])
     const [_optionmember,setoptionmember] = useState([])
     const [_optionstatus,setoptionstatus] = useState([])
     const [_optionmeterroom,setoptionmeterroom] = useState([])
@@ -332,7 +354,7 @@ export const Overview = () => {
     
     const get_API_Inputoption = async () =>{
         return new Promise( async (resolve,rejcet) =>{
-            let building = [],floor = [] ,member = [] , meterroom = [] ,type=[],status =[] 
+            let building = [],floor = [] ,member = [] , meterroom = [] ,type=[],status =[] ,_RoomType ={}
             let res_building = await API_queryBuildings()
             if(res_building && res_building.status === 200)
             {
@@ -361,10 +383,16 @@ export const Overview = () => {
                 meterroom =  res_meterroom.data.MeterRooms.map(e =>  ({label:e.name , value:e.id})  )
 
             }
+             let res_roomtype =    await GET_RoomType.refetch();
+             console.log('res_roomtype',res_roomtype)
+            if(res_roomtype && res_roomtype.data){
+                _RoomType =  res_roomtype.data.RoomTypes.map(e =>  ({label:e.name , value:e.id})  )
+
+            }
 
              // set Option form input
-            status = [{value:"จอง",label:"จอง"},{value:"ย้ายเข้า",label:"ย้ายเข้า"},{value:"ย้ายออก",label:"ย้ายออก"},{value:"ห้องว่าง",label:"ห้องว่าง"},{value:"มีคนอยู่",label:"มีคนอยู่"} ]
-            resolve({'building':building,'floor':floor,'member':member,'meterroom':meterroom,'type':type,status:status})
+            status = option_status_room
+            resolve({'building':building,'floor':floor,'member':member,'meterroom':meterroom,'RoomType':_RoomType,status:status})
         }).catch(e=>{
             console.log('Promis Error',e);
            return({building:[],floor:[],member:[],type:[],status:[]})
@@ -408,6 +436,8 @@ export const Overview = () => {
             setoptionmember(option.member)
             setoptionstatus(option.status)
             setoptionmeterroom(option.meterroom)
+            setoptionRoomType(option.RoomType)
+      
             
             let inputconfig = Inputconfig();
             console.log('inputconfig' ,inputconfig)
@@ -432,6 +462,10 @@ export const Overview = () => {
                     case "meterroom":
                         ele.form.options = option.meterroom
                         ele.form.value =  option.meterroom.length > 0 ? option.meterroom[0].value :'All'
+                        break;
+                    case 'RoomType' :
+                        ele.form.options = option.RoomType
+                        ele.form.value =  option.RoomType.length > 0 ? option.RoomType[0].value :'All'
                         break;
                     default:
                         break;
@@ -461,7 +495,6 @@ export const Overview = () => {
         inital_data()
         
     },[_load])
-        console.log(_optionbuilding )
     return (
         <> 
             { _showmodal? <Floormodal  onClose={ ()=>setshowmodal(false) } 
@@ -490,7 +523,7 @@ export const Overview = () => {
             </div> */}
 
             <div className={styles.body}>
-             { _optionbuilding && _optionfloor && _optionprice ?
+             { _optionbuilding && _optionfloor && _optionRoomType ?
                 <div className={styles.rowmenu}>
                     <div className={styles.option}>
                         <label> อาคาร</label>
@@ -511,7 +544,7 @@ export const Overview = () => {
                         <label> ประเภทห้อง </label>
                         <select onchange={(e)=>{console.log(e.target.value)}}>
                              <option> All </option>
-                            {_optionprice.map(item => <option>{item.label}</option>)}
+                            { _optionRoomType ? _optionRoomType.map(item => <option>{item.label}</option>) :null}
                         </select>
                     </div>
 
@@ -523,25 +556,14 @@ export const Overview = () => {
                         </select>
                     </div>
 
-                     <div className={styles.optionright} >
-                        <div className={styles.cornflowerblue} > {   _rooms.body.filter(room=> room.status === 'จอง').length} </div>
-                        <div>จอง </div>
-                        <div className={styles.red} > {   _rooms.body.filter(room=> room.status === 'ย้ายออก').length} </div>
-                        <div>ย้ายออก </div>
-                        <div className={styles.green} > { _rooms.body.filter(room=> room.status === 'มีคนอยู่').length } </div>
-                        <div>มีคนอยู่</div>
-                        <div className={styles.gray} > { _rooms.body.filter(room=> room.status === 'ห้องว่าง').length } </div>
-                        <div>ห้องว่าง</div>
-                        <div className={styles.yellow} > {  _rooms.body.filter(room=> room.status === 'ย้ายเข้า').length } </div>
-                        <div>ย้ายเข้า</div>
-                     </div>
-                     <div className={styles.optionbtn} >
-                        <button onClick={()=> Onclick_create()}> 
-                            <div> สร้างห้อง </div>
-                             <div><Add/> </div> 
-                        </button>
-                     </div>
-
+                    
+                        <div className={styles.optionbtn} >
+                            <button onClick={()=> Onclick_create()}> 
+                                <div> สร้างห้อง </div>
+                                <div><Add/> </div> 
+                            </button>
+                        </div>
+                    
 
                    
                 </div>

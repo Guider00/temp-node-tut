@@ -1,0 +1,12 @@
+.tablebooking{
+    margin-top: 1rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+.tablebooking>table{
+    width: 80vw;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
