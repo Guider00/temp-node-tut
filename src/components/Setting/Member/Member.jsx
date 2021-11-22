@@ -145,7 +145,7 @@ export const Member = () => {
 
             setmember({
                 showindex: true,
-                topic: [ "ชื่อ", "นามสกุล","บัตรประชาชน","เบอร์ติดต่อ","email"],
+                topic: [ "ชื่อ", "นามสกุล","บัตรประชาชน","เบอร์ติดต่อ","email" ,"ทะเบียนรถ","หมายเหตุ"],
                 body: table,
                 inputs: [
 
@@ -188,6 +188,24 @@ export const Member = () => {
                     {
                         label: "email",
                         property: "email",
+                        form: {
+                            displayform: "textbox",
+                            type: "text",
+                            value: ""
+                        }
+                    },
+                    {
+                        label: "ทะเบียนรถ",
+                        property: "carid",
+                        form: {
+                            displayform: "textbox",
+                            type: "text",
+                            value: ""
+                        }
+                    },
+                    {
+                        label: "หมายเหตุ",
+                        property: "note",
                         form: {
                             displayform: "textbox",
                             type: "text",

@@ -1,5 +1,9 @@
 
-export const option_status_room = [{value:"ห้องว่าง",label:"ห้องว่าง"},{value:"จอง",label:"จอง"},{value:"ย้ายเข้า",label:"ย้ายเข้า"},{value:"ย้ายออก",label:"ย้ายออก"},{value:"มีคนอยู่",label:"มีคนอยู่"} ] 
+export const option_status_room = [
+  {value:"ห้องว่าง",label:"ห้องว่าง"},{value:"จอง",label:"จอง"}
+  ,{value:"ย้ายเข้า",label:"ย้ายเข้า"},{value:"ย้ายออก",label:"ย้ายออก"}
+  ,{value:"มีคนอยู่",label:"มีคนอยู่"},{value:"ปรับปรุง",label:"ปรับปรุง"}
+   ] 
 export  const  Inputconfig = () => {
   return({
     topic:["#","อาคาร","ชั้น","ห้อง","มิตเตอร์"],
@@ -88,7 +92,7 @@ export const drowdownmenuroomconfig  =
       [
         {label:"ย้ายเข้า" , link:"check_in" },
         {label:"ย้ายออก" , link:"check_out" },
-        {label:"จองห้อง" , link:""},
+        {label:"จองห้อง" , link:"booking"},
         {label:"ยกเลิกการจอง" , link:""},
         {label:"แจ้งย้ายออก" , link:""},
         {label:"ยกเลิกการย้ายออก" , link:""},

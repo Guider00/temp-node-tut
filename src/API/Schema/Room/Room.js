@@ -44,7 +44,8 @@ export const queryRooms = () =>{
             id
             name
             status
-
+            checkin_date
+            checkout_date
             floor{
                 id
                 name
@@ -60,6 +61,15 @@ export const queryRooms = () =>{
                 lastname
                 email
                 personalid
+            }
+            members{
+                id
+                name
+                lastname
+                tel
+                email
+                personalid
+                carid
             }
             meterroom{
                 id
@@ -160,7 +170,9 @@ export const API_GET_Rooms = gql`
         Rooms{
             id
             name
-             status
+            status
+            checkin_date
+            checkout_date
             member{
                 id
                 name
@@ -183,6 +195,15 @@ export const API_GET_Rooms = gql`
                 lastname
                 email
                 personalid
+            }
+            members{
+                id
+                name
+                lastname
+                tel
+                email
+                personalid
+                carid
             }
             meterroom{
                 id
@@ -228,3 +249,19 @@ export const API_UPDATE_Room = gql`
     }
 `
 
+export const API_UPDATE_MemberInRoom = gql`
+    mutation addmemberinRoom($id:ID! , $input:MemberID!){
+        addmemberinRoom(id:$id,input:$input){
+            n
+            nModified
+        }
+    }
+`
+export const API_DELET_MemberInRoom = gql`
+    mutation deletememberinRoom($id:ID! , $input:MemberID!){
+        deletememberinRoom(id:$id,input:$input){
+            n
+            nModified
+        }
+    }
+`

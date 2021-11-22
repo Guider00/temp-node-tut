@@ -10,6 +10,8 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CancelIcon from '@mui/icons-material/Cancel';
 
+import AssignmentIcon from '@mui/icons-material/Assignment';
+
 import { formatDate } from '../../../general_functions/convert'
 import { Modalupload } from '../Modalupload/Modalupload'
 
@@ -24,10 +26,10 @@ export const Tablebooking =(props)=>{
         }
          fetchdata()
     },[loading])
-    const handleSaveimage = ( booking,file) =>{
+    const handleSaveimage = ( booking,file ) =>{
 
         if(props && props.handleSaveimage){
-            props.handleSaveimage(booking,file)
+            props.handleSaveimage(booking,file,()=>{setmodal(false)} )
         }
     }
     console.log(props.data)
@@ -81,6 +83,15 @@ export const Tablebooking =(props)=>{
                                  <CheckCircleOutlineIcon/>
                                  }
                                  </button>
+                                <button onClick={()=>{
+                                 if(booking.status === 'สำเร็จ' ){
+                                    
+                                 }else{
+                                     alert('รอการชำระเงิน')
+                                 }
+                                }}>
+                                 <AssignmentIcon/>
+                                </button>
 
                             </td>
 
@@ -101,6 +112,7 @@ export const Tablebooking =(props)=>{
                                 <button><EditIcon/> </button>
                                 <button><UploadFileIcon /></button>
                                 <button><CheckCircleOutlineIcon/></button>
+                                <button ><AssignmentIcon/></button>
                             </td>
 
                     </tr>

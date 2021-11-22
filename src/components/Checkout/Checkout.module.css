@@ -1,11 +1,106 @@
 
+.zone1{
+    width: 100vw;
+
+    display: flex;
+    flex-wrap: wrap;
+
+
+}
+.zone1>.bigbox{
+    flex: 1 1 40%;
+    /* max-width: 45vw; */
+    margin: 2rem;
+}
+.zone2 {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width:  100vw;
+
+}
+.zone2>.bigboxtable{
+    flex: 1 1 100vW;
+}
+
+.zone1>.bigbox>.formcontact{
+    display: flex;
+    justify-content: center;
+    flex: 1 1 100vW;
+}
+.zone1>.bigbox>.formcontact>.card{
+    flex-basis: 80%;    
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 2rem;
+    margin: auto;
+    justify-content: center;
+}
+.zone1>.bigbox>.formcontact>.card>.cardheader{
+    flex-basis: 100%;
+    background-color: darkgray;
+    align-items: center;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    font-size: x-large;
+}
+.zone1>.bigbox>.formcontact>.card>.cardbody{
+    flex-basis: 100%;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    font-size: medium;
+}
+.zone1>.bigbox>.formcontact>.card>.cardbody>.row{
+    margin-top: 1rem;
+    display: flex;
+    flex-basis: 100%;
+    margin-bottom: 1rem;
+}
+.zone1>.bigbox>.formcontact>.card>.cardbody>.row>.label{
+    flex-basis: 40%;
+}
+.zone1>.bigbox>.formcontact>.card>.cardbody>.row>.input{
+    flex-basis: 60%;
+}
+
+.zone1>.bigbox>.formcontact>.card>.cardbody>.rowmenu{
+    display: flex;
+    flex-basis: 100%;
+}
+.zone1>.bigbox>.formcontact>.card>.cardbody>.rowmenu>button{
+    margin-left: 2rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding: 0.25rem;
+    font-size: medium;
+    display: flex;
+    align-items: center;
+}
+
+.zone1>.bigbox>.formcontact>.card>.cardbody>.rowmenuright{
+    margin-top: 1rem;
+    display: flex;
+    flex-basis: 100%;
+    justify-content: right;
+}
+.zone1>.bigbox>.formcontact>.card>.cardbody>.rowmenuright>button{
+    margin-left: 2rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding: 0.25rem;
+    font-size: medium;
+    display: flex;
+    align-items: center;
+}
+
+
+
+
 
 .tableroomselect{
     display: flex;
-    max-width: 50%;
     flex-wrap: wrap;
     justify-content: center;
-    margin-top: 2rem;
     margin-bottom: 2rem;
     margin-left: 2rem;
 }

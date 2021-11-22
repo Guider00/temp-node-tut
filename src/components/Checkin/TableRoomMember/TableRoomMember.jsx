@@ -45,8 +45,8 @@ export const TableRoomMember =(props)=>{
                     <th>เบอร์ติดต่อ</th>
                     <th></th>
                 </tr>
-                { props &&  props.data &&  props.data.member ?
-                    <> { [props.data.data.member].map( member => 
+                { props &&  props.data &&  props.data.members ?
+                    <> { props.data.members.map( member => 
                     <tr>
                             <td>{ member && member.name  ? member.name  : "---" }</td>
                             <td>{ member && member.lastname ?  member.lastname  :'---'}</td>

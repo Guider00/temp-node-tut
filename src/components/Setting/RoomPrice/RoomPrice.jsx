@@ -433,8 +433,8 @@ export const RoomPrice = () => {
 
 
                     <>
-                         <Input label="อัตรา-ต่อหน่วย-รายเดือน" type="text"  value={_unit_electrical} onChange={(e)=>{setunit_electrical(e.target.value)}} ></Input>
-                         <Input label="ค่าบริการ" type="text"  value={_rate_electrical} onChange={(e)=>{setrate_electrical(e.target.value)}} ></Input>
+                         <Input label="อัตรา-ต่อหน่วย-รายเดือน" type="text"  value={_rate_electrical} onChange={(e)=>{setrate_electrical(e.target.value)}} ></Input>
+                         <Input label="ค่าบริการ" type="text"  value={_unit_electrical} onChange={(e)=>{setunit_electrical(e.target.value)}} ></Input>
                     </>
                     <>
                      <Input label="เหมาราคา" type="text"   value={_totalprice_electrical} onChange={(e)=>{settotalprice_electrical(e.target.value)}}  ></Input>
@@ -444,8 +444,8 @@ export const RoomPrice = () => {
                 <Topic label={"ค่าน้ำ"} size={"medium"} ></Topic>
 
                     <>
-                         <Input label="อัตรา-ต่อหน่วย-รายเดือน" type="text"   value={_unit_water} onChange={(e)=>{setunit_water(e.target.value)}}  ></Input>
-                         <Input label="ค่าบริการ" type="text"  value={_rate_water} onChange={(e)=>{setrate_water(e.target.value)}}  ></Input>
+                         <Input label="อัตรา-ต่อหน่วย-รายเดือน" type="text"   value={_rate_water} onChange={(e)=>{setrate_water(e.target.value)}}  ></Input>
+                         <Input label="ค่าบริการ" type="text"  value={_unit_water} onChange={(e)=>{setunit_water(e.target.value)}}  ></Input>
                     </>
                     <>
                      <Input label="เหมาราคา" type="text"      value={_totalprice_water} onChange={(e)=>{settotalprice_water(e.target.value)}}  ></Input>

@@ -39,6 +39,8 @@ const color_roomstatur = (status) =>{
         case"เช่า" :
         case"มีคนอยู่" :
         return 'green'
+        case"ปรับปรุง":
+        return 'orange'
         default:
         return 'gray'
     }
@@ -542,7 +544,7 @@ export const Overview = () => {
                         <label> ประเภทห้อง </label>
                         <select onchange={(e)=>{console.log(e.target.value)}}>
                              <option> All </option>
-                            {_optionRoomType.map(item => <option>{item.label}</option>)}
+                            { _optionRoomType ? _optionRoomType.map(item => <option>{item.label}</option>) :null}
                         </select>
                     </div>
 
@@ -554,25 +556,14 @@ export const Overview = () => {
                         </select>
                     </div>
 
-                     <div className={styles.optionright} >
-                        <div className={styles.cornflowerblue} > {   _rooms.body.filter(room=> room.status === 'จอง').length} </div>
-                        <div>จอง </div>
-                        <div className={styles.red} > {   _rooms.body.filter(room=> room.status === 'ย้ายออก').length} </div>
-                        <div>ย้ายออก </div>
-                        <div className={styles.green} > { _rooms.body.filter(room=> room.status === 'มีคนอยู่').length } </div>
-                        <div>มีคนอยู่</div>
-                        <div className={styles.gray} > { _rooms.body.filter(room=> room.status === 'ห้องว่าง').length } </div>
-                        <div>ห้องว่าง</div>
-                        <div className={styles.yellow} > {  _rooms.body.filter(room=> room.status === 'ย้ายเข้า').length } </div>
-                        <div>ย้ายเข้า</div>
-                     </div>
-                     <div className={styles.optionbtn} >
-                        <button onClick={()=> Onclick_create()}> 
-                            <div> สร้างห้อง </div>
-                             <div><Add/> </div> 
-                        </button>
-                     </div>
-
+                    
+                        <div className={styles.optionbtn} >
+                            <button onClick={()=> Onclick_create()}> 
+                                <div> สร้างห้อง </div>
+                                <div><Add/> </div> 
+                            </button>
+                        </div>
+                    
 
                    
                 </div>

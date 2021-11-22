@@ -1,16 +1,23 @@
+import React  from "react";
+
 import { useEffect, useState } from 'react';
 
 import styles from './Booking.module.css';
-import { API_queryRooms, API_queryBuildings, API_updateMeterRoomkwh, API_updateMeterRoomwater } from '../../API/index';
 import SearchIcon from '@material-ui/icons/Search';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
 import EditIcon from '@material-ui/icons/Edit';
 
-import { Tablebooking } from './Tablebooking/Tablebooking';
+import { ModalAlert } from '../../subcomponents/ModalAlert/ModalAlert';
 
+import { Tablebooking } from './Tablebooking/Tablebooking';
 import { formatDate } from '../../general_functions/convert';
+
 import { useQuery, useMutation } from '@apollo/client';
+import { API_queryRooms, API_queryBuildings, API_updateMeterRoomkwh, API_updateMeterRoomwater } from '../../API/index';
+
+
+
 import {
 	API_GET_Booking,
 	API_ADD_Booking,
@@ -25,6 +32,39 @@ import {
 import {
 	API_UPDATE_Room
 } from '../../API/Schema/Room/Room'
+
+const filter_rooms = (rooms , options_search) =>{
+		let _filter_table = []
+		if(rooms  &&  options_search){
+			_filter_table = rooms.filter(room =>{
+					if(options_search.keyword === 'ทั้งหมด'){
+						return (room.name.search(options_search.text) !== -1 ) ||
+						 (room.building.search(options_search.text) !== -1 ) || 
+						 (room.floor.search(options_search.text) !== -1 ) ||
+						 (room.RoomType.name.search(options_search.text) !== -1 ) ||
+						 (options_search.text === '')	
+						 ;
+					}else if (options_search.keyword === 'ห้อง'){
+						return (room.name.search(options_search.text) !== -1  || 
+						 (options_search.text === '')	
+						 )
+					}else if (options_search.keyword === 'อาคาร'){
+						return (room.building.search(options_search.text) !== -1 )||
+						 (options_search.text === '')	
+					}else if( options_search.keyword === 'ชั้น' ){
+						return (room.floor.search(options_search.text) !== -1 )	||
+						 (options_search.text === '')	
+					}else if( options_search.keyword === 'ประเภทห้อง'){
+						return (room.RoomType.name.search(options_search.text) !== -1 )	||
+						 (options_search.text === '')	
+					}else{
+						return false; 
+					}
+				})
+		}
+		return _filter_table
+}
+
 
 const getRooms = async () => {
 	return new Promise(async (resolve, reject) => {
@@ -83,9 +123,21 @@ export const Booking = () => {
 	const [ updateBooking, mutation_updatebook ] = useMutation(API_UPDATE_Booking);
 
 	const [ textfilter, settextfilter ] = useState('');
+
+	const [ alert , setalert ] = useState({
+
+			show : false,
+			item : null,
+			message : ""
+	})
 	const [ rooms, setrooms ] = useState([]);
 	const [ loadingpage, setloadingpage ] = useState(false);
 	const [ selectedroom, setselectedroom ] = useState(null);
+
+	const [ options_search  ,setoptions_search] = useState({
+		text:"",
+		keyword:"ทั้งหมด"
+	})
 
 	const [ action, setaction ] = useState('create');
 
@@ -187,6 +239,29 @@ export const Booking = () => {
 	// console.log('selectedroom', selectedroom);
 	return (
 		<div>
+			{alert && alert.show ?
+			<ModalAlert
+			 handleaccept ={ () =>{
+				let _alert = alert 
+				let res = deleteBooking({ variables: { id: _alert.item.id } });
+				if(res){
+				_alert.show = false
+				booking.refetch();
+				}else{
+					_alert.message 	= 'Delet Booking Error'
+				}
+				setalert({_alert})
+			 }}
+			 handleclose={ ()=>{ 
+				let _alert = alert 
+				_alert.item = null 
+				_alert.show = false
+				setalert({_alert})
+			} } message={ (alert && alert.message) ? alert.message :""}
+
+			/>
+			:null }
+			
 			<div className={styles.zone1}>
 				<div className={styles.bigbox}>
 					<div className={styles.tableroomselect}>
@@ -196,18 +271,39 @@ export const Booking = () => {
 								<div className={styles.zonetextbox}>
 									<input
 										type="text"
-										value={textfilter}
+										value={options_search.text}
 										onChange={(e) => {
-											settextfilter(e.target.value);
+											let _options_search = options_search
+											_options_search.text = e.target.value 
+											setoptions_search({..._options_search})
 										}}
 									/>
 								</div>
 								<div className={styles.zonebtn}>
-									<select>
+									<select value={ options_search.keyword } 
+									onChange={ (e)=>{
+										
+										let _options_search = options_search
+										_options_search.keyword = e.target.value 
+										setoptions_search({..._options_search})
+									}}
+
+									>
 										<option>ทั้งหมด</option>
 										<option>ห้อง</option>
+										<option>อาคาร</option>
+										<option>ชั้น</option>
+										<option>ประเภทห้อง</option>
+
 									</select>
-									<button onClick={() => {}}>
+									<button onClick={async () => {
+										let Rooms = await getRooms();
+
+										let _filter_rooms  =[]
+										_filter_rooms = filter_rooms(Rooms , options_search)
+
+										setrooms(_filter_rooms);
+									}}>
 										{' '}
 										ค้นหา<SearchIcon />{' '}
 									</button>
@@ -285,6 +381,18 @@ export const Booking = () => {
 								</div>
 								<div>
 									<div>
+										<label> รูปแบบการจอง </label>
+									</div>
+									<div className={styles.input}>
+										<select>
+											<option>รายวัน</option>
+											<option>รายเดือน</option>
+										</select>
+									</div>
+								</div>
+
+								<div>
+									<div>
 										<label> คำนำหน้า </label>
 									</div>
 									<div>
@@ -292,6 +400,9 @@ export const Booking = () => {
 											<option>นาย</option>
 											<option>นาง</option>
 											<option>นางสาว</option>
+											<option>Mr.</option>
+											<option>Ms.</option>
+											<option>Mrs.</option>
 										</select>
 									</div>
 								</div>
@@ -563,14 +674,17 @@ export const Booking = () => {
 						loading={booking.loading}
 						data={booking.data}
 						handlerdelete={(_booking) => {
-							console.log('delete', _booking.id);
+							console.log('delete', _booking);
+							let room_cancel = _booking.Room.name
+							setalert({show:true,message: `Cancel Booking Room ${room_cancel}` , item:_booking})
+
 							//TODO: TEST  booking.refetch()
-							let res = deleteBooking({ variables: { id: _booking.id } });
-							if(res){
-							booking.refetch();
-							}else{
-								console.log('elete Error')
-							}
+							// let res = deleteBooking({ variables: { id: _booking.id } });
+							// if(res){
+							// booking.refetch();
+							// }else{
+							// 	console.log('elete Error')
+							// }
 						}}
 						handleUpdatecompletestatus = { async (_booking)=>{
 								let _status =  ( (_booking && _booking.status === 'สำเร็จ' ) ? 'รอการชำระเงิน':'สำเร็จ' )
@@ -612,19 +726,23 @@ export const Booking = () => {
 										booking.refetch();
 									}
 						}}
-						handleSaveimage = { async (_booking , file_image) =>{
+						handleSaveimage = { async (_booking , file_image ,handleclose) =>{
 								
 								let _file_image = file_image
-								let  res
+								let  res = null
 								console.log('booking' , _booking , 'file_image',_file_image)
-								if(_file_image){
-								  res = await uploadFile({ variables : {file:_file_image} } );
-								 console.log('res upload', res)
-								}
-								if(res){
 									
-									console.log(_booking , res.data.singleUpload.url)
-									let _res = await updateBooking({
+								if(_file_image){
+									try{
+											res = await uploadFile({ variables : {file:_file_image} } );
+									}catch(error){
+										console.log('fetch upload error ')
+									}	
+								}
+								if(res && res.data && res.data.singleUpload && res.data.singleUpload.url){
+									let _res = null 
+									try{
+									_res = await updateBooking({
 													variables: {
 														id: _booking.id,
 														input: {
@@ -642,13 +760,19 @@ export const Booking = () => {
 														}
 													}
 												});
+									}catch(error){
+										console.log('fetch update updateBooking  error ')
+									}
 
 									if(_res){
-										booking.refetch();
+										 booking.refetch();
+										handleclose();
+									}else{
+										console.log('Error Update Booking ')
 									}
 
 								}else{
-									console.log('elete Error')
+									console.log('Upload image  Error')
 								}
 						}}
 						handleredit={(_booking) => {

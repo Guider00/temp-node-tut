@@ -21,11 +21,14 @@ const { Floorschema ,Floorschema_query,Floorschema_mutation, queryFloor, queryFl
 const { Memberschema,Memberschema_query,Memberschema_mutation ,queryMembers , queryMemberByid ,createMember,deleteMember,updateMember} = require('./Member/Member')
 const { Bookingschema,Bookingschema_query,Bookingschema_mutation ,queryBookings , queryBookingByid ,createBooking,deleteBooking,updateBooking} = require('./Booking/Booking')
 
-const { RoomTypeschema,RoomTypeschema_query,RoomTypeschema_mutation ,queryRoomTypes , queryRoomTypeByid ,createRoomType,deleteRoomType,updateRoomType} = require('./RoomType/RoomType')
+const { RoomTypeschema,RoomTypeschema_query,RoomTypeschema_mutation,Roomschema_subscription ,queryRoomTypes , queryRoomTypeByid ,createRoomType,deleteRoomType,updateRoomType } = require('./RoomType/RoomType')
 const { RoomPriceschema} = require('./Roomprice/Roomprice')
 const { Portmeterschema } = require('./PortMeter/PortMeter')
 const { MeterRoomschema } = require('./MeterRoom/MeterRoom')
-const {Roomschema,Roomschema_query,Roomschema_mutation ,queryRooms , queryRoomByid ,createRoom,deleteRoom,updateRoom} = require('./Room/Room')
+const {Roomschema,Roomschema_query,Roomschema_mutation ,
+queryRooms ,queryRoomByid ,createRoom,deleteRoom,updateRoom,
+addmemberinRoom, deletememberinRoom, querymembersinRoom
+ } = require('./Room/Room')
 
 
 const { Fileschema ,  UploadFile_query  ,  UploadFileschema_mutation  , UploadFile , singleUpload }  = require('./UploadFile/UploadFile') 
@@ -38,6 +41,7 @@ const { getAllMeter , adddevicelist }  = require ('../../../MQTT/server/deviceme
 let test = ""
 let dbstatus = ""
 let AllMeter  = ""
+let Rooms = ""
 var count = 0
  // << Test interval event 
 setInterval(() => {
@@ -66,7 +70,11 @@ setInterval(() => {
     onMessagesBroadcast(sub_devicemeterrealtime)
   }
 
+
 }, 1000);
+setInterval(() => {
+   onMessagesBroadcast(sub_rooms)
+}, 10000);
 
 // ---------------------------- // 
 
@@ -76,14 +84,13 @@ const submqtt = [];
 const sub_abes_history_packets = []
 const sub_databasestatus = []
 const sub_devicemeterrealtime = [] 
+const sub_rooms = []
 
 const resulte_history_packets = () => aedes_history_packets().map((item) => ({ payload: String.fromCharCode.apply(null, (JSON.parse(JSON.stringify(item.payload)).data)).replace(/(?:\r\n|\r|\n)/g, ''), topic: item.topic }))
-const subscribers = [];
 
+const subscribers = [];
 const onMqttUpdate = (fn) => submqtt.push(fn);  //  set new user 
 const onMessagesUpdates = (fn) => subscribers.push(fn);   // save new user subscriber to  array
-
-
 const registersub = (arr_subscribers, fn) => { arr_subscribers.push(fn) }
 const onMessagesBroadcast = (subscribers) => { subscribers.forEach((fn) => fn()) } // broadcast to all user
 
@@ -210,6 +217,8 @@ type Message {
     mqtthistory_packets:[MQTTHistory_packets!]
     subdatabasestatus:String
     subdevicemeterrealtime:[Tag!]
+    subRooms:[Room]
+    
   }
 `;
 const resolvers = {
@@ -258,6 +267,7 @@ const resolvers = {
 
     Rooms :queryRooms,
     RoomByid : queryRoomByid,
+    querymembersinRoom: querymembersinRoom,
   },
   Mutation: {
     createBuilding:createBuilding,
@@ -283,6 +293,11 @@ const resolvers = {
     createRoom : createRoom,
     updateRoom : updateRoom,
     deleteRoom : deleteRoom,
+    addmemberinRoom : addmemberinRoom,
+    deletememberinRoom : deletememberinRoom,
+ 
+
+
     UploadFile : UploadFile , 
     singleUpload: singleUpload,
 
@@ -398,6 +413,15 @@ const resolvers = {
         registersub(sub_devicemeterrealtime, () => pubsub.publish(channel, { subdevicemeterrealtime: getAllMeter })); // << update new user  subscription
         setTimeout(() => pubsub.publish(channel, { subdevicemeterrealtime: getAllMeter }), 0); // <<  update ข้อมูล มายัง id ปัจจุบัน 
 
+        return pubsub.asyncIterator(channel);  // << return data to  s
+      }
+    },
+    subRooms:{
+      subscribe:(parent, args, { user }) =>{
+      //  if (user === undefined || user === null) { throw Error("Permission denied") }
+        const channel = Math.random().toString(36).slice(2, 15); // generate  subscription id
+        registersub(sub_rooms, () => pubsub.publish(channel, { subRooms: queryRooms })); // << update new user  subscription
+        setTimeout(() => pubsub.publish(channel, { subRooms: queryRooms }), 0); // <<  update ข้อมูล มายัง id ปัจจุบัน 
         return pubsub.asyncIterator(channel);  // << return data to  s
       }
     }

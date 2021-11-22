@@ -7,6 +7,8 @@ input MemberInput {
    personalid : String,
    tel: String,
    email :String
+   carid : String,
+   note : String
  }
  type Member {
    id: String,
@@ -14,7 +16,9 @@ input MemberInput {
    lastname: String,
    personalid : String,
    tel: String,
-   email :  String
+   email :  String,
+   carid : String,
+   note : String
  }
        `
 
@@ -27,7 +31,9 @@ const _Memberschema_mutation =`
     updateMember(id: ID!,input :MemberInput):MessageUpdate,
     deleteMember(id: ID!): MessageDelete
 `
-const _queryMemberByid = async(payload) =>{
+const _queryMemberByid = async(payload ,payload2) =>{
+    if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
+
     try {
         if(!payload){ return null }
         if(!payload.id){ return null }
@@ -57,7 +63,9 @@ const _queryMembers = async() =>{
         return error
     }
 }
-const _updateMember = async( payload ) =>{
+const _updateMember = async( payload ,payload2) =>{
+    if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
+
     try{
         if(!payload){return null}
         if(!payload.id){return null}
@@ -68,7 +76,9 @@ const _updateMember = async( payload ) =>{
         return error
     }
 }
-const _deleteMember = async( payload ) =>{
+const _deleteMember = async( payload ,payload2 ) =>{
+    if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
+
     try{
         if(!payload){return null}
         if(!payload.id){return null}
@@ -78,7 +88,9 @@ const _deleteMember = async( payload ) =>{
          return error
      }
 }
-const _createMember = async( payload ) =>{
+const _createMember = async( payload , payload2 ) =>{
+    if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
+
     try {
         if(payload && payload.input ) {
             let resulted = await  db.create(payload.input) 
@@ -90,7 +102,9 @@ const _createMember = async( payload ) =>{
                 lastname : data.lastname,
                 tel  : data.tel,
                 personalid : data.personalid,
-                email: data.email
+                email: data.email,
+                carid: data.carid,
+                note : data.note
             }
             
          }else{
