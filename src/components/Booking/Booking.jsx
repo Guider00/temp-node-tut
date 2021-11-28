@@ -16,6 +16,8 @@ import { formatDate } from '../../general_functions/convert';
 import { useQuery, useMutation } from '@apollo/client';
 import { API_queryRooms, API_queryBuildings, API_updateMeterRoomkwh, API_updateMeterRoomwater } from '../../API/index';
 
+import { export_booking_pdf  } from '../../general_functions/pdf/export/export_pdf';
+
 
 
 import {
@@ -812,6 +814,9 @@ export const Booking = () => {
 									}
 								);
 							}
+						}}
+						handleExportformbooking ={(_booking)=>{
+							export_booking_pdf();
 						}}
 					/>
 				</div>

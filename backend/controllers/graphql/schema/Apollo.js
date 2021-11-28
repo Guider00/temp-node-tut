@@ -21,13 +21,15 @@ const { Floorschema ,Floorschema_query,Floorschema_mutation, queryFloor, queryFl
 const { Memberschema,Memberschema_query,Memberschema_mutation ,queryMembers , queryMemberByid ,createMember,deleteMember,updateMember} = require('./Member/Member')
 const { Bookingschema,Bookingschema_query,Bookingschema_mutation ,queryBookings , queryBookingByid ,createBooking,deleteBooking,updateBooking} = require('./Booking/Booking')
 
-const { RoomTypeschema,RoomTypeschema_query,RoomTypeschema_mutation,Roomschema_subscription ,queryRoomTypes , queryRoomTypeByid ,createRoomType,deleteRoomType,updateRoomType } = require('./RoomType/RoomType')
+const { RoomTypeschema,RoomTypeschema_query,RoomTypeschema_mutation ,queryRoomTypes , queryRoomTypeByid ,createRoomType,deleteRoomType,updateRoomType } = require('./RoomType/RoomType')
 const { RoomPriceschema} = require('./Roomprice/Roomprice')
 const { Portmeterschema } = require('./PortMeter/PortMeter')
 const { MeterRoomschema } = require('./MeterRoom/MeterRoom')
 const {Roomschema,Roomschema_query,Roomschema_mutation ,
 queryRooms ,queryRoomByid ,createRoom,deleteRoom,updateRoom,
-addmemberinRoom, deletememberinRoom, querymembersinRoom
+addmemberinRoom, deletememberinRoom, querymembersinRoom,
+Roomschema_subscription,
+subRooms
  } = require('./Room/Room')
 
 
@@ -72,9 +74,7 @@ setInterval(() => {
 
 
 }, 1000);
-setInterval(() => {
-   onMessagesBroadcast(sub_rooms)
-}, 10000);
+
 
 // ---------------------------- // 
 
@@ -212,12 +212,14 @@ type Message {
   }
 
   type Subscription {
+       ${Roomschema_subscription}
     messages: [Message!]
     submqttserverstatus:[SubMQTTServerstatus!]
     mqtthistory_packets:[MQTTHistory_packets!]
     subdatabasestatus:String
     subdevicemeterrealtime:[Tag!]
-    subRooms:[Room]
+ 
+
     
   }
 `;
@@ -417,13 +419,14 @@ const resolvers = {
       }
     },
     subRooms:{
-      subscribe:(parent, args, { user }) =>{
-      //  if (user === undefined || user === null) { throw Error("Permission denied") }
-        const channel = Math.random().toString(36).slice(2, 15); // generate  subscription id
-        registersub(sub_rooms, () => pubsub.publish(channel, { subRooms: queryRooms })); // << update new user  subscription
-        setTimeout(() => pubsub.publish(channel, { subRooms: queryRooms }), 0); // <<  update ข้อมูล มายัง id ปัจจุบัน 
-        return pubsub.asyncIterator(channel);  // << return data to  s
-      }
+      // subscribe:(parent, args, { user }) =>{
+      // //  if (user === undefined || user === null) { throw Error("Permission denied") }
+      //   const channel = Math.random().toString(36).slice(2, 15); // generate  subscription id
+      //   registersub(sub_rooms, () => pubsub.publish(channel, { subRooms: queryRooms })); // << update new user  subscription
+      //   setTimeout(() => pubsub.publish(channel, { subRooms: queryRooms }), 0); // <<  update ข้อมูล มายัง id ปัจจุบัน 
+      //   return pubsub.asyncIterator(channel);  // << return data to  s
+      // }
+      subscribe:subRooms
     }
   },
 
