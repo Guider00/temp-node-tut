@@ -19,20 +19,86 @@ import {Child} from './Child'
 
 
 import { jsPDF } from "jspdf";
-import {AddFont_jsPDF } from './AddFont'
+import {AddTH_font } from './AddFont'
 import 'jspdf-autotable'
 import autoTable from 'jspdf-autotable'
 
 
-AddFont_jsPDF(jsPDF);
-const doc = new jsPDF();
+/**
+    * @param doc is  jsdpdf doc 
+    * @param data is  object { header:{ FillColor:"", } , body , position ,start_x , start_y ,}
+  */
+const drawtable =    (doc:object , data:object)=>{
 
-const export_pdf  = ( timestart , timeend , building ,unitprice , roomstart , roomend) =>{
+    
+    doc.setTextColor(0, 0, 0);
+    let header = ['ห้อง', 'รุ่น   ', 'ชื่อมิตเตอร์','เริ่ม','สิ้นสุด','ผลต่าง','ราคา','อัตราส่วนต่อการใช้ไฟทั้งหมด (%)']
+    let body = [
+        ['209', 'KM-24-L', 'M209','150','200','50','250','20'],
+        ['210', 'KM-24-L', 'M209','150','200','50','250','20'],
+        ['211', 'KM-24-L', 'M209','150','200','50','250','20'],
+        ['212', 'KM-24-L', 'M209','150','200','50','250','20'],
+        ['213', 'KM-24-L', 'M209','150','200','50','250','20'],
+        ['214', 'KM-24-L', 'M209','150','200','50','250','20'],
+        ['215', 'KM-24-L', 'M209','150','200','50','250','20'],
+    ]
+    let footer = [
+        [ 'รวม' , ' 25dfdfff']
+    ]
+    // let message = 'ราคา'
+    let _fontsize = 12 
+    let start_y = 120
+    let default_start_x = 30
+    let box_size = 10
+    let start_x = default_start_x
+    doc.setFontSize(_fontsize);
+    header.map ( (message,index) => {
+    doc.setFillColor(189,228,209);
+    doc.rect(start_x, start_y, (message.length)*(_fontsize/8)+(2*(_fontsize/8)), box_size,'D');
+    doc.text(start_x+(_fontsize/8)+((message.length)*(_fontsize/8)/2 ) ,start_y+(5/7*box_size),message , 'center'); // text center 
+    start_x += (message.length)*(_fontsize/8)+(2*(_fontsize/8)) 
+    } )
+    
+    body.map ( (row,row_index) =>{
+        start_x = default_start_x
+        row.map( (str_data ,data_index)=>{
+             doc.text(start_x+(_fontsize/8) ,start_y+(5/7*box_size)  + (box_size * (row_index+1)  ) ,str_data);
+            doc.rect(start_x, start_y+(box_size * (row_index+1) ), (header[data_index].length)*(_fontsize/8)+(2*(_fontsize/8)), box_size);
+            start_x += (header[data_index].length)*(_fontsize/8)+(2*(_fontsize/8)) 
+        })  
+    })
+    footer.map ( (row,row_index) =>{
+        start_x = default_start_x
+        row.map( (str_data ,data_index)=>{
+             doc.text(start_x+(_fontsize/8) ,start_y+(5/7*box_size)  + (box_size * (row_index+1)  ) ,str_data);
+            doc.rect(start_x, start_y+(box_size * (row_index+1) ), (header[data_index].length)*(_fontsize/8)+(2*(_fontsize/8)), box_size);
+            start_x += (header[data_index].length)*(_fontsize/8)+(2*(_fontsize/8)) 
+        })  
+    })
+
+
+    
+}
+
+const export_pdf  = ( timestart:String , timeend:String , building ,unitprice , roomstart , roomend , logourl:String) =>{
+    
     console.log('export pdf ')
+    const doc = new jsPDF();
+    AddTH_font(doc ,'yourCustomFont.ttf' )
+    doc.addFont('yourCustomFont.ttf', 'yourCustomFont', 'normal');
+    doc.setFont('yourCustomFont');
+
      let pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
      let pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
-     doc.setFont("angsa",'normal');
-     doc.setFontSize(36);
+    try{
+        const img = new Image()
+        img.src = 'image/logo.png'
+        doc.addImage(img, 'png', 15, 10, 24, 24)
+    }catch(e){
+        alert('Loading image error ')
+    }
+
+    doc.setFontSize(36);
     doc.text('รายงานยอดรวมการใช้ไฟฟ้า', pageWidth / 2, 24, {align: 'center'});
     
     doc.setFontSize(24);
@@ -48,28 +114,8 @@ const export_pdf  = ( timestart , timeend , building ,unitprice , roomstart , ro
     doc.text(`ห้องสิ้นสุด ${roomend ? roomend : "---"}`,3*pageWidth / 4,24*4 ,{align: 'center'})
 
 
-     let drawCell = function(data) {
-        var doc = data.doc;
-        var rows = data.table.body;
-        if (rows.length === 1) {
-        } else if (data.row.index === rows.length - 1) {
-            doc.setFont("angsa",'normal');
-            doc.setFontSize("10");
-            doc.setFillColor(255, 255, 255);
-        }
-        };
+    drawtable(doc)
 
-    doc.autoTable({
-    headStyles: { fillColor: '#bde4d1', textColor: '#333333' , fontStyle: 'angsa' },
-    head: [['ห้อง', 'รุ่น', 'ชื่อมิตเตอร์','เริ่ม','สิ้นสุด','ผลต่าง','ราคา','อัตราส่วนต่อการใช้ไฟทั้งหมด (%)']],
-    body: [
-        ['209', 'KM-24-L', 'M209','150','200','50','250','20'],
-      
-    ],
-    willDrawCell: drawCell,
-
-    startY: 120
-    })
 
 /** Perview PDF  */
 var string = doc.output('datauristring');

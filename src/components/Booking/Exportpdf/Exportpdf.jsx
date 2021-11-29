@@ -7,12 +7,15 @@ import autoTable from 'jspdf-autotable'
 AddFont_jsPDF(jsPDF);
 const doc = new jsPDF();
 
-export const export_pdf  = ( timestart , timeend , building ,unitprice , roomstart , roomend) =>{
+export const export_pdf  = ( timestart:String , timeend:String , building:String ,unitprice , roomstart , roomend) =>{
     console.log('export pdf ')
      let pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
      let pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
-     doc.setFont("angsa",'normal');
-     doc.setFontSize(36);
+
+  
+
+    doc.setFont("angsa",'normal');
+    doc.setFontSize(36);
     doc.text('รายงานยอดรวมการใช้ไฟฟ้า', pageWidth / 2, 24, {align: 'center'});
     
     doc.setFontSize(24);

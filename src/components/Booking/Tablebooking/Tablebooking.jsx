@@ -85,6 +85,7 @@ export const Tablebooking =(props)=>{
                                  </button>
                                 <button onClick={()=>{
                                  if(booking.status === 'สำเร็จ' ){
+                                    props.handleExportformbooking(booking )
                                     
                                  }else{
                                      alert('รอการชำระเงิน')

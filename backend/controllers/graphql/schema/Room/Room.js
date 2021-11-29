@@ -60,8 +60,7 @@ const _Roomschema_mutation =`
     deletememberinRoom (id:ID! , input:MemberID!): MessageUpdate,
 `
 const _Roomschema_subscription = `
-    subRooms:[Room]
-    
+    subRooms:[Room],
 `
 
 const _querymembersinRoom = async (payload , payload2) =>{
@@ -163,6 +162,7 @@ const _createRoom = async ( payload ,payload2) =>{
             let resulted = await  db.create(payload.input) 
             if(!resulted) { return null}
             let data  = resulted._doc
+            onMessagesBroadcast(sub_rooms)
             return {
                 id:data._id.toString() ,
                 name:  data.name ,
@@ -195,6 +195,7 @@ const _deleteRoom = async (payload,payload2 ) =>{
         if(!payload){return null}
         if(!payload.id){return null}
         let resulted = await db.deleteOne({_id:payload.id})
+        onMessagesBroadcast(sub_rooms)
          return resulted
      }catch(error){
          return error
@@ -239,22 +240,41 @@ const _updateRoom = async (payload ,payload2) =>{
         if(!payload.id){return null}
         if(!payload.input){return null}
         let  resulted = await db.updateOne({_id:payload.id},payload.input)
+         onMessagesBroadcast(sub_rooms)
         return resulted
     }catch(error){
         return error
     }
  }
+
+
+const {  PubSub } = require('apollo-server-express');
+const sub_rooms = []
+const pubsub = new PubSub();
+const registersub = (arr_subscribers, fn) => { arr_subscribers.push(fn) }
+const onMessagesBroadcast = (subscribers) => { subscribers.forEach((fn) => fn()) } // broadcast to all user
+const _subRooms  = (parent, args, { user }) =>{
+      //  if (user === undefined || user === null) { throw Error("Permission denied") }
+        const channel = Math.random().toString(36).slice(2, 15); // generate  subscription id
+        registersub(sub_rooms, () => pubsub.publish(channel, { subRooms: _queryRooms })); // << update new user  subscription
+        setTimeout(() => pubsub.publish(channel, { subRooms: _queryRooms }), 0); // <<  update ข้อมูล มายัง id ปัจจุบัน 
+        return pubsub.asyncIterator(channel);  // << return data to  s
+    }
+
+
   /** API Member in Room  */
 exports.addmemberinRoom = _addmemberinRoom
 exports.deletememberinRoom = _deletememberinRoom
 exports.querymembersinRoom = _querymembersinRoom
 
-  /** API  Room  */
+/** API  Room  */
 exports.queryRoomByid = _queryRoomByid
 exports.queryRooms = _queryRooms
 exports.updateRoom  = _updateRoom
 exports.deleteRoom  = _deleteRoom
 exports.createRoom = _createRoom
+exports.subRooms = _subRooms
+
 /** API  Schema  */
 exports.Roomschema = _Roomschema
 exports.Roomschema_query = _Roomschema_query
