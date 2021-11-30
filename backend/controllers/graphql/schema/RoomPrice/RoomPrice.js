@@ -64,6 +64,7 @@ const _deleteRoomPrice = async (payload,payload2) =>{
     }
 }
 
+
 const _RoomPriceschema = `
 input OptionRoomInput{
     topic: String,

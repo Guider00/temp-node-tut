@@ -299,22 +299,27 @@ const _deleteRoom = async (payload,payload2 ) =>{
         if(!payload.id.match(/^[0-9a-fA-F]{24}$/)) { return "Error Format ID"}
 
         let resulted = await db.findById({_id:payload.id})
-        let data  = resulted._doc
-        return ({
-            id : data._id,
-            name: data.name,
-            status: data.status,
-            checkin_date: data.checkin_date,
-            checkout_date: data.checkout_date,
-            floor: await queryFloorByid({id:data.floor}),
-            member : await queryMemberByid ( {id:data.member}),
-            members :  await Promise.all( data.members.map( async memberid => {
-                 return await queryMemberByid ( {id:memberid}) 
-            } ) ),
-            meterroom : await queryMeterRoomByid ( { id: data.meterroom}),
-            roomprice : await queryRoomPriceByid({id:data.roomprice}),
-            RoomType : await queryRoomTypeByid({id:data.RoomType})
-        })
+        if(resulted && resulted._doc ) {
+             let data  = resulted._doc
+            return ({
+                id : data._id,
+                name: data.name,
+                status: data.status,
+                checkin_date: data.checkin_date,
+                checkout_date: data.checkout_date,
+                floor: await queryFloorByid({id:data.floor}),
+                member : await queryMemberByid ( {id:data.member}),
+                members :  await Promise.all( data.members.map( async memberid => {
+                    return await queryMemberByid ( {id:memberid}) 
+                } ) ),
+                meterroom : await queryMeterRoomByid ( { id: data.meterroom}),
+                roomprice : await queryRoomPriceByid({id:data.roomprice}),
+                RoomType : await queryRoomTypeByid({id:data.RoomType})
+            })
+        }else{
+            return null // not found  Room 
+        }
+       
     } catch (error) {
         console.error(error)
         return null
