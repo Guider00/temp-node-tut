@@ -4,7 +4,7 @@
 const { jsPDF }  = require('jspdf')
 const { AddTH_font }  =require('../AddFont/AddFont.js')
 
-export const export_booking_pdf = ( owner , customer_details ,room_booking  ) =>{
+export const export_booking_pdf1 = ( owner , customer_details ,room_booking  ) =>{
     let bookingID = "60739828"
     let bookingReference = "191" 
     let Client = "Nahatai Raganok"
@@ -28,7 +28,7 @@ export const export_booking_pdf = ( owner , customer_details ,room_booking  ) =>
     let EXP = "12/2017"
     let Booked = "Agoda Company"
     let contact = "+66 ---------"
-
+    
     let Noanswer = "-"
 
     bookingID = bookingID ? bookingID : Noanswer ;
@@ -269,7 +269,367 @@ export const export_booking_pdf = ( owner , customer_details ,room_booking  ) =>
     x.document.write(iframe);
     x.document.close();
 }
-export const export_receipt =  ( ) =>{
+export const export_booking_pdf2 =  ( ) =>{
+    let Name = "พิทักษ์ ไพศาชมาศ"
+    let Address1 = "213ข.6 หมูบ้านรมรื่น ถนนราชพฤกษ์ ข.28 แขวงตลิ่งชัน เขตตลิ่งชัน"
+    let Address2 = "กรุงเทพมหานคร 10170"
+    let No = "0494211100424"
+    let Date = "24/11/2021"
+    let HoneNo = "587/37"
+    let Month = "11/2021"
+    let Taxid = "0994000635567"
+    let Phone = "088-917-8965"
+    let Email = "Cityhome.ratchada23@gmail.com"
+    let Grand = "144.00"
+    let Backforward = "0.00"
+    let Grandtotal = "144.00"
+    let Money  = "0.00"
+    let credit = "จารุวรรณ พรมศิริ"
+    let Time = "14:19:42"
+    let table_prices = [ { name:"ท่อประปา" , unit:"8.00",price: "18.00",amount:"144.00"}, { name:"ท่อน้ำ" , unit:"2.00",price: "100.00",amount:"200.00"} , { name:"ท่อรถ" , unit:"1.00",price: "900.00",amount:"900.00"}]
+    let note = "เลขที่บัญชี 2878-xxxxxx-x"
+    const names = table_prices.map(table_prices => table_prices.name);
+    const Units = table_prices.map(table_prices => table_prices.unit);
+    const Price = table_prices.map(table_prices => table_prices.price);
+    const Amount = table_prices.map(table_prices => table_prices.amount);
+
+    const doc = new jsPDF('l', 'mm', [297, 210]);
+   
+
+    AddTH_font(doc ,'yourCustomFont.ttf' )
+    doc.addFont('yourCustomFont.ttf', 'yourCustomFont', 'normal');
+    doc.setFont('yourCustomFont');
+
+    //bill box
+    doc.setDrawColor(52, 192, 54)
+    doc.setFillColor(52, 192, 54)
+    doc.roundedRect(200, 8, 78, 13, 6, 6, 'FD')
+
+    //main box
+    doc.setDrawColor(70, 250, 100)
+    doc.setFillColor(70, 250, 100)
+    doc.rect(15,25,265,160 , 'FD')
+
+    //address box
+    doc.setDrawColor(155, 255, 168)
+    doc.setFillColor(155, 255, 168)
+    doc.roundedRect(17,27,173,46,6,6, 'FD')
+
+    doc.roundedRect(193,27,38,10,6,6 , 'FD')
+    doc.roundedRect(232,27,47,10,6,6 , 'FD')
+    doc.roundedRect(193,39,38,10,6,6 , 'FD')
+    doc.roundedRect(232,39,47,10,6,6 , 'FD')
+    doc.roundedRect(193,51,38,10,6,6 , 'FD')
+    doc.roundedRect(232,51,47,10,6,6 , 'FD')
+    doc.roundedRect(193,63,38,10,6,6 , 'FD')
+    doc.roundedRect(232,63,47,10,6,6 , 'FD')
+
+    //topic box
+    doc.setDrawColor(40, 120, 50)
+    doc.setFillColor(40, 210, 60)
+    doc.rect(17,75,138,15, 'FD' )
+    doc.rect(155,75,38,15, 'FD' )
+    doc.rect(193,75,38,15, 'FD' )
+    doc.rect(231,75,46,15, 'FD' )
+
+    doc.setDrawColor(40, 120, 50)
+    doc.setFillColor(155, 255, 168)
+    
+    //result box
+    doc.rect(17,90,138,60, 'FD' )
+    doc.rect(155,90,38,60, 'FD' )
+    doc.rect(193,90,38,60, 'FD' )
+    doc.rect(231,90,46,60, 'FD' )
+
+    //last box
+    doc.setFillColor(255,255,255)
+    doc.rect(17,152,138,31, 'FD' )
+    doc.setFillColor(180,250,190)
+    doc.rect(155,152,76,10, 'FD' )
+    doc.rect(155,162,76,11, 'FD' )
+    doc.rect(155,173,76,10, 'FD' )
+    
+    doc.rect(231,152,46,10, 'FD' )
+    doc.rect(231,162,46,11, 'FD' )
+    doc.rect(231,173,46,10, 'FD' )
+
+    
+    doc.setFontSize(16)
+    doc.text("นิติบุคคลอาคารชุดซิตี้โฮม รัชดาภิเษก 3" ,15, 11, {align: 'left'})
+    doc.setFontSize(14)
+    doc.text("583 ซอยรัชดาภิเษก10 แขวงห้วยขวาง กรุงเทพมหานคร 10310" ,15, 16, {align: 'left'})
+
+    doc.setFontSize(14)
+    doc.text("Tax ID : ",15, 21, {align: 'left'})
+    doc.text(Taxid,27, 21, {align: 'left'})
+    doc.text("โทร : ",52, 21, {align: 'left'})
+    doc.text(Phone,60, 21, {align: 'left'})
+    doc.text("Email :",82, 21, {align: 'left'})
+    doc.text(Email,93, 21, {align: 'left'})
+
+    doc.setFontSize(18)
+    doc.text("ใบแจ้งค่าใช้จ่าย/DEBIT NOTE" ,210, 16, {align: 'left'})
+
+    doc.setFontSize(14)
+    doc.text("ชื่อ/Name :" ,20, 40, {align: 'left'})
+    doc.setFontSize(16)
+    doc.text(Name ,50, 40, {align: 'left'})
+   
+   
+    doc.setFontSize(14)
+    doc.text("ที่อยู่/Address :" ,20, 55, {align: 'left'})
+    doc.setFontSize(16)
+    doc.text(Address1 ,50, 55, {align: 'left'})
+    doc.text(Address2 ,50, 60, {align: 'left'})
+
+    doc.setFontSize(14)
+    doc.text("เลขที่/No. " ,205, 33, {align: 'left'})
+    doc.setFontSize(16)
+    doc.text(No ,245, 33, {align: 'left'})
+    doc.setFontSize(14)
+    doc.text("วันที่/Date " ,205, 45, {align: 'left'})
+    doc.setFontSize(16)
+    doc.text(Date ,245, 45, {align: 'left'})
+    doc.setFontSize(14)
+    doc.text("ประจำเดือน/Month " ,198, 57, {align: 'left'})
+    doc.setFontSize(16)
+    doc.text(Month ,245, 57, {align: 'left'})
+    doc.setFontSize(14)
+    doc.text("บ้านเลขที่/Home No. " ,198, 69, {align: 'left'})
+    doc.setFontSize(16)
+    doc.text(HoneNo ,245, 69, {align: 'left'})
+
+    
+    doc.setFontSize(16)
+    doc.text("รายการ" ,73, 82, {align: 'left'})
+    doc.text("Description" ,70, 86, {align: 'left'})
+    
+    doc.text("จำนวนหน่วย" ,163, 82, {align: 'left'})
+    doc.text("Units" ,167, 86, {align: 'left'})
+    
+    doc.text("ราคาต่อหน่วย" ,202, 82, {align: 'left'})
+    doc.text("Unit /Price" ,203 , 86, {align: 'left'})
+
+    doc.text("จำนวนเงิน" ,246, 82, {align: 'left'})
+    doc.text("Amount" ,247 , 86, {align: 'left'})
+
+
+    doc.text("หมายเหตุ :" ,22, 160, {align: 'left'})
+    doc.text(note ,40, 160, {align: 'left'})
+    doc.text("รวมเงินทั้งสิ้น/Grand Total" ,168, 160, {align: 'left'})
+    doc.text(Grand ,250, 160, {align: 'left'})
+
+    doc.text("ยอดค้างชำระ/Back Forward" ,168 , 170, {align: 'left'})
+    doc.text(Backforward ,254 , 170, {align: 'left'})
+
+    doc.text("รวมเงินทั้งสิ้น/Grand Total" ,168 , 181, {align: 'left'})
+    doc.text(Grandtotal ,250 , 181, {align: 'left'})
+
+    doc.setFontSize(20)
+    doc.text("เงินฝากสำรองคงเหลือ :" ,220 , 192, {align: 'left'})
+    doc.text(Money,270 , 192, {align: 'left'})
+    doc.setFontSize(14)
+    doc.text("เขียนโดย" ,200 , 198, {align: 'left'})
+    doc.text(credit,215 , 198, {align: 'left'})
+    doc.text("วันที่" ,240 , 198, {align: 'left'})
+    doc.text(Date ,248 , 198, {align: 'left'})
+    doc.text(Time ,268 , 198, {align: 'left'})
+
+    doc.setFontSize(16)
+    doc.text(names ,20, 95, {align: 'left'})
+    doc.text(Units ,170, 95, {align: 'left'})
+    doc.text(Price ,210, 95, {align: 'left'})
+    doc.text(Amount ,250, 95, {align: 'left'})
+
+    let src_pdf = doc.output('datauristring');
+
+    const iframe = `<iframe width='100%' type="application/pdf"   height='100%' src="${src_pdf}"></iframe>`
+    const x = window.open();
+    x.document.title = "preview booking"
+    x.document.open();
+    x.document.write(iframe);
+    x.document.close();
+
+
 
 }
+export const export_booking_pdf =  ( ) =>{
+    let Name = "พิทักษ์ ไพศาชมาศ"
+    let Address1 = "213ข.6 หมูบ้านรมรื่น ถนนราชพฤกษ์ ข.28 แขวงตลิ่งชัน เขตตลิ่งชัน"
+    let Address2 = "กรุงเทพมหานคร 10170"
+    let No = "0494211100424"
+    let Date = "24/11/2021"
+    let HoneNo = "587/37"
+    let Room = "11/2021"
+    let Taxid = "0994000635567"
+    let Phone = "088-917-8965"
+    let Email = "Cityhome.ratchada23@gmail.com"
+    let Grandtotal = "144.00"
+    let Money  = "0.00"
+    let credit = "จารุวรรณ พรมศิริ"
+    let Time = "14:19:42"
+    let table_prices = [ { name:"ท่อประปา" , unit:"8.00",price: "18.00",amount:"144.00"}, { name:"ท่อน้ำ" , unit:"2.00",price: "100.00",amount:"200.00"} , { name:"ท่อรถ" , unit:"1.00",price: "900.00",amount:"900.00"}]
+    const names = table_prices.map(table_prices => table_prices.name);
+    const Units = table_prices.map(table_prices => table_prices.unit);
+    const Price = table_prices.map(table_prices => table_prices.price);
+    const Amount = table_prices.map(table_prices => table_prices.amount);
 
+    const doc = new jsPDF('l', 'mm', [297, 210]);
+   
+
+    AddTH_font(doc ,'yourCustomFont.ttf' )
+    doc.addFont('yourCustomFont.ttf', 'yourCustomFont', 'normal');
+    doc.setFont('yourCustomFont');
+
+    //bill box
+    doc.setDrawColor(0, 102, 205)
+    doc.setFillColor(0, 102, 205)
+    doc.roundedRect(195, 8, 78, 17, 2, 2, 'FD')
+    doc.setDrawColor(0, 102, 205)
+    doc.setFillColor(255, 255, 255)
+    doc.roundedRect(195, 27, 78, 10, 2, 2, 'FD')
+    doc.roundedRect(195, 39, 78, 10, 2, 2, 'FD')
+    doc.roundedRect(195, 51, 78, 10, 2, 2, 'FD')
+    doc.roundedRect(195, 63, 78, 10, 2, 2, 'FD')
+    
+
+
+    //address box
+    doc.setDrawColor(0, 102, 205)
+    doc.setFillColor(255, 255, 255)
+    doc.roundedRect(17,27,176,46,6,6, 'FD')
+
+    
+
+    //topic box
+    doc.setDrawColor(60, 50, 170)
+    doc.setFillColor(0, 102, 205)
+    doc.rect(17,75,138,15, 'FD' )
+    doc.rect(155,75,38,15, 'FD' )
+    doc.rect(193,75,38,15, 'FD' )
+    doc.rect(231,75,46,15, 'FD' )
+
+    
+    //result box
+    doc.setDrawColor(60, 50, 170)
+    doc.setFillColor(255, 255, 255)
+    doc.rect(17,90,138,60, 'FD' )
+    doc.rect(155,90,38,60, 'FD' )
+    doc.rect(193,90,38,60, 'FD' )
+    doc.rect(231,90,46,60, 'FD' )
+
+    //last box
+    doc.setFillColor(200,230,255)
+    doc.rect(17,152,214,31, 'FD' )
+    doc.rect(231,152,46,31, 'FD' )
+
+    doc.setDrawColor(60, 50, 170)
+    doc.rect(40,156,5,5, 'FD' )
+    doc.rect(72,156,5,5, 'FD' )
+    doc.rect(40,165,5,5, 'FD' )
+    
+    doc.setFontSize(14)
+    doc.text("เงินสด" ,47, 157, {align: 'left'})
+    doc.text("Cash" ,47, 161, {align: 'left'})
+    doc.text("อื่นๆ .........................................................................." ,79, 157, {align: 'left'})
+    doc.text("Other" ,79, 161, {align: 'left'})
+    doc.text("เช็คธนาคาร/สาขา ............................................................................................" ,47, 169, {align: 'left'})
+    doc.text("Cheque Bank/Branch" ,47, 173, {align: 'left'})
+    doc.text("เลขที่เช็ค ............................................ลงวันที่..................................................." ,47, 177, {align: 'left'})
+    doc.text("Cash No. ",47, 181, {align: 'left'})
+    doc.text("Date ",95, 181, {align: 'left'})
+
+    doc.setFontSize(16)
+    doc.text("นิติบุคคลอาคารชุดซิตี้โฮม รัชดาภิเษก 3 " ,17, 11, {align: 'left'})
+    doc.setFontSize(14)
+    doc.text("583 ซอยรัชดาภิเษก10 แขวงห้วยขวาง กรุงเทพมหานคร 10310" ,17, 16, {align: 'left'})
+
+    doc.setFontSize(14)
+    doc.text("Tax ID : ",17, 21, {align: 'left'})
+    doc.text(Taxid,29, 21, {align: 'left'})
+    doc.text("โทร : ",54, 21, {align: 'left'})
+    doc.text(Phone,62, 21, {align: 'left'})
+    doc.text("Email :",84, 21, {align: 'left'})
+    doc.text(Email,95, 21, {align: 'left'})
+
+    doc.setFontSize(18)
+    doc.text("ต้นฉบับใบเสร็จรับเงิน/ORIGINAL RECEIPT" ,198, 18, {align: 'left'})
+
+    doc.setFontSize(16)
+    doc.text("ชื่อ/Name :" ,20, 40, {align: 'left'})
+    doc.setFontSize(16)
+    doc.text(Name ,50, 40, {align: 'left'})
+   
+   
+    doc.setFontSize(14)
+    doc.text("ที่อยู่/Address :" ,20, 55, {align: 'left'})
+    doc.setFontSize(16)
+    doc.text(Address1 ,50, 55, {align: 'left'})
+    doc.text(Address2 ,50, 60, {align: 'left'})
+
+    doc.setFontSize(14)
+    doc.text("เลขที่/No. " ,202, 33, {align: 'left'})
+    doc.setFontSize(16)
+    doc.text(No ,238, 33, {align: 'left'})
+    doc.setFontSize(14)
+    doc.text("วันที่/Date " ,202, 45, {align: 'left'})
+    doc.setFontSize(16)
+    doc.text(Date ,238, 45, {align: 'left'})
+    doc.setFontSize(14)
+    doc.text("เลขที่ชุดห้อง/Room" ,202, 57, {align: 'left'})
+    doc.setFontSize(16)
+    doc.text(Room ,238, 57, {align: 'left'})
+    doc.setFontSize(14)
+    doc.text("บ้านเลขที่/Home No. " ,202, 69, {align: 'left'})
+    doc.setFontSize(16)
+    doc.text(HoneNo ,238 , 69, {align: 'left'})
+
+    
+    doc.setFontSize(16)
+    doc.text("รายการ" ,73, 82, {align: 'left'})
+    doc.text("Description" ,70, 86, {align: 'left'})
+    
+    doc.text("จำนวนหน่วย" ,163, 82, {align: 'left'})
+    doc.text("Units" ,167, 86, {align: 'left'})
+    
+    doc.text("ราคาต่อหน่วย" ,202, 82, {align: 'left'})
+    doc.text("Unit /Price" ,203 , 86, {align: 'left'})
+
+    doc.text("จำนวนเงิน" ,246, 82, {align: 'left'})
+    doc.text("Amount" ,247 , 86, {align: 'left'})
+
+    doc.setFontSize(14)
+    doc.text("หมายเหตุ กรณีชำระโดยเช็ค ใบเสร็จรับเงินนี้ จะสมบูรณ์เมื่อได้เรียกเก็บเงินตามเช็คแล้ว" ,17, 188, {align: 'left'})
+    doc.setFontSize(16)
+    doc.text("ชำระโดย" ,22, 160, {align: 'left'})
+    
+
+    doc.text("รวมเงินทั้งสิ้น/Grand Total" ,168 , 181, {align: 'left'})
+    doc.text(Grandtotal ,250 , 181, {align: 'left'})
+
+    doc.text(".................................................................................." ,50, 199, {align: 'left'})
+    doc.text("ผู้รับเงิน/Collector" ,70 , 205, {align: 'left'})
+
+
+    doc.text(".................................................................................." ,156 , 199, {align: 'left'})
+    doc.text("ผู้มีอำนาจลงนาม/Authorized" ,168 , 205, {align: 'left'})
+
+
+    doc.setFontSize(16)
+    doc.text(names ,20, 95, {align: 'left'})
+    doc.text(Units ,170, 95, {align: 'left'})
+    doc.text(Price ,210, 95, {align: 'left'})
+    doc.text(Amount ,250, 95, {align: 'left'})
+
+    let src_pdf = doc.output('datauristring');
+
+    const iframe = `<iframe width='100%' type="application/pdf"   height='100%' src="${src_pdf}"></iframe>`
+    const x = window.open();
+    x.document.title = "preview booking"
+    x.document.open();
+    x.document.write(iframe);
+    x.document.close();
+
+
+
+}
