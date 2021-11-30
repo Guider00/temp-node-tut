@@ -56,11 +56,18 @@ export const API_ADD_Booking = gql`
 `;
 export const API_DELETE_Booking = gql`
 
-	mutation deleteBooking($id: ID!) {
-		deleteBooking(id: $id) {
+	mutation deleteBooking($id: ID!,$id_room:ID!) {
+		deletebookingsinRoom(id:$id_room, input: {id:$id} ){
+			n
+			nModified
+		}
+		deleteBooking(id: $id,id_room: $id_room) {
 			n
 			deletedCount
 		}
+
+
+
 	}
 `;
 export const API_UPDATE_Booking = gql`

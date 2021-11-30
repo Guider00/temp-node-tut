@@ -28,6 +28,7 @@ const { MeterRoomschema } = require('./MeterRoom/MeterRoom')
 const {Roomschema,Roomschema_query,Roomschema_mutation ,
 queryRooms ,queryRoomByid ,createRoom,deleteRoom,updateRoom,
 addmemberinRoom, deletememberinRoom, querymembersinRoom,
+addbookingsinRoom , deletebookingsinRoom , querybookingsinRoom,
 Roomschema_subscription,
 subRooms
  } = require('./Room/Room')
@@ -101,7 +102,6 @@ ${Floorschema}
 ${Buildingschema}
 ${Memberschema}
 ${Bookingschema}
-
 ${Portmeterschema}
 ${MeterRoomschema}
 ${RoomPriceschema}
@@ -270,6 +270,7 @@ const resolvers = {
     Rooms :queryRooms,
     RoomByid : queryRoomByid,
     querymembersinRoom: querymembersinRoom,
+    querybookingsinRoom: querybookingsinRoom,
   },
   Mutation: {
     createBuilding:createBuilding,
@@ -297,6 +298,8 @@ const resolvers = {
     deleteRoom : deleteRoom,
     addmemberinRoom : addmemberinRoom,
     deletememberinRoom : deletememberinRoom,
+    addbookingsinRoom : addbookingsinRoom,
+    deletebookingsinRoom : deletebookingsinRoom,
  
 
 
