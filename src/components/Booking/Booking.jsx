@@ -245,7 +245,8 @@ export const Booking = () => {
 			<ModalAlert
 			 handleaccept ={ () =>{
 				let _alert = alert 
-				let res = deleteBooking({ variables: { id: _alert.item.id } });
+				console.log('alert item ',alert)
+				let res = deleteBooking({ variables: { id: _alert.item.id  ,id_room:_alert.item.Room.id   } });
 				if(res){
 				_alert.show = false
 				booking.refetch();
@@ -677,7 +678,7 @@ export const Booking = () => {
 						data={booking.data}
 						handlerdelete={(_booking) => {
 							console.log('delete', _booking);
-							let room_cancel = _booking.Room.name
+							let room_cancel = ( _booking.Room  &&  _booking.Room.name ) ? _booking.Room.name : '---'
 							setalert({show:true,message: `Cancel Booking Room ${room_cancel}` , item:_booking})
 
 							//TODO: TEST  booking.refetch()

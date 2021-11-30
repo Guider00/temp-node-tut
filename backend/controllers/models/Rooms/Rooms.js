@@ -11,6 +11,7 @@ const schemaDefinition = new mongoose.Schema({
     checkin_date : {type:String, default: ""},
     member:{ type:String},
     members:{ type:[String] },
+    bookings:{ type:[String] },
     meterroom:{ type:String},
     RoomType : {type:String},
     version:{ type: String ,default: "0.0.1"},

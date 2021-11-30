@@ -1,12 +1,12 @@
 
 const { db } = require('../../../models/Booking/Booking')
 
-const { queryRoomByid }  = require ('../Room/Room')
+const { queryRoomByid  ,addbookingsinRoom ,deletebookingsinRoom }  = require ('../Room/Room')
 
 
 const _Bookingschema = 
 `
-type Booking{
+type Booking {
   id: String
   booking_number:String
   customer_name :String
@@ -20,6 +20,7 @@ type Booking{
   receipt_number :String
   Room : Room
 }
+
 input BookingInput {
   booking_number :String
   customer_name :String
@@ -45,9 +46,9 @@ const _Bookingschema_query =`
 const _Bookingschema_mutation =`
     createBooking (input: BookingInput):MessageCreate,
     updateBooking(id: ID!, input: BookingInput): MessageUpdate,
-    deleteBooking(id: ID!): MessageDelete,
+    deleteBooking(id: ID! ,id_room:ID! ): MessageDelete,
 `
-const _queryBookingByid = async (payload) =>{
+const _queryBookingByid = async (payload:object) =>{
         try {
         if(!payload){ return null }
         if(!payload.id){ return null }
@@ -85,26 +86,42 @@ const _queryBookings = async () =>{
         return error
     }
 }
-const _createBooking = async (payload , payload2) =>{
+const _createBooking = async (payload:object , payload2:object) =>{
          if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
 
     try {
         if(payload && payload.input ) {
-            let resulted = await  db.create(payload.input) 
-            if(!resulted) { return null}
-            let data  = resulted._doc
-            return {
-                id: data._id.toString(),
-                booking_number : data.booking_number,
-                customer_name :data.customer_name,
-                customer_lastname :data.customer_lastname,
-                customer_tel :data.customer_tel,
-                deposit :data.deposit,
-                checkin_date : data.checkin_date,
-                note: data.note,
-                status: data.status,
-                receipt_number :data.status
+           
+            try{
+                let resulted = await  db.create(payload.input) 
+                if(!resulted) { return null}
+                let data  = resulted._doc
+                if(payload && payload.input && payload.input.Room)
+                {
+                   let _res =  await addbookingsinRoom({id:payload.input.Room,input:{id:data._id.toString()}})
+                   if(_res){
+                        return {
+                            id: data._id.toString(),
+                            booking_number : data.booking_number,
+                            customer_name :data.customer_name,
+                            customer_lastname :data.customer_lastname,
+                            customer_tel :data.customer_tel,
+                            deposit :data.deposit,
+                            checkin_date : data.checkin_date,
+                            note: data.note,
+                            status: data.status,
+                            receipt_number :data.status
+                        }
+                   }else{
+                       return null 
+                   }
+                }
+
+            }catch(e){
+                 return null
             }
+
+            
             
          }else{
             return null
@@ -114,7 +131,7 @@ const _createBooking = async (payload , payload2) =>{
      }
 }
 
-const _deleteBooking = async (payload , payload2) =>{
+const _deleteBooking = async (payload:object , payload2:object) =>{
 
         if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
 
@@ -129,7 +146,7 @@ const _deleteBooking = async (payload , payload2) =>{
 
 }
 
-const _updateBooking = async (payload , payload2) =>{
+const _updateBooking = async (payload:object , payload2:object) =>{
     if(payload === undefined && payload2){ payload =payload2 } //<< function for graphqlexpress , Apollo 
     try{
         if(!payload){return null}

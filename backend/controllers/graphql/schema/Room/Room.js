@@ -1,6 +1,7 @@
 const  {  db  }  = require('../../../models/Rooms/Rooms')
 const { queryFloorByid }  = require('../Floor/Floor')
 const { queryMemberByid } =require('../Member/Member')
+const { queryBookingByid } = require('../Booking/Booking')
 const { queryMeterRoomByid } = require('../MeterRoom/MeterRoom')
 const { queryRoomPriceByid } = require('../RoomPrice/RoomPrice')
 const { queryRoomTypeByid } = require('../RoomType/RoomType')
@@ -14,6 +15,8 @@ const { queryRoomTypeByid } = require('../RoomType/RoomType')
     floor : String,
     member : String,
     members : [String],
+    bookings:[String],
+
     meterroom : String,
     roomprice : String,
     RoomType : String,
@@ -21,11 +24,19 @@ const { queryRoomTypeByid } = require('../RoomType/RoomType')
     checkin_date: String,
     checkout_date: String,
 
+
+
     version: String 
   }
+
 input MemberID{
     id: String
 }
+input BookingID{
+    id: ID!
+}
+
+
 
   type Room {
     id: String,
@@ -35,12 +46,13 @@ input MemberID{
     floor : Floor,
     member : Member,
     members : [Member],
+    bookings :[String],
     meterroom : MeterRoom,
     roomprice : Roomprice,
     RoomType : RoomType,
-
     checkin_date: String,
     checkout_date: String,
+
 
     version:String 
   }
@@ -49,6 +61,8 @@ const _Roomschema_query =`
     Rooms:[Room],
     RoomByid(id:ID!):Room,
     querymembersinRoom(id:ID!):[Member],
+    querybookingsinRoom (id:ID!):[Booking]
+
 
 `
 const _Roomschema_mutation =`
@@ -58,6 +72,8 @@ const _Roomschema_mutation =`
 
     addmemberinRoom (id:ID! , input:MemberID!): MessageUpdate,
     deletememberinRoom (id:ID! , input:MemberID!): MessageUpdate,
+    addbookingsinRoom(id:ID! , input:BookingID!): MessageUpdate,
+    deletebookingsinRoom(id:ID! , input:BookingID!): MessageUpdate,
 `
 const _Roomschema_subscription = `
     subRooms:[Room],
@@ -74,8 +90,8 @@ const _querymembersinRoom = async (payload , payload2) =>{
         let resulted = await db.findById({_id:payload.id})
         let data  = resulted._doc
         if(data.members.length > 0 ){
-            let _resulte = await Promise.all( data.members.map( async memberid => {
-                 return await queryMemberByid ( {id:memberid}) 
+            let _resulte = await Promise.all( data.bookings.map( async bookingid => {
+                 return await queryMemberByid ( {id:bookingid}) 
             } ) )
             return (_resulte)
         }
@@ -129,6 +145,79 @@ const _deletememberinRoom = async (payload , payload2) =>{
      }
 
 }
+
+const _querybookingsinRoom = async (payload , payload2 ) =>{
+    if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
+
+        try {
+        if(!payload){ return null }
+        if(!payload.id){ return null }
+        if(!payload.id.match(/^[0-9a-fA-F]{24}$/)) { return "Error Format ID"}
+
+        let resulted = await db.findById({_id:payload.id})
+        let data  = resulted._doc
+        if(data.members.length > 0 ){
+            let _resulte = await Promise.all( data.members.map( async memberid => {
+                 return await queryBookingByid ( {id:memberid}) 
+            } ) )
+            return (_resulte)
+        }
+        else{
+            return []  // << Room with Out member
+        }
+  
+    } catch (error) {
+        console.error(error)
+        return null
+    }
+}
+const _addbookingsinRoom = async (payload , payload2) =>{
+    if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
+     try {
+        if(!payload){ return null }
+        if(!payload.id){ return null }
+        if(!payload.id.match(/^[0-9a-fA-F]{24}$/)) { return "Error Format ID"}
+
+          let  resulted = await db.update({_id:payload.id  },
+          { $push: { "bookings": `${payload.input.id}` } },
+             
+          )
+  
+          if(resulted && resulted.nModified === 0 ){
+              return null // << system not found  id member modified 
+          }else{
+            return resulted
+          }
+       
+
+     }catch (error){
+         return null
+     }
+}
+ 
+const _deletebookingsinRoom =  async (payload , payload2) =>{
+    if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
+     try {
+        if(!payload){ return null }
+        if(!payload.id){ return null }
+        if(!payload.id.match(/^[0-9a-fA-F]{24}$/)) { return "Error Format ID"}
+
+          let  resulted = await db.update({_id:payload.id},
+          { $pull: { "bookings": `${payload.input.id}` } }
+          )
+  
+          if(resulted && resulted.nModified === 0 ){
+              return null // << system not found  id member modified 
+          }else{
+            return resulted
+          }
+       
+
+     }catch (error){
+         return null
+     }
+}
+
 
 
  const _queryRooms = async ( filter ) =>{
@@ -260,6 +349,13 @@ const _subRooms  = (parent, args, { user }) =>{
         setTimeout(() => pubsub.publish(channel, { subRooms: _queryRooms }), 0); // <<  update ข้อมูล มายัง id ปัจจุบัน 
         return pubsub.asyncIterator(channel);  // << return data to  s
     }
+
+
+
+/** API Booking in Room  */
+exports.addbookingsinRoom = _addbookingsinRoom
+exports.deletebookingsinRoom = _deletebookingsinRoom
+exports.querybookingsinRoom = _querybookingsinRoom
 
 
   /** API Member in Room  */
