@@ -1,0 +1,73 @@
+
+.zone1{
+    width: 100vw;
+
+    display: flex;
+    flex-wrap: wrap;
+}
+.zone1>.bigbox{
+    flex: 1 1 40%;
+    /* max-width: 45vw; */
+    margin: 2rem;
+}
+
+.zone1>.bigbox>.formtableInvoice{
+    display: flex;
+    justify-content: center;
+    flex: 1 1 100vW;
+}
+
+.zone1>.bigbox>.formtableInvoice>.card{
+    flex-basis: 80%;    
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 2rem;
+    margin: auto;
+    justify-content: center;
+}
+.zone1>.bigbox>.formtableInvoice>.card>{
+    flex-basis: 100%;
+    background-color: darkgray;
+    align-items: center;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    font-size: x-large;
+}
+
+
+.zone1>.bigbox>.formdetailsInvoice{
+    display: flex;
+    justify-content: center;
+    flex: 1 1 100vW;
+}
+
+.zone1>.bigbox>.formdetailsInvoice>.card{
+    flex-basis: 80%;    
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 2rem;
+    margin: auto;
+    justify-content: center;
+}
+
+
+
+.card>.cardheader{
+    flex-basis: 100%;
+    background-color: darkgray;
+    align-items: center;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    font-size: x-large;
+}
+.card>.cardbody{
+    flex-basis: 100%;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    font-size: medium;
+}
+.card>.cardbody>.row{
+    flex-basis: 100%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}

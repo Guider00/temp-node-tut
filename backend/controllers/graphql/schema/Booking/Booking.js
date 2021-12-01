@@ -48,7 +48,7 @@ const _Bookingschema_mutation =`
     updateBooking(id: ID!, input: BookingInput): MessageUpdate,
     deleteBooking(id: ID! ,id_room:ID! ): MessageDelete,
 `
-const _queryBookingByid = async (payload:object) =>{
+const _queryBookingByid = async (payload) =>{
         try {
         if(!payload){ return null }
         if(!payload.id){ return null }
@@ -86,7 +86,7 @@ const _queryBookings = async () =>{
         return error
     }
 }
-const _createBooking = async (payload:object , payload2:object) =>{
+const _createBooking = async (payload , payload2) =>{
          if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
 
     try {
@@ -131,7 +131,7 @@ const _createBooking = async (payload:object , payload2:object) =>{
      }
 }
 
-const _deleteBooking = async (payload:object , payload2:object) =>{
+const _deleteBooking = async (payload , payload2) =>{
 
         if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
 
@@ -146,7 +146,7 @@ const _deleteBooking = async (payload:object , payload2:object) =>{
 
 }
 
-const _updateBooking = async (payload:object , payload2:object) =>{
+const _updateBooking = async (payload , payload2) =>{
     if(payload === undefined && payload2){ payload =payload2 } //<< function for graphqlexpress , Apollo 
     try{
         if(!payload){return null}
