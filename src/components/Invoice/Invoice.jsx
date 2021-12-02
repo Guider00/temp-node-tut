@@ -175,9 +175,12 @@ export const Invoice = () => {
                                 </p>
                                 <p>
                                 <label> รายละเอียดใบเสร็จ</label>
-                                <input className={styles.text} id ="detail"  value={formsearch.detail} onChange={handleChangeformsearch}></input>
+                                <input className={styles.text}></input>
 
-                                <button className={styles.button2}>แก้ไข<EditOutlinedIcon/></button>
+                                <button className = {styles.button2} >
+                                    <i className = {styles.icon}><EditOutlinedIcon/></i>
+                                    <p className={styles.button3}>แก้ไข</p>
+                                </button>
                                 </p>
 
                                 <div className={styles.menu}>รายการใบแจ้งหนี้</div>
