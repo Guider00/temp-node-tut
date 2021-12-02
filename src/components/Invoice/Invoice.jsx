@@ -3,7 +3,7 @@ import styles from './Invoice.module.css';
 import { useEffect, useState } from 'react';
 
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import DoDisturbOutlinedIcon from '@mui/icons-material/DoDisturbOutlined';
+
 
 export const Invoice = () => {
      //** calculate function  */
@@ -87,23 +87,23 @@ export const Invoice = () => {
                             <div className={styles.cardbody}>
                                 <div className={styles.row} >
                                     <label> วันที่ </label>
-                                    <input id="startdate" type="date" value={formsearch.startdate} onChange={handleChangeformsearch}></input>
+                                    <input className ={styles.spaceonerem} id="startdate" type="date" value={formsearch.startdate} onChange={handleChangeformsearch}></input>
 
-                                    <label> ถึง </label>
-                                    <input  id="enddate" type="date"  value={formsearch.enddate} onChange={handleChangeformsearch} ></input>
-                                    <label> แสดงผล </label>
-                                    <input id="lenghthdispaly" value={formsearch.lenghthdispaly} onChange={handleChangeformsearch} ></input>
+                                    <label className ={styles.spaceonerem}> ถึง </label>
+                                    <input className ={styles.spaceonerem} id="enddate" type="date"  value={formsearch.enddate} onChange={handleChangeformsearch} ></input>
+                                    <label className ={styles.spaceonerem}> แสดงผล </label>
+                                    <input className ={styles.spaceonerem} id="lenghthdispaly" value={formsearch.lenghthdispaly} onChange={handleChangeformsearch} ></input>
                                 </div>
                                 <div>
                                     <label> รอบบิล </label>
-                                    <input  id="duedate" type="date"  value={formsearch.duedate} onChange={handleChangeformsearch} ></input>
-                                    <label> ถึง </label>
-                                    <input  id="enddate" type="date"  value={formsearch.enddate} onChange={handleChangeformsearch} ></input>
+                                    <input className ={styles.spaceonerem} id="duedate" type="date"  value={formsearch.duedate} onChange={handleChangeformsearch} ></input>
+                                    <label className ={styles.spaceonerem}> ถึง </label>
+                                    <input className ={styles.spaceonerem} id="enddate" type="date"  value={formsearch.enddate} onChange={handleChangeformsearch} ></input>
                                 </div>
-                                <div className ={styles.Building}>
-                                    <lable>อาคาร</lable>
-                                    <input id="building" value ={formsearch.building} onChange={handleChangeformsearch} ></input>
-                                </div>
+                                <p>
+                                    <lable >อาคาร</lable>
+                                    <input className ={styles.Building}  value ={formsearch.building} onChange={handleChangeformsearch} ></input>
+                                </p>
                                 <table className ={styles.table}>
 
                                     <thead className ={styles.header}>
@@ -146,9 +146,9 @@ export const Invoice = () => {
 
 
                                 </table>
-                                <div >
-                                    <button className={styles.button}>พิมพ์ใบเสร็จที่เลือก</button>
-                                    <button className={styles.button}>พิมพ์ใบกำกับภาษีที่เลือก</button>
+                                <div className={styles.button}>
+                                    <button className={styles.press} >พิมพ์ใบเสร็จที่เลือก</button>
+                                    <button className={styles.press}>พิมพ์ใบกำกับภาษีที่เลือก</button>
 
                                 </div>
                                 
@@ -165,21 +165,21 @@ export const Invoice = () => {
                             
                             <div className={styles.cardbody}>
                                 <p className={styles.row} >
-                                    <label> รอบบิล </label>
-                                    <input id="round" type="date" value={formsearch.round} onChange={handleChangeformsearch}></input>
+                                    <label > รอบบิล </label>
+                                    <input className ={styles.spaceonerem} id="round" type="date" value={formsearch.round} onChange={handleChangeformsearch}></input>
                                     
                                 </p>
                                 <p>
                                 <label> สถานะใบเสร็จ </label>
-                                <input  id="statusbill"  value={formsearch.status} onChange={handleChangeformsearch} ></input>
+                                <input className ={styles.spaceonerem} id = "statusbill"  value={formsearch.status} onChange={handleChangeformsearch} ></input>
                                 </p>
                                 <p>
-                                <label> รายละเอียดใบเสร็จ</label>
+                                <label>รายละเอียดใบเสร็จ</label>
                                 <input className={styles.text}></input>
 
                                 <button className = {styles.button2} >
                                     <i className = {styles.icon}><EditOutlinedIcon/></i>
-                                    <p className={styles.button3}>แก้ไข</p>
+                                    <div>แก้ไข</div>
                                 </button>
                                 </p>
 
@@ -219,13 +219,14 @@ export const Invoice = () => {
                                         )
                                         }                
                                     </tbody>
-                                    <div>
-                                        <button className = {styles.button}>เพิ่ม</button>
-                                        <button className = {styles.button}>ลบ</button>
-                                    </div>
+                                    
                 
 
                                 </table>
+                                <div className={styles.button}>
+                                        <button className={styles.press}>เพิ่ม</button>
+                                        <button className={styles.press}>ลบ</button>
+                                </div>
                                 <div className = {styles.result}>
                                         <p>
                                             <label>รวม : </label>
