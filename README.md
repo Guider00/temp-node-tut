@@ -34,3 +34,14 @@ Open [http://localhost:4000/graphql]()
    // }
 
 Hope you enjoy with project
+
+# TODO List
+
+* backend
+  * [ ] add optionroom type
+  * [ ] delete option roomtype
+  * [ ] เพิ่มเบอร์โทรลูกค้าในการค้นหา หน้า checkin
+  * [ ] link ข้อมูลการ จองกับการ checkin
+  * [ ] แจ้งเตือนรายการจองของวันปัจจุบัน
+  * [ ] สร้างหน้าใบเสร็จ
+  * [ ] สร้างหน้าใบแจ้งหนี้

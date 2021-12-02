@@ -67,6 +67,23 @@ const _deleteRoomType = async (payload,payload2) =>{
     }
 }
 
+const _addlistoptionroom = async (payload , payload2) =>{
+     if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
+    try{
+
+    }catch(error){
+        return null
+    }
+}
+const _deletelistoptionroom = async (payload,payload2) =>{
+     if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
+    try{
+
+    }catch(error){
+        return null
+    }
+}
+
 const _RoomTypeschema = `
 
   input RoomTypeInput {
@@ -123,6 +140,9 @@ exports.queryRoomTypeByid = _queryRoomTypeByid
 exports.updateRoomType = _updateRoomType
 exports.deleteRoomType= _deleteRoomType
 exports.createRoomType = _createRoomType
+
+exports.addlistoptionroom = _addlistoptionroom
+exports.deletelistoptionroom = _deletelistoptionroom
 
 exports.RoomTypeschema_query =_RoomTypeschema_query
 exports.RoomTypeschema_mutation = _RoomTypeschema_mutation

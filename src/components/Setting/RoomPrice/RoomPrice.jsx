@@ -85,15 +85,6 @@ inputs: [
            
         ]
     }
-
-var GB_value =  {
-}
-
-
-
-
-
-
 export const RoomPrice = () => {
     const GET_Rooms = useQuery(API_GET_Rooms);
  
@@ -214,6 +205,11 @@ export const RoomPrice = () => {
     const [_rate_water,setrate_water] = useState('');
 
     const [_totalprice_water,settotalprice_water] = useState('');
+
+
+    const [otheroptionnname, setotheroptionnname] = useState('');
+    const [otheroptionprice , setotheroptionprice] = useState('');
+
 
     const [_load,setload] = useState(false);
     const [_inital,setinitial] = useState(false);
@@ -454,7 +450,29 @@ export const RoomPrice = () => {
                     <>
                     <Input label="Select icon" type="icon"    value={_totalprice_water} onChange={(e)=>{settotalprice_water(e.target.value)}}  ></Input>
                     </>
-                <Topic label="รายการอื่นๆ"/>
+           
+                <div className={styles.topic}>
+                    <label>รายการอื่นๆ</label>
+                </div>
+                <div className={styles.row} >
+                    <div>
+                        <label>รายการ</label>
+                        <input type="text" value={otheroptionnname}  onChange={(e)=>{setotheroptionnname(e.target.value)}} ></input>
+                    </div>
+                    <div>
+                        <label>ราคา</label>
+                        <input type="text"  value={otheroptionprice}  onChange={(e)=>{setotheroptionprice(e.target.value)}} ></input>
+                    </div>
+                     
+                    
+                      <button onClick={ ()=>{
+                          console.log('otheroptionnname', otheroptionnname , otheroptionnname)
+                         
+                          // << add data to option type 
+                      } } >เพิ่ม </button>
+                </div>
+              
+           
 
                 <Table Data={default_data}>
 
