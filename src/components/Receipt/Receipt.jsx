@@ -2,7 +2,7 @@ export const Receipt = () => {
 
     return (
         <>
-            <div> Invoice  page </div>
+            <div> receipt  page </div>
         </>
     )
 }

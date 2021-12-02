@@ -146,6 +146,20 @@ export const Menubar = () => {
                     </a>
                 </div>
                 <div>
+                    <a href="/createinvoice">
+                        <button>
+                            <div>
+                                <Book />
+
+                            </div>
+                            <div>
+                                สร้างใบแจ้งหนี้
+                            </div>
+
+                        </button>
+                    </a>
+                </div>
+                <div>
                     <a href="/invoice">
                         <button>
                             <div>

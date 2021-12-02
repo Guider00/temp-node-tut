@@ -42,6 +42,8 @@ import { Contract } from './components/Contract/Contract';
 import { Receipt } from './components/Receipt/Receipt';
 import { Invoice } from './components/Invoice/Invoice';
 
+import { CreateInvoic } from './components/CreateInvoice/CreateInvoice'
+
 import { Note } from './components/Note/Note';
 
 
@@ -149,6 +151,11 @@ const _Invoice = () =>(
       <Invoice />
   </>
 )
+const _CreateInvoic =( ) =>(
+  <>
+    <CreateInvoic />
+  </>
+)
 
 
 const _Note =()=>(
@@ -204,6 +211,8 @@ function App() {
             <Route exact path="/contract" component={_Contract} />
             <Route exact path="/receipt" component={_Receipt} />
             <Route exact path="/invoice" component={_Invoice} />
+            <Route exact path="/createinvoice" component={_CreateInvoic} />
+            
            
 
             <Route exact path="/note" component={_Note} />
