@@ -1,17 +1,7 @@
 
 const  { db }  =  require( "../../../models/RoomType/RoomType");
 
-const _createRoomType = async (payload , payload2)=> {
-     if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
-    try {
-        if(!payload){ return null }
-        if(!payload.input){ return null }
-       let resulted = await  db.create(payload.input) // findOrCreate(dbroomprice, {}, data)
-       return resulted
-    } catch (error) {
-      return error
-    }
-}
+
 const _queryRoomTypes =async (filter) =>{
     try{
         let resulted =  await db.find(filter)
@@ -43,6 +33,18 @@ const _queryRoomTypeByid =async (payload , payload2) =>{
         return error
     }
 }
+const _createRoomType = async (payload , payload2)=> {
+     if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
+    try {
+        if(!payload){ return null }
+        if(!payload.input){ return null }
+       let resulted = await  db.create(payload.input) // findOrCreate(dbroomprice, {}, data)
+       return resulted
+    } catch (error) {
+      return error
+    }
+}
+
 const _updateRoomType = async (payload ,payload2) =>{
       if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
     try{
@@ -67,24 +69,66 @@ const _deleteRoomType = async (payload,payload2) =>{
     }
 }
 
-const _addlistoptionroom = async (payload , payload2) =>{
-     if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
-    try{
+const _addlistoptioninRoomType = async (payload , payload2) =>{
 
-    }catch(error){
-        return null
-    }
+    if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
+     try {
+        if(!payload){ return null }
+        if(!payload.id){ return null }
+        if(!payload.id.match(/^[0-9a-fA-F]{24}$/)) { return "Error Format ID"}
+
+          let  resulted = await db.update({_id:payload.id  },
+          { $push: { "listoptionroom": payload.input } },
+             
+          )
+  
+          if(resulted && resulted.nModified === 0 ){
+              return null // << system not found  id member modified 
+          }else{
+            return resulted
+          }
+       
+
+     }catch (error){
+         return null
+     }
 }
-const _deletelistoptionroom = async (payload,payload2) =>{
-     if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
-    try{
+const _deletelistoptioninRoomType = async (payload,payload2) =>{
+    if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
+     try {
+        if(!payload){ return null }
+        if(!payload.id){ return null }
+        if(!payload.id.match(/^[0-9a-fA-F]{24}$/)) { return "Error Format ID"}
 
-    }catch(error){
-        return null
-    }
+          let  resulted = await db.update({_id:payload.id},
+          { $pull: { "listoptionroom": {_id: payload.input.id } } }
+          )
+  
+          if(resulted && resulted.nModified === 0 ){
+              return null // << system not found  id member modified 
+          }else{
+            return resulted
+          }
+       
+
+     }catch (error){
+         return null
+     }
 }
 
 const _RoomTypeschema = `
+input OptionRoomInput{
+    id:String,
+    topic: String,
+    price: String,
+    type : String
+  }
+  type OptionRoom {
+    id : String
+    topic: String,
+    price: String,
+    type : String
+  }
 
   input RoomTypeInput {
     name:  String ,
@@ -132,6 +176,8 @@ const _RoomTypeschema_mutation = `
     createRoomType (input: RoomTypeInput):MessageCreate,
     updateRoomType(id: ID!, input: RoomTypeInput): MessageUpdate,
     deleteRoomType(id: ID!): MessageDelete,
+    deletelistoptioninRoomType(id:ID!,input: OptionRoomInput) :MessageUpdate,
+    addlistoptioninRoomType(id: ID!,input: OptionRoomInput):MessageUpdate,
 `
 
 exports.queryRoomTypes = _queryRoomTypes
@@ -141,8 +187,8 @@ exports.updateRoomType = _updateRoomType
 exports.deleteRoomType= _deleteRoomType
 exports.createRoomType = _createRoomType
 
-exports.addlistoptionroom = _addlistoptionroom
-exports.deletelistoptionroom = _deletelistoptionroom
+exports.addlistoptioninRoomType = _addlistoptioninRoomType
+exports.deletelistoptioninRoomType = _deletelistoptioninRoomType
 
 exports.RoomTypeschema_query =_RoomTypeschema_query
 exports.RoomTypeschema_mutation = _RoomTypeschema_mutation
