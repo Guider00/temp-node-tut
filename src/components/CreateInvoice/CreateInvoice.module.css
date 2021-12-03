@@ -65,10 +65,10 @@
    
 }
 
-.zone>.bigbox>.normalbox>.displaybox>.flex>.topic{
+.zone>.bigbox>.normalbox>.displaybox>.display1>.topic{
     margin-left: 1rem;
     
-    font-size: larger;
+    font-size: large;
     
 }
 
@@ -89,10 +89,15 @@
     
 }
 
-.zone>.bigbox>.topic{
-    flex-basis: 100%;
-    margin-left: 600px;
+.zone>.bigbox>.flex>.topic{
+   
+   margin-left: 480px;
 }
+.zone>.bigbox>.flex>.head{
+    font-size:x-large;
+    margin-left: 1rem;
+    
+ }
 .onerem{
     margin-left:1rem ;
 }
@@ -121,10 +126,10 @@
     
 }
 .zone>.bigbox>.normalbox>.mainbox>.table{
-    margin-top:1rem;
+    margin:0.5rem;
     border-collapse: collapse;
     font-size: 1rem;
-    width: 100% ;
+    width: 1210px ;
     height: 40px;
     text-align: center;
     
@@ -145,10 +150,13 @@
 }
 .flex{
     display: flex;
+    
 
 }
-
-
+.display1{
+    display: flex;
+    
+}
 
 .all{
     margin-top: 1.2rem;
@@ -194,14 +202,53 @@
 .day{
     margin-left: 1rem;
     margin-top: 0.5rem;
- 
+    font-size: large;
 
 
 }
 
 
 .displaytext{
-    margin: 2rem;
+    margin-top: 0.5rem;
+    
+    background-color: rgb(235, 232, 232);
+    padding: 8px 8px;
 
 
 }
+
+.zone>.bigbox>.normalbox>.displaybox>.flex>.lablebox{
+    
+   
+    padding: 10px 10px;
+    margin: 2rem;
+    text-align: left;
+
+   
+   
+    
+}
+
+.zone>.bigbox>.normalbox>.displaybox>.flex>.inputbox{
+    
+    padding: 10px 10px;
+    margin-top: 3rem;
+    margin-left: 2rem;
+    text-align: left;
+   
+    
+}
+
+.zone>.bigbox>.normalbox>.displaybox>.flex{
+    
+    display: flex;
+    background-color: rgb(185, 183, 183);
+    margin: 0.5rem;
+   
+    
+}
+.select{
+    margin-left: 1rem;
+   
+}
+
