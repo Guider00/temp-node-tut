@@ -53,11 +53,14 @@ export const Tablebooking =(props)=>{
                 </tr>
                 { props &&  props.data &&  props.data.Bookings ?
                     <> { props.data.Bookings.map( booking => 
-                    <tr>
+                    <tr style={{backgroundColor: 
+                     formatDate( new Date(Number(booking.checkin_date) ) ) ===   formatDate( new Date())||  new Date(Number(booking.checkin_date) )  <= new Date()
+                     ?"darkgray":"white"}}>
                         <td>{  booking && booking.Room && booking.Room.name ? booking.Room.name : "---" }</td>
                             <td>{ booking &&  booking.customer_name ? booking.customer_name :'---'}</td>
                             <td>{ booking && booking.customer_lastname ? booking.customer_lastname :'---'}</td>
                             <td>{ booking && booking.deposit  ?  booking.deposit :"---"}</td>
+                            
                             <td>{ formatDate( new Date(Number(booking.checkin_date) ) ) }</td>
                             <td>{ formatDate( new Date(Number(booking.checkin_date_exp)  ) )}</td>
                             <td>{booking.booking_number ? booking.booking_number:'---'}</td>

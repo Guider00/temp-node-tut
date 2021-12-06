@@ -19,6 +19,12 @@ export const API_GET_RoomType = gql`
     unit_water
     rate_water
     totalprice_water
+    listoptionroom{
+        id
+        name
+        price
+        type
+    }
     version
    }
  }
@@ -48,3 +54,19 @@ mutation updateRoomType($id:ID! , $input:RoomTypeInput){
 	}
 }
 ` 
+export const API_UPDATE_LISTOPTION_IN_ROOM = gql`
+mutation addlistoptioninRoomType($id:ID! , $input:OptionRoomInput){
+	addlistoptioninRoomType(id:$id,input:$input){
+		n
+		nModified
+	}
+}
+`
+export const API_DELETE_LISTOPTION_IN_ROOM = gql`
+mutation deletelistoptioninRoomType($id:ID! , $input:OptionRoomInput){
+	deletelistoptioninRoomType(id:$id,input:$input){
+		n
+		nModified
+	}
+}
+`

@@ -24,7 +24,8 @@ import {
 	API_GET_Booking,
 	API_ADD_Booking,
 	API_DELETE_Booking,
-	API_UPDATE_Booking
+	API_UPDATE_Booking,
+	API_DELETE_Booking_and_BookinginRoom
 } from '../../API/Schema/Booking/Booking';
 
 import {
@@ -39,28 +40,32 @@ const filter_rooms = (rooms , options_search) =>{
 		let _filter_table = []
 		if(rooms  &&  options_search){
 			_filter_table = rooms.filter(room =>{
-					if(options_search.keyword === 'ทั้งหมด'){
-						return (room.name.search(options_search.text) !== -1 ) ||
-						 (room.building.search(options_search.text) !== -1 ) || 
-						 (room.floor.search(options_search.text) !== -1 ) ||
-						 (room.RoomType.name.search(options_search.text) !== -1 ) ||
-						 (options_search.text === '')	
-						 ;
-					}else if (options_search.keyword === 'ห้อง'){
-						return (room.name.search(options_search.text) !== -1  || 
-						 (options_search.text === '')	
-						 )
-					}else if (options_search.keyword === 'อาคาร'){
-						return (room.building.search(options_search.text) !== -1 )||
-						 (options_search.text === '')	
-					}else if( options_search.keyword === 'ชั้น' ){
-						return (room.floor.search(options_search.text) !== -1 )	||
-						 (options_search.text === '')	
-					}else if( options_search.keyword === 'ประเภทห้อง'){
-						return (room.RoomType.name.search(options_search.text) !== -1 )	||
-						 (options_search.text === '')	
+					if(room){
+						if(options_search.keyword === 'ทั้งหมด'){
+							return (room.name && room.name.search(options_search.text) !== -1 ) ||
+							(room.building && room.building.search(options_search.text) !== -1 ) || 
+							(room.floor && room.floor.search(options_search.text) !== -1 ) ||
+							(room.RoomType  && room.RoomType.name && room.RoomType.name.search(options_search.text) !== -1 ) ||
+							(options_search.text === '')	
+							;
+						}else if (options_search.keyword === 'ห้อง'){
+							return (room.name.search(options_search.text) !== -1  || 
+							(options_search.text === '')	
+							)
+						}else if (options_search.keyword === 'อาคาร'){
+							return (room.building.search(options_search.text) !== -1 )||
+							(options_search.text === '')	
+						}else if( options_search.keyword === 'ชั้น' ){
+							return (room.floor.search(options_search.text) !== -1 )	||
+							(options_search.text === '')	
+						}else if( options_search.keyword === 'ประเภทห้อง'){
+							return (room.RoomType && room.RoomType.name  && room.RoomType.name.search(options_search.text) !== -1 )	||
+							(options_search.text === '')	
+						}else{
+							return false; 
+						}
 					}else{
-						return false; 
+						return false;
 					}
 				})
 		}
@@ -120,6 +125,7 @@ export const Booking = () => {
 
 	const [ createBooking, mutationcreatebook ] = useMutation(API_ADD_Booking);
 
+	const [ deleteBooking_and_BookinginRoom, mutation_deletebook_and_BookinginRoom ] = useMutation(API_DELETE_Booking_and_BookinginRoom);
 	const [ deleteBooking, mutation_deletebook ] = useMutation(API_DELETE_Booking);
 
 	const [ updateBooking, mutation_updatebook ] = useMutation(API_UPDATE_Booking);
@@ -246,14 +252,29 @@ export const Booking = () => {
 			 handleaccept ={ () =>{
 				let _alert = alert 
 				console.log('alert item ',alert)
-				let res = deleteBooking({ variables: { id: _alert.item.id  ,id_room:_alert.item.Room.id   } });
-				if(res){
-				_alert.show = false
-				booking.refetch();
-				}else{
-					_alert.message 	= 'Delet Booking Error'
+				try{
+					let res = deleteBooking_and_BookinginRoom({ variables: { id: _alert.item.id  ,id_room:_alert.item.Room.id   } });
+					if(res){
+					_alert.show = false
+					booking.refetch();
+					}else{
+						_alert.message 	= 'Delet Booking Error'
+					}
+					setalert({_alert})
+				}catch(e){
+					if(_alert.item.Room === null ){
+						let res = deleteBooking({ variables: { id: _alert.item.id  ,id_room:""   } });
+						if(res){
+							_alert.show = false
+							booking.refetch();
+						}else{
+							_alert.message 	= 'Delet Booking Error'
+						}
+							setalert({_alert})
+					}
+					console.error(e);
 				}
-				setalert({_alert})
+				
 			 }}
 			 handleclose={ ()=>{ 
 				let _alert = alert 
@@ -804,14 +825,14 @@ export const Booking = () => {
 								setselectedroom(_booking.Room.id);
 								handleChangedALLformroom(
 									{
-										name:_booking.Room.name,
-										floor:_booking.Room.floor.name,
-										building:_booking.Room.floor.building.name,
-										nameroomtype: _booking.Room.RoomType.name,
-										monthlyprice : _booking.Room.RoomType.monthlyprice,
-										dailyprice : _booking.Room.RoomType.dailyprice,
-										insurance: _booking.Room.RoomType.insurance,
-										deposit_rent: _booking.Room.RoomType.deposit_rent
+										name: _booking.Room && _booking.Room.name ? _booking.Room.name:"",
+										floor: _booking.Room && _booking.Room.floor.name  ? _booking.Room.floor.name  :"",
+										building: _booking.Room  && _booking.Room.floor.building.name ? _booking.Room.floor.building.name : "",
+										nameroomtype: _booking.Room.RoomType && _booking.Room.RoomType.name ?_booking.Room.RoomType.name : "" ,
+										monthlyprice : _booking.Room.RoomType && _booking.Room.RoomType.monthlyprice?_booking.Room.RoomType.monthlyprice : "",
+										dailyprice : _booking.Room.RoomType && _booking.Room.RoomType.dailyprice?_booking.Room.RoomType.monthlyprice : "",
+										insurance: _booking.Room.RoomType &&  _booking.Room.RoomType.insurance?_booking.Room.RoomType.insurance : "",
+										deposit_rent:  _booking.Room.RoomType && _booking.Room.RoomType.deposit_rent?_booking.Room.RoomType.deposit_rent : ""
 									}
 								);
 							}

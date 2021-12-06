@@ -119,13 +119,13 @@ const _deletelistoptioninRoomType = async (payload,payload2) =>{
 const _RoomTypeschema = `
 input OptionRoomInput{
     id:String,
-    topic: String,
+    name: String,
     price: String,
     type : String
   }
   type OptionRoom {
     id : String
-    topic: String,
+    name: String,
     price: String,
     type : String
   }

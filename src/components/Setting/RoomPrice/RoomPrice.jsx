@@ -16,7 +16,9 @@ import {
 	API_GET_RoomType,
 	API_ADD_RoomType,
 	API_DELETE_RoomType,
-	API_UPDATE_RoomType
+	API_UPDATE_RoomType,
+    API_UPDATE_LISTOPTION_IN_ROOM,
+    API_DELETE_LISTOPTION_IN_ROOM,
 } from '../../../API/Schema/setting/RoomType/RoomType';
 import {
     API_GET_Rooms,
@@ -95,6 +97,42 @@ export const RoomPrice = () => {
 	const [ deleteRoomType, mutation_deleteRoomTyp ] = useMutation(API_DELETE_RoomType);
 
 	const [ updateRoomType, mutation_updateRoomType ] = useMutation(API_UPDATE_RoomType);
+
+    
+	const [ addlistoptioninRoomType, mutation_addlistoptioninRoomType ] = useMutation(API_UPDATE_LISTOPTION_IN_ROOM);
+
+    const [ deletelistoptioninRoomType, mutation_deletelistoptioninRoomType ] = useMutation(API_DELETE_LISTOPTION_IN_ROOM);
+
+    const [ tableoption  ,settableoption ] = useState({
+        showindex:true,
+        topic:["ชื่อ","ราคา"],
+        body:[],
+         inputs: [
+            {
+                label: "name",
+                property: "name",
+                form: {
+                    displayform: "textbox",
+                    type: "text",
+                    value: ""
+                }
+            },
+            {
+                label: "price",
+                property: "price",
+                form: {
+                    displayform: "textbox",
+                    type: "text",
+                    value: ""
+                }
+            },
+           
+        ]
+
+    })
+
+
+
 
     const [_roomtype , setroomtype] = useState({
                 showindex: true,
@@ -180,6 +218,30 @@ export const RoomPrice = () => {
                             });
             return _res
     }
+    const API_addlistoption = async (idRoom:String , payload) =>{
+    let	_res = await addlistoptioninRoomType({
+                                variables: {
+                                    id: idRoom,  // << id Room
+                                    input: {
+                                        name:payload.name,
+                                        type: payload.type ? payload.type:'NONE',
+                                        price: payload.price,
+                                    }
+                                }
+                            });
+            return _res
+    }
+    const API_deletelistoption = async (idRoom:String,idOption:String) =>{
+            let	_res = await deletelistoptioninRoomType({
+                                variables: {
+                                    id: idRoom,  // << id Room
+                                    input: {
+                                        id: idOption // << id Room
+                                    }
+                                }
+                            });
+            return _res
+    }
 
     const [_id,setid] = useState("");
     const [_name,setname] = useState("");
@@ -207,6 +269,7 @@ export const RoomPrice = () => {
     const [_totalprice_water,settotalprice_water] = useState('');
 
 
+    const [modelistoption , setmodelistoption] = useState('add')
     const [otheroptionnname, setotheroptionnname] = useState('');
     const [otheroptionprice , setotheroptionprice] = useState('');
 
@@ -267,6 +330,15 @@ export const RoomPrice = () => {
         settotalprice_water(data.totalprice_water)
 
         setshowedit(true)
+
+  
+        let _tableoptin = tableoption
+        _tableoptin.body = [...data.listoptionroom]
+        settableoption( JSON.parse(JSON.stringify(_tableoptin)) )
+   
+        // settableoption(){
+
+        // }
     }
 
     const _buttons =[ 
@@ -368,9 +440,18 @@ export const RoomPrice = () => {
                     })
             }
             console.log('table',table)
+     
             let  roomtype  = _roomtype 
             roomtype.body = [...table]
-            setroomtype (roomtype)
+            if(_id){
+                console.log('update table option')
+                roomtype.body.map(room=>{
+                    if(room && room.id === _id ){
+                        onClickEditRoomPrice(_id,room.data)
+                    }
+                })
+            }
+            setroomtype ( JSON.parse( JSON.stringify(roomtype) ))
             setload(true)
             setinitial(true)
          }
@@ -412,7 +493,7 @@ export const RoomPrice = () => {
             {_showedit ?
             <div className={styles.body}>
 
-                <Topic label={"Room Price"} size={"larger"} fontWeight={"bolder"} ></Topic>
+                <Topic label={"รายละเอียด"} size={"larger"} fontWeight={"bolder"} ></Topic>
                 
                 <Input label="ชื่อ" type="text"   value={_name} onChange={(e)=>{setname(e.target.value) } } ></Input>
            
@@ -465,17 +546,58 @@ export const RoomPrice = () => {
                     </div>
                      
                     
-                      <button onClick={ ()=>{
-                          console.log('otheroptionnname', otheroptionnname , otheroptionnname)
-                         
+                      <button onClick={ async ()=>{
+                          console.log('otheroptionnname',_id, otheroptionnname , otheroptionprice)
+                          let _res
+                          try{
+                            _res = await  API_addlistoption( _id,{name: otheroptionnname ,price: otheroptionprice} )
+                            if(_res && _res.data){
+                                  setotheroptionnname("")
+                                  setotheroptionprice("")
+                                  GET_RoomType.refetch(); // << refetch
+                            }
+                          }catch(e){
+                              console.log('ADD list option Error',_res)
+                          }
+                          if(modelistoption === 'edit'){
+                              setmodelistoption('add')
+                          }
                           // << add data to option type 
-                      } } >เพิ่ม </button>
+                      } } > {modelistoption==='add'?'เพิ่ม':'แก้ไข'} </button>
+                      {modelistoption==='edit'?
+                      <button onClick={()=>{  
+                          setotheroptionnname("")
+                         setotheroptionprice("")
+                          setmodelistoption('add')
+                           } }>ยกเลิก</button>
+                      : null 
+
+                      }
                 </div>
               
            
 
-                <Table Data={default_data}>
-
+                <Table Data={tableoption}
+                 onClickEdit={ (payload)=>{
+                 
+                            setotheroptionnname("")
+                            setotheroptionprice("")
+                            setmodelistoption('edit')
+                        }}
+                onClickDelete={async(payload)=>{
+                            let _res
+                            try{
+                                 _res = await  API_deletelistoption( _id,payload )
+                                if(_res && _res.data){
+                                  GET_RoomType.refetch(); // << refetch
+                                }
+                            }catch(e){
+                                console.log('Error delete API listoption ')
+                            }
+                     
+                        }}>
+                
+                       
                 </Table> 
 
                 <EndButton buttons={_buttons}></EndButton> 

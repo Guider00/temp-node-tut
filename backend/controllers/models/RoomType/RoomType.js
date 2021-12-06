@@ -18,7 +18,7 @@ const schemaDefinition = new mongoose.Schema({
   version:{type:String},
   listoptionroom:[
       {
-          topic: {type:String},
+          name: {type:String},
           price: {type:Number},
           type: {type:String}
       }
