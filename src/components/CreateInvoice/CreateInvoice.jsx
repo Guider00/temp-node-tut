@@ -14,15 +14,16 @@ export const CreateInvoic = () =>{
     return (
         <div className = {styles.zone}>
             <div className = {styles.bigbox}>
-                <div className = {styles.topic}> รอบบิล <input></input>
+                <div className = {styles.flex}>
+                    <lable className = {styles.head}>ออกใบแจ้งหนี้</lable>
+                    <div className = {styles.topic}> รอบบิล <input></input>
+                </div>
                 </div>
                 <div className = {styles.normalbox}>
+                    
                     <div className = {styles.displaybox}>
-                        <div className = {styles.flex}>       
-                            <div className = {styles.topic}>ออกใบแจ้งหนี้</div>
-                        </div>
-                        <div className = {styles.form}>
-                            รูปแบบใบแจ้งหนี้
+                        <div className = {styles.display1}>       
+                            <div className = {styles.topic}>รูปแบบออกใบแจ้งหนี้</div>
                         </div>
                         <div className = {styles.radio2} >
                             <input type = "radio"></input>
@@ -35,25 +36,23 @@ export const CreateInvoic = () =>{
                         <div className = {styles.day}>
                             รายเดือน
                         </div>
-                        <div className = {styles.displaytext}>
-                            <lable>วันที่คิดรอบบิล</lable>
-                            <input className = {styles.onerem}></input>
-                            <p>
-                                <lable >วันที่ครบกำหนดชำระ</lable>
-                                <input className = {styles.onerem} ></input>
-                            </p>
-                            <p>
-                                <input  type ="checkbox"></input>
-                                <lable className = {styles.onerem}>กรณีไม่พักเป็นเดือน</lable>
-                            </p>
-                            <p>
-                                <lable>คิดค่าเช่า</lable>
-                                <input className = {styles.onerem}></input>
-
-                            </p>
-
+                        <div className = {styles.flex}>
+                            <div className = {styles.lablebox}>
+                                <p>วันที่คิดรอบบิล</p>
+                                <p >วันที่ครบกำหนดชำระ</p>
+                                <p >กรณีไม่พักเป็นเดือน</p>
+                                <p>คิดค่าเช่า</p>
+                            </div>
+                            <div className = {styles.inputbox}>
+                                <input></input>
+                                <p></p>
+                                <input></input>
+                                <p></p>
+                                <input type = "checkbox"></input>
+                                <p></p>
+                                <input></input>
+                            </div>
                         </div>
-                        
                         
                        
                         
@@ -75,14 +74,17 @@ export const CreateInvoic = () =>{
                         <div  className = {styles.text}>
                             <div className = {styles.flex}>
                                 
-                                <input className = {styles.radio}  type = "radio"></input>
+                                <input className = {styles.radio}  type = "checkbox"></input>
                                 <div className = {styles.all} >เลือกทั้งหมด</div>
 
                             </div>
                            
         
-                            <p>
-                                <input className = {styles.input}></input> <button className = {styles.buttonmain}>กรอง</button> <button className = {styles.buttonmain}>ทั้งหมด</button>
+                            <p className = {styles.flex}>
+                                <input  className = {styles.select}></input>
+                                
+                                <button className = {styles.buttonmain}>กรอง</button> 
+                                <button className = {styles.buttonmain}>ทั้งหมด</button>
                             </p>
 
 
