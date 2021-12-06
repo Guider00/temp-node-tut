@@ -21,7 +21,9 @@ const { Floorschema ,Floorschema_query,Floorschema_mutation, queryFloor, queryFl
 const { Memberschema,Memberschema_query,Memberschema_mutation ,queryMembers , queryMemberByid ,createMember,deleteMember,updateMember} = require('./Member/Member')
 const { Bookingschema,Bookingschema_query,Bookingschema_mutation ,queryBookings , queryBookingByid ,createBooking,deleteBooking,updateBooking} = require('./Booking/Booking')
 
-const { RoomTypeschema,RoomTypeschema_query,RoomTypeschema_mutation ,queryRoomTypes , queryRoomTypeByid ,createRoomType,deleteRoomType,updateRoomType } = require('./RoomType/RoomType')
+const { RoomTypeschema,RoomTypeschema_query,RoomTypeschema_mutation ,queryRoomTypes , queryRoomTypeByid ,createRoomType,deleteRoomType,updateRoomType,
+ addlistoptioninRoomType , deletelistoptioninRoomType
+ } = require('./RoomType/RoomType')
 const { RoomPriceschema} = require('./Roomprice/Roomprice')
 const { Portmeterschema } = require('./PortMeter/PortMeter')
 const { MeterRoomschema } = require('./MeterRoom/MeterRoom')
@@ -292,6 +294,9 @@ const resolvers = {
     createRoomType : createRoomType,
     updateRoomType : updateRoomType,
     deleteRoomType : deleteRoomType,
+
+    addlistoptioninRoomType: addlistoptioninRoomType,
+    deletelistoptioninRoomType: deletelistoptioninRoomType,
 
     createRoom : createRoom,
     updateRoom : updateRoom,

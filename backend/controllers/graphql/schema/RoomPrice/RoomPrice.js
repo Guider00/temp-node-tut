@@ -66,17 +66,7 @@ const _deleteRoomPrice = async (payload,payload2) =>{
 
 
 const _RoomPriceschema = `
-input OptionRoomInput{
-    topic: String,
-    price: Float,
-    type : String
-  }
-  type OptionRoom {
-    id : String
-    topic: String,
-    price: Float,
-    type : String
-  }
+
   input RoompriceInput {
     name:  String ,
     type: String,
