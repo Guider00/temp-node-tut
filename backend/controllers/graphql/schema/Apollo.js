@@ -35,6 +35,8 @@ Roomschema_subscription,
 subRooms
  } = require('./Room/Room')
 
+ const { Invoiceschema , Invoicesschema_query ,Invoiceschema_mutation,Invoices , addInvoice} = require('./Invoice/Invoice')
+
 
 const { Fileschema ,  UploadFile_query  ,  UploadFileschema_mutation  , UploadFile , singleUpload }  = require('./UploadFile/UploadFile') 
 
@@ -110,6 +112,7 @@ ${RoomPriceschema}
 ${RoomTypeschema}
 ${Roomschema}
 ${Fileschema}
+${Invoiceschema}
 
 type SubMQTTServerstatus{
   name:String!
@@ -176,6 +179,7 @@ type Message {
     ${Bookingschema_query}
     ${RoomTypeschema_query}
     ${Roomschema_query}
+    ${Invoicesschema_query}
  
 
     submqttserverstatus:[SubMQTTServerstatus]
@@ -195,6 +199,7 @@ type Message {
      ${RoomTypeschema_mutation}
      ${Roomschema_mutation}
      ${UploadFileschema_mutation}
+    ${Invoiceschema_mutation}
 
     postMessage(user: String!, content: String!): ID!
     signup (email:String! , password:String! ,level:String!) : Signup
@@ -225,6 +230,10 @@ type Message {
     
   }
 `;
+const Invoicequery = {
+  Invoices:Invoices
+  }
+
 const resolvers = {
   Query: {
     //   messages: () => messages,
@@ -273,6 +282,11 @@ const resolvers = {
     RoomByid : queryRoomByid,
     querymembersinRoom: querymembersinRoom,
     querybookingsinRoom: querybookingsinRoom,
+
+    ...Invoicequery
+   
+
+
   },
   Mutation: {
     createBuilding:createBuilding,
@@ -305,6 +319,9 @@ const resolvers = {
     deletememberinRoom : deletememberinRoom,
     addbookingsinRoom : addbookingsinRoom,
     deletebookingsinRoom : deletebookingsinRoom,
+
+    addInvoice: addInvoice,
+    
  
 
 
