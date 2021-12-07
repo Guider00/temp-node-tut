@@ -35,7 +35,13 @@ Roomschema_subscription,
 subRooms
  } = require('./Room/Room')
 
- const { Invoiceschema , Invoicesschema_query ,Invoiceschema_mutation,Invoices , addInvoice} = require('./Invoice/Invoice')
+const { Invoiceschema , Invoicesschema_query ,Invoiceschema_mutation,Invoices , addInvoice} = require('./Invoice/Invoice')
+const Invoicequery = {
+  Invoices:Invoices
+}
+const Invoicemutation = {
+ addInvoice: addInvoice,
+}
 
 
 const { Fileschema ,  UploadFile_query  ,  UploadFileschema_mutation  , UploadFile , singleUpload }  = require('./UploadFile/UploadFile') 
@@ -230,9 +236,7 @@ type Message {
     
   }
 `;
-const Invoicequery = {
-  Invoices:Invoices
-  }
+
 
 const resolvers = {
   Query: {
@@ -320,7 +324,8 @@ const resolvers = {
     addbookingsinRoom : addbookingsinRoom,
     deletebookingsinRoom : deletebookingsinRoom,
 
-    addInvoice: addInvoice,
+    ...Invoicemutation,
+   
     
  
 
