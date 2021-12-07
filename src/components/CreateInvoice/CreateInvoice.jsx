@@ -1,6 +1,5 @@
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
-import { style } from 'dom-helpers';
 import styles from './CreateInvoice.module.css';
 
 

@@ -4,7 +4,7 @@
 const { jsPDF }  = require('jspdf')
 const { AddTH_font }  =require('../AddFont/AddFont.js')
 
-export const export_booking_pdf1 = ( owner , customer_details ,room_booking  ) =>{
+export const export_booking_pdf2 = ( owner , customer_details ,room_booking  ) =>{
     let bookingID = "60739828"
     let bookingReference = "191" 
     let Client = "Nahatai Raganok"
@@ -269,7 +269,7 @@ export const export_booking_pdf1 = ( owner , customer_details ,room_booking  ) =
     x.document.write(iframe);
     x.document.close();
 }
-export const export_booking_pdf2 =  ( ) =>{
+export const export_booking_pdf =  ( ) =>{
     let Name = "พิทักษ์ ไพศาชมาศ"
     let Address1 = "213ข.6 หมูบ้านรมรื่น ถนนราชพฤกษ์ ข.28 แขวงตลิ่งชัน เขตตลิ่งชัน"
     let Address2 = "กรุงเทพมหานคร 10170"
@@ -453,7 +453,7 @@ export const export_booking_pdf2 =  ( ) =>{
 
 
 }
-export const export_booking_pdf =  ( ) =>{
+export const export_booking_pdf1 =  ( ) =>{
     let Name = "พิทักษ์ ไพศาชมาศ"
     let Address1 = "213ข.6 หมูบ้านรมรื่น ถนนราชพฤกษ์ ข.28 แขวงตลิ่งชัน เขตตลิ่งชัน"
     let Address2 = "กรุงเทพมหานคร 10170"
