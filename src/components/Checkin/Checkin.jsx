@@ -455,8 +455,8 @@ export const Checkin = () => {
 										<option>ชั้น</option>
 										<option>ประเภทห้อง</option>
 										<option>สถานะ</option>
-										<option>ชื่อ</option>
-										<option>เบอร์ติดต่อ</option>
+										<option>ชื่อคนจอง</option>
+										<option>เบอร์ติดต่อจอง</option>
 									</select>
 									<button onClick={async () => { 
 										
@@ -484,8 +484,8 @@ export const Checkin = () => {
 									<th> ชั้น</th>
 									<th> ประเภทห้อง</th>
 									<th> สถานะ</th>
-									<th> ชื่อ</th>
-									<th> เบอร์ติดต่อ</th>
+									<th> ชื่อคนจอง </th>
+									<th> เบอร์ติดต่อจอง </th>
 								</tr>
 								{rooms
 									.filter((room) => (room && room.status === 'จอง') || room.status === 'ห้องว่าง')
@@ -526,10 +526,17 @@ export const Checkin = () => {
 													<td>{room.floor ? room.floor : '---'}</td>
 													<td>{room.RoomType ? room.RoomType : '---'}</td>
 													<td>{room.status ? room.status : '---'}</td>
-													<td>{room && room.hasOwnProperty('members') &&  room.members.length > 0 && room.members[0] &&  room.members[0].name ?
+													
+													<td>{room && room.hasOwnProperty('bookings') &&  room.bookings.length > 0 && room.bookings[0] &&  room.bookings[0].name ?
+													 room.bookings[0].name : '---'}</td>
+													<td>{ room && room.hasOwnProperty('bookings') &&  room.bookings.length > 0 && room.bookings[0] &&  room.bookings[0].tel ?
+													room.bookings[0].tel : '---'}</td>
+
+
+													{/* <td>{room && room.hasOwnProperty('members') &&  room.members.length > 0 && room.members[0] &&  room.members[0].name ?
 													 room.members[0].name : '---'}</td>
 													<td>{ room && room.hasOwnProperty('members') &&  room.members.length > 0 && room.members[0] &&  room.members[0].tel ?
-													room.members[0].tel : '---'}</td>
+													room.members[0].tel : '---'}</td> */}
 												</tr>
 											) : null
 									)}

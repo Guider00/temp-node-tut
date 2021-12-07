@@ -35,7 +35,19 @@ input MemberID{
 input BookingID{
     id: ID!
 }
-
+type BookinginRoom{
+    id: String
+    booking_number:String
+    customer_name :String
+    customer_lastname :String
+    customer_tel :String
+    deposit :String
+    checkin_date : String
+    checkin_date_exp : String
+    note: String
+    status: String
+    receipt_number :String
+}
 
 
   type Room {
@@ -46,7 +58,7 @@ input BookingID{
     floor : Floor,
     member : Member,
     members : [Member],
-    bookings :[String],
+    bookings :[BookinginRoom],
     meterroom : MeterRoom,
     roomprice : Roomprice,
     RoomType : RoomType,
@@ -230,10 +242,13 @@ const _deletebookingsinRoom =  async (payload , payload2) =>{
             payload.members =  await Promise.all( payload.members.map( async memberid => {
                  return await queryMemberByid ( {id:memberid}) 
             } ) )
+            // payload.bookings = await Promise.all (payload.bookings.map ( async bookingid => {
+            //     return await queryBookingByid({id:bookingid})
+            // }))
             payload.meterroom = await queryMeterRoomByid ( { id: payload.meterroom})
             payload.roomprice = await queryRoomPriceByid({id:payload.roomprice})
             payload.RoomType = await queryRoomTypeByid({id:payload.RoomType})
-
+            
             return (payload)
         })
         return (
