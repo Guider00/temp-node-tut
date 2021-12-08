@@ -52,19 +52,7 @@ export const CreateInvoic = () =>{
                                 <input></input>
                             </div>
                         </div>
-                        
-                       
-                        
-                        
-                        
-                        
-                       
-                        
-
-
-                        
-                        
-                        
+                            
                     </div>
                     <div className = {styles.mainbox}>
                         <div className = {styles.topic}>
@@ -74,7 +62,7 @@ export const CreateInvoic = () =>{
                             <div className = {styles.flex}>
                                 
                                 <input className = {styles.radio}  type = "checkbox"></input>
-                                <div className = {styles.all} >เลือกทั้งหมด</div>
+                                <div className = {styles.all} >เลือกทั้งหมด </div>
 
                             </div>
                            
@@ -139,13 +127,13 @@ export const CreateInvoic = () =>{
 
                 </div>
                 <div className={styles.lastbutton}>
-                <button className = {styles.button}>
-                    <i><CreateRoundedIcon/></i>
-                    <div>ออกใบแจ้งหนี้</div>
-                </button>
-                <button className = {styles.button}>
-                    <i><CancelRoundedIcon/></i>
-                    <div>ยกเลิก</div>
+                    <button className = {styles.button}>
+                        <i><CreateRoundedIcon/></i>
+                        <div>ออกใบแจ้งหนี้</div>
+                    </button>
+                    <button className = {styles.button}>
+                        <i><CancelRoundedIcon/></i>
+                        <div>ยกเลิก</div>
                 </button>
             </div>
                 
