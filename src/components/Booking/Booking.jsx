@@ -184,6 +184,7 @@ export const Booking = () => {
 		customer_lastname: '',
 		customer_tel: '',
 		deposit: '',
+		checkin_type:'รายวัน',
 		checkin_date: '',
 		checkin_date_exp: '',
 		note: '',
@@ -408,7 +409,11 @@ export const Booking = () => {
 										<label> รูปแบบการจอง </label>
 									</div>
 									<div className={styles.input}>
-										<select>
+										<select
+										id="checkin_type"
+										value={formbooking.checkin_type}
+										onChange={handleChangedformbooking}
+										>
 											<option>รายวัน</option>
 											<option>รายเดือน</option>
 										</select>
@@ -637,6 +642,7 @@ export const Booking = () => {
 															customer_lastname: formbooking.customer_lastname,
 															customer_tel: formbooking.customer_tel,
 															deposit: formbooking.deposit,
+															checkin_type: formbooking.checkin_type,
 															checkin_date: formbooking.checkin_date,
 															checkin_date_exp: formbooking.checkin_date_exp,
 															note: formbooking.note,
@@ -655,6 +661,7 @@ export const Booking = () => {
 															customer_lastname: formbooking.customer_lastname,
 															customer_tel: formbooking.customer_tel,
 															deposit: formbooking.deposit,
+															checkin_type: formbooking.checkin_type,
 															checkin_date: formbooking.checkin_date,
 															checkin_date_exp: formbooking.checkin_date_exp,
 															note: formbooking.note,
@@ -722,6 +729,7 @@ export const Booking = () => {
 															customer_lastname: _booking.customer_lastname,
 															customer_tel: _booking.customer_tel,
 															deposit: _booking.deposit,
+															checkin_type: _booking.checkin_type,
 															checkin_date: _booking.checkin_date,
 															checkin_date_exp: _booking.checkin_date_exp,
 															note: _booking.note,
@@ -775,6 +783,7 @@ export const Booking = () => {
 															customer_lastname: _booking.customer_lastname,
 															customer_tel: _booking.customer_tel,
 															deposit: _booking.deposit,
+															checkin_type: _booking.checkin_type,
 															checkin_date: _booking.checkin_date,
 															checkin_date_exp: _booking.checkin_date_exp,
 															note: _booking.note,
@@ -810,6 +819,7 @@ export const Booking = () => {
 								customer_lastname: _booking.customer_lastname,
 								customer_tel: _booking.customer_tel,
 								deposit: _booking.deposit,
+								checkin_type: _booking.checkin_type,
 								checkin_date: formatDate(
 									new Date(_booking.checkin_date ? Number(_booking.checkin_date) : Number(0))
 								),

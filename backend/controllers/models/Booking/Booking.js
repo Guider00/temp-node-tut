@@ -8,6 +8,7 @@ const schemaDefinition = new mongoose.Schema({
   customer_lastname :{type:String},
   customer_tel :{type:String},
   deposit :{type:String},
+  checkin_type : {type:String}, 
   checkin_date : {type:Date},  // YYYY-MM-DDTHH:MM:SS
   checkin_date_exp : {type:Date},  // YYYY-MM-DDTHH:MM:SS
   note: {type:String},

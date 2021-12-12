@@ -13,6 +13,7 @@ type Booking {
   customer_lastname :String
   customer_tel :String
   deposit :String
+  checkin_type : String
   checkin_date : String
   checkin_date_exp : String
   note: String
@@ -27,6 +28,7 @@ input BookingInput {
   customer_lastname :String
   customer_tel :String
   deposit :String
+  checkin_type : String
   checkin_date : String
   checkin_date_exp : String
   note: String
@@ -48,6 +50,22 @@ const _Bookingschema_mutation =`
     updateBooking(id: ID!, input: BookingInput): MessageUpdate,
     deleteBooking(id: ID! ,id_room:ID! ): MessageDelete,
 `
+const _queryBookingByid_raw = async (payload) =>{
+        try {
+        if(!payload){ return null }
+        if(!payload.id){ return null }
+        if(!payload.id.match(/^[0-9a-fA-F]{24}$/)) { return "Error Format ID"}
+        let resulted = await db.findById({_id:payload.id})
+        if(!resulted) { return null}
+        return (
+            resulted
+        )
+    } catch (error) {
+        return error
+    }
+
+}
+
 const _queryBookingByid = async (payload) =>{
         try {
         if(!payload){ return null }
@@ -162,7 +180,7 @@ const _updateBooking = async (payload , payload2) =>{
 
 
 
-
+exports.queryBookingByid_raw = _queryBookingByid_raw
 exports.queryBookingByid = _queryBookingByid
 exports.queryBookings = _queryBookings
 exports.updateBooking  = _updateBooking

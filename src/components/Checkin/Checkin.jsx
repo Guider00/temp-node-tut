@@ -20,6 +20,9 @@ import AddIcon from '@mui/icons-material/Add';
 import SaveIcon from '@mui/icons-material/Save';
 import EditIcon from '@mui/icons-material/Edit';
 
+import { formatDate } from '../../general_functions/convert'
+import { DiffDate } from '../../general_functions/time'
+
 const filter_rooms = (rooms , options_search) =>{
 		let _filter_table = []
 		if(rooms  &&  options_search){
@@ -33,8 +36,8 @@ const filter_rooms = (rooms , options_search) =>{
 							(room.floor.search(options_search.text) !== -1 ) ||
 							(room.data.RoomType.name.search(options_search.text) !== -1 ) ||
 							(room.data  && (room.data.status.search(options_search.text) !== -1 ) )	||
-							(room.data.members.length > 0  && (room.data.members[0].name.search(options_search.text) !== -1 ) )	||
-							(room.data.members.length > 0  && (room.data.members[0].tel.search(options_search.text) !== -1 ) ) || 
+							( room.data.bookings.length > 0  && (room.data.bookings[0].customer_name.search(options_search.text) !== -1 ) )	||
+							( room.data.bookings.length > 0  && (room.data.bookings[0].customer_tel.search(options_search.text) !== -1 ) ) || 
 							(options_search.text === '')	
 							;
 						}else if (options_search.keyword === 'ห้อง'){
@@ -53,11 +56,11 @@ const filter_rooms = (rooms , options_search) =>{
 						}else if( options_search.keyword === 'สถานะ'){
 							return (room.data  && (room.data.status.search(options_search.text) !== -1 ) )	||
 							(options_search.text === '')		
-						}else if( options_search.keyword === 'ชื่อ'){
-							return (room.data.members.length > 0  && (room.data.members[0].name.search(options_search.text) !== -1 ) )	||
-							(options_search.text === '')		
-						}else if( options_search.keyword === 'เบอร์ติดต่อ'){
-							return ( room.data.members.length > 0  && (room.data.members[0].tel.search(options_search.text) !== -1 ) )	||
+						}else if( options_search.keyword === 'ชื่อคนจอง'){
+							return ( room.data.bookings.length > 0  && (room.data.bookings[0].customer_name.search(options_search.text) !== -1 ) )	||
+							(options_search.text === '')
+						}else if( options_search.keyword === 'เบอร์ติดต่อจอง'){
+							return (  room.data.bookings.length > 0  && (room.data.bookings[0].customer_tel.search(options_search.text) !== -1 ) )	||
 							(options_search.text === '')	
 						
 						}else{
@@ -150,7 +153,7 @@ export const Checkin = () => {
 
 	const [ formcheckin , setformcheckin] = useState({
 		checkinnumber:"",
-		checkintype:"",
+		checkin_type:"",
 		rental_period:"",
 		rental_deposit:"",
 		rental_period_day:"",
@@ -357,13 +360,14 @@ export const Checkin = () => {
 		}
 	}
 	const handlechangeformcheckin =(e) =>{
-			let _formcheckin = formmember
+			let _formcheckin = formcheckin
 			console.log('change',e.target.id , _formcheckin)
 		if (e.target.id && _formcheckin.hasOwnProperty(e.target.id) ) {
 			_formcheckin[e.target.id] = e.target.value;
 			setformcheckin({ ..._formcheckin });
 		}
 	}
+
 	useEffect( ()=>{
 		
 				console.log('update Rooms')
@@ -495,7 +499,28 @@ export const Checkin = () => {
 												<tr
 													onClick={() => {
 														setselectedroom(room);
-														console.log('ROOM_SELECTED',room)
+															console.log('ROOM_SELECTED',room)
+															
+
+															setformcheckin({
+																checkin_date:room && room.data  && room.data.hasOwnProperty('bookings')  && room.data.bookings.length > 0 && 
+																			room.data.bookings[0].checkin_date ? formatDate(new Date(Number(room.data.bookings[0].checkin_date)) ) :"2021-12-08" ,
+																checkin_type:room && room.data  && room.data.hasOwnProperty('bookings')  && room.data.bookings.length > 0 && 
+																			room.data.bookings[0].checkin_type ?  room.data.bookings[0].checkin_type : "",
+																rental_period:room && room.data  && room.data.hasOwnProperty('bookings')  && room.data.bookings.length > 0 && 
+																			room.data.bookings[0].checkin_date &&  room.data.bookings[0].checkin_date_exp  ?
+																			DiffDate(new Date(Number(room.data.bookings[0].checkin_date)) , new Date(Number(room.data.bookings[0].checkin_date_exp))): "",
+																rental_deposit: room && room.data  && room.data.hasOwnProperty('bookings')  && room.data.bookings.length > 0 && 
+																				room.data.bookings[0].deposit ? room.data.bookings[0].deposit :"",
+																rental_period_day: "",
+																branch:"",
+
+
+															})
+													
+													
+													
+
 														if(room && room.data && room.data.RoomType)
 														{
 															setformroomtype({
@@ -527,16 +552,11 @@ export const Checkin = () => {
 													<td>{room.RoomType ? room.RoomType : '---'}</td>
 													<td>{room.status ? room.status : '---'}</td>
 													
-													<td>{room && room.hasOwnProperty('bookings') &&  room.bookings.length > 0 && room.bookings[0] &&  room.bookings[0].name ?
-													 room.bookings[0].name : '---'}</td>
-													<td>{ room && room.hasOwnProperty('bookings') &&  room.bookings.length > 0 && room.bookings[0] &&  room.bookings[0].tel ?
-													room.bookings[0].tel : '---'}</td>
+													<td>{room && room.data && room.data.hasOwnProperty('bookings') &&  room.data.bookings.length > 0 && room.data.bookings[0] &&  room.data.bookings[0].customer_name ?
+													 room.data.bookings[0].customer_name : '---'}</td>
+													<td>{ room && room.data &&  room.data.hasOwnProperty('bookings') &&  room.data.bookings.length > 0 && room.data.bookings[0] &&  room.data.bookings[0].customer_tel ?
+													room.data.bookings[0].customer_tel : '---'}</td>
 
-
-													{/* <td>{room && room.hasOwnProperty('members') &&  room.members.length > 0 && room.members[0] &&  room.members[0].name ?
-													 room.members[0].name : '---'}</td>
-													<td>{ room && room.hasOwnProperty('members') &&  room.members.length > 0 && room.members[0] &&  room.members[0].tel ?
-													room.members[0].tel : '---'}</td> */}
 												</tr>
 											) : null
 									)}
@@ -557,7 +577,7 @@ export const Checkin = () => {
 									<label>เลขที่สัญญา</label>
 								</div>
 								<div className={styles.input}>
-									<input type="text" id="checkinnumber"  onChange={handlechangeformcheckin}/>
+									<input type="text" value={formcheckin.checkinnumber}  id="checkinnumber"  onChange={handlechangeformcheckin}/>
 								</div>
 							</div>
 							<div className={styles.row}>
@@ -565,7 +585,7 @@ export const Checkin = () => {
 									<label>วันที่ทำสัญญา</label>
 								</div>
 								<div className={styles.input}>
-									<input type="date"  id="checkindate" onChange={handlechangeformcheckin}/>
+									<input  type="date" value={formcheckin.checkin_date}   id="checkin_date" onChange={handlechangeformcheckin}/>
 								</div>
 							</div>
 							<div className={styles.row}>
@@ -573,7 +593,7 @@ export const Checkin = () => {
 									<label>ประเภทการเช่า</label>
 								</div>
 								<div className={styles.input}>
-									<select id="checkintype" onChange={handlechangeformcheckin} >
+									<select  value={formcheckin.checkin_type} id="checkin_type" onChange={handlechangeformcheckin} >
 										<option>รายวัน</option>
 										<option>รายเดือน</option>
 									</select>
@@ -584,7 +604,7 @@ export const Checkin = () => {
 									<label>ระยะเวลาเช่า</label>
 								</div>
 								<div className={styles.input}>
-									<input type="text"   id="rental_period" />
+									<input  value={formcheckin.rental_period} type="text"   id="rental_period"  onChange={handlechangeformcheckin}/>
 								</div>
 							</div>
 							<div className={styles.row}>
@@ -592,7 +612,7 @@ export const Checkin = () => {
 									<label>เงินจองห้อง</label>
 								</div>
 								<div className={styles.input}>
-									<input type="text"  id="rental_deposit"/>
+									<input value={formcheckin.rental_deposit} type="text"  id="rental_deposit" onChange={handlechangeformcheckin}/>
 								</div>
 							</div>
 							<div className={styles.row}>
@@ -600,7 +620,7 @@ export const Checkin = () => {
 									<label>จำนวนวัน</label>
 								</div>
 								<div className={styles.input}>
-									<input type="text" id="rental_period_day" />
+									<input value={formcheckin.rental_period_day}  type="text" id="rental_period_day"  onChange={handlechangeformcheckin}/>
 								</div>
 							</div>
 							<div className={styles.row}>
@@ -608,7 +628,7 @@ export const Checkin = () => {
 								    <label>สาขา</label>
                                 </div>
 								<div className={styles.input}>
-									<input type="text" id="branch"   />
+									<input  value={formcheckin.branch} type="text" id="branch"   />
 								</div>
 							</div>
 						</div>

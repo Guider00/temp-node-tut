@@ -9,6 +9,7 @@ export const API_GET_Booking = gql`
 			customer_name
 			customer_lastname
 			customer_tel
+			checkin_type 
 			checkin_date
 			checkin_date_exp
 			deposit
