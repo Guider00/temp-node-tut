@@ -19,7 +19,7 @@ const { User } = require('../../models/User/User')
 const { Buildingschema, Buildingschema_query , Buildingschema_mutation,queryBuilding, queryBuildingByid,createBuilding, deleteBuilding, updateBuilding } = require('./Building/Building')
 const { Floorschema ,Floorschema_query,Floorschema_mutation, queryFloor, queryFloorByid, createFloor, deleteFloor, updateFloor } = require('./Floor/Floor')
 const { Memberschema,Memberschema_query,Memberschema_mutation ,queryMembers , queryMemberByid ,createMember,deleteMember,updateMember} = require('./Member/Member')
-const { Bookingschema,Bookingschema_query,Bookingschema_mutation ,queryBookings , queryBookingByid ,createBooking,deleteBooking,updateBooking} = require('./Booking/Booking')
+const { Bookingschema,Bookingschema_query,Bookingschema_mutation ,queryBookings , queryBookingByid  ,createBooking,deleteBooking,updateBooking} = require('./Booking/Booking')
 
 const { RoomTypeschema,RoomTypeschema_query,RoomTypeschema_mutation ,queryRoomTypes , queryRoomTypeByid ,createRoomType,deleteRoomType,updateRoomType,
  addlistoptioninRoomType , deletelistoptioninRoomType
@@ -377,7 +377,7 @@ const resolvers = {
         return ({ token: "", error: " Username is Locked plase contact Admin " })
       }
       if (user.validPassword(password)) {
-        let token = jwt.sign({ user: user }, 'secret', { expiresIn: 60 * 60 });
+        let token = jwt.sign({ user: user }, 'secret', { expiresIn:  3 * 24 * 60 * 60 }); // unit sec
 
         return ({ token, error: null })
       } else {
@@ -393,7 +393,7 @@ const resolvers = {
         } else {
           const create_user = await User.create({ email, password, level })
           if (create_user.validPassword(password)) {
-            let token = jwt.sign({ user: create_user }, 'secret', { expiresIn: 60 * 60 });
+            let token = jwt.sign({ user: create_user }, 'secret', { expiresIn:  3 * 24 * 60 * 60 });
             return ({ token, error: null })
           } else {
             return ({ token: "", error: "  signup error " })
