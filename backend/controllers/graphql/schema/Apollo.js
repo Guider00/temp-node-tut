@@ -35,12 +35,22 @@ Roomschema_subscription,
 subRooms
  } = require('./Room/Room')
 
-const { Invoiceschema , Invoicesschema_query ,Invoiceschema_mutation,Invoices , addInvoice} = require('./Invoice/Invoice')
+
+ const{ CreateInvoiceschema,CreateInvoice_mutation ,CreateInvoicesschema_query,CreateInvoicequery,deleteCreateInvoice,addCreateInvoice,updateCreateInvoice} = require('./CreateInvoice/CreateInvoice')
+ const CreateInvoicetion = {
+  deleteCreateInvoice:deleteCreateInvoice,
+  addCreateInvoice:addCreateInvoice,
+  updateCreateInvoice:updateCreateInvoice,
+  }
+
+const { Invoiceschema , Invoicesschema_query ,Invoiceschema_mutation,Invoices , addInvoice , updateInvoice , deleteInvoice} = require('./Invoice/Invoice')
 const Invoicequery = {
   Invoices:Invoices
 }
 const Invoicemutation = {
  addInvoice: addInvoice,
+ updateInvoice:updateInvoice,
+ deleteInvoice:deleteInvoice
 }
 
 
@@ -112,6 +122,7 @@ ${Floorschema}
 ${Buildingschema}
 ${Memberschema}
 ${Bookingschema}
+${CreateInvoiceschema}
 ${Portmeterschema}
 ${MeterRoomschema}
 ${RoomPriceschema}
@@ -183,6 +194,7 @@ type Message {
     ${Floorschema_query}
     ${Memberschema_query}
     ${Bookingschema_query}
+    ${CreateInvoicesschema_query}
     ${RoomTypeschema_query}
     ${Roomschema_query}
     ${Invoicesschema_query}
@@ -202,6 +214,7 @@ type Message {
      ${Floorschema_mutation}
      ${Memberschema_mutation}
      ${Bookingschema_mutation}
+     ${CreateInvoice_mutation}
      ${RoomTypeschema_mutation}
      ${Roomschema_mutation}
      ${UploadFileschema_mutation}
@@ -279,6 +292,8 @@ const resolvers = {
     Bookings : queryBookings,
     BookingByid : queryBookingByid,
 
+    CreateInvoices :CreateInvoicequery,
+
     RoomTypes : queryRoomTypes,
     RoomTypeByid : queryRoomTypeByid,
 
@@ -287,6 +302,7 @@ const resolvers = {
     querymembersinRoom: querymembersinRoom,
     querybookingsinRoom: querybookingsinRoom,
 
+    
     ...Invoicequery
    
 
@@ -300,6 +316,7 @@ const resolvers = {
     createFloor: createFloor,
     updateFloor: updateFloor,
     deleteFloor: deleteFloor,
+
 
     createMember : createMember,
     updateMember : updateMember,
@@ -324,7 +341,9 @@ const resolvers = {
     addbookingsinRoom : addbookingsinRoom,
     deletebookingsinRoom : deletebookingsinRoom,
 
+    
     ...Invoicemutation,
+    ...CreateInvoicetion,
    
     
  
