@@ -10,6 +10,7 @@ import {
     API_DELETE_CreateInvoice,
     API_UPDATE_CreateInvoice
 } from '../../API/Schema/CreateInvoice/CreateInvoice'
+import { checkboxClasses } from '@mui/material';
 
 
 export const CreateInvoic = () =>{
@@ -25,25 +26,25 @@ export const CreateInvoic = () =>{
   
     const [createInvoices,setcreateInvoices]  = useState([])
 
-    const [createInvoice,setcreateInvoice] = useState(
-        {   
-            id: null,
-            building:"---",
-            floor:"",
-            room_type:"",
-            name_room:"",
-            type_rent:"",
-            bill_exp:"",
-            date_exp:"",
-            round_bill:"",
+    // const [createInvoice,setcreateInvoice] = useState(
+    //     {   
+    //         id: null,
+    //         building:"---",
+    //         floor:"",
+    //         room_type:"",
+    //         name_room:"",
+    //         type_rent:"",
+    //         bill_exp:"",
+    //         date_exp:"",
+    //         round_bill:"",
 
 
-        }
-    )  
+    //     }
+    // )  
     useEffect(()=>{
         
         if(CreateInvoice && CreateInvoice.data && CreateInvoice.data.CreateInvoices){
-            console.log('CreateInvoice',CreateInvoice.data.CreateInvoices[0].id)
+            // console.log('CreateInvoice',CreateInvoice.data.CreateInvoices[0].id)
             // let _createInvoice = createInvoice
             // _createInvoice.id = CreateInvoice.data.CreateInvoices[0].id
             
@@ -77,7 +78,93 @@ export const CreateInvoic = () =>{
     const createCreateInvoice = useMutation(API_ADD_CreateInvoice);
     const updateCreateInvoice = useMutation(API_UPDATE_CreateInvoice);
     const deleteCreateInvoice = useMutation(API_DELETE_CreateInvoice);
+    
 
+    
+
+    const mainPage = () =>{
+        let enablePage = document.querySelector('#D2')
+        let disablePage = document.querySelector('#D1')
+        let dataPage = document.getElementsByName('D3')
+        let dataPageLen = dataPage.length
+        console.log("dataPageLen",dataPageLen)
+        console.log("disablePage",disablePage)
+        console.log("dataPage",dataPage)
+        console.log("enablePage",enablePage)
+
+        
+        if(enablePage.checked == true ){
+            disablePage.checked = false
+            for (var x=0; x<dataPageLen; x++){
+                dataPage[x].disabled=false;
+            }
+            console.log("EnablePage")
+        }
+
+        
+
+        // var custom = dataPage
+        // custom.disabled = enablePage.checked ? false: true;
+        // if(!custom.disabled){
+        //     console.log('error')
+        // }
+
+    }
+    const supPage = () =>{
+        let enablePage = document.querySelector('#D2')
+        let disablePage = document.querySelector('#D1')
+        let dataPage = document.getElementsByName('D3')
+        let dataPageLen = dataPage.length
+        console.log("dataPageLen",dataPageLen)
+        console.log("disablePage",disablePage)
+        console.log("dataPage",dataPage)
+        console.log("enablePage",enablePage)
+
+       if(disablePage.checked == true){
+            enablePage.checked = false
+            for (var x=0; x<dataPageLen; x++){
+                dataPage[x].disabled=true;
+            }
+            console.log("DisablePage")
+
+        }
+
+
+
+
+    }
+
+    const selectAll = () =>{
+        let myCheckboxId = document.querySelector('#myCheckboxId')
+        let myCheckboxMain = document.querySelector('#select-all');
+        let myCheckboxName = document.getElementsByName('myCheckboxName');
+        let myCheckboxNameLen = myCheckboxName.length
+        
+        if(myCheckboxMain.checked == true){
+            for (var x=0; x<myCheckboxNameLen; x++){
+                myCheckboxName[x].checked=true;
+                }
+
+        }
+        
+        else{
+            for (var x=0; x<myCheckboxNameLen; x++){
+                myCheckboxName[x].checked=false;
+                }
+
+        }
+        
+        
+        
+
+        
+
+    }
+   
+    
+    
+
+  
 
     let header_table = ["","อาคาร","ชั้น","ประเภทห้อง","ชื่อห้อง","ประเภทการเช่า"]
     let sim_table = [{"":"","อาคาร":"อาคารเอ","ชั้น":"01","ประเภทห้อง":"ห้องแอร์","ชื่อห้อง":"101","ประเภทการเช่า":"รายเดือน"},{"":"","อาคาร":"อาคารเอ","ชั้น":"01","ประเภทห้อง":"ห้องแอร์","ชื่อห้อง":"101","ประเภทการเช่า":"รายเดือน"}]
@@ -102,14 +189,19 @@ export const CreateInvoic = () =>{
                         <div className = {styles.display1}>       
                             <div className = {styles.topic}>รูปแบบออกใบแจ้งหนี้</div>
                         </div>
-                        <div className = {styles.radio2} >
+                        <div className = {styles.radio} >
                             
-                            <input type = "radio"></input>
+                            
+
+                            <div className = {styles.radio1}>
+                            <input type = "radio" id = 'D1' name = 'D1' checked = 'true' onChange={supPage}></input>
                             <lable>ออกตามรอบบิล</lable>
-                            
-                            <input className = {styles.onerem} type = "radio"></input>
+                            </div>
+                            <div className = {styles.radio2}>
+                            <input type = "radio" id = 'D2' name = 'D2'  onChange={mainPage}></input>
                             <lable>กำหนดเอง</lable>
-                            
+                            </div>
+
                         </div>
                         <div className = {styles.day}>
                             รายเดือน
@@ -121,14 +213,14 @@ export const CreateInvoic = () =>{
                                 <p >กรณีไม่พักเป็นเดือน</p>
                                 <p>คิดค่าเช่า</p>
                             </div>
-                            <div className = {styles.inputbox}>
-                                <input type = "date"></input>
+                            <div className = {styles.inputbox} >
+                                <input type = "date" name = 'D3' disabled = 'disabled'></input>
                                 <p></p>
-                                <input type = "date"></input>
+                                <input type = "date" name = 'D3' disabled = 'disabled'></input>
                                 <p></p>
-                                <input type = "checkbox"></input>
+                                <input type = "checkbox" name = 'D3' disabled = 'disabled'></input>
                                 <p></p>
-                                <input type = "text"></input>
+                                <input type = "text" name = 'D3' disabled = 'disabled'></input>
                             </div>
                         </div>
                             
@@ -139,8 +231,7 @@ export const CreateInvoic = () =>{
                         </div>
                         <div  className = {styles.text}>
                             <div className = {styles.flex}>
-                                
-                                <input className = {styles.radio}  type = "checkbox"></input>
+                                <input className = {styles.checkbox}  type = "checkbox" name ="selectAll" id="select-all" onChange={selectAll} ></input>
                                 <div className = {styles.all} >เลือกทั้งหมด </div>
 
                             </div>
