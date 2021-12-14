@@ -334,6 +334,7 @@ export const RoomPrice = () => {
   
         let _tableoptin = tableoption
         _tableoptin.body = [...data.listoptionroom]
+        console.log('',data.listoptionroom)
         settableoption( JSON.parse(JSON.stringify(_tableoptin)) )
    
         // settableoption(){

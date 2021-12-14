@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import styles from './Checkin.module.css';
 import { API_queryRooms, API_queryBuildings, API_updateMeterRoomkwh, API_updateMeterRoomwater } from '../../API/index';
-
+import { Table } from "../../subcomponents/Table/Table"
 
 
 import SearchIcon from '@material-ui/icons/Search';
@@ -189,6 +189,38 @@ export const Checkin = () => {
 		inmemory_water_date:""
 
 	})
+	const [ tableoption  ,settableoption ] = useState({
+	showindex:true,
+	topic:["ชื่อ","ราคา"],
+	body:[{id: "61ad0cb37bf6e6364c8f76a4",
+name: "hello",
+price: "55.2",
+type: "NONE",
+__typename: "OptionRoom"}],
+		inputs: [
+		{
+			label: "name",
+			property: "name",
+			form: {
+				displayform: "textbox",
+				type: "text",
+				value: ""
+			}
+		},
+		{
+			label: "price",
+			property: "price",
+			form: {
+				displayform: "textbox",
+				type: "text",
+				value: ""
+			}
+		},
+		
+	]
+
+})
+	//  function in file
 	const  clearformcheckin  = () =>{
 		setformcheckin({
 				checkinnumber:"",
@@ -215,6 +247,8 @@ export const Checkin = () => {
 		inmemory_water_date:""
 		})
 	}
+
+	
 
 	const refetch_roomMember = () =>{
 		GET_Rooms.refetch() // << refect data room 
@@ -992,7 +1026,11 @@ export const Checkin = () => {
 										></input>
 									</div>
 								</div>
+								 {/* ตรางรายละเอียดห้องพัก */}
+								<div>
+										 <Table Data={tableoption} />
 
+								</div>
 								<div className={styles.rowmenu}>
 									<button 
 									disabled={ (selectedroom === null) }
