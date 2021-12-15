@@ -6,6 +6,9 @@ import { Table } from "../../subcomponents/Table/Table"
 
 
 import SearchIcon from '@material-ui/icons/Search';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+import PaidIcon from '@mui/icons-material/Paid';
+
 import  { TableRoomMember }  from './TableRoomMember/TableRoomMember'
 import {  ModalSelectMember } from './ModalSelectMember/ModalSelectMember'
 import { useQuery, useMutation } from '@apollo/client';
@@ -186,17 +189,15 @@ export const Checkin = () => {
 		rate_electrical:"",
 		inmemory_kwh_date:"",
 		rate_water:"",
-		inmemory_water_date:""
+		inmemory_water_date:"",
+		listoptionroom:[],
 
 	})
 	const [ tableoption  ,settableoption ] = useState({
 	showindex:true,
-	topic:["ชื่อ","ราคา"],
-	body:[{id: "61ad0cb37bf6e6364c8f76a4",
-name: "hello",
-price: "55.2",
-type: "NONE",
-__typename: "OptionRoom"}],
+	disablemenu:true,
+	topic:["รายการ","ราคา"],
+	body:[],
 		inputs: [
 		{
 			label: "name",
@@ -244,7 +245,8 @@ __typename: "OptionRoom"}],
 		rate_electrical:"",
 		inmemory_kwh_date:"",
 		rate_water:"",
-		inmemory_water_date:""
+		inmemory_water_date:"",
+		listoptionroom:[]
 		})
 	}
 
@@ -401,6 +403,11 @@ __typename: "OptionRoom"}],
 			setformcheckin({ ..._formcheckin });
 		}
 	}
+
+	useEffect(( )=>{
+
+		
+	},[formroomtype])
 
 	useEffect( ()=>{
 		
@@ -569,10 +576,12 @@ __typename: "OptionRoom"}],
 																	rate_electrical:room.data.RoomType.rate_electrical,
 																	inmemory_kwh_date:room.data.meterroom.inmemory_kwh_date,
 																	rate_water:room.data.RoomType.rate_water,
-																	inmemory_water_date:room.data.meterroom.inmemory_water_date
-																	
-															
+																	inmemory_water_date:room.data.meterroom.inmemory_water_date,
+																	listoptionroom: room.data.RoomType.listoptionroom
 															})
+															let _tableoption = tableoption
+															_tableoption.body = room.data.RoomType.listoptionroom
+															settableoption(_tableoption)
 														}
 															
 													}}
@@ -989,6 +998,9 @@ __typename: "OptionRoom"}],
 										value={formroomtype.rate_electrical} 
 										 onChange={()=>{}}
 										></input>
+										<button>
+											อ่านค่าจาก Meter
+										</button>
 									</div>
 								</div>
 
@@ -1013,6 +1025,9 @@ __typename: "OptionRoom"}],
 										value={formroomtype.rate_water} 
 										onChange={()=>{}}
 										></input>
+										<button>
+											อ่านค่าจาก Meter
+										</button>
 									</div>
 								</div>
 								<div className={styles.row}>
@@ -1029,7 +1044,14 @@ __typename: "OptionRoom"}],
 								 {/* ตรางรายละเอียดห้องพัก */}
 								<div>
 										 <Table Data={tableoption} />
-
+								</div>
+								<div className={styles.rowmenu} style={{float:"right"}}>
+									 {/* ออกใบแจ้งหนี้ */}
+									<button  onClick={()=>{
+										
+									}}>ชำระเงิน <PaidIcon/></button>
+									  {/* ออกใบเสร็จ */}
+									<button > ออกใบเสร็จ  <ReceiptIcon/></button>
 								</div>
 								<div className={styles.rowmenu}>
 									<button 

@@ -7,7 +7,8 @@ const schemaDefinition = new mongoose.Schema({
   customer_name :{type:String},
   customer_lastname :{type:String},
   customer_tel :{type:String},
-  deposit :{type:String},
+  payment_method :{type:String}, // วิธีการชำระเงิน 
+  deposit :{type:String},  // จำนวนเงินจอง
   checkin_type : {type:String}, 
   checkin_date : {type:Date},  // YYYY-MM-DDTHH:MM:SS
   checkin_date_exp : {type:Date},  // YYYY-MM-DDTHH:MM:SS

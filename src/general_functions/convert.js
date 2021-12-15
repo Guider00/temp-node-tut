@@ -15,3 +15,8 @@ export const  formatDate = (date) => {
         return ('')
     }
 }
+export const toHHMMSS = (date) =>{
+    let d = new Date();
+    let datetext = d.toTimeString();
+    return( datetext.split(' ')[0] ) 
+}
