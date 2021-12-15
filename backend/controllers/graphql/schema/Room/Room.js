@@ -1,7 +1,10 @@
 const  {  db  }  = require('../../../models/Rooms/Rooms')
 const { queryFloorByid }  = require('../Floor/Floor')
 const { queryMemberByid } =require('../Member/Member')
-const { queryBookingByid } = require('../Booking/Booking')
+let FuncBook = require('../Booking/Booking')
+
+
+
 const { queryMeterRoomByid } = require('../MeterRoom/MeterRoom')
 const { queryRoomPriceByid } = require('../RoomPrice/RoomPrice')
 const { queryRoomTypeByid } = require('../RoomType/RoomType')
@@ -35,7 +38,20 @@ input MemberID{
 input BookingID{
     id: ID!
 }
-
+type BookinginRoom{
+    id: String
+    booking_number:String
+    customer_name :String
+    customer_lastname :String
+    customer_tel :String
+    deposit :String
+    checkin_type : String
+    checkin_date : String
+    checkin_date_exp : String
+    note: String
+    status: String
+    receipt_number :String
+}
 
 
   type Room {
@@ -46,7 +62,7 @@ input BookingID{
     floor : Floor,
     member : Member,
     members : [Member],
-    bookings :[String],
+    bookings : [BookinginRoom],
     meterroom : MeterRoom,
     roomprice : Roomprice,
     RoomType : RoomType,
@@ -158,7 +174,8 @@ const _querybookingsinRoom = async (payload , payload2 ) =>{
         let data  = resulted._doc
         if(data.members.length > 0 ){
             let _resulte = await Promise.all( data.members.map( async memberid => {
-                 return await queryBookingByid ( {id:memberid}) 
+                 return await FuncBook.queryBookingByid ( {id:memberid}) 
+                
             } ) )
             return (_resulte)
         }
@@ -223,19 +240,25 @@ const _deletebookingsinRoom =  async (payload , payload2) =>{
  const _queryRooms = async ( filter ) =>{
     try{
         let resulted =  await db.find(filter ? filter:{})
-        let data = resulted.map(payload => payload._doc).map(async (payload) => {
+        let data =  resulted.map(payload => payload._doc).map(async (payload) => {
             payload.id = payload._id.toString()
             payload.floor =  await queryFloorByid( {id:payload.floor})
             payload.member =  await queryMemberByid ( {id:payload.member})
             payload.members =  await Promise.all( payload.members.map( async memberid => {
                  return await queryMemberByid ( {id:memberid}) 
             } ) )
+          
+
+            payload.bookings = await Promise.all (payload.bookings.map ( async bookingid => {
+                return await FuncBook.queryBookingByid_raw({id:bookingid})
+            }))
             payload.meterroom = await queryMeterRoomByid ( { id: payload.meterroom})
             payload.roomprice = await queryRoomPriceByid({id:payload.roomprice})
             payload.RoomType = await queryRoomTypeByid({id:payload.RoomType})
-
+            
             return (payload)
         })
+  
         return (
          [...data ]
         )
