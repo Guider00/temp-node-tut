@@ -1,0 +1,175 @@
+.container{
+    
+    max-width: 95%;
+    background: rgb(207, 226, 233);
+    margin: 20px auto;
+    padding: 20px;
+    
+    
+}
+
+.container>.imgbox{
+    display: grid;
+    place-items: center;
+    text-align: center;
+    min-width: 200px;
+    width: 30%;
+    height: 300px;
+    border: 2px dashed rgb(148, 147, 147);
+    border-radius: 10px;
+    margin: 1rem auto;
+    
+    
+    
+
+}
+.container>.save{
+    display: flex;
+    justify-content: center;
+   
+    
+    
+    
+}
+
+.container>.header{
+    font-size: 2rem;
+    font-style:initial;
+    
+    
+    
+
+}
+.container>.inputbox{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    
+    margin: 1rem auto;
+    width: 100%;
+    height: 300px;
+   
+    
+}
+@media only screen and (max-width:480px) {
+    .container>.inputbox{
+        
+        grid-template-columns: 1fr;
+            
+    }
+    
+}
+
+.container>.inputbox>.inputstyle{
+    margin: 0.5rem auto;
+   
+    width: 100%;
+    height: 50%;
+    
+}
+.container>.inputbox>.inputstyle>.text{
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 10px 20px;
+   
+    
+}
+
+.container>.inputbox>.inputstyle>.input{
+    margin-left: 1rem;
+    background-color: rgb(255, 255, 255);
+    height: 20px;
+    
+}
+
+.container>.imgbox>.content{
+    width: 100%;
+    height: 90%;
+    overflow: hidden;
+    
+}
+.container>.imgbox>.content>.icon{
+    margin: 0.5rem auto; 
+    
+    
+}
+.container>.imgbox>.content>.icon>.icon1{
+    background-color: black;
+    height: 10rem;
+    
+    
+}
+.container>.imgbox>.content>.icon>.icon1>.icon3{
+    width: 100%;
+    height: 100%;
+    
+    
+    
+    
+    
+    
+}
+.container>.imgbox>.content>.icon>.icon1>.icon2{
+    
+    font-size: 8rem;
+    
+}
+@media only screen and (max-width:480px) {
+    .container>.imgbox>.content>.icon>.icon1>.icon2{
+    
+        font-size: 5rem;
+        
+    }
+    
+}
+
+.container>.uploadbox{
+    margin: 1rem auto;
+   
+    width: 80%;
+    height: 50%;
+}
+.container>.uploadbox>.upload1{
+    margin: 1rem auto;
+    min-width: 140px;
+    width: 30%;
+    height: 30px;
+    font-size: 15px;
+    display: block;
+    text-transform: uppercase;
+    border:10%;
+    border-radius: 25px;
+    cursor: pointer;
+
+    }
+.container>.uploadbox>.upload{
+    margin: 1rem auto;
+    display: block;
+    font-size: 16px;
+    width: 30%;
+    min-width: 150px;
+    outline: none; 
+    box-shadow: 2px 2px 10px black; 
+    border-radius: 25px;
+    }
+ ::-webkit-file-upload-button{
+     border: none;
+     padding: 5px;
+     border-radius: 25px;
+     cursor: pointer;
+     box-shadow: 2px 2px 10px black; 
+ }
+.container>.save>.savestyle{
+    width: 5%;
+    min-width: 60px;
+    font-size: 15px;
+    border-radius: 25px;
+    cursor: pointer;
+    text-transform: uppercase;
+    box-shadow: 1px 1px 5px black; 
+    padding: 5px;
+    margin: 0.2rem auto;
+    
+        
+        
+        
+}
