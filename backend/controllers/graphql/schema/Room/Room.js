@@ -44,6 +44,7 @@ type BookinginRoom{
     customer_name :String
     customer_lastname :String
     customer_tel :String
+    payment_method :String
     deposit :String
     checkin_type : String
     checkin_date : String

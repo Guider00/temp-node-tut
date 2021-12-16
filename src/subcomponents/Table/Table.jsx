@@ -28,10 +28,15 @@ export const  Table = ({Data,onClickDelete , onClickEdit , maxWidth}) =>{
                        
                     <tbody >
                          <tr>
-                             <th>#</th>
-                        { Data.topic.map( (ele,index) => (  index >=  page_index*(width > 800? (6) : (4))     &&  index <=  (width > 800? (6) : (4))- 1 + (page_index*(width > 800? (6) : (4)))    ) ?( <th key={`tbl_${index}`} >{ele}</th> ):null) }
+                        {Data.showindex?  <th>#</th> :null}
 
+                        { Data.topic.map( (ele,index) => 
+                            (  index >=  page_index*(width > 800? (6) : (4))     &&  index <=  (width > 800? (6) : (4))- 1 + (page_index*(width > 800? (6) : (4)))    ) 
+                            ?( <th key={`tbl_${index}`} >{ele}</th> ):null) 
+                        }
 
+                         {
+                         ( Data.topic.length > (width > 800? (6) : (4)) ) ?
                          <th>
                             <div>
                             {
@@ -54,7 +59,12 @@ export const  Table = ({Data,onClickDelete , onClickEdit , maxWidth}) =>{
                             }
 
                             </div>
-                         </th>
+                         </th> : (
+                             Data.disablemenu ? null:<th></th>
+                             )
+
+                         }
+
                               {/*
                                 |   #   | name           | name2          | ....
                                 |   1   | body[property] | body[property] | ....
@@ -94,23 +104,26 @@ export const  Table = ({Data,onClickDelete , onClickEdit , maxWidth}) =>{
                             )
 
                             } 
-                             <td key={row_index}>
-                                    <div>
-                                        <button onClick={()=>{ 
-                                            onClickDelete?
-                                            onClickDelete(ele_body['id']) : console.log('delete',ele_body['id'])
-                                        }  }   ><Delete/>
-                                        </button>
+                                {
+                                    Data.disablemenu ?
+                                    ( Data.topic.length > (width > 800? (6) : (4)) ) ?  <td></td> : null 
+                                     :  // << disable menu 
+                                    <td key={row_index}>
+                                            <div>
+                                                <button onClick={()=>{ 
+                                                    onClickDelete?
+                                                    onClickDelete(ele_body['id']) : console.log('delete',ele_body['id'])
+                                                }  }   ><Delete/>
+                                                </button>
 
-                                        <button onClick={()=>{ 
-                                           
-                                            onClickEdit?
-                                            onClickEdit(ele_body['id'],ele_body['data']) : console.log('edit',ele_body['id'])
-                                        }  }     ><SettingsIcon/></button>
-                                    </div>
-                                   
-                                  
-                            </td> 
+                                                <button onClick={()=>{ 
+                                                
+                                                    onClickEdit?
+                                                    onClickEdit(ele_body['id'],ele_body['data']) : console.log('edit',ele_body['id'])
+                                                }  }     ><SettingsIcon/></button>
+                                            </div>
+                                    </td> 
+                                }
                         </tr>
                         
                         ) } 

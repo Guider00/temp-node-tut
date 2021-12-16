@@ -10,6 +10,9 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import SearchIcon from '@material-ui/icons/Search';
 import CalculateIcon from '@mui/icons-material/Calculate';
 
+import { export_invoice_pdf  , export_Receipt_pdf } from '../../general_functions/pdf/export/export_pdf';
+
+
 import { API_queryRooms, API_queryBuildings, API_updateMeterRoomkwh, API_updateMeterRoomwater } from '../../API/index';
 
 
@@ -495,10 +498,21 @@ export const Checkout = () => {
 															onClick ={ ()=>{
 															if(selectedroom){
 																setshowtableprice(true)
-																
+											
 																console.log('select-room',selectedroom)
 																let _selectedroom = selectedroom
-														
+																let option_room = []
+																if(selectedroom &&  selectedroom.data &&  selectedroom.data.RoomType &&  selectedroom.data.RoomType.listoptionroom){
+																	option_room = selectedroom.data.RoomType.listoptionroom.map(item =>{
+																		return {
+																			name:item.name,	
+																			number:Number(1),
+																			price:Number(item.price),
+																			costvat:(Number(item.price)*0.07).toFixed(2),
+																			totalprice:(Number(item.price)*1.07).toFixed(2),
+																			addvat:true 
+																		} } )
+																}
 																settableprice([...[
 																	{name:"ค่าเช่า",number:1,
 																	price:_selectedroom.data.RoomType.monthlyprice,
@@ -521,7 +535,7 @@ export const Checkout = () => {
 																	totalprice:Number(Number(_selectedroom.data.RoomType.rate_water) * (Number(formdetailroom.end_unit_water) - Number(formdetailroom.start_unit_water))*1.07).toFixed(2),
 																	addvat:true 
 																	},
-																	
+																	...option_room													
 																]])
 															}
 														}}>
@@ -588,6 +602,10 @@ export const Checkout = () => {
 														 }}
 														 > สร้างใบคืนเงินประกัน <PictureAsPdfIcon/> </button>
 														<button  disabled={(selectedroom === null)} onClick={ async ()=>{ 
+															console.log('tableprice',tableprice)
+															console.log('selectedroom',selectedroom)
+															export_invoice_pdf(selectedroom , tableprice)
+														
 														 }} > ออกใบแจ้งหนี้ <PictureAsPdfIcon/>  </button>
 													
 														<button disabled={(selectedroom === null)}  onClick={ async ()=>{ 
