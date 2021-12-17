@@ -102,7 +102,6 @@ export const Address = () => {
     // alley
     // boundary
     // province
-
     // code
     
     
@@ -128,17 +127,12 @@ export const Address = () => {
             console.log('Address' ,Address)
             
             
-            
-            
-            
         }
     },[Address]
 
   
     
    )
-
-   
 
 
 
@@ -161,7 +155,6 @@ export const Address = () => {
                                 <img className={styles.icon3} src={imageSrc}/>
                             ))}
                             </i>
-                            
                             
                             
                         </div>
