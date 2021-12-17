@@ -43,6 +43,13 @@ subRooms
   updateCreateInvoice:updateCreateInvoice,
   }
 
+  const{ Address_query,Address_mutation ,Addressschema,Addressquery,deleteAddress,addAddress,updateAddress} = require('./Address/Address')
+ const Addressmutation = {
+  deleteAddress:deleteAddress,
+  addAddress:addAddress,
+  updateAddress:updateAddress,
+  }
+
 const { Invoiceschema , Invoicesschema_query ,Invoiceschema_mutation,Invoices , addInvoice , updateInvoice , deleteInvoice} = require('./Invoice/Invoice')
 const Invoicequery = {
   Invoices:Invoices
@@ -123,6 +130,7 @@ ${Buildingschema}
 ${Memberschema}
 ${Bookingschema}
 ${CreateInvoiceschema}
+${Addressschema}
 ${Portmeterschema}
 ${MeterRoomschema}
 ${RoomPriceschema}
@@ -195,6 +203,7 @@ type Message {
     ${Memberschema_query}
     ${Bookingschema_query}
     ${CreateInvoicesschema_query}
+    ${Address_query}
     ${RoomTypeschema_query}
     ${Roomschema_query}
     ${Invoicesschema_query}
@@ -215,6 +224,7 @@ type Message {
      ${Memberschema_mutation}
      ${Bookingschema_mutation}
      ${CreateInvoice_mutation}
+     ${Address_mutation}
      ${RoomTypeschema_mutation}
      ${Roomschema_mutation}
      ${UploadFileschema_mutation}
@@ -294,6 +304,8 @@ const resolvers = {
 
     CreateInvoices :CreateInvoicequery,
 
+    Addresss:Addressquery,
+
     RoomTypes : queryRoomTypes,
     RoomTypeByid : queryRoomTypeByid,
 
@@ -344,6 +356,7 @@ const resolvers = {
     
     ...Invoicemutation,
     ...CreateInvoicetion,
+    ...Addressmutation,
    
     
  

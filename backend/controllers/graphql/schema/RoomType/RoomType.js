@@ -77,7 +77,7 @@ const _addlistoptioninRoomType = async (payload , payload2) =>{
         if(!payload.id){ return null }
         if(!payload.id.match(/^[0-9a-fA-F]{24}$/)) { return "Error Format ID"}
 
-          let  resulted = await db.update({_id:payload.id  },
+          let  resulted = await db.updateOne({_id:payload.id  },
           { $push: { "listoptionroom": payload.input } },
              
           )
@@ -100,7 +100,7 @@ const _deletelistoptioninRoomType = async (payload,payload2) =>{
         if(!payload.id){ return null }
         if(!payload.id.match(/^[0-9a-fA-F]{24}$/)) { return "Error Format ID"}
 
-          let  resulted = await db.update({_id:payload.id},
+          let  resulted = await db.updateOne({_id:payload.id},
           { $pull: { "listoptionroom": {_id: payload.input.id } } }
           )
   
