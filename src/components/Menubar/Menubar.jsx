@@ -226,7 +226,8 @@ export const Menubar = () => {
                             { label: "Meter", href: "/meterroom", icon: "settings" },
                             { label: "Portmeter", href: "/Portmeter", icon: "settings" },
                             { label: "overviewmeter", href: "/overviewmeter", icon: "settings" },
-                            { label: "MQTTOverview", href: "/MQTToverview", icon: "settings" }
+                            { label: "MQTTOverview", href: "/MQTToverview", icon: "settings" },
+                            { label: "Address" , href: "/Address",icon: "settings"}
 
                         ]} />
                     </div>

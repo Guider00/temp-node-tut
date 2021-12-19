@@ -13,6 +13,7 @@ import { MeterRoom } from './components/Setting/MeterRoom/MeterRoom';
 
 import { Portmeter } from './components/Setting/PortMeter/PortMeter';
 import { Overviewmeter } from './components/Setting/Overviewmeter/Overviewmeter';
+import { Address } from './components/Setting/Address/Address';
 
 
 
@@ -156,6 +157,11 @@ const _CreateInvoic =( ) =>(
     <CreateInvoic />
   </>
 )
+const _Address =() =>(
+  <>
+  <Address/>x
+  </>
+)
 
 
 const _Note =()=>(
@@ -203,6 +209,8 @@ function App() {
             <Route exact path="/meterroom" component={_MeterRoom} />
             <Route exact path="/portmeter" component={_Portmeter} />
             <Route exact path="/overviewmeter" component={_OverviewMeter} />
+            <Route exact path="/Address" component={_Address} />
+          
 
             <Route exact path="/booking" component={_Booking} />
             <Route exact path="/check_in" component={_Check_in} />
