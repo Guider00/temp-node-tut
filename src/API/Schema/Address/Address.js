@@ -27,7 +27,7 @@ export const API_ADD_Address = gql`
     }
 `;
 export const API_DELETE_Address = gql`
-	mutation deleteAddress($id: ID!) {
+	mutation deleteAddress($id: ID) {
 		deleteAddress(id: $id) {
 			n
 			deletedCount
@@ -37,8 +37,8 @@ export const API_DELETE_Address = gql`
 export const API_UPDATE_Address = gql`
     mutation updateAddress($id:ID! , $input:AddressInput){
 	    updateAddress(id:$id,input:$input){
-		    n
-		    nModified
+		n
+		nModified
 	}
 }
 ` ;
