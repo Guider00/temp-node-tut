@@ -19,6 +19,7 @@ import { Address } from './components/Setting/Address/Address';
 
 import { Overview } from './components/Overview/Overview'
 
+import { Checkoutinform } from './components/Checkoutinform/Checkoutinform'
 
 import { FormLogin } from './components/Login/Login'
 import { FormSignup } from './components/Signup/Signup'
@@ -78,6 +79,12 @@ const _FormSignup = () => (
 const _MeterRoom = () => (
   <>
     <MeterRoom></MeterRoom>
+  </>
+)
+
+const Checkout_inform = () =>(
+  <>
+    <Checkoutinform></Checkoutinform>
   </>
 )
 
@@ -210,6 +217,7 @@ function App() {
             <Route exact path="/portmeter" component={_Portmeter} />
             <Route exact path="/overviewmeter" component={_OverviewMeter} />
             <Route exact path="/Address" component={_Address} />
+            <Route exact path="/checkoutinform" component={Checkout_inform} />
           
 
             <Route exact path="/booking" component={_Booking} />

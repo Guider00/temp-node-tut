@@ -155,6 +155,30 @@ export const Address = () => {
 
             } catch(error){
                 console.log(error.message)
+
+                inputBox[0].value="";
+                inputBox[1].value="";
+                inputBox[2].value="";
+                inputBox[3].value="";
+                inputBox[4].value="";
+                inputBox[5].value="";
+                inputBox[6].value="";
+                inputBox[7].value="";
+                inputBox[8].value="";
+                inputBox[9].value="";
+
+                let blank= ("")
+                setpostname([blank])
+                setpostcode([blank])
+                setposttel([blank])
+                setpostno([blank])
+                setpostalley([blank])
+                setpostdistrict([blank])
+                setpostvillage([blank])
+                setpostprovince([blank])
+                setpostboundary([blank])
+                setpostroad([blank])
+                
             }        
 
         }
@@ -166,6 +190,7 @@ export const Address = () => {
 
 
     const checkData = async () =>{
+         
         if(Address && Address.data &&  Address.data.Addresss.length == 0 ){
             // console.log('No-data')
              
