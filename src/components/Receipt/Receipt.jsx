@@ -258,7 +258,7 @@ export const Receipt = () => {
                 </div>
                 <div>
                     <div className={styles.zone1}>
-                        <div className={styles.bigbox} >
+                        <div className={styles.buttonstyles} >
                             <button className = {styles.createbutton}>สร้างใบเสร็จ</button>
                             <button className = {styles.cancelbutton}>ยกเลิกใบเสร็จ</button>
                             <button className = {styles.editbutton}> แก้ไข</button>
