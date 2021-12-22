@@ -43,6 +43,15 @@ subRooms
   updateCreateInvoice:updateCreateInvoice,
   }
 
+const{Checkoutinformschema,Checkoutinform_query,Checkoutinform_mutation,Checkoutinformquery,createCheckoutinform,updateCheckoutinform,deleteCheckoutinform} = require('./Checkoutinform/Checkoutinform')
+const Checkoutinformation = {
+  createCheckoutinform:createCheckoutinform,
+  updateCheckoutinform:updateCheckoutinform,
+  deleteCheckoutinform:deleteCheckoutinform,
+
+}
+
+
   const{ Address_query,Address_mutation ,Addressschema,Addressquery,deleteAddress,addAddress,updateAddress} = require('./Address/Address')
  const Addressmutation = {
   deleteAddress:deleteAddress,
@@ -52,7 +61,7 @@ subRooms
 
 const { Invoiceschema , Invoicesschema_query ,Invoiceschema_mutation,Invoices , addInvoice , updateInvoice , deleteInvoice} = require('./Invoice/Invoice')
 const Invoicequery = {
-  Invoices:Invoices
+  Invoices:Invoices,
 }
 const Invoicemutation = {
  addInvoice: addInvoice,
@@ -130,6 +139,7 @@ ${Buildingschema}
 ${Memberschema}
 ${Bookingschema}
 ${CreateInvoiceschema}
+${Checkoutinformschema}
 ${Addressschema}
 ${Portmeterschema}
 ${MeterRoomschema}
@@ -203,6 +213,7 @@ type Message {
     ${Memberschema_query}
     ${Bookingschema_query}
     ${CreateInvoicesschema_query}
+    ${Checkoutinform_query}
     ${Address_query}
     ${RoomTypeschema_query}
     ${Roomschema_query}
@@ -224,6 +235,7 @@ type Message {
      ${Memberschema_mutation}
      ${Bookingschema_mutation}
      ${CreateInvoice_mutation}
+     ${Checkoutinform_mutation}
      ${Address_mutation}
      ${RoomTypeschema_mutation}
      ${Roomschema_mutation}
@@ -304,6 +316,8 @@ const resolvers = {
 
     CreateInvoices :CreateInvoicequery,
 
+    Checkoutinforms : Checkoutinformquery,
+
     Addresss:Addressquery,
 
     RoomTypes : queryRoomTypes,
@@ -356,6 +370,7 @@ const resolvers = {
     
     ...Invoicemutation,
     ...CreateInvoicetion,
+    ...Checkoutinformation,
     ...Addressmutation,
    
     
