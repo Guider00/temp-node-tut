@@ -16,7 +16,7 @@ import { formatDate } from '../../general_functions/convert';
 import { useQuery, useMutation } from '@apollo/client';
 import { API_queryRooms, API_queryBuildings, API_updateMeterRoomkwh, API_updateMeterRoomwater } from '../../API/index';
 
-import { export_booking_pdf  } from '../../general_functions/pdf/export/export_pdf';
+import { export_booking_pdf  , export_Receipt_pdf } from '../../general_functions/pdf/export/export_pdf';
 
 
 
@@ -156,6 +156,7 @@ export const Booking = () => {
 			customer_name: '',
 			customer_lastname: '',
 			customer_tel: '',
+			payment_method:"",
 			deposit: '',
 			checkin_date: '',
 			checkin_date_exp: '',
@@ -183,6 +184,7 @@ export const Booking = () => {
 		customer_name: '',
 		customer_lastname: '',
 		customer_tel: '',
+		payment_method:"",
 		deposit: '',
 		checkin_type:'รายวัน',
 		checkin_date: '',
@@ -476,6 +478,23 @@ export const Booking = () => {
 								</div>
 								<div>
 									<div>
+										<label> วิธีการชำระเงิน </label>
+									</div>
+									<div>
+										<select
+										id="payment_method"
+										type="text"
+										value={formbooking.payment_method}
+										onChange={handleChangedformbooking}
+										>
+											<option>เงินสด</option>
+											<option>ผ่านบัตร</option>
+											<option>โอน</option>
+										</select>
+									</div>
+								</div>
+								<div>
+									<div>
 										<label> เงินจองห้อง </label>
 									</div>
 									<div>
@@ -641,6 +660,7 @@ export const Booking = () => {
 															customer_name: formbooking.customer_name,
 															customer_lastname: formbooking.customer_lastname,
 															customer_tel: formbooking.customer_tel,
+															payment_method: formbooking.payment_method,
 															deposit: formbooking.deposit,
 															checkin_type: formbooking.checkin_type,
 															checkin_date: formbooking.checkin_date,
@@ -660,6 +680,7 @@ export const Booking = () => {
 															customer_name: formbooking.customer_name,
 															customer_lastname: formbooking.customer_lastname,
 															customer_tel: formbooking.customer_tel,
+															payment_method:formbooking.payment_method,
 															deposit: formbooking.deposit,
 															checkin_type: formbooking.checkin_type,
 															checkin_date: formbooking.checkin_date,
@@ -728,6 +749,7 @@ export const Booking = () => {
 															customer_name: _booking.customer_name,
 															customer_lastname: _booking.customer_lastname,
 															customer_tel: _booking.customer_tel,
+															payment_method : _booking.payment_method,
 															deposit: _booking.deposit,
 															checkin_type: _booking.checkin_type,
 															checkin_date: _booking.checkin_date,
@@ -782,6 +804,7 @@ export const Booking = () => {
 															customer_name: _booking.customer_name,
 															customer_lastname: _booking.customer_lastname,
 															customer_tel: _booking.customer_tel,
+															payment_method:_booking.payment_method,
 															deposit: _booking.deposit,
 															checkin_type: _booking.checkin_type,
 															checkin_date: _booking.checkin_date,
@@ -818,6 +841,7 @@ export const Booking = () => {
 								customer_name: _booking.customer_name,
 								customer_lastname: _booking.customer_lastname,
 								customer_tel: _booking.customer_tel,
+								payment_method:_booking.payment_method,
 								deposit: _booking.deposit,
 								checkin_type: _booking.checkin_type,
 								checkin_date: formatDate(
@@ -847,8 +871,12 @@ export const Booking = () => {
 								);
 							}
 						}}
+
 						handleExportformbooking ={(_booking)=>{
-							export_booking_pdf();
+							export_booking_pdf(_booking);
+						}}
+						handleExportReceipt ={(_booking)=>{
+							export_Receipt_pdf(_booking , 'booking');
 						}}
 					/>
 				</div>

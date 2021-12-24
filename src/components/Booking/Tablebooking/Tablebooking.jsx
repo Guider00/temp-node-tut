@@ -11,6 +11,7 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CancelIcon from '@mui/icons-material/Cancel';
 
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import ReceiptIcon from '@mui/icons-material/Receipt';
 
 import { formatDate } from '../../../general_functions/convert'
 import { Modalupload } from '../Modalupload/Modalupload'
@@ -95,6 +96,16 @@ export const Tablebooking =(props)=>{
                                  }
                                 }}>
                                  <AssignmentIcon/>
+                                </button>
+                                <button onClick={()=>{
+                                    if(booking.status === 'สำเร็จ' ){
+                                        props.handleExportReceipt(booking )
+                                        
+                                    }else{
+                                        alert('รอการชำระเงิน')
+                                    }
+                                }}>
+                                <ReceiptIcon/>
                                 </button>
 
                             </td>

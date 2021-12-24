@@ -51,6 +51,7 @@ export const queryRooms = () =>{
                 checkin_type
                 checkin_date
                 checkin_date_exp
+                payment_method
                 deposit
                 status
                 customer_tel
@@ -189,6 +190,7 @@ export const API_GET_Rooms = gql`
                 checkin_type
                 checkin_date_exp
                 checkin_date
+                payment_method
                 deposit
                 status
                 customer_tel
@@ -256,6 +258,12 @@ export const API_GET_Rooms = gql`
                 unit_water
                 rate_water
                 totalprice_water
+                listoptionroom{
+                    id
+                    name
+                    price
+                }
+                
             }
         }
     }
