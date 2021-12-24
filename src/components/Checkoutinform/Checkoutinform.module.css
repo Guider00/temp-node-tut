@@ -78,9 +78,20 @@
     
     
 }
-.buttonrow{
+.CheckButton{
     
-    height: 25px;
+    height: 5%;
+    width: 28%;
+    margin: 0.2rem;
+    
+    
+    
+}
+.ClearButton{
+    
+    height: 5%;
+    width: 28%;
+    margin: 0.2rem;
     
     
     
