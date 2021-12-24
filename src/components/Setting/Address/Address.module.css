@@ -1,9 +1,11 @@
 .container{
     
     max-width: 95%;
-    background: rgb(207, 226, 233);
+    background: rgb(245, 248, 248);
     margin: 20px auto;
     padding: 20px;
+    border: 1px solid black;
+    border-radius: 20px;
     
     
 }
@@ -102,6 +104,7 @@
 .container>.imgbox>.content>.icon{
     margin: 0.5rem auto; 
     height: 100%;
+    
     
     
 }

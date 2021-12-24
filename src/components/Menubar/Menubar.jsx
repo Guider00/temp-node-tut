@@ -132,6 +132,18 @@ export const Menubar = () => {
                     </a>
                 </div>
                 <div>
+                    <a href='/checkoutinform'>
+                        <button>
+                            <div>
+                                <Book />
+                            </div>
+                            <div>
+                                แจ้งย้ายออก
+                            </div>
+                        </button>
+                    </a>
+                </div>
+                <div>
                     <a href="/receipt">
                         <button>
                             <div>
