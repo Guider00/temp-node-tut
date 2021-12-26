@@ -1,44 +1,52 @@
 
 
 .container{
-    max-width: 100%;
-    width: 1840px;
-    max-height: 100% ;
-    height: 810px;
     
-    margin: 2rem;
+    width: 95%;
+    height: 100% ;
+    margin: 2rem auto;
+    
 }
 
 
 
 .container>.display{
    display: flex;
+   justify-content: center;
    flex-wrap: wrap;
+   
+  
 }
 
 .container>.display>.zone1>.box1{
     
-    margin: 1rem;
-    max-width: 100%;
-    width: 700px;
-    max-height: 100%;
+    margin: 1rem auto;
+    min-width: 670px;
+    width: 95%;
     height: 680px;
     border: 1px solid black;
+    border-radius: 15px;
+    
     
 
 
 
+    
+}
+@media only screen and (max-width:480px) {
+    
     
 }
 .container>.display>.zone2>.box2{
     
     
     margin: 1rem;
-    max-width: 100%;
-    max-height: 100%;
+    width: 100%;
+    
+    
     height: 680px;
-    width: 1050px;
     border: 1px solid black;
+    border-radius: 15px;
     
 
 
@@ -46,59 +54,65 @@
     
 }
 .container>.buttonzone>.box3{
+
+    text-align: right;
     
-    margin-left: 1rem;
-    max-width : 50% ;
-    width: 700px;
+    width: 50%;
     max-height : 50% ;
-    height: 80px;
-    
-}
-.container>.buttonzone>.box3>.button1{
     margin: 1rem;
-    
-    
-}
-.container>.buttonzone>.box3>.button2{
-    margin-left: 270px;
-    
-    
-}
-.container>.buttonzone>.box3>.button3{
-    margin-left:1rem;
-    
     
     
 }
 .container>.buttonzone>.box4{
-    
-    margin-left: 2rem;
-    max-width : 100% ;
-    width: 1050px;
+   
+    width: 50%;
     max-height : 50% ;
-    height: 80px;
+    margin: 1rem ;
     text-align: right;
     
+    
+    
 }
+.container>.buttonzone>.box3>.button1{
+    margin: 0.5rem;
+    
+    
+    
+}
+.container>.buttonzone>.box3>.button2{
+    margin: 0.5rem ;
+    
+}
+.container>.buttonzone>.box3>.button3{
+    margin: 0.5rem ;
+    
+    
+    
+    
+}
+
 .container>.buttonzone{
+   
     display: flex;
+    justify-content: center;
+    margin:1rem auto;
+    width: 100%;
+    
     
 }
 
 .container>.buttonzone>.box4>.button1{
-    margin: 1rem;
     
+    margin: 0.5rem;
     
 }
 .container>.buttonzone>.box4>.button2{
-    margin-left: 1px;
     
+    margin: 0.5rem;
     
 }
 .container>.buttonzone>.box4>.button3{
-    margin-left:1rem;
-    margin-right: 1rem;
-    
+    margin-right: 8rem;
     
     
     
@@ -114,17 +128,27 @@
 
 
 .container>.display>.zone1>.box1>.date{
-    padding: 1rem;
+    margin: 1rem auto;
+    width: 100%;
+  
     
     
 
 
     
 }
+.container>.display>.zone1>.box1>.date>.part1{
+    
+    
+    
+    
+
+    
+}
 .container>.display>.zone1>.box1>.date>.part1>.side1{
-    width: 150px;
-    margin-right: 1rem;
-    margin-left: 1rem;
+    
+    width: 20%;
+    margin: 1rem;
     
     
     
@@ -132,16 +156,16 @@
     
 }
 .container>.display>.zone1>.box1>.date>.part1>.side2{
-    width: 150px;
-    margin-right: 1rem;
-    margin-left: 1rem;
+   
+    width: 20%;
+    margin: 1rem;
     
 }
 
 .container>.display>.zone1>.box1>.date>.part1>.side3{
-    width: 60px;
-    margin-right: 1rem;
-    margin-left: 1rem;
+    
+    width: 20%;
+    margin: 1rem;
     
     
     
@@ -150,7 +174,8 @@
 }
 
 .container>.display>.zone1>.box1>.date>.part2{
-   margin-top: 0.5rem;
+   
+   
     
     
     
@@ -158,7 +183,8 @@
     
 }
 .container>.display>.zone1>.box1>.date>.part3{
-    margin-top: 0.5rem;
+    
+    
      
      
      
@@ -173,9 +199,9 @@
 }
 
 .container>.display>.zone1>.box1>.date>.part2>.side1{
-    width: 150px;
-    margin-right: 1rem;
-    margin-left: 0.4rem;
+    
+    width: 20%;
+    margin: 1rem;
     
     
     
@@ -183,20 +209,9 @@
     
 }
 .container>.display>.zone1>.box1>.date>.part2>.side2{
-    width: 150px;
-    margin-right: 1rem;
-    margin-left: 1rem;
     
-    
-    
-
-    
-}
-
-.container>.display>.zone1>.box1>.date>.part2>.side3{
-    width: 60px;
-    margin-right: 1rem;
-    margin-left: 1rem;
+    width: 20%;
+    margin: 1rem;
     
     
     
@@ -205,26 +220,10 @@
 }
 
 
-.card>.cardbody>.table>.header{
-    margin-top:5rem;
-    border-collapse: collapse;
-    font-size: 1rem;
-    width: 100% ;
-    height: 40px;
-    text-align: center;
-    background-color:rgb(185, 183, 183);
-}
-.card>.cardbody>.table>.body{
-    border-collapse: collapse;
-    font-size: 0.8rem;
-    width: 100%;
-    height: 40px;
-    text-align: center;
-    overflow:hidden;
-}
 .container>.display>.zone1>.box1>.date>.part3>.side2{
-    width: 150px;
-    margin-right: 1rem;
+    
+    width: 20%;
+    margin: 1rem;
     
     
     
@@ -238,18 +237,24 @@
 }
 
 .container>.display>.zone1>.box1>.main>.research{
-    margin-left: 1rem;
+
+    width: 100%;
+   
     
        
 }
 .container>.display>.zone1>.box1>.main>.research>.input1{
-    width: 520px;
+    width: 60%;
+    margin: 1rem;
+    
     
        
 }
 .container>.display>.zone1>.box1>.main>.research>.input2{
     margin-left: 1rem;
     padding: 5px 10px;
+   
+    
     
        
 }
@@ -261,85 +266,88 @@
 }
 .container>.display>.zone1>.box1>.table{
     margin: 1rem auto;
-    min-width: 95%;
+    width: 95%;
     border-collapse: collapse;
     
        
 }
 .container>.display>.zone2>.box2>.table{
-    margin: 1rem;
-    width: 1010px;
+    margin: 1rem auto;
+    width: 95%;
     border-collapse: collapse;
     
        
 }
 
 .container>.display>.zone1>.box1>.table>.header{
-    margin: 1rem;
-    width: 660px;
     background-color: rgb(168, 168, 170);
     text-align: center;
+    
     
        
 }
 .container>.display>.zone2>.box2>.table>.header{
-    margin: 1rem;
-    width: 660px;
+    
     background-color: rgb(168, 168, 170);
     text-align: center;
     
        
 }
 .container>.display>.zone1>.box1>.table>.body{
-    margin: 1rem;
+    
     text-align: center;
     font-size: small;
        
 }
 .container>.display>.zone2>.box2>.table>.body{
-    margin: 1rem;
+    
     text-align: center;
     font-size: small;
        
 }
 .container>.display>.zone2>.box2>.topic1{
-    margin-top: 0.5rem;
-    margin-left: 1rem;
+    margin: 1rem;
     font-size: medium;
+    
         
 }
 .container>.display>.zone2>.box2>.display>.topic2{
 
-    
+   
     border: 1px solid black ;
-    margin-top: 1rem;
-    margin-left: 7rem;
+    border-radius: 15px;
+    margin: 0.5rem ;
+    text-align: center;
+    
     width: 400px;
     height: 120px;
 }
 .container>.display>.zone2>.box2>.display>.topic3{
+    margin: 0.5rem ;
     
     border: 1px solid black ;
-    margin-top: 1rem;
-    margin-left: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    
     width: 350px;
     height: 120px;
 }
 .container>.display>.zone2>.box2>.display{
     
     display: flex;
+    justify-content: center;
     
 }
 .container>.display>.zone2>.box2>.display>.topic2>.text1{
-    
+  
     margin-top: 1rem;
-    margin-left: 7rem;
+    margin-left: 5rem;
    
 }
 .container>.display>.zone2>.box2>.display>.topic2>.text2{
     
     margin-top: 1rem;
-    margin-left: 6rem;
+    margin-left: 5rem;
    
 }
 .container>.display>.zone2>.box2>.display>.topic2>.input{
@@ -351,15 +359,15 @@
 }
 .container>.display>.zone2>.box2>.display>.topic2>.input>.input1{
     
- 
-   width: 140px;
+    
+   width: 38%;
    
    
 }
 .container>.display>.zone2>.box2>.display>.topic2>.input>.input2{
     margin-left: 1rem;
     
-    width: 140px;
+    width: 38%;
     
     
  }
@@ -367,7 +375,7 @@
  .container>.display>.zone2>.box2>.display>.topic2>.input>.input3{
     
     margin-left: 1.2rem;
-    width: 140px;
+    width: 38%;
     
     
  }
@@ -380,26 +388,27 @@
  .container>.display>.zone2>.box2>.display>.topic3>.text1{
     
     margin-top: 1rem;
-    margin-left: 5rem;
+    margin: 3rem;
+    
    
 }
 .container>.display>.zone2>.box2>.display>.topic3>.text2{
     
     margin-top: 1rem;
-    margin-left: 6rem;
+    margin: 2rem;
    
 }
 .container>.display>.zone2>.box2>.display>.topic3>.input>.input1{
     
- 
-    width: 140px;
+    
+    width: 45%;
     
     
  }
  .container>.display>.zone2>.box2>.display>.topic3>.input>.input2{
      margin-left: 1rem;
      
-     width: 140px;
+     width: 42%;
      
      
   }
@@ -412,12 +421,12 @@
 }
 .container>.display>.zone2>.box2>.topic4{
 
+    text-align: center;
     
+    margin: 1rem auto;
+    width: 100%;
+    height: 10%;
     
-    margin-top: 1rem;
-    margin-left: 7rem;
-    width: 600px;
-    height: 80px;
 }
 .container>.display>.zone2>.box2>.topic4>.text1{
     
@@ -441,56 +450,60 @@
 .container>.display>.zone2>.box2>.topic4>.input>.input1{
     
     margin-left: 1rem;
-    width: 140px;
+    width: 15%;
     
     
  }
  .container>.display>.zone2>.box2>.topic4>.input>.input2{
     
     margin-left: 1rem;
-    width: 140px;
+    width: 15%;
     
     
  }
  .container>.display>.zone2>.box2>.topic4>.input>.input3{
     
     margin-left: 1rem;
-    width: 140px;
+    width: 15%;
     
     
  }
  .container>.display>.zone2>.box2>.topic4>.input>.text4{
     
     margin-left: 1rem;
-    width: 140px;
+    width: 15%;
     
     
  }
  .container>.display>.zone2>.box2>.button>.button1{
     
-   margin-left: 1rem;
-   height: 40px;
+    width: 5%;
+    margin: 1rem;
+    height: 40px;
     
        
 }
 .container>.display>.zone2>.box2>.button>.button2{
-    margin-left: 1rem;
+    
     height: 40px;
+    width: 5%;
+    margin: 1rem;
+    margin-right: 30%;
     
     
     
        
 }
 .container>.display>.zone2>.box2>.button>.lastresult{
-    margin-left: 400px;
-    width: 520px;
-    height: 100px;
+    
+    
    
     text-align: right;
 }
 .container>.display>.zone2>.box2>.button{
-    
+    justify-content: right;
     display: flex;
+   
 }
 .head{
    margin-top: 0.5rem;

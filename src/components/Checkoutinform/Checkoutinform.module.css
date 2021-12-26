@@ -1,0 +1,95 @@
+.container{
+    max-width: 95%;
+    background-color: rgb(255, 255, 255);
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid black;
+    border-radius: 20px;
+}
+
+.container>.mainbox>.buttonstyles{
+    text-align: right;
+    padding: 10px 10px;
+    min-width: 500px;
+
+    
+}
+.container>.mainbox>.buttonstyles>.buttonsave{
+  width:50px; 
+  margin: 1rem;
+}
+.container>.mainbox>.buttonstyles>.buttoncancel{
+    width:50px;
+    margin: 1rem;
+}
+
+
+.container>.mainbox>.headerstyles{
+    padding: 10px 10px;
+    min-width: 200px;
+
+   
+}
+.container>.mainbox>.headerstyles>.header{
+    font-size: 1.6rem;
+    
+}
+.container>.mainbox>.headerstyles>.subheader{
+    padding: 10px 10px;
+    min-width: 500px;
+    display: flex;
+    
+    
+}
+
+.container>.mainbox>.headerstyles>.subheader>.selectstyles{
+    height: 25px;
+    width: 50%;
+    margin: 2rem;
+    
+    
+}
+.container>.mainbox>.headerstyles>.subheader>.filterstyles{
+    height: 25px;
+    margin: 2rem;
+    width: 10%;
+    
+    
+}
+.container>.mainbox>.headerstyles>.subheader>.selectallstyles{
+    height: 25px;
+    margin: 2rem;
+    width: 10%;
+    
+}
+.container>.mainbox>.table{
+    
+    max-width: 100%;
+    padding: 10px 10px;
+    height: 500px;
+    
+    
+    
+}
+.container>.mainbox>.table>.tablestyles{
+    border-collapse: collapse;
+    width: 100%;
+    
+    height: 10%;
+    
+    min-width: 500px;
+    
+    
+}
+.container>.mainbox>.table>.tablestyles>.header{
+    font-size: 1rem;
+    background-color: darkgray;
+    
+    
+}
+.container>.mainbox>.table>.tablestyles>.body{
+    font-size: 0.8rem;
+    height: 10px;
+    
+    
+}
