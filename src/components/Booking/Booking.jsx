@@ -478,6 +478,23 @@ export const Booking = () => {
 								</div>
 								<div>
 									<div>
+										<label> ที่อยู่ตามบัตรประชาชน </label>
+									</div>
+									<div>
+										<input
+											id="customer_address"
+											type="text"
+											value={formbooking.customer_tel}
+											onChange={handleChangedformbooking}
+										/>
+									</div>
+								</div>
+
+
+								
+
+								<div>
+									<div>
 										<label> วิธีการชำระเงิน </label>
 									</div>
 									<div>

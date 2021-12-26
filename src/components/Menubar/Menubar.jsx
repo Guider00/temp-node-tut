@@ -5,11 +5,11 @@ import ListAlt from '@material-ui/icons/ListAlt';
 import Book from '@material-ui/icons/Book'
 import Folder from '@material-ui/icons/Folder'
 
-
+import { Notifications }  from './Notifications/Notifications'
 import { Submenudropdown } from './Submenudropdown/Submenudropdown'
 
 import { useSubscription, gql } from '@apollo/client';
-
+import { useEffect, useState } from "react"
 const GET_MESSAGES = gql`
   subscription {
     subdatabasestatus
@@ -20,6 +20,15 @@ const API_SUBROOMS = gql`
     subscription {
         subRooms{
             status
+        }
+    }
+`
+const API_SUBALERT = gql`
+    subscription{
+       subAlerts{
+ 		    id
+            customer_name
+            customer_tel
         }
     }
 `
@@ -52,6 +61,14 @@ export const Menubar = () => {
     const { subdatabasestatus } = (data !== undefined) ? data : { subdatabasestatus: null }
     const api_subrooms = useSubscription(API_SUBROOMS);
 
+    const api_subalert = useSubscription(API_SUBALERT);
+    const [numberalart , setnumberalart ] = useState(0);
+    console.log('api_subalert',api_subalert)
+    useEffect(()=>{
+        if(api_subalert && api_subalert.data && api_subalert.data.subAlerts ){
+            setnumberalart(api_subalert.data.subAlerts.length)
+        }
+    },[api_subalert])
     return (
         <>
             <div className={styles.menu}>
@@ -244,9 +261,9 @@ export const Menubar = () => {
                         ]} />
                     </div>
                 </div>
-
+              
                 <div className={styles.menu_right}>
-
+                    <Notifications number={numberalart}/>
                     {api_subrooms && api_subrooms.data && api_subrooms.data.subRooms ? 
                       <div className={styles.optionright} >
                         <div className={styles.cornflowerblue} > {   api_subrooms.data.subRooms.filter(room=> room.status === 'จอง').length} </div>
