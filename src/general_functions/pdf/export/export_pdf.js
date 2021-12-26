@@ -503,14 +503,14 @@ export const export_Receipt_pdf =  ( booking , type  ) =>{
     let Taxid = "0105536011803"
     let Phone = "026937005"
     let Email = "sales@primusthai.com" 
-
+    console.log('export_Receipt_pdf',booking)
     let Name = booking.customer_name  ?  `${booking.customer_name} ${booking.customer_lastname}`  : Noanswer 
     let Address1 = "-----------------" /// ที่อยู่ ผู้รับใบเสร็จ 
     let Address2 = "-----------------"
     let No = booking.id ? booking.id : Noanswer
     let _Date =  formatDate(new Date())
-    let HoneNo = booking.Room ? booking.Room.name :Noanswer
-    let Room = "........."
+    let HoneNo = booking.Room &&  booking.Room.floor && booking.Room.floor.building && booking.Room.floor.building.name ? booking.Room.floor.building.name :Noanswer
+    let Room = booking.Room ? booking.Room.name :Noanswer
    
 
     

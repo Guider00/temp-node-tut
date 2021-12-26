@@ -398,6 +398,7 @@ exports.queryRooms = _queryRooms
 exports.updateRoom  = _updateRoom
 exports.deleteRoom  = _deleteRoom
 exports.createRoom = _createRoom
+/** API SubScript */
 exports.subRooms = _subRooms
 
 /** API  Schema  */

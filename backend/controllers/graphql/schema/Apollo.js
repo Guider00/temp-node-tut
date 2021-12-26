@@ -35,6 +35,8 @@ Roomschema_subscription,
 subRooms
  } = require('./Room/Room')
 
+const { subAlerts , Alertschema_subscription , Alertschema } = require('./Alert/Alert')
+
 
  const{ CreateInvoiceschema,CreateInvoice_mutation ,CreateInvoicesschema_query,CreateInvoicequery,deleteCreateInvoice,addCreateInvoice,updateCreateInvoice} = require('./CreateInvoice/CreateInvoice')
  const CreateInvoicetion = {
@@ -138,6 +140,7 @@ ${RoomTypeschema}
 ${Roomschema}
 ${Fileschema}
 ${Invoiceschema}
+${Alertschema}
 
 type SubMQTTServerstatus{
   name:String!
@@ -249,6 +252,7 @@ type Message {
 
   type Subscription {
        ${Roomschema_subscription}
+       ${Alertschema_subscription}
     messages: [Message!]
     submqttserverstatus:[SubMQTTServerstatus!]
     mqtthistory_packets:[MQTTHistory_packets!]
@@ -489,6 +493,9 @@ const resolvers = {
       //   return pubsub.asyncIterator(channel);  // << return data to  s
       // }
       subscribe:subRooms
+    },
+    subAlerts:{
+      subscribe:subAlerts
     }
   },
 

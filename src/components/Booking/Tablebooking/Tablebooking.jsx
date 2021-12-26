@@ -10,8 +10,14 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CancelIcon from '@mui/icons-material/Cancel';
 
+import CheckIcon from '@mui/icons-material/Check';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import ReceiptIcon from '@mui/icons-material/Receipt';
+
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
 import { formatDate } from '../../../general_functions/convert'
 import { Modalupload } from '../Modalupload/Modalupload'
@@ -50,6 +56,8 @@ export const Tablebooking =(props)=>{
                     <th>เลขที่ใบจอง</th>
                     <th>สถานะ</th>
                     <th>ใบเสร็จ</th>
+                    <th>ยืนยันการเข้าพัก</th>
+                    <th>แจ้งเตือน</th>
                     <th></th>
                 </tr>
                 { props &&  props.data &&  props.data.Bookings ?
@@ -72,7 +80,17 @@ export const Tablebooking =(props)=>{
                                 <a href={booking.receipt_number ? booking.receipt_number:''}>{booking.receipt_number ? booking.receipt_number:'---'}</a>
                              </td>
                             <td>
-                                <button onClick={ props.handlerdelete ?()=>props.handlerdelete(booking) : ()=>{console.log('delete',booking) }   }> <DeleteIcon/> </button>
+                                
+                                  { (booking.status && booking.status === 'ยืนยันการเข้าพัก')?<CheckIcon/>:"---" }
+                                
+                             </td>
+                             <td>
+                              
+
+                                 <button     className={styles.blink_me}> <NotificationsIcon /></button>
+                             </td>
+                            <td>
+                           
                                 <button onClick={ props.handleredit ?()=>props.handleredit(booking) :()=>{console.log('edit',booking)}  } > <EditIcon/> </button>
                                 <button onClick={  ()=> {
                                 setmodal(true) 
@@ -107,6 +125,7 @@ export const Tablebooking =(props)=>{
                                 }}>
                                 <ReceiptIcon/>
                                 </button>
+                                <button onClick={ props.handlerdelete ?()=>props.handlerdelete(booking) : ()=>{console.log('delete',booking) }   }> <DeleteIcon/> </button>
 
                             </td>
 
@@ -122,12 +141,17 @@ export const Tablebooking =(props)=>{
                             <td>{"---"}</td>
                             <td>{"---"}</td>
                             <td>{"---"}</td>
+                            <td>   <button> <NotificationsIcon/></button> </td>
                             <td>
-                                <button><DeleteIcon/></button>
+                              
+                                
                                 <button><EditIcon/> </button>
                                 <button><UploadFileIcon /></button>
                                 <button><CheckCircleOutlineIcon/></button>
                                 <button ><AssignmentIcon/></button>
+                                <button > <ReceiptIcon/></button>
+                                <button><DeleteIcon/></button>
+                                  
                             </td>
 
                     </tr>

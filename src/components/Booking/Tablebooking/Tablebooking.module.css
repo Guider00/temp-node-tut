@@ -10,3 +10,16 @@
     margin-left: 2rem;
     margin-right: 2rem;
 }
+
+.blink_me {
+
+    animation: blinker 1s linear infinite;
+  }
+  .blink_me>svg{
+      color:red
+  }
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }

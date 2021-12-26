@@ -1,0 +1,28 @@
+.body:hover{
+   
+}
+.icon{
+
+}
+.icon:hover{
+    background-color: #cfcfcf; 
+}
+.number{
+    display: flex;
+    position: relative;
+    left: -0.75rem;
+    top: -0.65rem;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    font-size: small;
+    min-width: 1rem;
+    min-height: 1rem;
+    max-width: 1.4rem;
+    max-height: 1.4rem;
+    
+    padding-right: 0.3rem;
+ 
+    background-color: red;
+    z-index: 2;
+}
