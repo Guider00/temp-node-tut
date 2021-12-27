@@ -12,6 +12,7 @@ type Booking {
   customer_name :String
   customer_lastname :String
   customer_tel :String
+  payment_method :String
   deposit :String
   checkin_type : String
   checkin_date : String
@@ -27,6 +28,7 @@ input BookingInput {
   customer_name :String
   customer_lastname :String
   customer_tel :String
+  payment_method :String
   deposit :String
   checkin_type : String
   checkin_date : String
@@ -124,6 +126,7 @@ const _createBooking = async (payload , payload2) =>{
                             customer_name :data.customer_name,
                             customer_lastname :data.customer_lastname,
                             customer_tel :data.customer_tel,
+                            payment_method :data.payment_method,
                             deposit :data.deposit,
                             checkin_date : data.checkin_date,
                             note: data.note,

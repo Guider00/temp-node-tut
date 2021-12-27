@@ -12,6 +12,7 @@ export const API_GET_Booking = gql`
 			checkin_type 
 			checkin_date
 			checkin_date_exp
+			payment_method
 			deposit
 			note
 			receipt_number
