@@ -12,6 +12,45 @@ import {
 } from '../../API/Schema/Contract/Contract'
 
 
+const filter_room = (rooms , options_search) =>{
+    let _filter_table = []
+    if(rooms && options_search){
+        _filter_table = rooms.filter(room =>{
+            if(room){
+                if(options_search.keyword === 'ทั้งหมด'){
+                    return (room.Contractnumber && room.Contractnumber.search(options_search.text) !== -1 ) ||
+                    (room.RoomType && room.RoomType.search(options_search.text) !== -1 ) || 
+                    (room.RoomName && room.RoomName.search(options_search.text) !== -1 ) ||
+                    (room.RentType && room.RentType.search(options_search.text) !== -1 ) ||
+                    (room.name && room.name.search(options_search.text) !== -1 ) ||
+                    (room.surname && room.surname.search(options_search.text) !== -1 ) ||
+                    (room.Check_in && room.Check_in.search(options_search.text) !== -1 ) ||
+                    (room.status && room.status.search(options_search.text) !== -1 ) ||
+                    (room.Check_out && room.Check_out.search(options_search.text) !== -1 ) ||
+                    (options_search.text === '')	
+                    ;
+
+                }else if (options_search.keyword === 'ชื่อห้อง'){
+                    return (room.RoomName.search(options_search.text) !== -1 )||
+                    (options_search.text === '')	
+                }else if( options_search.keyword === 'สถานะ' ){
+                    return (room.status.search(options_search.text) !== -1 )	||
+                    (options_search.text === '')	
+                }else if( options_search.keyword === 'ประเภทห้อง'){
+                    return (room.RoomType && room.RoomType.search(options_search.text) !== -1 )	||
+                    (options_search.text === '')		
+                }else{
+                    return false; 
+                }
+            }else{
+                return false;
+            }
+
+        })
+    }
+    return _filter_table
+}
+
 
 
 
@@ -21,9 +60,138 @@ export const Contract = () => {
 
     const Contract = useQuery(API_GET_Contract);
     
+    
+
+    const monthPage = () => {
+        let monthButton = document.querySelector('#month')
+        let dayButton = document.querySelector('#day')
+        let inputD1 = document.getElementById('D1')
+        let inputD2 = document.getElementById('D2')
+        let inputD3 = document.getElementById('D3')
+        let inputD4 = document.getElementById('D4')
+        let inputD5 = document.getElementById('D5')
+        let inputD6 = document.getElementById('D6')
+        let inputD7 = document.getElementById('D7')
+        let inputD8 = document.getElementById('D8')
+        let inputD9 = document.getElementById('D9')
+        let inputD10 = document.getElementById('D10')
+        let inputD11 = document.getElementById('D11')
+        let inputD12 = document.getElementById('D12')
+        let inputD13 = document.getElementById('D13')
+
+        let inputD14 = document.getElementById('D14')
+        let inputD15 = document.getElementById('D15')
+        let inputD16 = document.getElementById('D16')
+        let inputD17 = document.getElementById('D17')
+        let inputD18 = document.getElementById('D18')
+        let inputD19 = document.getElementById('D19')
+        let inputD20 = document.getElementById('D20')
+        let inputD21 = document.getElementById('D21')
+        let inputD22 = document.getElementById('D22')
+        let inputD23 = document.getElementById('D23')
+        let inputD24 = document.getElementById('D24')
+
+        if(monthButton.checked == true){
+            dayButton.checked = false
+            inputD1.disabled=false;
+            inputD2.disabled=false;
+            inputD3.disabled=false;
+            inputD4.disabled=false;
+            inputD5.disabled=false;
+            inputD6.disabled=false;
+            inputD7.disabled=false;
+            inputD8.disabled=false;
+            inputD9.disabled=false;
+            inputD10.disabled=false;
+            inputD11.disabled=false;
+            inputD12.disabled=false;
+            inputD13.disabled=false;
+
+            inputD14.disabled=true;
+            inputD15.disabled=true;
+            inputD16.disabled=true;
+            inputD17.disabled=true;
+            inputD18.disabled=true;
+            inputD19.disabled=true;
+            inputD20.disabled=true;
+            inputD21.disabled=true;
+            inputD22.disabled=true;
+            inputD23.disabled=true;
+            inputD24.disabled=true;
+        }
+
+    }
+
+    const dayPage = () => {
+        let monthButton = document.querySelector('#month')
+        let dayButton = document.querySelector('#day')
+
+        let inputD1 = document.getElementById('D1')
+        let inputD2 = document.getElementById('D2')
+        let inputD3 = document.getElementById('D3')
+        let inputD4 = document.getElementById('D4')
+        let inputD5 = document.getElementById('D5')
+        let inputD6 = document.getElementById('D6')
+        let inputD7 = document.getElementById('D7')
+        let inputD8 = document.getElementById('D8')
+        let inputD9 = document.getElementById('D9')
+        let inputD10 = document.getElementById('D10')
+        let inputD11 = document.getElementById('D11')
+        let inputD12 = document.getElementById('D12')
+        let inputD13 = document.getElementById('D13')
+        
+
+        let inputD14 = document.getElementById('D14')
+        let inputD15 = document.getElementById('D15')
+        let inputD16 = document.getElementById('D16')
+        let inputD17 = document.getElementById('D17')
+        let inputD18 = document.getElementById('D18')
+        let inputD19 = document.getElementById('D19')
+        let inputD20 = document.getElementById('D20')
+        let inputD21 = document.getElementById('D21')
+        let inputD22 = document.getElementById('D22')
+        let inputD23 = document.getElementById('D23')
+        let inputD24 = document.getElementById('D24')
+
+        if(dayButton.checked == true){
+            monthButton.checked = false
+            inputD14.disabled=false;
+            inputD15.disabled=false;
+            inputD16.disabled=false;
+            inputD17.disabled=false;
+            inputD18.disabled=false;
+            inputD19.disabled=false;
+            inputD20.disabled=false;
+            inputD21.disabled=false;
+            inputD22.disabled=false;
+            inputD23.disabled=false;
+            inputD24.disabled=false;
+
+            inputD1.disabled=true;
+            inputD2.disabled=true;
+            inputD3.disabled=true;
+            inputD4.disabled=true;
+            inputD5.disabled=true;
+            inputD6.disabled=true;
+            inputD7.disabled=true;
+            inputD8.disabled=true;
+            inputD9.disabled=true;
+            inputD10.disabled=true;
+            inputD11.disabled=true;
+            inputD12.disabled=true;
+            inputD13.disabled=true;
+            
+        }
+
+    }
+
+
+
+    
 
     const [ loadingpage, setloadingpage] = useState(false)
     const [ rooms , setrooms ] = useState([])
+    
 
    
 
@@ -35,7 +203,6 @@ export const Contract = () => {
             console.log('1',_contract)
             
         }
-        
         
         setloadingpage(true);
 
@@ -141,17 +308,17 @@ export const Contract = () => {
                     
                     <div className={styles.inputmonthandday}>
                         <h1 className={styles.line}></h1>
-                        <div className={styles.month}>
+                        <div  className={styles.month}>
                             <lable className={styles.month}>รายเดือน :</lable>
-                            <input className={styles.check} type = 'checkbox'/>
+                            <input id = 'month' type = 'radio' checked = 'true' className={styles.check} onChange={monthPage}/>
                             <div className={styles.input1}>
                                 <lable className={styles.inputtext1}>ค่าเช่าห้อง :</lable>
-                                <input placeholder='0.00' className={styles.inputbox1}></input>
+                                <input id = 'D1' placeholder='0.00' className={styles.inputbox1}></input>
                                 <lable className={styles.inputtext2}>ค่าประกัน :</lable>
-                                <input placeholder='0.00' className={styles.inputbox2}></input>
+                                <input  id = 'D2' placeholder='0.00' className={styles.inputbox2}></input>
                                 <br/>
                                 <lable className={styles.inputtext3}>ค่าเช่าล่วงหน้า :</lable>
-                                <input placeholder='0.00' className={styles.inputtext3}></input>
+                                <input id = 'D3' placeholder='0.00' className={styles.inputtext3}></input>
                             </div>
                             <lable className={styles.submonth}>ค่าสาธารณูปโภค</lable>
                             <div className={styles.input2}>
@@ -161,21 +328,21 @@ export const Contract = () => {
                                 <lable className={styles.inputtext4}>เหมาจ่าย</lable>
                                 <br/>
                                 <lable className={styles.inputtext5}>ไฟฟ้า :</lable>
-                                <input placeholder='0.00' className={styles.inputtext6} type = 'checkbox'/>
-                                <input placeholder='0.00' className={styles.inputbox1}></input>
-                                <input placeholder='0.00' className={styles.inputbox2}></input>
+                                <input id = 'D4' placeholder='0.00' className={styles.inputtext6} type = 'checkbox'/>
+                                <input id = 'D5' placeholder='0.00' className={styles.inputbox1}></input>
+                                <input id = 'D6' placeholder='0.00' className={styles.inputbox2}></input>
                                 <lable>บาท</lable>
-                                <input placeholder='0.00' className={styles.checkbox2} type = 'checkbox'/>
-                                <input placeholder='0.00' className={styles.inputbox3}></input>
+                                <input id = 'D7' placeholder='0.00' className={styles.checkbox2} type = 'checkbox'/>
+                                <input id = 'D8' placeholder='0.00' className={styles.inputbox3}></input>
                                 <lable>บาท</lable>
                                 <br/>
                                 <lable className={styles.inputtext7}>น้ำ :</lable>
-                                <input placeholder='0.00' className={styles.inputtext6} type = 'checkbox'/>
-                                <input placeholder='0.00' className={styles.inputbox1}></input>
-                                <input placeholder='0.00' className={styles.inputbox2}></input>
+                                <input id = 'D9' placeholder='0.00' className={styles.inputtext6} type = 'checkbox'/>
+                                <input id = 'D10' placeholder='0.00' className={styles.inputbox1}></input>
+                                <input id = 'D11' placeholder='0.00' className={styles.inputbox2}></input>
                                 <lable>บาท</lable>
-                                <input placeholder='0.00' className={styles.checkbox2} type = 'checkbox'/>
-                                <input placeholder='0.00' className={styles.inputbox3}></input>
+                                <input id = 'D12' placeholder='0.00' className={styles.checkbox2} type = 'checkbox'/>
+                                <input id = 'D13' placeholder='0.00' className={styles.inputbox3}></input>
                                 <lable>บาท</lable>
                             </div>
                
@@ -183,10 +350,10 @@ export const Contract = () => {
                         <h1 className={styles.line}></h1>
                         <div className={styles.day}>
                                 <lable className={styles.day}>รายวัน :</lable>
-                                <input type='checkbox' className={styles.check} />
+                                <input id = 'day' type='radio' className={styles.check} onChange={dayPage}/>
                                 <div className={styles.input1}>
                                     <lable className={styles.inputtext1}>ค่าเช่าห้อง :</lable>
-                                    <input placeholder='0.00' className={styles.inputbox1}></input>
+                                    <input id = 'D14' disabled = 'disabled' placeholder='0.00' className={styles.inputbox1}></input>
                                 </div>
                                 <lable className={styles.subday}>ค่าสาธารณูปโภค</lable>
                                 <div className={styles.input2}>
@@ -196,21 +363,21 @@ export const Contract = () => {
                                     <lable className={styles.inputtext4}>เหมาจ่าย</lable>
                                     <br/>
                                     <lable className={styles.inputtext5}>ไฟฟ้า :</lable>
-                                    <input placeholder='0.00' className={styles.inputtext6} type = 'checkbox'/>
-                                    <input placeholder='0.00' className={styles.inputbox1}></input>
-                                    <input placeholder='0.00' className={styles.inputbox2}></input>
+                                    <input id = 'D15' disabled = 'disabled' placeholder='0.00' className={styles.inputtext6} type = 'checkbox'/>
+                                    <input id = 'D16' disabled = 'disabled' placeholder='0.00' className={styles.inputbox1}></input>
+                                    <input id = 'D17' disabled = 'disabled' placeholder='0.00' className={styles.inputbox2}></input>
                                     <lable>บาท</lable>
-                                    <input placeholder='0.00' className={styles.checkbox2} type = 'checkbox'/>
-                                    <input placeholder='0.00' className={styles.inputbox3}></input>
+                                    <input id = 'D18' disabled = 'disabled' placeholder='0.00' className={styles.checkbox2} type = 'checkbox'/>
+                                    <input id = 'D19' disabled = 'disabled' placeholder='0.00' className={styles.inputbox3}></input>
                                     <lable>บาท</lable>
                                     <br/>
                                     <lable className={styles.inputtext7}>น้ำ :</lable>
-                                    <input placeholder='0.00' className={styles.inputtext6} type = 'checkbox'/>
-                                    <input placeholder='0.00' className={styles.inputbox1}></input>
-                                    <input placeholder='0.00' className={styles.inputbox2}></input>
+                                    <input id = 'D20' disabled = 'disabled' placeholder='0.00' className={styles.inputtext6} type = 'checkbox'/>
+                                    <input id = 'D21' disabled = 'disabled' placeholder='0.00' className={styles.inputbox1}></input>
+                                    <input id = 'D22' disabled = 'disabled' placeholder='0.00' className={styles.inputbox2}></input>
                                     <lable>บาท</lable>
-                                    <input placeholder='0.00' className={styles.checkbox2} type = 'checkbox'/>
-                                    <input placeholder='0.00' className={styles.inputbox3}></input>
+                                    <input id = 'D23' disabled = 'disabled' placeholder='0.00' className={styles.checkbox2} type = 'checkbox'/>
+                                    <input id = 'D24' disabled = 'disabled' placeholder='0.00' className={styles.inputbox3}></input>
                                     <lable>บาท</lable>
                                 </div>
                                 
