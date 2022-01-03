@@ -64,6 +64,8 @@ export const Menubar = () => {
     const api_subalert = useSubscription(API_SUBALERT);
     const [numberalart , setnumberalart ] = useState(0);
     console.log('api_subalert',api_subalert)
+    console.log('api_subrooms',api_subalert)
+
     useEffect(()=>{
         if(api_subalert && api_subalert.data && api_subalert.data.subAlerts ){
             setnumberalart(api_subalert.data.subAlerts.length)
@@ -279,7 +281,9 @@ export const Menubar = () => {
                         <div className={styles.orange} > { api_subrooms.data.subRooms.filter(room=> room.status === 'ปรับปรุง').length } </div>
                         <div>ปรับปรุง</div>
                      </div>
-                      :null
+                      :<div className={styles.optionright} >
+                        <div>  - Error subscription  Rooms - </div>
+                      </div>
                     }
 
                     <div className={styles.db_status}>

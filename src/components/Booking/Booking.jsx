@@ -156,6 +156,7 @@ export const Booking = () => {
 			customer_name: '',
 			customer_lastname: '',
 			customer_tel: '',
+			customer_address:'',
 			payment_method:"",
 			deposit: '',
 			checkin_date: '',
@@ -163,6 +164,7 @@ export const Booking = () => {
 			note: '',
 			status: '',
 			receipt_number: '',
+			confirm_booking:'',
 			Room:'',
 		});
 		setselectedroom(null)
@@ -184,6 +186,7 @@ export const Booking = () => {
 		customer_name: '',
 		customer_lastname: '',
 		customer_tel: '',
+		customer_address:'',
 		payment_method:"",
 		deposit: '',
 		checkin_type:'รายวัน',
@@ -191,6 +194,7 @@ export const Booking = () => {
 		checkin_date_exp: '',
 		note: '',
 		status: '',
+		confirm_booking:'',
 		receipt_number: ''
 	});
 
@@ -484,7 +488,7 @@ export const Booking = () => {
 										<input
 											id="customer_address"
 											type="text"
-											value={formbooking.customer_tel}
+											value={formbooking.customer_address}
 											onChange={handleChangedformbooking}
 										/>
 									</div>
@@ -677,6 +681,7 @@ export const Booking = () => {
 															customer_name: formbooking.customer_name,
 															customer_lastname: formbooking.customer_lastname,
 															customer_tel: formbooking.customer_tel,
+															customer_address : formbooking.customer_address,
 															payment_method: formbooking.payment_method,
 															deposit: formbooking.deposit,
 															checkin_type: formbooking.checkin_type,
@@ -684,6 +689,7 @@ export const Booking = () => {
 															checkin_date_exp: formbooking.checkin_date_exp,
 															note: formbooking.note,
 															status: formbooking.status ? formbooking.status : 'รอการชำระเงิน' ,
+															confirm_booking :formbooking.confirm_booking ? formbooking.confirm_booking : '---' ,
 															receipt_number: formbooking.receipt_number,
 															Room:selectedroom
 														}
@@ -697,6 +703,7 @@ export const Booking = () => {
 															customer_name: formbooking.customer_name,
 															customer_lastname: formbooking.customer_lastname,
 															customer_tel: formbooking.customer_tel,
+															customer_address : formbooking.customer_address,
 															payment_method:formbooking.payment_method,
 															deposit: formbooking.deposit,
 															checkin_type: formbooking.checkin_type,
@@ -704,6 +711,7 @@ export const Booking = () => {
 															checkin_date_exp: formbooking.checkin_date_exp,
 															note: formbooking.note,
 															status: 'รอการชำระเงิน',
+															confirm_booking : formbooking.confirm_booking,
 															receipt_number: '',
 															Room:selectedroom
 														}
@@ -766,6 +774,7 @@ export const Booking = () => {
 															customer_name: _booking.customer_name,
 															customer_lastname: _booking.customer_lastname,
 															customer_tel: _booking.customer_tel,
+															customer_address : _booking.customer_address,
 															payment_method : _booking.payment_method,
 															deposit: _booking.deposit,
 															checkin_type: _booking.checkin_type,
@@ -773,6 +782,7 @@ export const Booking = () => {
 															checkin_date_exp: _booking.checkin_date_exp,
 															note: _booking.note,
 															status:  _status,
+															confirm_booking : _booking.confirm_booking,
 															receipt_number: _booking.receipt_number,
 															Room:_booking.Room.id
 														}
@@ -821,6 +831,7 @@ export const Booking = () => {
 															customer_name: _booking.customer_name,
 															customer_lastname: _booking.customer_lastname,
 															customer_tel: _booking.customer_tel,
+															customer_address: _booking.customer_address,
 															payment_method:_booking.payment_method,
 															deposit: _booking.deposit,
 															checkin_type: _booking.checkin_type,
@@ -828,6 +839,7 @@ export const Booking = () => {
 															checkin_date_exp: _booking.checkin_date_exp,
 															note: _booking.note,
 															status: _booking.status ? _booking.status : 'รอการชำระเงิน' ,
+															confirm_booking : _booking.confirm_booking,
 															receipt_number: res.data.singleUpload.url,
 															Room:_booking.Room.id
 														}
@@ -858,6 +870,7 @@ export const Booking = () => {
 								customer_name: _booking.customer_name,
 								customer_lastname: _booking.customer_lastname,
 								customer_tel: _booking.customer_tel,
+								customer_address : _booking.customer_address,
 								payment_method:_booking.payment_method,
 								deposit: _booking.deposit,
 								checkin_type: _booking.checkin_type,
@@ -869,6 +882,7 @@ export const Booking = () => {
 								),
 								note: _booking.note,
 								status: _booking.status,
+								confirm_booking: _booking.confirm_booking,
 								receipt_number: _booking.receipt_number
 							});
 							if(_booking && _booking.Room)

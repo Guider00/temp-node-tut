@@ -56,6 +56,7 @@ export const queryRooms = () =>{
                 status
                 customer_tel
                 customer_name
+                customer_address
             }
 
             floor{
@@ -195,6 +196,7 @@ export const API_GET_Rooms = gql`
                 status
                 customer_tel
                 customer_name
+                customer_address
             }
             member{
                 id
