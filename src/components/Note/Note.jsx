@@ -178,18 +178,23 @@ export const Note = () =>{
             let res = await API_queryNotes()
             let table = []
             if (res && res.status === 200) {
-               
+                
                 table = res.data.Notes.map((data) => {
-                    let _data = data
-                    let _room  =  (data.room  &&  data.room.name )  ? data.room.name  :""
-                    let _floor  =  (  data.room && data.room.floor && data.room.floor.name) ? data.room.floor.name  :""
-                    let _building  =  ( data.room && data.room.floor &&  data.room.floor.building && data.room.floor.building.name ) ? data.room.floor.building.name  :""
-              
-                     let _event_date  =   ( data.event_date ? new Date( parseInt( data.event_date) ).toISOString().split('T')[0] :"")
-                     _data = {..._data , ...{ event_date:_event_date }}
-                    console.log('event my data',_data)
-                    return {...{ data: _data},  ...data ,...{building :  _building , floor: _floor , room: _room  ,event_date:_event_date} }
-                })
+                    if(data){
+                         let _data = data
+                        let _room  =  (data.room  &&  data.room.name )  ? data.room.name  :""
+                        let _floor  =  (  data.room && data.room.floor && data.room.floor.name) ? data.room.floor.name  :""
+                        let _building  =  ( data.room && data.room.floor &&  data.room.floor.building && data.room.floor.building.name ) ? data.room.floor.building.name  :""
+                
+                        let _event_date  =   ( data.event_date ? new Date( parseInt( data.event_date) ).toISOString().split('T')[0] :"")
+                        _data = {..._data , ...{ event_date:_event_date }}
+                        console.log('event my data',_data)
+                        return {...{ data: _data},  ...data ,...{building :  _building , floor: _floor , room: _room  ,event_date:_event_date} }
+                    }else{
+                        return null
+                    }
+                   
+                }).filter(a=> a)
                 console.log('data',table)
                 resolve (table)
             }else{
