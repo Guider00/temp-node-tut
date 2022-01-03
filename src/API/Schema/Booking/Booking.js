@@ -9,6 +9,7 @@ export const API_GET_Booking = gql`
 			customer_name
 			customer_lastname
 			customer_tel
+			customer_address
 			checkin_type 
 			checkin_date
 			checkin_date_exp
@@ -17,6 +18,7 @@ export const API_GET_Booking = gql`
 			note
 			receipt_number
 			status
+			confirm_booking
 			Room {
 				id
 				name

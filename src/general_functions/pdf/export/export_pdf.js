@@ -14,6 +14,7 @@ export const export_booking_pdf = ( booking , owner , customer_details   ) =>{
     let bookingReference = booking.booking_number ?  booking.booking_number : Noanswer ;
     let Client =   booking.customer_name  ?  `${booking.customer_name} ${booking.customer_lastname}`  : Noanswer 
     let Customer_tel =  booking.customer_tel ? booking.customer_tel : Noanswer
+    let Customer_address = booking.customer_address ?  booking.customer_tel : Noanswer
     let memberID = Noanswer
     let Country = Noanswer
 

@@ -7,6 +7,7 @@ const schemaDefinition = new mongoose.Schema({
   customer_name :{type:String},
   customer_lastname :{type:String},
   customer_tel :{type:String},
+  customer_address :{type:String}, // ที่อยู่ ผู้จอง
   payment_method :{type:String}, // วิธีการชำระเงิน 
   deposit :{type:String},  // จำนวนเงินจอง
   checkin_type : {type:String}, 
@@ -14,6 +15,7 @@ const schemaDefinition = new mongoose.Schema({
   checkin_date_exp : {type:Date},  // YYYY-MM-DDTHH:MM:SS
   note: {type:String},
   status: {type:String},
+  confirm_booking : {type:String}, // << ยืนยันการเข้าพัก
   img_receipt : {type:String}, // image
   receipt_number : {type:String}
 })
