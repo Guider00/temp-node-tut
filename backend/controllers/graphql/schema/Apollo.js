@@ -53,6 +53,13 @@ const Checkoutinformation = {
 
 }
 
+const{Contractschema,Contract_query,Contract_mutation,Contractquery,createContract,updateContract,deleteContract} = require('./Contract/Contract')
+const Contractmation = {
+  createContract:createContract,
+  updateContract:updateContract,
+  deleteContract:deleteContract,
+
+}
 
   const{ Address_query,Address_mutation ,Addressschema,Addressquery,deleteAddress,addAddress,updateAddress} = require('./Address/Address')
  const Addressmutation = {
@@ -142,6 +149,7 @@ ${Memberschema}
 ${Bookingschema}
 ${CreateInvoiceschema}
 ${Checkoutinformschema}
+${Contractschema}
 ${Addressschema}
 ${Portmeterschema}
 ${MeterRoomschema}
@@ -216,6 +224,7 @@ type Message {
     ${Memberschema_query}
     ${Bookingschema_query}
     ${CreateInvoicesschema_query}
+    ${Contract_query}
     ${Checkoutinform_query}
     ${Address_query}
     ${RoomTypeschema_query}
@@ -239,6 +248,7 @@ type Message {
      ${Bookingschema_mutation}
      ${CreateInvoice_mutation}
      ${Checkoutinform_mutation}
+     ${Contract_mutation}
      ${Address_mutation}
      ${RoomTypeschema_mutation}
      ${Roomschema_mutation}
@@ -321,6 +331,7 @@ const resolvers = {
     CreateInvoices :CreateInvoicequery,
 
     Checkoutinforms : Checkoutinformquery,
+    Contracts : Contractquery,
 
     Addresss:Addressquery,
 
@@ -376,6 +387,7 @@ const resolvers = {
     ...CreateInvoicetion,
     ...Checkoutinformation,
     ...Addressmutation,
+    ...Contractmation,
    
     
  

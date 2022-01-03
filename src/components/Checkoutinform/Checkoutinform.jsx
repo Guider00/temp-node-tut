@@ -88,7 +88,7 @@ export const Checkoutinform = () => {
                         floor: data.floor ? data.floor.name : '---',
                         name : ( data.members && data.members.length > 0 ) ? data.members[0].name : '---',
                         surname : ( data.members && data.members.length > 0 ) ? data.members[0].lastname : '---',
-                        status: data.status ? data.status : '---',
+                        status: data.status ? data.status  : '---'
                         
                     };
                 });
@@ -221,7 +221,7 @@ export const Checkoutinform = () => {
 
                             </thead>
                             <tbody className={styles.body}>
-                            {filterrooms.map(
+                            {filterrooms.filter((room) => (room && room.status === 'ย้ายออก') || room.status === 'มีคนอยู่').map(
                                         (room) =>
                                             room ? (
                                                 <tr>
