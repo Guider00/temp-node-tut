@@ -3,81 +3,106 @@ import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
 import styles from './CreateInvoice.module.css';
 import { useEffect, useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
+import { API_queryRooms} from '../../API/index';
 
-import {
-    API_GET_CreateInvoice,
-    API_ADD_CreateInvoice,
-    API_DELETE_CreateInvoice,
-    API_UPDATE_CreateInvoice
-} from '../../API/Schema/CreateInvoice/CreateInvoice'
-import { checkboxClasses } from '@mui/material';
+
+const filter_rooms = (rooms , options_search) =>{
+    let _filter_table = []
+    if(rooms  &&  options_search){
+        _filter_table = rooms.filter(room =>{
+                if(room){
+                    if(options_search.keyword === 'ทั้งหมด'){
+                        console.log("all")
+                        return (room.room && room.room.search(options_search.text) !== -1 ) ||
+                        (room.building && room.building.search(options_search.text) !== -1 ) || 
+                        (room.floor && room.floor.search(options_search.text) !== -1 ) ||
+                        (room.RoomType && room.RoomType.search(options_search.text) !== -1 ) ||
+                        (room.status && room.status.search(options_search.text) !== -1 ) ||
+                        (options_search.text === '')	
+                        ;
+                    }else if (options_search.keyword === 'ห้อง'){                      
+                        return (room.room.search(options_search.text) !== -1 )||
+                        (options_search.text === '')	
+                    }else if (options_search.keyword === 'อาคาร'){
+                        return (room.building.search(options_search.text) !== -1 )||
+                        (options_search.text === '')	
+                    }else if( options_search.keyword === 'ชั้น' ){
+                        return (room.floor.search(options_search.text) !== -1 )	||
+                        (options_search.text === '')	
+                    }else if( options_search.keyword === 'ประเภทห้อง'){
+                        return (room.RoomType && room.RoomType.search(options_search.text) !== -1 )	||
+                        (options_search.text === '')		
+                    }else{
+                        return false; 
+                    }
+                }else{
+                    return false;
+                }
+            })
+    }
+    return _filter_table
+    
+}
+
 
 
 export const CreateInvoic = () =>{
 
+    const [ options_search  ,setoptions_search] = useState({
+		text:"",
+		keyword:"ทั้งหมด"
+	})
+    const [rooms , setrooms] = useState([]);
+    const [filterrooms , setfilterrooms] = useState([]);
+    const [ loadingpage, setloadingpage ] = useState(false);
 
 
-    const CreateInvoice = useQuery(API_GET_CreateInvoice);
-    console.log(CreateInvoice)
-    const [loadingpage, setloadingpage] = useState(false);
-
-
-
-  
-    const [createInvoices,setcreateInvoices]  = useState([])
-
-    // const [createInvoice,setcreateInvoice] = useState(
-    //     {   
-    //         id: null,
-    //         building:"---",
-    //         floor:"",
-    //         room_type:"",
-    //         name_room:"",
-    //         type_rent:"",
-    //         bill_exp:"",
-    //         date_exp:"",
-    //         round_bill:"",
-
-
-    //     }
-    // )  
-    useEffect(()=>{
-        
-        if(CreateInvoice && CreateInvoice.data && CreateInvoice.data.CreateInvoices){
-            // console.log('CreateInvoice',CreateInvoice.data.CreateInvoices[0].id)
-            // let _createInvoice = createInvoice
-            // _createInvoice.id = CreateInvoice.data.CreateInvoices[0].id
+    const getRooms = async () => {
+        return new Promise(async (resolve, reject) => {
             
-            // setcreateInvoice(_createInvoice)
-            // console.log("rent",_createInvoice)
+            let res = await API_queryRooms();
+            console.log("get-first-res",res)
+            let table = [];
+            if (res && res.status === 200) {
+                table = res.data.rooms.map((data) => {
+                    let _data = data;
+                    return {
+                        id: data.id,
+                        building:
+                            data.floor && data.floor.building && data.floor.building.name
+                                ? data.floor.building.name
+                                : '---',
+                        floor: data.floor ? data.floor.name : '---',
+                        RoomType : data.RoomType ? data.RoomType.name : '---',
+                        room : data.name ? data.name : '---',
+                        status: data.status ? data.status  : '---'
+                    };
+                });
+            }
+    
+            resolve(table);
+        }).catch((e) => {
+            console.log('Promise Error', e);
+            return [];
+        });
+    };
+    
+
+    useEffect(
+        () => {
+            async function fetchData() {
+                let Rooms = await getRooms();
+                setrooms(Rooms);
+                setfilterrooms(Rooms);
+            }
+            console.log('rooms',rooms)
+            fetchData();
+            setloadingpage(true);
+        },
+        [ loadingpage ]
+    );
 
 
-            let _createInvoices  = createInvoices
-            _createInvoices  = [...CreateInvoice.data.CreateInvoices]
-            setcreateInvoices([..._createInvoices])
-
-            console.log('createInvoices :',createInvoices )
-            
-        }
-    },[CreateInvoice])
-
-    // const [createInvoice,setcreateInvoice] = useState({
-    //     name:"---"
-    // });
-    // useEffect(()=>{
-    //     console.log('CreateInvoice',CreateInvoice)
-    //     if(CreateInvoice && CreateInvoice.data &&  CreateInvoice.data.CreateInvoices  ){
-    //         console.log('CreateInvoice',CreateInvoice.data.CreateInvoices[0].name)
-    //         let _createInvoice = createInvoice
-    //         _createInvoice.name = CreateInvoice.data.CreateInvoices[0].name
-    //         setcreateInvoice(_createInvoice)
-    //     }
-       
-    // },[CreateInvoice])
-
-    const createCreateInvoice = useMutation(API_ADD_CreateInvoice);
-    const updateCreateInvoice = useMutation(API_UPDATE_CreateInvoice);
-    const deleteCreateInvoice = useMutation(API_DELETE_CreateInvoice);
     
 
     
@@ -87,10 +112,6 @@ export const CreateInvoic = () =>{
         let disablePage = document.querySelector('#D1')
         let dataPage = document.getElementsByName('D3')
         let dataPageLen = dataPage.length
-        console.log("dataPageLen",dataPageLen)
-        console.log("disablePage",disablePage)
-        console.log("dataPage",dataPage)
-        console.log("enablePage",enablePage)
 
         
         if(enablePage.checked == true ){
@@ -98,16 +119,9 @@ export const CreateInvoic = () =>{
             for (var x=0; x<dataPageLen; x++){
                 dataPage[x].disabled=false;
             }
-            console.log("EnablePage")
+           
         }
 
-        
-
-        // var custom = dataPage
-        // custom.disabled = enablePage.checked ? false: true;
-        // if(!custom.disabled){
-        //     console.log('error')
-        // }
 
     }
     const supPage = () =>{
@@ -115,17 +129,14 @@ export const CreateInvoic = () =>{
         let disablePage = document.querySelector('#D1')
         let dataPage = document.getElementsByName('D3')
         let dataPageLen = dataPage.length
-        console.log("dataPageLen",dataPageLen)
-        console.log("disablePage",disablePage)
-        console.log("dataPage",dataPage)
-        console.log("enablePage",enablePage)
+        
 
        if(disablePage.checked == true){
             enablePage.checked = false
             for (var x=0; x<dataPageLen; x++){
                 dataPage[x].disabled=true;
             }
-            console.log("DisablePage")
+            
 
         }
 
@@ -166,7 +177,7 @@ export const CreateInvoic = () =>{
 
   
 
-    let header_table = ["","อาคาร","ชั้น","ประเภทห้อง","ชื่อห้อง","ประเภทการเช่า"]
+    let header_table = ["","อาคาร","ชั้น","ประเภทห้อง","ห้อง","ประเภทการเช่า"]
     let sim_table = [{"":"","อาคาร":"อาคารเอ","ชั้น":"01","ประเภทห้อง":"ห้องแอร์","ชื่อห้อง":"101","ประเภทการเช่า":"รายเดือน"},{"":"","อาคาร":"อาคารเอ","ชั้น":"01","ประเภทห้อง":"ห้องแอร์","ชื่อห้อง":"101","ประเภทการเช่า":"รายเดือน"}]
     return (
         <div className = {styles.zone}>
@@ -238,10 +249,46 @@ export const CreateInvoic = () =>{
                            
         
                             <p className = {styles.flex}>
-                                <input  className = {styles.select}></input>
+                                <input  className = {styles.select}
+                                type="text"
+                                value={options_search.text}
+
+                                onChange={(e) => {
+                                    let _options_search = options_search
+                                    _options_search.text = e.target.value 
+                                    setoptions_search({..._options_search})
+                                }}
                                 
-                                <button className = {styles.buttonmain}>กรอง</button> 
-                                <button className = {styles.buttonmain}>ทั้งหมด</button>
+                                
+                                />
+                                
+                                <select className={styles.buttonmain}
+                                        value={ options_search.keyword } 
+									    onChange={ (e)=>{
+										let _options_search = options_search
+										_options_search.keyword = e.target.value 
+										setoptions_search({..._options_search})
+                                        console.log(options_search)
+									}}
+
+									>
+                                    <option>ทั้งหมด</option>
+                                    <option>ห้อง</option>
+                                    <option>อาคาร</option>
+                                    <option>ชั้น</option>
+                                    <option>ประเภทห้อง</option>
+                                </select> 
+                                <button className= {styles.buttonmain}
+
+                                onClick={ async () => {
+                                        
+                                            let _filter_rooms  =[]
+                                            _filter_rooms = filter_rooms(rooms , options_search)
+
+                                            setfilterrooms(_filter_rooms);
+                                            console.log("filter",rooms);
+                                            console.log("option",options_search)
+									}}>กรอง</button>
                             </p>
 
 
@@ -257,35 +304,29 @@ export const CreateInvoic = () =>{
                                     <td>{header_table[5]}</td>
                                 </tr>
                             </thead>
-                            <tbody className ={styles.body}>{createInvoices.map( (item) =>
-                                <tr>
-                                    <td>    
-                                        <input type="checkbox" name = "myCheckboxName" id="myCheckboxId"></input>
-                                    </td>
-                                    <td>{item.building}</td>
-                                    <td>{item.floor}</td>
-                                    <td>{item.room_type}</td>
-                                    <td>{item.name_room}</td>
-                                    <td>{item.type_rent}</td>
-                                </tr>
-                                    )
-                                        }                
+                            <tbody className ={styles.body}>
+
+                            {filterrooms.filter((room) => (room && room.status === 'จอง') || room.status === 'มีคนอยู่').map(
+                                        (room) =>
+                                            room ? (
+                                                <tr>
+                                                    <td width={'20px'} ><input type='checkbox' name = "myCheckboxName" id="myCheckboxId"/></td>
+                                                    <td width={'60px'} >{room.building ? room.building : '---'}</td>
+                                                    <td width={'60px'} >{room.floor ? room.floor : '---'}</td>
+                                                    <td width={'80px'} >{room.RoomType ? room.RoomType : '---'}</td>
+                                                    <td width={'60px'}>{room.room ? room.room : '---'}</td>
+                                                    <td width={'80px'} >{room.status ? room.status : '---'}</td>
+                                                    
+                                                </tr>
+                                            ) : null
+                                    )}
+
+
+
+
+
                             </tbody>
-                            {/* <tbody className ={styles.body}>{sim_table.map( (data) =>
-                                <tr>
-                                    <td>    
-                                        <input type="checkbox" name = "myCheckboxName" id="myCheckboxId"></input>
-                                    </td>
-                                    <td>{data["อาคาร"]}</td>
-                                    <td>{data["ชั้น"]}</td>
-                                    <td>{data["ประเภทห้อง"]}</td>
-                                    <td>{data["ชื่อห้อง"]}</td>
-                                    <td>{data["ประเภทการเช่า"]}</td>
-                                </tr>
-                                    )
-                                        }                
-                            </tbody> */}
-                           
+                            
                            
                             
 
