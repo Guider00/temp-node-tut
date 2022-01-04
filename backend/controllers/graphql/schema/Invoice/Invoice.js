@@ -1,40 +1,70 @@
 
 
 const  { db }  =  require( "../../../models/Invoice/Invoice");
+const { queryRoomByid  ,addbookingsinRoom ,deletebookingsinRoom }  = require ('../Room/Room')
 
  const _Invoiceschema = `
 
 type Invoice {
     id:ID!
     duedateinvoice : String
+
+    monthlybilling : String,
+    printstatus : String ,
+    status : String,
+    room:Room
   }
 
 input InvoicInput {
     id:ID
     duedateinvoice:String 
-  } 
-  input InvoicUpdate {
-    
-    duedateinvoice:String
-  } 
 
+    monthlybilling : String,
+    printstatus : String ,
+    status : String,
+    roomid: String,
+  } 
 `
 
 const _Invoicesschema_query =`
     Invoices :[Invoice]
+    countInvoices : String 
 `
 const _Invoiceschema_mutation = `
     addInvoice(input:InvoicInput):MessageCreate!,
-    updateInvoice(id:ID!,input:InvoicUpdate):MessageUpdate,
+    updateInvoice(id:ID!,input:InvoicInput):MessageUpdate,
     deleteInvoice(id:ID!):MessageDelete
 `
+
+const _countInvoices = async (filter) =>{
+     try{
+            let resulted =  await db.find(filter).count()
+            return resulted
+     }catch(e){
+         return null 
+     }
+
+}
 const _Invoices =async (filter) =>{
     try{
         let resulted =  await db.find(filter)
-        let _Invoices = resulted.map(payload => payload._doc).map(payload => {
-            payload.id = payload._id.toString()
-            return (payload)
-        })
+        let _Invoices =  await Promise.all( resulted.map(payload => payload._doc).map( async payload => {
+            if(payload){
+                payload.id = payload._id.toString()
+                if(payload.roomid){
+                    try{
+                        payload.room = await  queryRoomByid( {id : payload.roomid })
+                        return (payload)
+                    }catch(e){
+                        return null 
+                    }
+                }
+                return payload
+            }else{
+                return null 
+            }
+          
+        }) )
         return (
             [..._Invoices ]
            )
@@ -62,6 +92,8 @@ const _updateInvoice = async (payload ,payload2) =>{
         if(!payload){return null}
         if(!payload.id){return null}
         if(!payload.input){return null}
+        if(!payload.id.match(/^[0-9a-fA-F]{24}$/)) { return null }
+
         let  resulted = await db.updateOne({_id:payload.id},payload.input)
         return resulted
     }catch(error){
@@ -74,7 +106,7 @@ const _deleteInvoice = async (payload,payload2) =>{
     try {
         if(!payload){ return null }
         if(!payload.id){ return null }
-        if(!payload.id.match(/^[0-9a-fA-F]{24}$/)) { return "Error Format ID"}
+        if(!payload.id.match(/^[0-9a-fA-F]{24}$/)) { return {errors:"Error Format ID"} }
 
         let  resulted = await db.deleteOne({_id:payload.id})
   
@@ -101,7 +133,7 @@ const _deleteInvoice = async (payload,payload2) =>{
 
 
 
-
+exports.countInvoices = _countInvoices
 
 
 exports.Invoices  =_Invoices 
