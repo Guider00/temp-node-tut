@@ -68,14 +68,29 @@ const Contractmation = {
   updateAddress:updateAddress,
   }
 
-const { Invoiceschema , Invoicesschema_query ,Invoiceschema_mutation,Invoices , addInvoice , updateInvoice , deleteInvoice} = require('./Invoice/Invoice')
+const { Invoiceschema , Invoicesschema_query ,Invoiceschema_mutation,Invoices , countInvoices , addInvoice , updateInvoice , deleteInvoice} = require('./Invoice/Invoice')
 const Invoicequery = {
   Invoices:Invoices,
+  countInvoices : countInvoices,
 }
 const Invoicemutation = {
  addInvoice: addInvoice,
  updateInvoice:updateInvoice,
  deleteInvoice:deleteInvoice
+}
+
+const {Receiptschema , Receiptschema_query , Receiptschema_mutation, Receipts,countReceipts , createReceipt ,updateReceiptlist, updateReceipt , deleteReceipt} = require('./Receipt/Receipt')
+const Receiptquery = {
+  Receipts:Receipts,
+
+  countReceipts: countReceipts
+}
+const Receiptmutation = {
+  createReceipt:createReceipt,
+  updateReceipt:updateReceipt,
+  updateReceiptlist:updateReceiptlist,
+  deleteReceipt:deleteReceipt
+
 }
 
 
@@ -158,6 +173,7 @@ ${RoomTypeschema}
 ${Roomschema}
 ${Fileschema}
 ${Invoiceschema}
+${Receiptschema}
 ${Alertschema}
 
 type SubMQTTServerstatus{
@@ -230,6 +246,7 @@ type Message {
     ${RoomTypeschema_query}
     ${Roomschema_query}
     ${Invoicesschema_query}
+    ${Receiptschema_query}
  
 
     submqttserverstatus:[SubMQTTServerstatus]
@@ -253,7 +270,8 @@ type Message {
      ${RoomTypeschema_mutation}
      ${Roomschema_mutation}
      ${UploadFileschema_mutation}
-    ${Invoiceschema_mutation}
+     ${Invoiceschema_mutation}
+     ${Receiptschema_mutation}
 
     postMessage(user: String!, content: String!): ID!
     signup (email:String! , password:String! ,level:String!) : Signup
@@ -343,9 +361,9 @@ const resolvers = {
     querymembersinRoom: querymembersinRoom,
     querybookingsinRoom: querybookingsinRoom,
 
-    
-    ...Invoicequery
-   
+ 
+    ...Invoicequery,
+      ...Receiptquery,
 
 
   },
@@ -388,6 +406,7 @@ const resolvers = {
     ...Checkoutinformation,
     ...Addressmutation,
     ...Contractmation,
+    ...Receiptmutation,
    
     
  
