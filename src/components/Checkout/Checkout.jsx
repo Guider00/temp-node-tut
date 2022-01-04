@@ -108,6 +108,34 @@ export const Checkout = () => {
 	});
 	const [showtableprice,setshowtableprice] = useState(false)
 	const [tableprice,settableprice] = useState([])
+	const [editmodetableprice,seteditmodetableprices] = useState(false)
+
+	const handlerdeletetableprice = (index) =>{
+		let _tableprice = tableprice
+		_tableprice.splice(index, 1)
+		settableprice([..._tableprice])
+	}
+	const handleronChangetableprice = (e,index,key) =>{
+		let _tableprice = tableprice
+		if(index !== undefined && e !== undefined && e.target !== undefined && e.target.value !== undefined&& key !== undefined){
+			_tableprice[index][key] = e.target.value
+	
+		}
+		if(key === "price" || key === 'number'){
+				if(_tableprice[index].addvat === false){
+						_tableprice[index].costvat = 0
+						_tableprice[index].totalprice = Number(_tableprice[index].price*Number(_tableprice[index].number) ).toFixed(2)
+					}else{
+						_tableprice[index].costvat =Number(_tableprice[index].price*Number(_tableprice[index].number)*0.07).toFixed(2)
+						_tableprice[index].totalprice = Number(_tableprice[index].price*Number(_tableprice[index].number)*1.07).toFixed(2)
+
+					}
+
+			 // update calculate
+		}
+		
+		settableprice([..._tableprice])
+	}
 
 	const clertableprice =() =>{
 		settableprice([])
@@ -194,7 +222,7 @@ export const Checkout = () => {
 	);
 
     return (
-        <>
+        <div>
            		<div className={styles.zone1}>
 				   	<div className={styles.bigbox}>
 						
@@ -543,56 +571,99 @@ export const Checkout = () => {
 														</button>
 													</div>
 													{showtableprice ?
-														<div className={styles.tableroomselect} >
-															<table>
-																<thead>
-																	<tr>
-																		<th>#</th>
-																		<th>ชื่อรายการ</th>
-																		<th>จำนวน</th>
-																		<th>ราคา</th>
-																		<th>ภาษี</th>
-																		<th>ราคาทั้งหมด</th>
-																		<th>ภาษี</th>
-																	</tr>
-																</thead>
-																<tbody>
-																	{
-																	tableprice.map( (list,index) => 
-																	<tr>
-																		<td>{index}</td>
-																		<td>{list.name}</td>
-																		<td>{list.number}</td>
-																		<td>{list.price}</td>
-																		<td>{list.costvat}</td>
-																		<td>{list.totalprice}</td>
-																		<td>
-																		<input type="checkbox"checked={list.addvat} 
-																		onChange={()=>{
-																			
-																			let _tableprice = tableprice
-																			_tableprice[index].addvat = !_tableprice[index].addvat
-																			if(_tableprice[index].addvat === false){
-																				_tableprice[index].costvat = 0
-																				_tableprice[index].totalprice = Number(_tableprice[index].price*Number(_tableprice[index].number) ).toFixed(2)
-																			}else{
-																				_tableprice[index].costvat =Number(_tableprice[index].price*Number(_tableprice[index].number)*0.07).toFixed(2)
-																				_tableprice[index].totalprice = Number(_tableprice[index].price*Number(_tableprice[index].number)*1.07).toFixed(2)
+														<div>
+															<div>
+																 <button onClick={()=>{
+																	 let _tableprice = tableprice
+																	 if(_tableprice.length < 10){
+																		 
+																	 
+																		_tableprice = [..._tableprice,{
+																			name:"",
+																			number:"0",
+																			price:"0",
+																			costvat:"",
+																			totalprice:"",
+																			addvat:true
+																		}
+																		]
+																		seteditmodetableprices(true)
+																		settableprice([..._tableprice])
+																		console.log('_tableprice',_tableprice)
+																	 }
+																 }} >เพิ่มรายการค่าใช้จ่าย</button>
+																 <button onClick={ ()=>{
+																	 // Mode Edit table 
+																	 seteditmodetableprices(!editmodetableprice)
+																 }}
+																 > {editmodetableprice ? "ยกเลิกการแก้ไข": "แก้ไขรายการค่าใช้จ่าย"} </button>
+															</div>
+															<div className={styles.tableroomselect} >
+															
+																<table>
+																	<thead>
+																		<tr>
+																			<th>#</th>
+																			<th>ชื่อรายการ</th>
+																			<th>จำนวน</th>
+																			<th>ราคา</th>
+																			<th>ภาษี</th>
+																			<th>ราคาทั้งหมด</th>
+																			<th>ภาษี</th>
+																			 {editmodetableprice ? <th></th>:null}
+																		</tr>
+																	</thead>
+																	<tbody>
+																		{
+																		tableprice.map( (list,index) => 
+																		<tr>
+																			<td>{index}</td>
+																			<td>
+																			<input value={list.name}   type="text"  disabled={ !editmodetableprice} 
+																			 onChange ={(e)=>handleronChangetableprice(e,index,'name')}
+																			/>
 
+																			</td>
+																			<td><input value={list.number} type="text"  disabled={ !editmodetableprice} 
+																			onChange ={(e)=>handleronChangetableprice(e,index,'number')}
+																			/></td>
+																			<td><input value={list.price}  type="text"  disabled={ !editmodetableprice}
+																				onChange ={(e)=>handleronChangetableprice(e,index,'price')}
+																			/></td>
+																			<td>{list.costvat}</td>
+																			<td>{list.totalprice}</td>
+																			<td>
+																				<input type="checkbox"checked={list.addvat} 
+																				onChange={()=>{
+																					
+																					let _tableprice = tableprice
+																					_tableprice[index].addvat = !_tableprice[index].addvat
+																					if(_tableprice[index].addvat === false){
+																						_tableprice[index].costvat = 0
+																						_tableprice[index].totalprice = Number(_tableprice[index].price*Number(_tableprice[index].number) ).toFixed(2)
+																					}else{
+																						_tableprice[index].costvat =Number(_tableprice[index].price*Number(_tableprice[index].number)*0.07).toFixed(2)
+																						_tableprice[index].totalprice = Number(_tableprice[index].price*Number(_tableprice[index].number)*1.07).toFixed(2)
+
+																					}
+																					console.log('change',_tableprice)
+																					settableprice( [..._tableprice])
+																				}}
+																				>
+																				</input>
+																			</td>
+																			{editmodetableprice ?
+																			<td> <button onClick={()=> handlerdeletetableprice(index)}> X </button> </td> :null
 																			}
-																			console.log('change',_tableprice)
-																			settableprice( [..._tableprice])
-																		}}
-																		>
-																		</input>
-																		</td>
-																	</tr>
-																	)
-																	}
-																	
-																</tbody>
-															</table>
-														</div> :
+																		</tr>
+																		)
+																		}
+																		
+																	</tbody>
+																</table>
+															</div> 
+														</div>
+														:
 													null}
 
 
@@ -688,6 +759,6 @@ export const Checkout = () => {
 							</div>
 					</div>
 				</div>
-        </>
+        </div>
     )
 }

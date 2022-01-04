@@ -195,7 +195,8 @@ export const Checkin = () => {
 	})
 	const [ tableoption  ,settableoption ] = useState({
 	showindex:true,
-	disablemenu:true,
+	disablemenu:false,
+	disableedit:false,
 	topic:["รายการ","ราคา"],
 	body:[],
 		inputs: [
@@ -581,6 +582,7 @@ export const Checkin = () => {
 															})
 															let _tableoption = tableoption
 															_tableoption.body = room.data.RoomType.listoptionroom
+															console.log('_tableoption.body',_tableoption.body)
 															settableoption(_tableoption)
 														}
 															
@@ -1043,7 +1045,41 @@ export const Checkin = () => {
 								</div>
 								 {/* ตรางรายละเอียดห้องพัก */}
 								<div>
-										 <Table Data={tableoption} />
+										<div> 
+											<button onClick={()=> {
+												let _tableoption = tableoption
+												_tableoption.body = [..._tableoption.body , {name:"",price:"0"}]
+												settableoption({..._tableoption})
+											}}>เพิ่มรายการ</button>
+											<button onClick={()=>{
+												let _tableoption = tableoption
+												_tableoption.disableedit = !tableoption.disableedit
+												settableoption({...tableoption})
+											}}> { !tableoption.disableedit ? "แก้ไขรายการ" : "บันทึกรายการ" }</button>
+										 </div>
+										 <table>
+										 	<thead> 
+											 	<tr>
+												 	{tableoption.topic.map(topic =>
+													 <th>{topic}</th>
+													 )}
+												 	
+												</tr>
+											</thead>
+											<tbody>
+												{tableoption.body.map(data =>
+												<tr>
+											
+													<td> <input value={data.name}  disabled={ !tableoption.disableedit }/></td>
+													<td><input value={data.price}  disabled={ !tableoption.disableedit }/></td>
+												</tr>
+												)}
+											</tbody>
+										 </table>
+										 {/* <Table Data={tableoption}
+										 onClickDelete={()=>{console.log('delete')}}
+										 onClickEdit={()=>{console.log('edit')}}
+										  /> */}
 								</div>
 								<div className={styles.rowmenu} style={{float:"right"}}>
 									 {/* ออกใบแจ้งหนี้ */}
@@ -1064,7 +1100,7 @@ export const Checkin = () => {
 												variables: {
 													id: _room.id,
 													input: {
-														status:"มีคนอยู่"
+														status:"ย้ายเข้า"
 													}
 												}
 											});
