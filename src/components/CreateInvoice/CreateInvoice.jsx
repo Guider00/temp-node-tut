@@ -4,7 +4,7 @@ import styles from './CreateInvoice.module.css';
 import { useEffect, useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { API_queryRooms} from '../../API/index';
-
+import { API_GET_Invoice,API_ADD_Invoice,API_DELETE_Invoice,API_UPDATE_Invoice} from '../../API/Schema/Invoice/Invoice'
 
 const filter_rooms = (rooms , options_search) =>{
     let _filter_table = []
@@ -55,13 +55,14 @@ export const CreateInvoic = () =>{
     const [rooms , setrooms] = useState([]);
     const [filterrooms , setfilterrooms] = useState([]);
     const [ loadingpage, setloadingpage ] = useState(false);
-
+    const [IDrooms , setIDrooms] = useState([]);
+    const [addInvoice ,mutationaddInvoice ] = useMutation(API_ADD_Invoice);
+    const [deleteInvoice ,mutationdeleteInvoice ] = useMutation(API_DELETE_Invoice);
 
     const getRooms = async () => {
         return new Promise(async (resolve, reject) => {
             
             let res = await API_queryRooms();
-            console.log("get-first-res",res)
             let table = [];
             if (res && res.status === 200) {
                 table = res.data.rooms.map((data) => {
@@ -95,11 +96,11 @@ export const CreateInvoic = () =>{
                 setrooms(Rooms);
                 setfilterrooms(Rooms);
             }
-            console.log('rooms',rooms)
+
             fetchData();
             setloadingpage(true);
         },
-        [ loadingpage ]
+        [ loadingpage ,IDrooms]
     );
 
 
@@ -145,6 +146,7 @@ export const CreateInvoic = () =>{
 
     }
 
+
     const selectAll = () =>{
         let myCheckboxId = document.querySelector('#myCheckboxId')
         let myCheckboxMain = document.querySelector('#select-all');
@@ -156,19 +158,28 @@ export const CreateInvoic = () =>{
                 myCheckboxName[x].checked=true;
                 }
 
+            let _IDrooms = filterrooms.filter((room) => (room && room.status === 'จอง') || room.status === 'มีคนอยู่').map((room)=> {
+                return {...room}
+            })
+            setIDrooms(_IDrooms);
+            console.log("IDrooms-if",_IDrooms)
+
         }
         
         else{
             for (var x=0; x<myCheckboxNameLen; x++){
                 myCheckboxName[x].checked=false;
                 }
+            
+            let _IDrooms = IDrooms.filter(item => item !== item)
+            setIDrooms(_IDrooms)
+            console.log("IDrooms-else",_IDrooms)
+
+            
 
         }
-        
-        
-        
 
-        
+  
 
     }
    
@@ -181,13 +192,7 @@ export const CreateInvoic = () =>{
     let sim_table = [{"":"","อาคาร":"อาคารเอ","ชั้น":"01","ประเภทห้อง":"ห้องแอร์","ชื่อห้อง":"101","ประเภทการเช่า":"รายเดือน"},{"":"","อาคาร":"อาคารเอ","ชั้น":"01","ประเภทห้อง":"ห้องแอร์","ชื่อห้อง":"101","ประเภทการเช่า":"รายเดือน"}]
     return (
         <div className = {styles.zone}>
-            {/* {createInvoices.map(item => {
-                return (<p>
-                    {item.id}
-                    {item.room_type}
-                    </p>)
-                    }
-                )} */}
+            
             <div className = {styles.bigbox}>
                 <div className = {styles.flex}>
                     <lable className = {styles.head}>ออกใบแจ้งหนี้</lable>
@@ -246,7 +251,6 @@ export const CreateInvoic = () =>{
                                 <div className = {styles.all} >เลือกทั้งหมด </div>
 
                             </div>
-                           
         
                             <p className = {styles.flex}>
                                 <input  className = {styles.select}
@@ -264,7 +268,7 @@ export const CreateInvoic = () =>{
                                 
                                 <select className={styles.buttonmain}
                                         value={ options_search.keyword } 
-									    onChange={ (e)=>{
+                                        onChange={ (e)=>{
 										let _options_search = options_search
 										_options_search.keyword = e.target.value 
 										setoptions_search({..._options_search})
@@ -310,7 +314,29 @@ export const CreateInvoic = () =>{
                                         (room) =>
                                             room ? (
                                                 <tr>
-                                                    <td width={'20px'} ><input type='checkbox' name = "myCheckboxName" id="myCheckboxId"/></td>
+                                                    <td width={'20px'} ><input type='checkbox' 
+                                                    name = "myCheckboxName" 
+                                                    id="myCheckboxId"
+                                                    
+                                                    onChange={(e)=>{
+                                                        const checked = e.target.checked
+                                                        const id = room.id
+                                                        if(checked){
+                                                            let _IDrooms = IDrooms
+                                                        _IDrooms = [..._IDrooms,room]
+                                                        setIDrooms(_IDrooms)
+                                                        console.log('_IDrooms',_IDrooms)
+
+                                                        }
+                                                        else{
+                                                            let _IDrooms = IDrooms.filter(item => item.id !== id)
+                                                            setIDrooms(_IDrooms)
+                                                            
+                                
+                                                        }
+                                                        
+                                                    }}
+                                                    /></td>
                                                     <td width={'60px'} >{room.building ? room.building : '---'}</td>
                                                     <td width={'60px'} >{room.floor ? room.floor : '---'}</td>
                                                     <td width={'80px'} >{room.RoomType ? room.RoomType : '---'}</td>
@@ -355,11 +381,52 @@ export const CreateInvoic = () =>{
 
                 </div>
                 <div className={styles.lastbutton}>
-                    <button className = {styles.button}>
+                    <button className = {styles.button} onClick={ ()=>{
+                        IDrooms.map((room) =>{
+
+                            try{
+                                let _res = addInvoice({
+                                    variables: {
+                                        input:{
+                                            status:`${room.status}`,
+                                            roomid: `${room.id}`,
+                                            
+                                        }
+                                        
+                                    }
+                                });
+                                console.log("AddID",room.id)
+                                console.log("Success")
+    
+                            }catch(error){
+                                console.log(error)
+                            }
+                            
+
+
+
+                        })
+                        
+                    }}>
                         <i><CreateRoundedIcon/></i>
                         <div>ออกใบแจ้งหนี้</div>
                     </button>
-                    <button className = {styles.button}>
+                    <button className = {styles.button} onClick={
+                        ()=>{
+                            try{
+                                let _res = deleteInvoice({
+                                    variables: {
+                                        id: `${IDrooms.id}`
+                                    }
+                                });
+                                console.log("DeleteID",IDrooms.id)
+                                console.log("Success")
+
+                            }catch(error){
+                                console.log(error)
+                            }
+                        }
+                    }>
                         <i><CancelRoundedIcon/></i>
                         <div>ยกเลิก</div>
                 </button>
