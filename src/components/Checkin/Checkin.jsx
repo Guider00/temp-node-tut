@@ -1062,16 +1062,22 @@ export const Checkin = () => {
 											 	<tr>
 												 	{tableoption.topic.map(topic =>
 													 <th>{topic}</th>
+													 
 													 )}
+													  { tableoption.disableedit ? <th></th>:null }
 												 	
 												</tr>
 											</thead>
 											<tbody>
-												{tableoption.body.map(data =>
+												{tableoption.body.map( (data,index) =>
 												<tr>
-											
 													<td> <input value={data.name}  disabled={ !tableoption.disableedit }/></td>
 													<td><input value={data.price}  disabled={ !tableoption.disableedit }/></td>
+													 { (tableoption && tableoption.disableedit) ? <td><button onClick={()=>{
+														 let _tableoption  =tableoption
+														_tableoption.body.splice(index, 1)
+														settableoption({..._tableoption})
+													 }}> X </button></td>:null }
 												</tr>
 												)}
 											</tbody>
@@ -1081,39 +1087,47 @@ export const Checkin = () => {
 										 onClickEdit={()=>{console.log('edit')}}
 										  /> */}
 								</div>
+							
 								<div className={styles.rowmenu} style={{float:"right"}}>
+									<button  onClick={()=>{
+										// ดึงข้อมูลจาก checkin-list ไป สร้างใบแจ้งหนี้
+									}}>สร้างใบแจ้งหนี้ <PaidIcon/></button>
 									 {/* ออกใบแจ้งหนี้ */}
 									<button  onClick={()=>{
-										
+										// เปลี่ยน สถานะ ใบแจ้งหนี้  เป็นชำระเงิน
 									}}>ชำระเงิน <PaidIcon/></button>
 									  {/* ออกใบเสร็จ */}
-									<button > ออกใบเสร็จ  <ReceiptIcon/></button>
+									<button   onClick={()=>{
+										// ดึงข้อมูลใบแจ้งหนี้ ที่ชำระเงินแล้ว มาสร้างใบเสร็จ
+									}}> ออกใบเสร็จ  <ReceiptIcon/></button>
 								</div>
 								<div className={styles.rowmenu}>
 									<button 
 									disabled={ (selectedroom === null) }
 									onClick={ async ()=>{ 
+									  // ส่ง table option ไปบันทึกไว้ใน ห้อง 
 									// upload Room status
-									let _room = selectedroom
-									if(_room && _room.id){
-										let _res = await updateRoom({
-												variables: {
-													id: _room.id,
-													input: {
-														status:"ย้ายเข้า"
-													}
-												}
-											});
-										if(_res){
-											console.log('update status Room ')
-											GET_Rooms.refetch() 
-											setselectedroom(null)
-											clerformroomtype();
-											// reface page
-										}
-									}
+
+									// let _room = selectedroom
+									// if(_room && _room.id){
+									// 	let _res = await updateRoom({
+									// 			variables: {
+									// 				id: _room.id,
+									// 				input: {
+									// 					status:"ย้ายเข้า"
+									// 				}
+									// 			}
+									// 		});
+									// 	if(_res){
+									// 		console.log('update status Room ')
+									// 		GET_Rooms.refetch() 
+									// 		setselectedroom(null)
+									// 		clerformroomtype();
+									// 		// reface page
+									// 	}
+									// }
 					
-								} }>บันทึก <SaveIcon/> </button>
+								} }>บันทึก รายการ <SaveIcon/> </button>
 								 <button onClick={()=>{
 									 setselectedroom(null);
 									 clerformroomtype();

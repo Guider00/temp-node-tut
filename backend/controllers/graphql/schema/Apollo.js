@@ -93,6 +93,19 @@ const Receiptmutation = {
 
 }
 
+const {Checkinschema , Checkinschema_query , Checkinschema_mutation, Checkins,countCheckins ,CheckinByid, createCheckin , updateCheckin , deleteCheckin} = require('./Checkin/Checkin')
+
+const Checkinquery ={
+   Checkins : Checkins,
+   CheckinByid: CheckinByid,
+   countCheckins : countCheckins
+}
+const Checkinmutation ={
+   createCheckin : createCheckin,
+   updateCheckin :updateCheckin,
+   deleteCheckin: deleteCheckin
+}
+
 
 const { Fileschema ,  UploadFile_query  ,  UploadFileschema_mutation  , UploadFile , singleUpload }  = require('./UploadFile/UploadFile') 
 
@@ -158,6 +171,7 @@ const onMessagesBroadcast = (subscribers) => { subscribers.forEach((fn) => fn())
 
 
 const typeDefs = gql`
+${Checkinschema}
 ${Floorschema}
 ${Buildingschema}
 ${Memberschema}
@@ -175,6 +189,7 @@ ${Fileschema}
 ${Invoiceschema}
 ${Receiptschema}
 ${Alertschema}
+
 
 type SubMQTTServerstatus{
   name:String!
@@ -247,7 +262,7 @@ type Message {
     ${Roomschema_query}
     ${Invoicesschema_query}
     ${Receiptschema_query}
- 
+    ${Checkinschema_query}
 
     submqttserverstatus:[SubMQTTServerstatus]
     mqtthistory_packets:[MQTTHistory_packets]
@@ -272,6 +287,7 @@ type Message {
      ${UploadFileschema_mutation}
      ${Invoiceschema_mutation}
      ${Receiptschema_mutation}
+     ${Checkinschema_mutation}
 
     postMessage(user: String!, content: String!): ID!
     signup (email:String! , password:String! ,level:String!) : Signup
@@ -364,6 +380,7 @@ const resolvers = {
  
     ...Invoicequery,
       ...Receiptquery,
+      ...Checkinquery,
 
 
   },
@@ -407,6 +424,7 @@ const resolvers = {
     ...Addressmutation,
     ...Contractmation,
     ...Receiptmutation,
+    ...Checkinmutation,
    
     
  
