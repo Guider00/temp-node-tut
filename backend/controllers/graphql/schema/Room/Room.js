@@ -9,6 +9,8 @@ const { queryMeterRoomByid } = require('../MeterRoom/MeterRoom')
 const { queryRoomPriceByid } = require('../RoomPrice/RoomPrice')
 const { queryRoomTypeByid } = require('../RoomType/RoomType')
 
+const {queryCheckinByid ,Checkinschema} = require('../Checkin/Checkin')
+
  const _Roomschema = `
  input RoomInput {
     name:  String ,
@@ -28,7 +30,7 @@ const { queryRoomTypeByid } = require('../RoomType/RoomType')
     checkout_date: String,
 
 
-
+    checkinid: String,
     version: String 
   }
 
@@ -55,8 +57,19 @@ type BookinginRoom{
     confirm_booking:String
     receipt_number :String
 }
-
-
+type Checkinoption_Room{
+    name:String,
+    price:String,
+}
+type Checkin_Room{
+    id:String
+    id_contact:String
+    checkin_type:String 
+    rent_time:String
+    number_day_rent:String
+    branch:String
+    Checkinoption:[Checkinoption_Room]
+}
   type Room {
     id: String,
     name:  String ,
@@ -71,6 +84,7 @@ type BookinginRoom{
     RoomType : RoomType,
     checkin_date: String,
     checkout_date: String,
+    checkin : Checkin_Room,
 
 
     version:String 
