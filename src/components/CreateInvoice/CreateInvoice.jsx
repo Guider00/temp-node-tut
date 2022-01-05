@@ -63,7 +63,6 @@ export const CreateInvoic = () =>{
         return new Promise(async (resolve, reject) => {
             
             let res = await API_queryRooms();
-            console.log("get-first-res",res)
             let table = [];
             if (res && res.status === 200) {
                 table = res.data.rooms.map((data) => {
@@ -163,7 +162,7 @@ export const CreateInvoic = () =>{
                 return {...room}
             })
             setIDrooms(_IDrooms);
-            console.log("IDrooms-if",IDrooms)
+            console.log("IDrooms-if",_IDrooms)
 
         }
         
@@ -171,24 +170,16 @@ export const CreateInvoic = () =>{
             for (var x=0; x<myCheckboxNameLen; x++){
                 myCheckboxName[x].checked=false;
                 }
-
-        }
-
-
-    const handleChange = () =>{
-        let myCheckboxName = document.getElementsByName('myCheckboxName');
-        
-        if(myCheckboxName.checked == true){
-            console.log("45678")
             
+            let _IDrooms = IDrooms.filter(item => item !== item)
+            setIDrooms(_IDrooms)
+            console.log("IDrooms-else",_IDrooms)
+
+            
+
         }
 
-    }
-        
-        
-        
-
-        
+  
 
     }
    
@@ -327,11 +318,23 @@ export const CreateInvoic = () =>{
                                                     name = "myCheckboxName" 
                                                     id="myCheckboxId"
                                                     
-                                                    onChange={()=>{
-                                                        let _IDrooms = IDrooms
+                                                    onChange={(e)=>{
+                                                        const checked = e.target.checked
+                                                        const id = room.id
+                                                        if(checked){
+                                                            let _IDrooms = IDrooms
                                                         _IDrooms = [..._IDrooms,room]
                                                         setIDrooms(_IDrooms)
                                                         console.log('_IDrooms',_IDrooms)
+
+                                                        }
+                                                        else{
+                                                            let _IDrooms = IDrooms.filter(item => item.id !== id)
+                                                            setIDrooms(_IDrooms)
+                                                            
+                                
+                                                        }
+                                                        
                                                     }}
                                                     /></td>
                                                     <td width={'60px'} >{room.building ? room.building : '---'}</td>
