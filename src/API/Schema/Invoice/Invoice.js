@@ -12,6 +12,7 @@ query{
         status
         room{
             id
+            name
         }
     }
 }
