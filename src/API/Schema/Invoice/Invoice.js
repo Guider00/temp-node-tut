@@ -3,13 +3,17 @@ import { gql } from '@apollo/client';
 export const API_GET_Invoice = gql`
 
 query{
-    Invoice{
+    Invoices{
         id
         duedateinvoice
         monthlybilling
         printstatus
         status
-        room
+        status
+        room{
+            id
+            name
+        }
     }
 }
 
@@ -38,5 +42,14 @@ mutation updateInvoice($id:ID! , $input:InvoicInput){
 }
 ` ;
 
+export const API_CountInvoices = gql`
+query{
+    countInvoices{
+        String
+
+    }
+}
+
+`
 
 

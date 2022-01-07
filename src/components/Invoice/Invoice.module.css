@@ -4,7 +4,12 @@
     
     width: 95%;
     height: 100% ;
-    margin: 2rem auto;
+    margin: 1rem auto;
+    display: flex;
+    flex-wrap: wrap;
+    min-width: 780px;
+   
+
     
 }
 
@@ -13,19 +18,30 @@
 .container>.display{
    display: flex;
    justify-content: center;
-   flex-wrap: wrap;
    
-  
+   width: 100%;
+   height: 100% ;
+}
+
+@media only screen and (max-width:1400px) {
+    .container>.display{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+
+     }
+
+    
 }
 
 .container>.display>.zone1>.box1{
     
-    margin: 1rem auto;
-    min-width: 670px;
+    margin: 1rem ;
     width: 95%;
     height: 680px;
     border: 1px solid black;
     border-radius: 15px;
+    min-width: 725px;
     
     
 
@@ -40,8 +56,8 @@
 .container>.display>.zone2>.box2{
     
     
-    margin: 1rem;
-    width: 100%;
+    margin: 1rem ;
+    width: 95%;
     
     
     height: 680px;
@@ -53,37 +69,33 @@
 
     
 }
-.container>.buttonzone>.box3{
+.box3{
 
     text-align: right;
-    
-    width: 50%;
     max-height : 50% ;
     margin: 1rem;
     
     
 }
-.container>.buttonzone>.box4{
-   
-    width: 50%;
-    max-height : 50% ;
+.box4{
     margin: 1rem ;
     text-align: right;
+    max-height : 50% ;
     
     
     
 }
-.container>.buttonzone>.box3>.button1{
+.button1{
     margin: 0.5rem;
     
     
     
 }
-.container>.buttonzone>.box3>.button2{
+.button2{
     margin: 0.5rem ;
     
 }
-.container>.buttonzone>.box3>.button3{
+.button3{
     margin: 0.5rem ;
     
     
@@ -183,6 +195,7 @@
     
 }
 .container>.display>.zone1>.box1>.date>.part3{
+    padding: 5px 20px;
     
     
      
@@ -245,7 +258,8 @@
 }
 .container>.display>.zone1>.box1>.main>.research>.input1{
     width: 60%;
-    margin: 1rem;
+    margin: 0.5rem;
+    margin-left: 1.5rem;
     
     
        
@@ -261,6 +275,7 @@
 .container>.display>.zone1>.box1>.main>.research>.input3{
     margin-left: 1rem;
     padding: 5px 10px;
+    width: 110px;
     
        
 }
@@ -431,20 +446,20 @@
 .container>.display>.zone2>.box2>.topic4>.text1{
     
     margin-top: 1rem;
-    margin-left:8rem;
+    margin-left:5rem;
    
 }
 .container>.display>.zone2>.box2>.topic4>.text2{
     
     margin-top: 1rem;
-    margin-left: 7rem;
+    margin-left: 5rem;
    
 }
 
 .container>.display>.zone2>.box2>.topic4>.text3{
     
     margin-top: 1rem;
-    margin-left: 6rem;
+    margin-left: 4rem;
    
 }
 .container>.display>.zone2>.box2>.topic4>.input>.input1{
@@ -507,7 +522,7 @@
 }
 .head{
    margin-top: 0.5rem;
-   margin-right: 5rem;
+   margin-right: 2rem;
 }
     
     

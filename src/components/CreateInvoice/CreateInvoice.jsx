@@ -6,6 +6,8 @@ import { useQuery, useMutation } from '@apollo/client';
 import { API_queryRooms} from '../../API/index';
 import { API_GET_Invoice,API_ADD_Invoice,API_DELETE_Invoice,API_UPDATE_Invoice} from '../../API/Schema/Invoice/Invoice'
 
+
+
 const filter_rooms = (rooms , options_search) =>{
     let _filter_table = []
     if(rooms  &&  options_search){
@@ -48,6 +50,7 @@ const filter_rooms = (rooms , options_search) =>{
 
 export const CreateInvoic = () =>{
 
+    const [ Invoices , setInvoices] = useState([])
     const [ options_search  ,setoptions_search] = useState({
 		text:"",
 		keyword:"ทั้งหมด"
@@ -58,6 +61,21 @@ export const CreateInvoic = () =>{
     const [IDrooms , setIDrooms] = useState([]);
     const [addInvoice ,mutationaddInvoice ] = useMutation(API_ADD_Invoice);
     const [deleteInvoice ,mutationdeleteInvoice ] = useMutation(API_DELETE_Invoice);
+    const [date , setdate ] = useState([]);
+    const invoices = useQuery(API_GET_Invoice)
+    console.log('invoices',invoices)
+
+
+
+
+
+
+
+
+
+
+
+
 
     const getRooms = async () => {
         return new Promise(async (resolve, reject) => {
@@ -89,6 +107,9 @@ export const CreateInvoic = () =>{
     };
     
 
+
+
+
     useEffect(
         () => {
             async function fetchData() {
@@ -100,7 +121,7 @@ export const CreateInvoic = () =>{
             fetchData();
             setloadingpage(true);
         },
-        [ loadingpage ,IDrooms]
+        [ loadingpage ]
     );
 
 
@@ -153,9 +174,10 @@ export const CreateInvoic = () =>{
         let myCheckboxName = document.getElementsByName('myCheckboxName');
         let myCheckboxNameLen = myCheckboxName.length
         
-        if(myCheckboxMain.checked == true){
+        if(myCheckboxMain.checked == true  ){
             for (var x=0; x<myCheckboxNameLen; x++){
                 myCheckboxName[x].checked=true;
+                
                 }
 
             let _IDrooms = filterrooms.filter((room) => (room && room.status === 'จอง') || room.status === 'มีคนอยู่').map((room)=> {
@@ -165,6 +187,7 @@ export const CreateInvoic = () =>{
             console.log("IDrooms-if",_IDrooms)
 
         }
+      
         
         else{
             for (var x=0; x<myCheckboxNameLen; x++){
@@ -196,7 +219,14 @@ export const CreateInvoic = () =>{
             <div className = {styles.bigbox}>
                 <div className = {styles.flex}>
                     <lable className = {styles.head}>ออกใบแจ้งหนี้</lable>
-                    <div className = {styles.topic}> รอบบิล <input type = "date"></input>
+                    <div className = {styles.topic}> รอบบิล 
+                    <input type = "date" onChange={
+                        (e)=>{
+                            let _date = date
+                            _date =  e.target.value
+                            setdate(_date)
+                        }
+                    }/>
                 </div>
                 </div>
                 <div className = {styles.normalbox}>
@@ -331,6 +361,7 @@ export const CreateInvoic = () =>{
                                                         else{
                                                             let _IDrooms = IDrooms.filter(item => item.id !== id)
                                                             setIDrooms(_IDrooms)
+                                                            console.log('_IDrooms',_IDrooms)
                                                             
                                 
                                                         }
@@ -353,7 +384,7 @@ export const CreateInvoic = () =>{
 
                             </tbody>
                             
-                           
+                         
                             
 
 
@@ -390,13 +421,14 @@ export const CreateInvoic = () =>{
                                         input:{
                                             status:`${room.status}`,
                                             roomid: `${room.id}`,
+                                            monthlybilling: `${ date == '' ? '00-00-0000': date}`,
                                             
                                         }
                                         
                                     }
                                 });
                                 console.log("AddID",room.id)
-                                console.log("Success")
+                                
     
                             }catch(error){
                                 console.log(error)
@@ -412,19 +444,22 @@ export const CreateInvoic = () =>{
                         <div>ออกใบแจ้งหนี้</div>
                     </button>
                     <button className = {styles.button} onClick={
-                        ()=>{
-                            try{
-                                let _res = deleteInvoice({
-                                    variables: {
-                                        id: `${IDrooms.id}`
-                                    }
-                                });
-                                console.log("DeleteID",IDrooms.id)
-                                console.log("Success")
+                        ()=>{ 
+                            let myCheckboxMain = document.querySelector('#select-all');
+                            let myCheckboxName = document.getElementsByName('myCheckboxName');
+                            let myCheckboxNameLen = myCheckboxName.length 
+                            for (var x=0; x<myCheckboxNameLen; x++){
+                                myCheckboxName[x].checked=false;
+                                myCheckboxMain.checked=false;
+                                }
+                            
+                            let _IDrooms = IDrooms.filter(item => item !== item)
+                            setIDrooms(_IDrooms)
+                            console.log("IDrooms-else",_IDrooms)
 
-                            }catch(error){
-                                console.log(error)
-                            }
+                            let _date = date
+                            _date =  '00-00-0000'
+                            setdate(_date)
                         }
                     }>
                         <i><CancelRoundedIcon/></i>
