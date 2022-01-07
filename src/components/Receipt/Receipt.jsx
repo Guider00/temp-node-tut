@@ -13,6 +13,7 @@ export const Receipt = () => {
     
     const [receipt , setreceipt] = useState([])
     const [IDrooms , setIDrooms] = useState([])
+    const [selectrooms , setselectrooms] = useState([])
 
 
 
@@ -151,7 +152,18 @@ export const Receipt = () => {
                                     </thead>
                                     <tbody className ={styles.body}>
                                         {receipt.map( (data) =>
-                                        <tr>
+                                        <tr onClick={()=>{
+
+                                            let _selectrooms = selectrooms
+                                            _selectrooms = data.id
+                                            setselectrooms(_selectrooms)
+                                            console.log(_selectrooms)
+
+                                            
+                                            
+                                        }} style={{
+                                            background: selectrooms === data.id ? 'lightgray' : 'none'
+                                        }}>
                                             <td>    
                                                 <input type="checkbox" 
                                                 name = "myCheckboxName" 
@@ -174,9 +186,9 @@ export const Receipt = () => {
                                                 ></input>
                                             </td>
                                             <td width={'100px'}>{data.id ? data.id : "---"}</td>
-                                            <td width={'120px'} hover onClick={()=>{
-                                                console.log(data.id)
-                                            }}>{data.monthlybilling ? data.monthlybilling : "---"}</td>
+                                            <td width={'120px'}  onClick={()=>{
+                                                console.log(data.lists[0])
+                                            }} >{data.monthlybilling ? data.monthlybilling : "---"}</td>
                                             <td width={'80px'}>{data.note ? data.note : "---"}</td>
                                             <td width={'50px'}>{data.lists[0].number ? data.lists[0].number : "---"}</td>
                                             <td width={'100px'}>{data.lists[0].name ? data.lists[0].name : "---"}</td>
