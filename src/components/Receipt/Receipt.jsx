@@ -163,6 +163,8 @@ export const Receipt = () => {
                                             
                                         }} style={{
                                             background: selectrooms === data.id ? 'lightgray' : 'none'
+
+                                            
                                         }}>
                                             <td>    
                                                 <input type="checkbox" 

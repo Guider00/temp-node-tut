@@ -238,6 +238,8 @@ export const Invoice = () => {
                                     }}
                                     style={{
                                         background: selectrooms === data.id ? 'lightgray' : 'none'
+
+                                        
                                     }}>
                                         <td>    
                                             <input type="checkbox" 
