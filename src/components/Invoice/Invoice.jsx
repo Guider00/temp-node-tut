@@ -64,6 +64,7 @@ export const Invoice = () => {
     const [rooms , setrooms] = useState([])
     const [ filterrooms , setfilterrooms] = useState([])
     const [ deleteInvoice , mutationdeleteInvoice] = useMutation(API_DELETE_Invoice);
+    const [ empty , setempty ] = useState([])
 
     const selectAll = () =>{
         let myCheckboxMain = document.querySelector('#select-all');
@@ -112,6 +113,7 @@ export const Invoice = () => {
             _rooms = Invoice.data.Invoices
             setrooms(_rooms)
             setfilterrooms(_rooms)
+            console.log(Invoice.data.Invoices)
             
         }
         
@@ -147,7 +149,7 @@ export const Invoice = () => {
                                     <input className = {styles.side2} type = 'date'/>
 
                                     <lable>แสดงผล</lable>
-                                    <input className = {styles.side3}></input>
+                                    <input className = {styles.side3} placeholder='0.00'></input>
                                     <lable>เดือน</lable>
                                 </div>
                                 <div className = {styles.part2}>
@@ -281,36 +283,55 @@ export const Invoice = () => {
                                 <div>ชำระทั้งหมดที่เลือก</div>
                                 </button>
                             <button className = {styles.button3} 
-                            onClick={()=>{
+                            onClick={ async ()=>{
+                                let myCheckboxName = document.getElementsByName('myCheckboxName');
+                                let myCheckboxNameLen = myCheckboxName.length
                 
-                                IDrooms.map((room)=>{
+                                Promise.all(IDrooms).then((IDrooms)=>{
+                                    IDrooms.map(async (room)=>{
                                    
-                                    let _res = deleteInvoice({
-                                        variables:{
-                                            id:`${room.id}`
-                                            }
-                                        })
-                                        
-                                    if(_res){
-                                        Invoice.refetch()
+                                        let _res = await deleteInvoice({
+                                            variables:{
+                                                id:`${room.id}`
+                                                }
+                                            })
+                                            
+                                        if(_res){
+                                            
     
-                                        }
-                                    else{
-                                        console.log('error')
-                                        }
+    
+                                            for (var x=0; x<myCheckboxNameLen; x++){
+                                                myCheckboxName[x].checked=false;
+                                                }
+                                            
+                                            let _IDrooms = IDrooms.filter(item => item !== item)
+                                            setIDrooms(_IDrooms)
+    
+                                            console.log('_IDrooms_IDrooms',_IDrooms)
+                                            
+                                            
+    
+                                            Invoice.refetch();
+        
+                                            }
+                                        else{
+                                            console.log('error')
+                                            }
+    
+                                            
+                                            
+                                            
+    
+    
+    
+                                            
+    
+                                       
+                                    }
+                                    
+                                    )
 
-                                        
-                                        
-                                        
-
-
-
-                                        
-
-                                   
-                                }
-                                
-                                )
+                                })
                             }
                             }
                             
@@ -425,17 +446,17 @@ export const Invoice = () => {
                                 <div className = {styles.lastresult}>
                                     <div className = {styles.head} >
                                         <lable>รวม</lable>
-                                        <input className = {styles.onerem}></input>
+                                        <input className = {styles.onerem} placeholder='0.00'></input>
                                         <lable className = {styles.onerem}>บาท</lable>
                                     </div>
                                     <div className = {styles.head}>
                                         <lable>ภาษีมูลค่าเพิ่ม 7%</lable>
-                                        <input className = {styles.onerem}></input>
+                                        <input className = {styles.onerem} placeholder='0.00'></input>
                                         <lable className = {styles.onerem}>บาท</lable>
                                     </div>
                                     <div className = {styles.head}>
                                         <lable>รวมยอกเงินสุทธิ</lable>
-                                        <input className = {styles.onerem}></input>
+                                        <input className = {styles.onerem} placeholder='0.00'></input>
                                         <lable className = {styles.onerem}>บาท</lable>
                                     </div>
                                     
