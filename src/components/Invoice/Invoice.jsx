@@ -7,7 +7,7 @@ import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
 
-import { API_GET_Invoice,API_ADD_Invoice,API_DELETE_Invoice,API_UPDATE_Invoice} from '../../API/Schema/Invoice/Invoice'
+import { API_GET_Invoice,API_DELETE_Invoice,API_UPDATE_Invoice} from '../../API/Schema/Invoice/Invoice'
 import { useQuery , useMutation } from '@apollo/client';
 import { useEffect , useState } from 'react';
 
@@ -239,7 +239,7 @@ export const Invoice = () => {
                                     style={{
                                         background: selectrooms === data.id ? 'lightgray' : 'none'
 
-                                        
+
                                     }}>
                                         <td>    
                                             <input type="checkbox" 
