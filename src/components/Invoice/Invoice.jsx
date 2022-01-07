@@ -64,7 +64,7 @@ export const Invoice = () => {
     const [rooms , setrooms] = useState([])
     const [ filterrooms , setfilterrooms] = useState([])
     const [ deleteInvoice , mutationdeleteInvoice] = useMutation(API_DELETE_Invoice);
-    const [ empty , setempty ] = useState([])
+    const [ selectrooms , setselectrooms ] = useState([])
 
     const selectAll = () =>{
         let myCheckboxMain = document.querySelector('#select-all');
@@ -228,7 +228,17 @@ export const Invoice = () => {
                                     </tr>
                                 </thead>
                                 <tbody className ={styles.body}>{filterrooms.map( (data) =>
-                                    <tr>
+                                    <tr
+                                    onClick={()=>{
+
+                                        let _selectrooms = selectrooms
+                                        _selectrooms = [..._selectrooms,data.id]
+                                        setselectrooms(_selectrooms)
+                                        console.log(_selectrooms)
+                                    }}
+                                    style={{
+                                        background: selectrooms === data.id ? 'lightgray' : 'none'
+                                    }}>
                                         <td>    
                                             <input type="checkbox" 
                                             name = "myCheckboxName" 
