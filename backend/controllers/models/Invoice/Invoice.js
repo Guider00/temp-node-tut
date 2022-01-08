@@ -7,6 +7,15 @@ const schemaDefinition = new mongoose.Schema({
   printstatus : {type: String },
   status : {type: String },
   roomid: {type: String},
+   lists: [
+        {
+        name:{type:String},
+        number:{type:String},
+        price:{type:String},
+        vat:{type:Number , default: 7 },
+        selectvat :{type:String},
+        }
+    ]
 })
 module.exports = {
     db : mongoose.model("invoice", schemaDefinition)

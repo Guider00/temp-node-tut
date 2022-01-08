@@ -10,7 +10,7 @@ const schemaDefinition = new mongoose.Schema({
         name:{type:String},
         number:{type:String},
         price:{type:String},
-        vat:{type:Number},
+        vat:{type:Number ,  default: 7},
         selectvat :{type:String},
         }
     ]
