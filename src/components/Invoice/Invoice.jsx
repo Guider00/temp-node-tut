@@ -7,7 +7,7 @@ import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
 
-import { API_GET_Invoice,API_ADD_Invoice,API_DELETE_Invoice,API_UPDATE_Invoice} from '../../API/Schema/Invoice/Invoice'
+import { API_GET_Invoice,API_DELETE_Invoice,API_UPDATE_Invoice} from '../../API/Schema/Invoice/Invoice'
 import { useQuery , useMutation } from '@apollo/client';
 import { useEffect , useState } from 'react';
 
@@ -64,7 +64,7 @@ export const Invoice = () => {
     const [rooms , setrooms] = useState([])
     const [ filterrooms , setfilterrooms] = useState([])
     const [ deleteInvoice , mutationdeleteInvoice] = useMutation(API_DELETE_Invoice);
-    const [ empty , setempty ] = useState([])
+    const [ selectrooms , setselectrooms ] = useState([])
 
     const selectAll = () =>{
         let myCheckboxMain = document.querySelector('#select-all');
@@ -228,7 +228,19 @@ export const Invoice = () => {
                                     </tr>
                                 </thead>
                                 <tbody className ={styles.body}>{filterrooms.map( (data) =>
-                                    <tr>
+                                    <tr
+                                    onClick={()=>{
+
+                                        let _selectrooms = selectrooms
+                                        _selectrooms = data.id
+                                        setselectrooms(_selectrooms)
+                                        console.log(_selectrooms)
+                                    }}
+                                    style={{
+                                        background: selectrooms === data.id ? 'lightgray' : 'none'
+
+
+                                    }}>
                                         <td>    
                                             <input type="checkbox" 
                                             name = "myCheckboxName" 

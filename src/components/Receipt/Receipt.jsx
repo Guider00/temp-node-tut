@@ -1,12 +1,20 @@
 
 import styles from './Receipt.module.css';
 import { useEffect, useState } from 'react';
-
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-
+import { API_GET_Receipt,API_ADD_Receipt,API_DELETE_Receipt,API_UPDATE_Receipt} from '../../API/Schema/Receipt/Receipt'
+import { useQuery } from '@apollo/client';
+import { set } from 'mongoose';
 
 export const Receipt = () => {
-     //** calculate function  */
+
+    const Receipt = useQuery(API_GET_Receipt)
+    console.log('Receipt',Receipt)
+    
+    const [receipt , setreceipt] = useState([])
+    const [IDrooms , setIDrooms] = useState([])
+    const [selectrooms , setselectrooms] = useState([])
+
     const Inputdatenow = ()=>{
         let date = new Date();
         let day = date.getDate();
@@ -67,7 +75,26 @@ export const Receipt = () => {
 
 
     }
-    let header_table = ["","เลขที่ใบเสร็จ","เลขที่ใบแจ้งหนี้","วันที่ออกบิล","ชื่อห้อง","ชื่อผู้..","สถานะ","สถานะ การพิมพ์","รอบบิล"]
+
+    useEffect(()=>{
+
+        if(Receipt && Receipt.data && Receipt.data.Receipts){
+            let _receipt = receipt
+            _receipt = Receipt.data.Receipts
+            setreceipt(_receipt)
+            console.log("_receipt_receipt_receipt",_receipt)
+
+        }
+
+        
+
+    },[Receipt])
+
+
+
+
+
+    let header_table = ["","เลขที่ใบเสร็จ","เลขที่ใบแจ้งหนี้","วันที่ออกบิล","ชื่อห้อง","ชื่อผู้..","สถานะ","สถานะการพิมพ์","รอบบิล"]
     let sim_table = [{"เลือก":"","เลขที่ใบเสร็จ":"PEM12345678910","เลขที่ใบแจ้งหนี้":"DEV12345678910","วันที่ออกบิล":"1/2/2021","ชื่อห้อง":"205","ชื่อผู้จ..":"","สถานะ":"ปกติ","สถานะการพิมพ์":"พิมพ์แล้ว","รอบบิล":"02/2022"}]
 
     let header_table2 = ["รายการ","ชื่อรายการใช้จ่าย","จำนวน","จำนวนเงิน","ราคา","ภาษีมูลค่าเพิ่ม","จำนวนเงิน","ภาษี"]
@@ -92,7 +119,7 @@ export const Receipt = () => {
                                     <label className ={styles.spaceonerem}> ถึง </label>
                                     <input className ={styles.spaceonerem} id="enddate" type="date"  value={formsearch.enddate} onChange={handleChangeformsearch} ></input>
                                     <label className ={styles.spaceonerem}> แสดงผล </label>
-                                    <input className ={styles.spaceonerem} id="lenghthdispaly" value={formsearch.lenghthdispaly} onChange={handleChangeformsearch} ></input>
+                                    <input className ={styles.spaceonerem}  id="lenghthdispaly" value={formsearch.lenghthdispaly} onChange={handleChangeformsearch} ></input>
                                 </div>
                                 <div>
                                     <label> รอบบิล </label>
@@ -120,19 +147,56 @@ export const Receipt = () => {
                                         </tr>
                                     </thead>
                                     <tbody className ={styles.body}>
-                                        {sim_table.map( (data) =>
-                                        <tr>
+                                        {receipt.map( (data) =>
+                                        <tr onClick={()=>{
+
+                                            let _selectrooms = selectrooms
+                                            _selectrooms = data.id
+                                            setselectrooms(_selectrooms)
+                                            console.log(_selectrooms)
+
+                                            
+                                            
+                                        }} style={{
+                                            background: selectrooms === data.id ? 'lightgray' : 'none'
+
+
+                                        }}>
                                             <td>    
-                                                <input type="checkbox" name = "myCheckboxName" id="myCheckboxId"></input>
+                                                <input type="checkbox" 
+                                                name = "myCheckboxName" 
+                                                id="myCheckboxId" 
+                                                onChange={(e)=>{
+                                                    const checked = e.target.checked
+                                                    const id = data.id
+                                                    if(checked){
+                                                        let _IDrooms = IDrooms
+                                                        _IDrooms = [..._IDrooms,id]
+                                                        setIDrooms(_IDrooms)
+                                                        console.log("check",_IDrooms)
+                                                    }else{
+                                                        let _IDrooms = IDrooms.filter(item => item != id)
+                                                        setIDrooms(_IDrooms)
+                                                        console.log('uncheck',_IDrooms)
+                                                    }
+
+                                                }}
+                                                ></input>
                                             </td>
-                                            <td>{data["เลขที่ใบเสร็จ"]}</td>
-                                            <td>{data["เลขที่ใบแจ้งหนี้"]}</td>
-                                            <td>{data["วันที่ออกบิล"]}</td>
-                                            <td>{data["ชื่อห้อง"]}</td>
-                                            <td>{data["ชื่อผู้.."]}</td>
-                                            <td>{data["สถานะ"]}</td>
-                                            <td>{data["สถานะการพิมพ์"]}</td>
-                                            <td>{data["รอบบิล"]}</td>
+                                            <td width={'100px'}>{data.id ? data.id : "---"}</td>
+                                            <td width={'120px'}  onClick={()=>{
+                                                console.log(data.lists[0])
+                                            }} >{data.monthlybilling ? data.monthlybilling : "---"}</td>
+                                            <td width={'80px'}>{data.note ? data.note : "---"}</td>
+                                            <td width={'50px'}>{data.lists[0].number ? data.lists[0].number : "---"}</td>
+                                            <td width={'100px'}>{data.lists[0].name ? data.lists[0].name : "---"}</td>
+                                            <td width={'50px'}>{data.status ? data.status : "---"}</td>
+                                            <td width={'50px'}>{data.status ? data.status : "---"}</td>
+                                            <td width={'50px'}>{data.lists[0].selectvat ? data.lists[0].selectvat : "---"}</td>
+
+
+                                            
+                                            
                                         </tr>
                                         )
                                         }                
