@@ -253,11 +253,11 @@ export const Invoice = () => {
                                             />
                                             </td>
                                         <td>{data.id}</td>
-                                        <td>{data.room.name ? data.room.name : '---'}</td>
-                                        <td>{data.duedateinvoice ? data.duedateinvoice : '---'}</td>
-                                        <td>{data.status ? data.status : '---'}</td>
-                                        <td>{data.printstatus ? data.printstatus : '---'}</td>
-                                        <td>{data.monthlybilling ? data.monthlybilling : '---'}</td>
+                                        <td>{data && data.room && data.room.name ? data.room.name : '---'}</td>
+                                        <td>{data && data.duedateinvoice ? data.duedateinvoice : '---'}</td>
+                                        <td>{data && data.status ? data.status : '---'}</td>
+                                        <td>{data && data.printstatus ? data.printstatus : '---'}</td>
+                                        <td>{data && data.monthlybilling ? data.monthlybilling : '---'}</td>
                                         
                                     </tr>
                                         )
