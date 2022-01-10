@@ -4,8 +4,8 @@ const schemaDefinition = new mongoose.Schema({
   duedateinvoice: { type: String },
   
   monthlybilling : {type: String},
-  printstatus : {type: String },
-  status : {type: String },
+  printstatus : {type: String ,default:"รอการพิมพ์" },
+  status : {type: String ,default:"รอชำระเงิน" },
   roomid: {type: String},
    lists: [
         {

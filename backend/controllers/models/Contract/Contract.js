@@ -6,11 +6,13 @@ const schemaDefinition = new mongoose.Schema({
     RoomName: {type:String},
     RentType: {type:String},
     name: {type:String},
+  
     surname: {type:String},
     Check_in: {type:String},
     status: {type:String},
     Check_out: {type:String},
-    
+    checkinid:{type:String},
+    roomid:{type:String}
 
 
 })

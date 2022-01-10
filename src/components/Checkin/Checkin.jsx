@@ -8,6 +8,7 @@ import { Table } from "../../subcomponents/Table/Table"
 import SearchIcon from '@material-ui/icons/Search';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import PaidIcon from '@mui/icons-material/Paid';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import  { TableRoomMember }  from './TableRoomMember/TableRoomMember'
 import {  ModalSelectMember } from './ModalSelectMember/ModalSelectMember'
@@ -16,6 +17,8 @@ import { useQuery, useMutation } from '@apollo/client';
 import { API_UPDATE_MemberInRoom, API_DELET_MemberInRoom } from '../../API/Schema/Room/Room';
 import { API_UPDATE_Room ,API_GET_Rooms} from '../../API/Schema/Room/Room'
 import { API_createMember , API_updateMember} from '../../API/Schema/Member/Member'
+import { API_ADD_Invoice } from '../../API/Schema/Invoice/Invoice'
+
 
  // icon 
 
@@ -150,7 +153,11 @@ export const Checkin = () => {
 	const [ createMember, mutationcreateMember]  = useMutation(API_createMember)
 	const [ updateMember,mutationupdateMember] = useMutation(API_updateMember) 
 
+	const [ crateInvoice ] = useMutation(API_ADD_Invoice)
+
 	const [ modalselectmember , setmodalselectmember ] = useState(false)
+
+
 	
 
 
@@ -219,9 +226,23 @@ export const Checkin = () => {
 			}
 		},
 		
-	]
+				]
 
-})
+	})
+	const handlerchangetableoption = (e ,index) =>{
+		if( (e && e.target && e.target.value !== null)   ){
+			let _tableoption = tableoption
+			if(e.target.name === 'price'){
+				tableoption.body[index][e.target.name] =  e.target.value 
+
+			}else{
+					tableoption.body[index][e.target.name] =  e.target.value 
+			}
+		
+			
+			settableoption({..._tableoption})
+		}
+	}
 	//  function in file
 	const  clearformcheckin  = () =>{
 		setformcheckin({
@@ -534,7 +555,7 @@ export const Checkin = () => {
 									<th> เบอร์ติดต่อจอง </th>
 								</tr>
 								{rooms
-									.filter((room) => (room && room.status === 'จอง') || room.status === 'ห้องว่าง')
+									.filter((room) => (room && room.status === 'จอง') || room.status === 'ห้องว่าง' || room.status === 'ย้ายเข้า')
 									.map(
 										(room, index) =>
 											room ? (
@@ -581,7 +602,21 @@ export const Checkin = () => {
 																	listoptionroom: room.data.RoomType.listoptionroom
 															})
 															let _tableoption = tableoption
-															_tableoption.body = room.data.RoomType.listoptionroom
+															
+															if(room.data.checkinInvoice !== null ){
+																console.log('room.data',room.data.checkinInvoice)
+																if(room.data.checkinInvoice.lists &&  room.data.checkinInvoice.lists.length > 0){
+																	let _body = room.data.checkinInvoice.lists.map(obj =>{
+																		return {name:obj.name,price:obj.price };
+																		});
+																		
+																	_tableoption.body  = [..._body]
+																}	
+															}else{
+																 // ดึงข้อมูลจาก รายการเบิ้องต้นจากประเภทห้อง
+																_tableoption.body = room.data.RoomType.listoptionroom
+															}
+															
 															console.log('_tableoption.body',_tableoption.body)
 															settableoption(_tableoption)
 														}
@@ -1044,10 +1079,11 @@ export const Checkin = () => {
 									</div>
 								</div>
 								 {/* ตรางรายละเอียดห้องพัก */}
-								<div>
-										<div> 
+								<div className={styles.zonetablelist}>
+										 <div className={styles.menutablelist}> 
 											<button onClick={()=> {
 												let _tableoption = tableoption
+												_tableoption.disableedit = true
 												_tableoption.body = [..._tableoption.body , {name:"",price:"0"}]
 												settableoption({..._tableoption})
 											}}>เพิ่มรายการ</button>
@@ -1057,84 +1093,148 @@ export const Checkin = () => {
 												settableoption({...tableoption})
 											}}> { !tableoption.disableedit ? "แก้ไขรายการ" : "บันทึกรายการ" }</button>
 										 </div>
-										 <table>
-										 	<thead> 
-											 	<tr>
-												 	{tableoption.topic.map(topic =>
-													 <th>{topic}</th>
-													 
-													 )}
-													  { tableoption.disableedit ? <th></th>:null }
-												 	
-												</tr>
-											</thead>
-											<tbody>
-												{tableoption.body.map( (data,index) =>
-												<tr>
-													<td> <input value={data.name}  disabled={ !tableoption.disableedit }/></td>
-													<td><input value={data.price}  disabled={ !tableoption.disableedit }/></td>
-													 { (tableoption && tableoption.disableedit) ? <td><button onClick={()=>{
-														 let _tableoption  =tableoption
-														_tableoption.body.splice(index, 1)
-														settableoption({..._tableoption})
-													 }}> X </button></td>:null }
-												</tr>
-												)}
-											</tbody>
-										 </table>
+										 <div className={styles.tablelist} >
+											<table>
+												<thead> 
+													<tr>
+														{tableoption.topic.map(topic =>
+														<th>{topic}</th>
+														
+														)}
+														{ tableoption.disableedit ? <th></th>:null }
+														
+													</tr>
+												</thead>
+												<tbody>
+													{tableoption.body.map( (data,index) =>
+													<tr>
+														<td><input type="text" value={data.name}   name="name" onChange={(e)=>handlerchangetableoption(e,index)}
+														disabled={ !tableoption.disableedit }/></td>
+														<td><input  type="text"value={data.price}  name="price" onChange={(e)=>handlerchangetableoption(e,index)}  disabled={ !tableoption.disableedit }/></td>
+														{ (tableoption && tableoption.disableedit) ? <td><button onClick={()=>{
+															let _tableoption  =tableoption
+															_tableoption.body.splice(index, 1)
+															settableoption({..._tableoption})
+														}}> <DeleteIcon/> </button></td>:null }
+													</tr>
+													)}
+												</tbody>
+											</table>
+										 </div>
 										 {/* <Table Data={tableoption}
 										 onClickDelete={()=>{console.log('delete')}}
 										 onClickEdit={()=>{console.log('edit')}}
 										  /> */}
 								</div>
 							
-								<div className={styles.rowmenu} style={{float:"right"}}>
-									<button  onClick={()=>{
-										// ดึงข้อมูลจาก checkin-list ไป สร้างใบแจ้งหนี้
-									}}>สร้างใบแจ้งหนี้ <PaidIcon/></button>
-									 {/* ออกใบแจ้งหนี้ */}
-									<button  onClick={()=>{
-										// เปลี่ยน สถานะ ใบแจ้งหนี้  เป็นชำระเงิน
-									}}>ชำระเงิน <PaidIcon/></button>
-									  {/* ออกใบเสร็จ */}
-									<button   onClick={()=>{
-										// ดึงข้อมูลใบแจ้งหนี้ ที่ชำระเงินแล้ว มาสร้างใบเสร็จ
-									}}> ออกใบเสร็จ  <ReceiptIcon/></button>
-								</div>
+							
 								<div className={styles.rowmenu}>
 									<button 
 									disabled={ (selectedroom === null) }
 									onClick={ async ()=>{ 
 									  // ส่ง table option ไปบันทึกไว้ใน ห้อง 
 									// upload Room status
+									console.log('บันทึกรายการ',tableoption)
+									let _tableoption = tableoption
+									let _updatetableoption   = _tableoption.body.map(obj  =>{
+										return ({name:obj.name , price:obj.price})
+									})
+									try{
+										let _res_createInvoice = await crateInvoice({
+											variables:{
+												input:{
+													status:"รอชำระเงิน",
+													  lists:[..._updatetableoption]
+												}
+											}
+										})
+										if(_res_createInvoice && _res_createInvoice.data && _res_createInvoice.data.addInvoice.id){ 
+											 // สร้างใบเสร็จสำเร็จ //
+											console.log('create invoice',_res_createInvoice)
+											let _idinvoce = _res_createInvoice.data.addInvoice.id
+											let _room = selectedroom
+											if(_room && _room.id){
+												let _res = await updateRoom({
+														variables: {
+															id: _room.id,
+															input: {
+																status:"ย้ายเข้า",
+																checkinInvoiceid:_idinvoce
+															}
+														}
+													});
+												if(_res){
+													console.log('update status Room ')
+													GET_Rooms.refetch() 
+													setselectedroom(null)
+													clerformroomtype();
+													let _tableoption = tableoption
+													_tableoption.disableedit = !tableoption.disableedit
+													settableoption({...tableoption})
+													// reface page
+												}
+											}
+										}
 
-									// let _room = selectedroom
-									// if(_room && _room.id){
-									// 	let _res = await updateRoom({
-									// 			variables: {
-									// 				id: _room.id,
-									// 				input: {
-									// 					status:"ย้ายเข้า"
-									// 				}
-									// 			}
-									// 		});
-									// 	if(_res){
-									// 		console.log('update status Room ')
-									// 		GET_Rooms.refetch() 
-									// 		setselectedroom(null)
-									// 		clerformroomtype();
-									// 		// reface page
-									// 	}
-									// }
+
+
+
+									}catch(e){
+										console.log(e)
+									}
+									
 					
 								} }>บันทึก รายการ <SaveIcon/> </button>
-								 <button onClick={()=>{
+								 <button onClick={ async ()=>{
+									 //ลบ รายการ invoices
+									let _room = selectedroom
+									try{
+										if(_room && _room.id && _room.data &&  _room.data.checkinInvoice){
+											let _res = await updateRoom({
+													variables: {
+														id: _room.id,
+														input: {
+															checkinInvoiceid:null
+														}
+													}
+												});
+											if(_res && _res.data){
+
+											}else{
+												console.log('communication Error ')
+											}
+
+										}
+									}catch(e){
+										console.log(e)
+									}
+									console.log(_room)
 									 setselectedroom(null);
 									 clerformroomtype();
 								 }
 								 
 								 }>ยกเลิก </button>
 								</div>
+
+								<div className={styles.rowmenu} style={{float:"right"}}>
+									<button  onClick={()=>{
+										// ดึงข้อมูลจาก checkin-list ไป สร้างใบแจ้งหนี้
+									}}>ออกเอกสารสัญญา <ReceiptIcon/></button>
+									<button  onClick={()=>{
+										// ดึงข้อมูลจาก checkin-list ไป สร้างใบแจ้งหนี้
+									}}>สร้างใบแจ้งหนี้ <PaidIcon/></button>
+									 {/* ออกใบแจ้งหนี้ */}
+									<button  onClick={()=>{
+										// เปลี่ยน สถานะ ใบแจ้งหนี้  เป็นชำระเงิน
+
+										 // update Invoice  status เป็นชำระเงิน
+									}}>ชำระเงิน <PaidIcon/></button>
+									  {/* ออกใบเสร็จ */}
+									<button   onClick={()=>{
+										// ดึงข้อมูลใบแจ้งหนี้ ที่ชำระเงินแล้ว มาสร้างใบเสร็จ
+									}}> ออกใบเสร็จ  <ReceiptIcon/></button>
+								</div>
+								
 
 							</div>
 						</div>

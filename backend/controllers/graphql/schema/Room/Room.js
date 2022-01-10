@@ -10,6 +10,8 @@ const { queryRoomPriceByid } = require('../RoomPrice/RoomPrice')
 const { queryRoomTypeByid } = require('../RoomType/RoomType')
 
 const {queryCheckinByid ,Checkinschema} = require('../Checkin/Checkin')
+const {queryInvoiceByid} = require('../Invoice/Invoice')
+const { queryReceiptByid } = require('../Receipt/Receipt')
 
  const _Roomschema = `
  input RoomInput {
@@ -29,8 +31,18 @@ const {queryCheckinByid ,Checkinschema} = require('../Checkin/Checkin')
     checkin_date: String,
     checkout_date: String,
 
+    checkinid:String,
 
-    checkinid: String,
+
+    checkinInvoiceid: String,
+    checkinReceiptid:String,
+
+    monthlyInvoiceid:String,
+    monthlyReceiptid:String,
+
+    checkoutInvoiceid:String,
+    checkoutReceiptid:String,
+
     version: String 
   }
 
@@ -57,10 +69,7 @@ type BookinginRoom{
     confirm_booking:String
     receipt_number :String
 }
-type Checkinoption_Room{
-    name:String,
-    price:String,
-}
+
 type Checkin_Room{
     id:String
     id_contact:String
@@ -68,7 +77,6 @@ type Checkin_Room{
     rent_time:String
     number_day_rent:String
     branch:String
-    Checkinoption:[Checkinoption_Room]
 }
   type Room {
     id: String,
@@ -84,7 +92,18 @@ type Checkin_Room{
     RoomType : RoomType,
     checkin_date: String,
     checkout_date: String,
+
     checkin : Checkin_Room,
+
+    checkinInvoice:Invoice,
+    checkinReceipt:Receipt,
+
+    monthlyInvoice:Invoice,
+    monthlyReceipt:Receipt,
+
+    checkoutInvoice:Invoice,
+    checkoutReceipt:Receipt
+
 
 
     version:String 
@@ -272,6 +291,20 @@ const _deletebookingsinRoom =  async (payload , payload2) =>{
             payload.meterroom = await queryMeterRoomByid ( { id: payload.meterroom})
             payload.roomprice = await queryRoomPriceByid({id:payload.roomprice})
             payload.RoomType = await queryRoomTypeByid({id:payload.RoomType})
+
+            // เพิ่มตัวแปร checkin  
+
+            payload.checkinInvoice = await queryInvoiceByid({id:payload.checkinInvoiceid})
+            payload.checkoutReceipt = await queryInvoiceByid({id:payload.checkoutReceiptid})
+
+            payload.monthlyInvoice = await queryInvoiceByid({id:payload.monthlyInvoiceid})
+            payload.monthlyReceipt = await queryInvoiceByid({id:payload.monthlyReceiptid})
+
+
+            payload.checkoutInvoice = await queryInvoiceByid({id:payload.checkoutInvoiceid})
+            payload.checkoutReceipt = await queryInvoiceByid({id:payload.checkoutReceiptid})
+
+
             
             return (payload)
         })

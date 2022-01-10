@@ -14,6 +14,14 @@ query{
             id
             name
         }
+        list{
+            id
+            name,
+            number,
+            price,
+            vat,
+            selectvat,
+        }
     }
 }
 

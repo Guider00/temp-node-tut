@@ -267,6 +267,83 @@ export const API_GET_Rooms = gql`
                 }
                 
             }
+
+            checkinInvoice{
+                id
+                status
+                printstatus
+                lists{
+                    id
+                    name
+                    price
+                    number
+                    vat
+                    selectvat
+                }
+            }
+            checkinReceipt{
+                id
+                status
+                lists{
+                    id
+                    name
+                    price
+                    number
+                    vat
+                    selectvat
+                }
+            }
+            
+            monthlyInvoice{
+                id
+                status
+                printstatus
+                lists{
+                    id
+                    name
+                    price
+                    number
+                    vat
+                    selectvat
+                }
+            }
+            monthlyReceipt{
+                id
+                status
+                lists{
+                    id
+                    name
+                    price
+                    number
+                    vat
+                    selectvat
+                }
+            }
+
+            checkoutInvoice{
+                id
+                status
+                printstatus
+                lists{
+                    id
+                    name
+                    price
+                    number
+                }
+            }
+            checkoutReceipt{
+                id
+                status
+                lists{
+                    id
+                    name
+                    price
+                    number
+                    vat
+                    selectvat
+                }
+            }
+
         }
     }
 `;
