@@ -39,6 +39,7 @@ input ReceiptInput {
 const _Receiptschema_query =`
     Receipts :[Receipt]
     countReceipts : String 
+    queryReceiptByid: Receipt
 `
 const _Receiptschema_mutation = `
     createReceipt(input:ReceiptInput):MessageCreate!,
@@ -56,6 +57,24 @@ const _countReceipts = async (filter) =>{
      }
 
 }
+const _queryReceiptByid = async(payload ,payload2) =>{
+    if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
+
+    try {
+        if(!payload){ return null }
+        if(!payload.id){ return null }
+        if(!payload.id.match(/^[0-9a-fA-F]{24}$/)) { return "Error Format ID"}
+        let resulted = await db.findById({_id:payload.id})
+        if(!resulted) { return null}
+
+        return (
+            resulted
+        )
+    } catch (error) {
+        return error
+    }
+}
+
 const _Receipts =async (filter) =>{
     try{
         let resulted =  await db.find(filter)
@@ -165,6 +184,7 @@ exports.countReceipts = _countReceipts
 
 
 exports.Receipts  =_Receipts 
+exports.queryReceiptByid = _queryReceiptByid
 
 exports.createReceipt = _createReceipt
 

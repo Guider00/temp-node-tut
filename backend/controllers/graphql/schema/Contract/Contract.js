@@ -14,6 +14,8 @@ type Contract{
     Check_in: String
     status: String
     Check_out: String
+    Checkin:Checkin
+    Room:Room
     
 }
 
@@ -28,11 +30,14 @@ input ContractInput{
     Check_in: String
     status: String
     Check_out: String
+    checkinid:String
+    roomid:String
 
 }
 `
 const _Contract_query = `
 Contracts:[Contract]
+queryContractByid :Contract
 `
 
 const _Contract_mutation = `
@@ -42,8 +47,26 @@ deleteContract(id:ID!):MessageDelete,
 
 `
 
+const _queryContractByid = async(payload ,payload2) =>{
 
-const _Contractquery = async (filter) => {
+    if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
+
+    try {
+        if(!payload){ return null }
+        if(!payload.id){ return null }
+        if(!payload.id.match(/^[0-9a-fA-F]{24}$/)) { return "Error Format ID"}
+        let resulted = await db.findById({_id:payload.id})
+        if(!resulted) { return null}
+
+        return (
+            resulted
+        )
+    } catch (error) {
+        return error
+    }
+}
+
+const _Contracts = async (filter) => {
 
     try{
 
@@ -106,9 +129,11 @@ const _deleteContract = async (payload, payload2) =>{
 }
 
 exports.Contractschema = _Contractschema
+
+exports.queryContractByid = _queryContractByid 
 exports.Contract_query = _Contract_query
 exports.Contract_mutation = _Contract_mutation
-exports.Contractquery = _Contractquery
+exports.Contracts = _Contracts
 
 
 exports.createContract = _createContract

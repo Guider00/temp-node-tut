@@ -53,7 +53,11 @@ const Checkoutinformation = {
 
 }
 
-const{Contractschema,Contract_query,Contract_mutation,Contractquery,createContract,updateContract,deleteContract} = require('./Contract/Contract')
+const{Contractschema,Contract_query,Contract_mutation,Contracts , queryContractByid ,createContract,updateContract,deleteContract} = require('./Contract/Contract')
+const Contractquery = {
+      Contracts : Contracts,
+      queryContractByid :queryContractByid
+}
 const Contractmation = {
   createContract:createContract,
   updateContract:updateContract,
@@ -68,10 +72,11 @@ const Contractmation = {
   updateAddress:updateAddress,
   }
 
-const { Invoiceschema , Invoicesschema_query ,Invoiceschema_mutation,Invoices , countInvoices , addInvoice , updateInvoice , deleteInvoice} = require('./Invoice/Invoice')
+const { Invoiceschema , Invoicesschema_query ,Invoiceschema_mutation,Invoices,queryInvoiceByid , countInvoices , addInvoice , updateInvoice , deleteInvoice} = require('./Invoice/Invoice')
 const Invoicequery = {
   Invoices:Invoices,
   countInvoices : countInvoices,
+  queryInvoiceByid :queryInvoiceByid
 }
 const Invoicemutation = {
  addInvoice: addInvoice,
@@ -79,10 +84,10 @@ const Invoicemutation = {
  deleteInvoice:deleteInvoice
 }
 
-const {Receiptschema , Receiptschema_query , Receiptschema_mutation, Receipts,countReceipts , createReceipt ,updateReceiptlist, updateReceipt , deleteReceipt} = require('./Receipt/Receipt')
+const {Receiptschema , Receiptschema_query , Receiptschema_mutation, Receipts,queryReceiptByid,countReceipts , createReceipt ,updateReceiptlist, updateReceipt , deleteReceipt} = require('./Receipt/Receipt')
 const Receiptquery = {
   Receipts:Receipts,
-
+  queryReceiptByid :queryReceiptByid,
   countReceipts: countReceipts
 }
 const Receiptmutation = {
@@ -365,7 +370,7 @@ const resolvers = {
     CreateInvoices :CreateInvoicequery,
 
     Checkoutinforms : Checkoutinformquery,
-    Contracts : Contractquery,
+
 
     Addresss:Addressquery,
 
@@ -377,7 +382,7 @@ const resolvers = {
     querymembersinRoom: querymembersinRoom,
     querybookingsinRoom: querybookingsinRoom,
 
- 
+    ...Contractquery,
     ...Invoicequery,
       ...Receiptquery,
       ...Checkinquery,

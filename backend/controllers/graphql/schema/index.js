@@ -16,6 +16,9 @@ const { Portmeterschema, queryPortmeters, queryPortmeterByid, createPortmeter, d
 
 const { Noteschema , queryNotes , queryNoteByid , createNote , deleteNote , updateNote } = require('./Note/Note')
 
+const { Invoiceschema  } = require('./Invoice/Invoice')
+const { Receiptschema  } = require('./Receipt/Receipt')
+
 const { RoomTypeschema  } = require('./RoomType/RoomType')
 
  // real time system status 
@@ -41,7 +44,8 @@ const schema = buildSchema(`
   ${MeterRoomschema}
   ${Portmeterschema}
   ${RoomTypeschema}
-
+  ${Invoiceschema}
+  ${Receiptschema}
   ${Noteschema}
 
   type MessageCreate{

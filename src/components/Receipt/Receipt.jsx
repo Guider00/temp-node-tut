@@ -187,12 +187,12 @@ export const Receipt = () => {
                                             <td width={'120px'}  onClick={()=>{
                                                 console.log(data.lists[0])
                                             }} >{data.monthlybilling ? data.monthlybilling : "---"}</td>
-                                            <td width={'80px'}>{data.note ? data.note : "---"}</td>
-                                            <td width={'50px'}>{data.lists[0].number ? data.lists[0].number : "---"}</td>
-                                            <td width={'100px'}>{data.lists[0].name ? data.lists[0].name : "---"}</td>
-                                            <td width={'50px'}>{data.status ? data.status : "---"}</td>
-                                            <td width={'50px'}>{data.status ? data.status : "---"}</td>
-                                            <td width={'50px'}>{data.lists[0].selectvat ? data.lists[0].selectvat : "---"}</td>
+                                            <td width={'80px'}>{ data.note ? data.note : "---"}</td>
+                                            <td width={'50px'}>{  data.lists[0] && data.lists[0].number ? data.lists[0].number : "---"}</td>
+                                            <td width={'100px'}>{ data.lists[0] && data.lists[0].name ? data.lists[0].name : "---"}</td>
+                                            <td width={'50px'}>{ data.lists[0] && data.status ? data.status : "---"}</td>
+                                            <td width={'50px'}>{ data.lists[0] && data.status ? data.status : "---"}</td>
+                                            <td width={'50px'}>{ data.lists[0] && data.lists[0].selectvat ? data.lists[0].selectvat : "---"}</td>
 
 
                                             
