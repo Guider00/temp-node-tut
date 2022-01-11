@@ -8,6 +8,13 @@
 
 }
 
+.test{
+    
+    height: 450px;
+    width: 100%;
+    overflow-y: overlay;
+    
+}
 
 
 .container>.zone1{
@@ -122,18 +129,27 @@
     
     
 }
-.container>.zone1>.body>.table{
-    width: 100%;
+.container>.zone1>.body>.test>.table{
+    width: 95%;
     height: 50px;
     border-collapse: collapse;
     margin: auto;
     
     
+    
+    
 }
 
-.container>.zone1>.body>.table>.head{
+.container>.zone1>.body>.test>.table>.head{
     font-size:medium;
     background-color: darkgray;
+    
+    
+}
+.container>.zone1>.body>.test>.table>.body{
+    font-size:medium;
+    
+    
     
     
 }
