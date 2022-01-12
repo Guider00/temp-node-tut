@@ -1,7 +1,11 @@
 const  {  db  }  = require('../../../models/Rooms/Rooms')
 const { queryFloorByid }  = require('../Floor/Floor')
 const { queryMemberByid } =require('../Member/Member')
+
 let FuncBook = require('../Booking/Booking')
+const { queryInvoiceByid , queryInvoicedetailsByid} = require('../Invoice/Invoice')
+const { queryReceiptByid } = require('../Receipt/Receipt')
+const { queryContractByid , queryContractdetailsByid } = require('../Contract/Contract')
 
 
 
@@ -10,11 +14,12 @@ const { queryRoomPriceByid } = require('../RoomPrice/RoomPrice')
 const { queryRoomTypeByid } = require('../RoomType/RoomType')
 
 const {queryCheckinByid ,Checkinschema} = require('../Checkin/Checkin')
-const {queryInvoiceByid} = require('../Invoice/Invoice')
-const { queryReceiptByid } = require('../Receipt/Receipt')
+
+
+
 
  const _Roomschema = `
- input RoomInput {
+input RoomInput {
     name:  String ,
     type: String,
     status: String,
@@ -34,7 +39,7 @@ const { queryReceiptByid } = require('../Receipt/Receipt')
     checkinid:String,
 
 
-    checkinInvoiceid: String,
+    checkinInvoiceid:String,
     checkinReceiptid:String,
 
     monthlyInvoiceid:String,
@@ -42,6 +47,8 @@ const { queryReceiptByid } = require('../Receipt/Receipt')
 
     checkoutInvoiceid:String,
     checkoutReceiptid:String,
+
+    contractid:String
 
     version: String 
   }
@@ -51,6 +58,18 @@ input MemberID{
 }
 input BookingID{
     id: ID!
+}
+type ContractinRoom{
+    id:String
+    Contractnumber: String
+    RoomType: String
+    RoomName: String
+    RentType: String
+    name: String
+    surname: String
+    Check_in: String
+    status: String
+    Check_out: String
 }
 type BookinginRoom{
     id: String
@@ -69,15 +88,16 @@ type BookinginRoom{
     confirm_booking:String
     receipt_number :String
 }
-
-type Checkin_Room{
-    id:String
-    id_contact:String
-    checkin_type:String 
-    rent_time:String
-    number_day_rent:String
-    branch:String
+type InvoiceinRoom{
+    id:ID!
+    duedateinvoice : String
+    monthlybilling : String,
+    printstatus : String ,
+    status : String,
+    lists:[Invoice_list]
 }
+
+
   type Room {
     id: String,
     name:  String ,
@@ -93,17 +113,18 @@ type Checkin_Room{
     checkin_date: String,
     checkout_date: String,
 
-    checkin : Checkin_Room,
+    checkin : Checkin,
 
-    checkinInvoice:Invoice,
+    checkinInvoice:InvoiceinRoom,
     checkinReceipt:Receipt,
 
-    monthlyInvoice:Invoice,
+    monthlyInvoice:InvoiceinRoom,
     monthlyReceipt:Receipt,
 
-    checkoutInvoice:Invoice,
-    checkoutReceipt:Receipt
+    checkoutInvoice:InvoiceinRoom,
+    checkoutReceipt:Receipt,
 
+    Contract:Contract
 
 
     version:String 
@@ -292,17 +313,20 @@ const _deletebookingsinRoom =  async (payload , payload2) =>{
             payload.roomprice = await queryRoomPriceByid({id:payload.roomprice})
             payload.RoomType = await queryRoomTypeByid({id:payload.RoomType})
 
-            // เพิ่มตัวแปร checkin  
+        
+            payload.checkin  = await queryCheckinByid({id:payload.checkinid})
 
-            payload.checkinInvoice = await queryInvoiceByid({id:payload.checkinInvoiceid})
-            payload.checkoutReceipt = await queryInvoiceByid({id:payload.checkoutReceiptid})
+            payload.checkinInvoice = await queryInvoicedetailsByid({id:payload.checkinInvoiceid})
+            payload.checkinReceipt = await queryReceiptByid({id:payload.checkinReceiptid})
 
-            payload.monthlyInvoice = await queryInvoiceByid({id:payload.monthlyInvoiceid})
-            payload.monthlyReceipt = await queryInvoiceByid({id:payload.monthlyReceiptid})
+            payload.monthlyInvoice = await queryInvoicedetailsByid({id:payload.monthlyInvoiceid})
+            payload.monthlyReceipt = await queryReceiptByid({id:payload.monthlyReceiptid})
 
 
-            payload.checkoutInvoice = await queryInvoiceByid({id:payload.checkoutInvoiceid})
-            payload.checkoutReceipt = await queryInvoiceByid({id:payload.checkoutReceiptid})
+            payload.checkoutInvoice = await queryInvoicedetailsByid({id:payload.checkoutInvoiceid})
+            payload.checkoutReceipt = await queryReceiptByid({id:payload.checkoutReceiptid})
+
+            payload.Contract = await queryContractdetailsByid({id:payload.contractid})
 
 
             
@@ -363,8 +387,7 @@ const _deleteRoom = async (payload,payload2 ) =>{
          return error
      }
  }
-
- const _queryRoomByid = async (payload , payload2) =>{
+const _queryRoomByid = async (payload , payload2) =>{
          if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
     try {
         if(!payload){ return null }
@@ -387,7 +410,20 @@ const _deleteRoom = async (payload,payload2 ) =>{
                 } ) ),
                 meterroom : await queryMeterRoomByid ( { id: data.meterroom}),
                 roomprice : await queryRoomPriceByid({id:data.roomprice}),
-                RoomType : await queryRoomTypeByid({id:data.RoomType})
+                RoomType : await queryRoomTypeByid({id:data.RoomType}),
+                checkin  : await queryCheckinByid({id:data.checkinid}),
+
+                checkinInvoice : await queryInvoicedetailsByid({id:data.checkinInvoiceid}),
+                checkinReceipt : await queryReceiptByid({id:data.checkoutReceiptid}),
+
+                monthlyInvoice : await queryInvoicedetailsByid({id:data.monthlyInvoiceid}),
+                monthlyReceipt : await queryReceiptByid({id:data.monthlyReceiptid}),
+
+
+                checkoutInvoice : await queryInvoicedetailsByid({id:data.checkoutInvoiceid}),
+                checkoutReceipt : await queryReceiptByid({id:data.checkoutReceiptid}),
+
+                Contract : await queryContractdetailsByid({id:data.contractid}),
             })
         }else{
             return null // not found  Room 
@@ -431,7 +467,7 @@ const _subRooms  = (parent, args, { user }) =>{
 
 
 /** API Booking in Room  */
-exports.addbookingsinRoom = _addbookingsinRoom
+exports.addbookingsinRoom =_addbookingsinRoom
 exports.deletebookingsinRoom = _deletebookingsinRoom
 exports.querybookingsinRoom = _querybookingsinRoom
 
@@ -442,6 +478,7 @@ exports.deletememberinRoom = _deletememberinRoom
 exports.querymembersinRoom = _querymembersinRoom
 
 /** API  Room  */
+
 exports.queryRoomByid = _queryRoomByid
 exports.queryRooms = _queryRooms
 exports.updateRoom  = _updateRoom
@@ -455,5 +492,4 @@ exports.Roomschema = _Roomschema
 exports.Roomschema_query = _Roomschema_query
 exports.Roomschema_mutation = _Roomschema_mutation
 exports.Roomschema_subscription = _Roomschema_subscription
-
 

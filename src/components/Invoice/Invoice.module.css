@@ -279,22 +279,27 @@
     
        
 }
-.container>.display>.zone1>.box1>.table{
+.container>.display>.zone1>.box1>.tablecontent{
     margin: 1rem auto;
-    width: 95%;
-    border-collapse: collapse;
-    
-       
+    flex-basis: 100%;
+    display: flex;
+    justify-content: center;
+    overflow-y: auto;
+    max-height: 24rem;
 }
 .container>.display>.zone2>.box2>.table{
     margin: 1rem auto;
     width: 95%;
     border-collapse: collapse;
+ 
+       
+}
+.container>.display>.zone1>.box1>.tablecontent>table>.header{
+   width: 100%;
     
        
 }
-
-.container>.display>.zone1>.box1>.table>.header{
+.container>.display>.zone1>.box1>.tablecontent>table>.header{
     background-color: rgb(168, 168, 170);
     text-align: center;
     
@@ -308,10 +313,11 @@
     
        
 }
-.container>.display>.zone1>.box1>.table>.body{
-    
+.container>.display>.zone1>.box1>.tablecontent>table>.body{
+   
     text-align: center;
     font-size: small;
+
        
 }
 .container>.display>.zone2>.box2>.table>.body{
@@ -320,6 +326,8 @@
     font-size: small;
        
 }
+
+
 .container>.display>.zone2>.box2>.topic1{
     margin: 1rem;
     font-size: medium;

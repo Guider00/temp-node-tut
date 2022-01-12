@@ -5,8 +5,10 @@ input MemberInput {
    name:  String ,
    lastname: String,
    personalid : String,
-   tel: String,
+   taxnumber:String,
+   address : String,
    email :String
+   tel: String,
    carid : String,
    note : String
  }
@@ -15,6 +17,8 @@ input MemberInput {
    name: String,
    lastname: String,
    personalid : String,
+   taxnumber:String,
+   address : String,
    tel: String,
    email :  String,
    carid : String,
@@ -100,8 +104,10 @@ const _createMember = async( payload , payload2 ) =>{
                 id:data._id.toString() ,
                 name:  data.name ,
                 lastname : data.lastname,
-                tel  : data.tel,
                 personalid : data.personalid,
+                taxnumber:data.taxnumber,
+                address : data.address,
+                tel  : data.tel,
                 email: data.email,
                 carid: data.carid,
                 note : data.note

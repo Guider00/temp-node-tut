@@ -16,24 +16,28 @@ type Checkin{
     id:String
     id_contact:String
     checkin_type:String 
-    rent_time:String
+    checkin_date:String
+    rental_deposit:String
     number_day_rent:String
     branch:String
     Checkinoption:[Checkinoption]
+   
 }
 
 input CheckinInput{
     id_contact:String
     checkin_type:String 
-    rent_time:String
+    checkin_date:String
+    rental_deposit:String
     number_day_rent:String
     branch:String
     Checkinoption:[CheckinoptionInput]
+ 
 }
 `
 const _Checkinschema_query =`
     Checkins :[Checkin]
-    CheckinByid:Checkin
+    queryCheckinByid:Checkin
     countCheckins : String 
 `
 const _Checkinschema_mutation = `
@@ -54,7 +58,8 @@ const _countCheckins = async (filter) =>{
      }
 
 }
-const _CheckinByid = async (payload , payload2) =>{
+
+const _queryCheckinByid = async (payload , payload2) =>{
   try {
         if(!payload){ return null }
         if(!payload.id){ return null }
@@ -62,8 +67,8 @@ const _CheckinByid = async (payload , payload2) =>{
         let resulted = await db.findById({_id:payload.id})
         if(!resulted) { return null}
         
-        let data  = resulted._doc
-        return (data)
+   
+        return (resulted)
     } catch (error) {
         return error
     }
@@ -132,7 +137,7 @@ const _deleteCheckin = async (payload,payload2) =>{
 
 exports.countCheckins = _countCheckins
 
-exports.CheckinByid = _CheckinByid
+exports.queryCheckinByid = _queryCheckinByid
 exports.Checkins  =_Checkins
 
 exports.createCheckin = _createCheckin

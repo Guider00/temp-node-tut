@@ -11,6 +11,8 @@ import {
     API_UPDATE_Contract
 } from '../../API/Schema/Contract/Contract'
 
+import {  export_Contract   } from '../../general_functions/pdf/export/export_pdf';
+
 
 const filter_room = (rooms , options_search) =>{
     let _filter_table = []
@@ -265,15 +267,15 @@ export const Contract = () => {
                                 <td>
                                     <input type='checkbox' ></input>
                                 </td>
-                                <td>{item.Contractnumber}</td>
-                                <td>{item.RoomType}</td>
-                                <td>{item.RoomName}</td>
-                                <td>{item.RentType}</td>
-                                <td>{item.name}</td>
-                                <td>{item.surname}</td>
-                                <td>{item.Check_in}</td>
-                                <td>{item.status}</td>
-                                <td>{item.Check_out}</td>
+                                <td>{ item && item.Contractnumber ?  item.Contractnumber  : "---"}</td>
+                                <td>{ item && item.Room && item.Room.RoomType.name ?  item.Room.RoomType.name :  "---"}</td>
+                                <td>{ item && item.Room && item.Room.name ? item.Room.name : "---"}</td>
+                                <td>{ item && item.Room && item.Room.checkin && item.Room.checkin.checkin_type ? item.Room.checkin.checkin_type  :"---"}</td>
+                                <td>{ item && item.Room && item.Room.members &&  item.Room.members.length>0  &&  item.Room.members[0].name ?  item.Room.members[0].name :"---"  }</td>
+                                <td>{ item && item.Room && item.Room.members &&  item.Room.members.length>0  &&  item.Room.members[0].lastname ?  item.Room.members[0].lastname :"---" }</td>
+                                <td>{ item && item.Room && item.Room.checkin &&  item.Room.checkin.checkin_date ? item.Room.checkin.checkin_date : "---"}</td>
+                                <td>{ item && item.status ? item.status :"---"}</td>
+                                <td>{ item && item.Room && item.Room.checkout &&  item.Room.checkout.checkout_date ?  item.Room.checkout.checkout_date : "---" }</td>
                             </tr>
                             
                             )}
@@ -286,7 +288,11 @@ export const Contract = () => {
 
                     </div>
                     <div className={styles.button}>
-                        <button className={styles.print}>พิมพ์</button>
+                        <button className={styles.print}
+                            onClick={()=>{
+                                export_Contract()
+                            }}
+                        >พิมพ์</button>
                         <button className={styles.importfile}>แนบไฟล์</button>
                     </div>
 

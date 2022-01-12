@@ -43,6 +43,8 @@ export const createMember= (input) =>{
         name:"${input.name}",
         lastname:"${input.lastname}",
         personalid:"${input.personalid}",
+        taxnumber:"${input.taxnumber}",
+        address:"${input.address}",
         tel:"${input.tel}",
         email:"${input.email}",
         carid:"${input.carid}",
@@ -65,6 +67,8 @@ export const updateMember = (id , input) =>{
                             name:"${input.name}",
                             lastname:"${input.lastname}",
                             personalid:"${input.personalid}",
+                            taxnumber:"${input.taxnumber}",
+                            address:"${input.address}",
                             tel:"${input.tel}",
                             email:"${input.email}",
                             carid:"${input.carid}",
@@ -105,6 +109,8 @@ export const API_GET_Members = gql`
             name
             lastname
             personalid
+            taxnumber
+            address
             tel
             email
             carid

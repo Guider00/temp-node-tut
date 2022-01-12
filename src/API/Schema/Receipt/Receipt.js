@@ -16,7 +16,28 @@ query{
                     price
                     vat
                     selectvat
-        }
+                }
+                Invoice{
+                    id
+                    status
+                    lists
+                    {
+                        id
+                        name
+                        number
+                        price
+                        vat
+                        selectvat
+                    }
+                    Room{
+                        id
+                        name
+                        member{
+                            name
+                            lastname
+                        }
+                    }
+                }
       }
 }
 

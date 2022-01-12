@@ -13,7 +13,8 @@ const schemaDefinition = new mongoose.Schema({
         vat:{type:Number ,  default: 7},
         selectvat :{type:String},
         }
-    ]
+    ],
+    invoiceid:{type:String}
 })
 module.exports = {
     db: mongoose.model("receipt", schemaDefinition)

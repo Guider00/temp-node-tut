@@ -10,14 +10,23 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import SearchIcon from '@material-ui/icons/Search';
 import CalculateIcon from '@mui/icons-material/Calculate';
 
-import { export_invoice_pdf  , export_Receipt_pdf } from '../../general_functions/pdf/export/export_pdf';
+import { export_Invoice_pdf  , export_Receipt_pdf } from '../../general_functions/pdf/export/export_pdf';
 
 
 import { API_queryRooms, API_queryBuildings, API_updateMeterRoomkwh, API_updateMeterRoomwater } from '../../API/index';
 
 
+
+
+
 import { useQuery, useMutation } from '@apollo/client';
 import { API_UPDATE_Room ,API_GET_Rooms} from '../../API/Schema/Room/Room'
+import { API_ADD_Invoice , API_UPDATE_Invoice } from '../../API/Schema/Invoice/Invoice'
+import { API_CREATE_Checkin ,API_DELETE_Checkin , API_UPDATE_Checkin } from '../../API/Schema/Checkin/Checkin'
+import { API_CREATE_Contract , API_DELETE_Contract , API_UPDATE_Contract } from '../../API/Schema/Contract/Contract'
+import { API_CREATE_Receipt }  from '../../API/Schema/Receipt/Receipt'
+
+
 
 import { filter_rooms } from '../../general_functions/filter'
 
@@ -202,6 +211,9 @@ export const Checkout = () => {
 
 	const GET_Rooms = useQuery(API_GET_Rooms);
 	const [ updateRoom, mutationuploadFile ] = useMutation(API_UPDATE_Room)
+	const [ crateInvoice ] = useMutation(API_ADD_Invoice)
+	const [ deleteContract] = useMutation(API_DELETE_Contract)
+
 
 	useEffect(
 		() => {
@@ -675,7 +687,32 @@ export const Checkout = () => {
 														<button  disabled={(selectedroom === null)} onClick={ async ()=>{ 
 															console.log('tableprice',tableprice)
 															console.log('selectedroom',selectedroom)
-															export_invoice_pdf(selectedroom , tableprice)
+															let newtable = tableprice.map(data=>{
+																let _data = data
+																_data.unit = data.number
+																return _data
+															})
+															let _list  = tableprice.map(data=>{
+																
+																return {
+																		name: data.name,
+																		number: `${data.number}`,
+																		price: `${data.price}`,
+																		selectvat : `${data.addvat}`
+																		}
+															})
+															console.log('_list',_list)
+																let _res = await crateInvoice({
+																			variables:{
+																				input:{
+																					status:"รอการชำระเงิน",
+																					lists:[..._list]
+																				}
+																			}
+																		})
+
+															export_Invoice_pdf(selectedroom , newtable)
+
 														
 														 }} > ออกใบแจ้งหนี้ <PictureAsPdfIcon/>  </button>
 													
@@ -707,7 +744,7 @@ export const Checkout = () => {
 															alert('ไม่พบค่าวันย้ายออก')
 														}
 										
-													} }>แจ้งย้ายออก <SaveIcon/> </button>
+													} }>ย้ายออก <SaveIcon/> </button>
 
 													</div>
 													<div className={styles.rowmenuright}>

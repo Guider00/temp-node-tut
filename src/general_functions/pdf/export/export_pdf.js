@@ -292,7 +292,7 @@ export const export_booking_pdf = ( booking , owner , customer_details   ) =>{
   
 }
 
-export const export_booking_pdf9 = () =>{
+export const export_Contract = (contract ) =>{
 
     
     let location = "213ข.6 หมูบ้านรมรื่น ถนนราชพฤกษ์ ข.28 แขวงตลิ่งชัน เขตตลิ่งชัน"
@@ -506,7 +506,7 @@ export const export_booking_pdf9 = () =>{
 
 }
  // ใบแจ้งหนี้  // 
-export const export_invoice_pdf =  ( room ,table_price) =>{
+export const export_Invoice_pdf =  ( room ,table_price) =>{
 
     let business_Address_1 = "119 ซอยสีม่วงอนุสรณ์ ถนน สุทธิสาร"
     let business_Address_2 = "แขวง ดินแดง เขต ดินแดง กรุงเทพ 10400"
@@ -519,7 +519,7 @@ export const export_invoice_pdf =  ( room ,table_price) =>{
                      ? `${room.data.members[0].name}  ${room.data.members[0].lastname} ` : '--------'
     let Address1 = "........................................."   // ที่อยู่ ของผู้รับบิล
     let Address2 = "........................................."    // ที่อยู่ ของผู้รับบิล
-    let No = room.id ? room.id : "---"
+    let No =  ( room && room.data  &&  room.data.id )  ? room.data.id : "---"
     let _Date =  formatDate(new Date())
     let HoneNo = room.name ? room.name : "------"
     let Month = "12/2021"
@@ -709,33 +709,21 @@ export const export_invoice_pdf =  ( room ,table_price) =>{
 
 
  // ใบเสร็จ  //
-export const export_Receipt_pdf =  ( booking , type  ) =>{
  
-    let Noanswer = "-"
-    let business_Address_1 = "119 ซอยสีม่วงอนุสรณ์ ถนน สุทธิสาร"
-    let business_Address_2 = "แขวง ดินแดง เขต ดินแดง กรุงเทพ 10400"
-    let Taxid = "0105536011803"
-    let Phone = "026937005"
-    let Email = "sales@primusthai.com" 
-    console.log('export_Receipt_pdf',booking)
-    let Name = booking.customer_name  ?  `${booking.customer_name} ${booking.customer_lastname}`  : Noanswer 
-    let Address1 = "-----------------" /// ที่อยู่ ผู้รับใบเสร็จ 
-    let Address2 = "-----------------"
-    let No = booking.id ? booking.id : Noanswer
-    let _Date =  formatDate(new Date())
-    let HoneNo = booking.Room &&  booking.Room.floor && booking.Room.floor.building && booking.Room.floor.building.name ? booking.Room.floor.building.name :Noanswer
-    let Room = booking.Room ? booking.Room.name :Noanswer
-    let Money  = "0.00"
-    let credit = "  ...คนออกบิล... "
-    let Time = toHHMMSS(new Date())
-    let table_prices = []
+export const export_Receipt_pdf =  ( booking , type  ) =>{
+    
+    if(booking  === undefined){
+        alert('ไม่มีข้อมูลในการสร้าง ใบเสร็จ')
+        return
+    }
+      let table_prices = []
     if(type === 'booking')
     {
         table_prices = [{ 
                     name:`เงินจองห้อง ${booking.Room.name}` ,
                     unit:"1",
-                    price:booking.deposit,
-                    amount:booking.deposit
+                    price:booking.deposit ? booking.deposit:"0",
+                    amount:booking.deposit ? booking.deposit:"0"
                  }]
     }
     else if( type  === 'checkin' )
@@ -746,6 +734,24 @@ export const export_Receipt_pdf =  ( booking , type  ) =>{
     {
 
     }
+    let Noanswer = "-"
+    let business_Address_1 = "119 ซอยสีม่วงอนุสรณ์ ถนน สุทธิสาร"
+    let business_Address_2 = "แขวง ดินแดง เขต ดินแดง กรุงเทพ 10400"
+    let Taxid = "0105536011803"
+    let Phone = "026937005"
+    let Email = "sales@primusthai.com" 
+    console.log('export_Receipt_pdf',booking)
+    let Name = booking.customer_name  ?  `${booking.customer_name} ${booking.customer_lastname}`  : Noanswer 
+    let Address1 = booking && booking.customer_address ?  booking.customer_address  : "-----------------" /// ที่อยู่ ผู้รับใบเสร็จ 
+    let Address2 = "-----------------"
+    let No = booking.id ? booking.id : Noanswer
+    let _Date =  formatDate(new Date())
+    let HoneNo = booking.Room &&  booking.Room.floor && booking.Room.floor.building && booking.Room.floor.building.name ? booking.Room.floor.building.name :Noanswer
+    let Room = booking.Room && booking.Room.name ? booking.Room.name :Noanswer
+    let Money  = "0.00"
+    let credit = "  ...คนออกบิล... "
+    let Time = toHHMMSS(new Date())
+  
     let _total_price = 0
     table_prices.map(item => _total_price += (item && item.price ) ?  Number(item.price) : 0 )
     let Grandtotal = `${_total_price}`
@@ -914,4 +920,8 @@ export const export_Receipt_pdf =  ( booking , type  ) =>{
 
 
 
+}
+
+export const export_taxinvoice_pdf = () =>{
+    
 }

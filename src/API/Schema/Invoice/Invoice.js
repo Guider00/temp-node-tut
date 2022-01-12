@@ -1,37 +1,38 @@
 import { gql } from '@apollo/client';
 
 export const API_GET_Invoice = gql`
-
-query{
-    Invoices{
-        id
-        duedateinvoice
-        monthlybilling
-        printstatus
-        status
-        status
-        room{
-            id
-            name
-        }
-        list{
-            id
-            name,
-            number,
-            price,
-            vat,
-            selectvat,
-        }
-    }
-}
-
+	query {
+		Invoices {
+			id
+            duedateinvoice
+			printstatus
+			status
+			Room {
+				id
+				name
+                members{
+                    id
+                    name
+                    lastname
+                }
+			}
+			lists {
+				id
+				name
+                number
+				price
+                selectvat
+                vat
+			}
+		}
+	}
 `;
 export const API_ADD_Invoice = gql`
-    mutation addInvoice($input:InvoicInput!){
-        addInvoice(input: $input){
-            id
-        }
-    }
+	mutation addInvoice($input: InvoicInput!) {
+		addInvoice(input: $input) {
+			id
+		}
+	}
 `;
 export const API_DELETE_Invoice = gql`
 	mutation deleteInvoice($id: ID!) {
@@ -42,22 +43,18 @@ export const API_DELETE_Invoice = gql`
 	}
 `;
 export const API_UPDATE_Invoice = gql`
-mutation updateInvoice($id:ID! , $input:InvoicInput){
-	updateInvoice(id:$id,input:$input){
-		n
-		nModified
+	mutation updateInvoice($id: ID!, $input: InvoicInput) {
+		updateInvoice(id: $id, input: $input) {
+			n
+			nModified
+		}
 	}
-}
-` ;
+`;
 
 export const API_CountInvoices = gql`
-query{
-    countInvoices{
-        String
-
-    }
-}
-
-`
-
-
+	query {
+		countInvoices {
+			String
+		}
+	}
+`;

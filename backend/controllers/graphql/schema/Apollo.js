@@ -27,6 +27,10 @@ const { RoomTypeschema,RoomTypeschema_query,RoomTypeschema_mutation ,queryRoomTy
 const { RoomPriceschema} = require('./Roomprice/Roomprice')
 const { Portmeterschema } = require('./PortMeter/PortMeter')
 const { MeterRoomschema } = require('./MeterRoom/MeterRoom')
+
+
+
+
 const {Roomschema,Roomschema_query,Roomschema_mutation ,
 queryRooms ,queryRoomByid ,createRoom,deleteRoom,updateRoom,
 addmemberinRoom, deletememberinRoom, querymembersinRoom,
@@ -98,11 +102,11 @@ const Receiptmutation = {
 
 }
 
-const {Checkinschema , Checkinschema_query , Checkinschema_mutation, Checkins,countCheckins ,CheckinByid, createCheckin , updateCheckin , deleteCheckin} = require('./Checkin/Checkin')
+const {Checkinschema , Checkinschema_query , Checkinschema_mutation, Checkins,countCheckins ,queryCheckinByid, createCheckin , updateCheckin , deleteCheckin} = require('./Checkin/Checkin')
 
 const Checkinquery ={
    Checkins : Checkins,
-   CheckinByid: CheckinByid,
+   queryCheckinByid: queryCheckinByid,
    countCheckins : countCheckins
 }
 const Checkinmutation ={
@@ -377,12 +381,14 @@ const resolvers = {
     RoomTypes : queryRoomTypes,
     RoomTypeByid : queryRoomTypeByid,
 
+  
+      
     Rooms :queryRooms,
-    RoomByid : queryRoomByid,
+     RoomByid : queryRoomByid,
     querymembersinRoom: querymembersinRoom,
     querybookingsinRoom: querybookingsinRoom,
 
-    ...Contractquery,
+  ...Contractquery,
     ...Invoicequery,
       ...Receiptquery,
       ...Checkinquery,
