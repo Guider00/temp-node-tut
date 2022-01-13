@@ -169,9 +169,14 @@ export const Checkoutinform = () => {
 										type="text"
 										value={options_search.text}
 										onChange={(e) => {
-											let _options_search = options_search
-											_options_search.text = e.target.value 
-											setoptions_search({..._options_search})
+                                            let text = /[^0-9a-zA-Zก-๙]/ig;
+                                            e.target.value = e.target.value.replace(text,'')
+
+                                            let _options_search = options_search
+                                                _options_search.text = e.target.value 
+                                                setoptions_search({..._options_search})
+                                           
+											
 										}}
 									/>
                             <select className={styles.selectstyles}
@@ -232,7 +237,7 @@ export const Checkoutinform = () => {
                                                     <td width={'80px'} >{room.status ? room.status : '---'}</td>
                                                     <td width={'100px'} >{room.name}</td>
                                                     <td width={'100px'} >{room.surname}</td>
-                                                    <td width={'80px'} >{room.checkout ? room.checkout : '---'}</td>
+                                                    <td width={'80px'} ><input type = 'date'/></td>
                                                     <td width={'60px'} >
                                                         <button 
                                                     className={styles.CheckButton}

@@ -1,0 +1,151 @@
+
+
+.container{
+    max-width: 95%;
+    background-color: rgb(255, 255, 255);
+    margin: 10px auto;
+    padding: 20px;
+    border: 1px solid black;
+    border-radius: 20px;
+    min-width: 580px;
+}
+.container>.main{
+    max-width: 95%;
+    background-color: rgb(255, 255, 255);
+    margin: 1rem auto;
+    
+    
+    border-radius: 20px;
+}
+.container>.main>.header{
+    max-width: 100%;
+    margin: 5px auto;
+    padding: 20px;
+    border-radius: 20px;
+    
+    
+}
+.container>.main>.header>.headertext{
+  
+}
+.container>.main>.header>.headerselect{
+    width:30%;
+    min-width: 200px;
+    height: 20px;
+    font-size: medium;
+}
+
+.container>.main>.header>.headerfilter{
+    width: 110px;
+    height: 25px;
+    margin: 1rem;
+    font-size: medium;
+}
+.container>.main>.header>.headerall{
+    width: 5%;
+    min-width: 60px;
+    height: 25px;
+    margin: 1rem auto;
+    font-size: medium;
+}
+.container>.main>.header>.headerdefault{
+    width: 5%;
+    min-width: 60px;
+    height: 25px;
+    margin: 1rem ;
+    font-size: medium;
+    
+}
+
+
+
+
+.container>.main>.table{
+    max-width: 100%;
+    height: 350px;
+    background-color: rgb(255, 255, 255);
+    margin: 5px auto;
+    padding: 20px;
+    border-radius: 20px;
+    overflow-y: auto;
+    
+    
+    border: 1px solid black;
+}
+.container>.main>.table>.tablestyles{
+    border-collapse: collapse;
+    width: 100%;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid black;
+    
+    
+    
+}
+
+.container>.main>.table>.tablestyles>.thead{
+    width: 100%;
+    position: sticky;
+    top: 0;
+    background-color: darkgray;
+    font-size: 15px;
+    
+    
+}
+.container>.main>.table>.tablestyles>.tbody{
+    
+    
+    
+    table-layout: fixed;
+    max-height: 5px;
+    overflow: auto;
+    font-size: 15px;
+    
+    
+    
+}
+
+.container>.main>.button{
+    margin: 1rem ;
+    height:40px;
+    font-size: 15px;
+    border-radius: 10px;
+    
+    
+    
+    
+}
+.container>.main>.button:hover{
+    transform: translate(0,-6px);
+    box-shadow: 10px -10px 25px 0 rgba(175, 50, 192, 0.5),-10px 10px 25px 0 rgba(28, 2, 100, 0.5);
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+.container>.main>.footer{
+    max-width: 100%;
+    height: 20%;
+    background-color: rgb(255, 255, 255);
+    padding: 20px;
+    border-radius: 20px;
+    display: flex;
+    justify-items: center;
+    justify-content: center;
+}
+.container>.main>.footer>.footertext{
+    align-items: center;
+    width: 50%;
+    
+}
+.container>.main>.footer>.footertext>.highlight{
+    color: red;
+    
+}

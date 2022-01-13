@@ -80,15 +80,17 @@ export const Contract = () => {
     const [dateRange,setdateRange] = useState([]);
     const [getStart , setgetStart] = useState({});
     const [getEnd , setgetEnd] = useState([]);
+    const [minDate , setminDate] = useState([]);
+    const [maxDate , setmaxDate] = useState([]);
     
 
-    const [defultformfilter ,setdefultformfilter] = useState({
+    const [defaultformfilter ,setdefaultformfilter] = useState({
         id: null,
         checkin_date: '01/01/2520',
         checkin_date_exp: '01/01/2580',
         option_search:'เลือกอาคารทั้งหมด',
         text:'',
-        dateRange:[],
+        
     })
     const [ formfilter , setformfilter ] = useState({
         id: null,
@@ -96,15 +98,15 @@ export const Contract = () => {
         checkin_date_exp: '01/01/2580',
         option_search:'เลือกอาคารทั้งหมด',
         text:'',
-        dateRange:[],
+        
 
     })
     
 
 
-    const hadleChangedformfilterTodefult = () =>{
-        setformfilter(defultformfilter)
-        console.log("formfilter",formfilter)
+    const hadleChangedformfilterTodefault = () =>{
+        setformfilter(defaultformfilter)
+        console.log("setdefault-formfilter",formfilter)
     }
 
     const handleChangedformfilter = (e) => {
@@ -112,11 +114,49 @@ export const Contract = () => {
         console.log('e', e.target.value, e.target.id, _formfilter)
 
         if(e.target.id && _formfilter.hasOwnProperty(e.target.id)){
-            _formfilter[e.target.id] = e.target.value;
-            setformfilter({..._formfilter})
-            console.log('_formfilter',_formfilter)
+            if( e.target.id === "option_search" ){
+                _formfilter[e.target.id] = e.target.value;
+                setformfilter({..._formfilter})
+                console.log('_formfilter',_formfilter)
+
+            }else if(e.target.id === "checkin_date_exp"){
+                _formfilter[e.target.id] = e.target.value;
+                setformfilter({..._formfilter})
+                setmaxDate(e.target.value)
+                console.log('_formfilter',_formfilter)
+
+                
+            }else if(e.target.id === "checkin_date"){
+                _formfilter[e.target.id] = e.target.value;
+                setformfilter({..._formfilter})
+                setminDate(e.target.value)
+                console.log('_formfilter',_formfilter)
+
+            }else if(e.target.id === "text"){
+                let text = /[^0-9a-zA-Zก-๙]/ig;
+                e.target.value = e.target.value.replace(text,'')
+                _formfilter[e.target.id] = e.target.value;
+                setformfilter({..._formfilter})
+                console.log('_formfilter',_formfilter)
+
+            }else{
+                return false
+            }
+
         }
         if(formfilter.checkin_date && formfilter.checkin_date_exp){
+            let _checkin = new Date(formfilter.checkin_date).getTime().toString()
+            let _checkout = new Date(formfilter.checkin_date_exp).getTime().toString()
+            
+            if(_checkin > _checkout){
+                alert('Can not Checkin > Checkout')
+                hadleChangedformfilterTodefault()
+            }
+            else{
+                console.log('complete')
+            }
+            
+
 
 
         }
@@ -293,15 +333,7 @@ export const Contract = () => {
 
     }
 
-    const formatTime = (e) =>{
-        let _Time = new Date(e).getTime().toString()
-        console.log("forMatTime",_Time)
-    }
-
-    const formatTime2 = (e) =>{
-        let _Time = new Date(e).getTime().toString()
-        console.log("forMatTime-",_Time)
-    }
+    
 
 
     
@@ -334,9 +366,7 @@ export const Contract = () => {
 
         }
 
-        console.log('getStart-',getStart)
-        console.log('getEnd-',getEnd)
-
+       
         setloadingpage(true);
     },[getRooms, loadingpage,formfilter])
     
@@ -371,9 +401,9 @@ export const Contract = () => {
                         </div>
                         <div className={styles.dateinput}>
                             <label className={styles.date}>วันที่ :</label>
-                            <input id = 'checkin_date'type='date' className={styles.inputdate} onChange={handleChangedformfilter}></input>
+                            <input  id = 'checkin_date'type='date' min= "2015-01-01" max={maxDate} className={styles.inputdate} onChange={handleChangedformfilter}></input>
                             <label className={styles.to}>ถึง :</label>
-                            <input id = 'checkin_date_exp' type='date' className={styles.inputdate} onChange={handleChangedformfilter}></input>
+                            <input id = 'checkin_date_exp' type='date' min= {minDate} className={styles.inputdate} onChange={handleChangedformfilter}></input>
                             <br/>
                             <label className={styles.selectAll} >เลือกทั้งหมด</label>
                             <input type = 'checkbox' className={styles.checkbox} name ="selectAll" id="select-all" onChange={selectAll}></input>
@@ -403,7 +433,7 @@ export const Contract = () => {
                                     
                                 }
                             }>กรอง</button>
-                            <button className={styles.button} onClick={hadleChangedformfilterTodefult}>ทั้งหมด</button>
+                            <button className={styles.button} onClick={hadleChangedformfilterTodefault}>ทั้งหมด</button>
                         </div>
                         <div className={styles.test}>
 

@@ -223,9 +223,24 @@ export const Booking = () => {
 	};
 	const handleChangedformroom = (e) => {
 		let _formroom = formroom;
-		if (e.target.id && _formroom.hasOwnProperty(e.target.id) ) {
+		if(e.target.id === 'name' || e.target.id === 'building' || e.target.id === 'floor' || e.target.id === 'nameroomtype'){
+			let text = /[^0-9a-zA-Zก-๙]/ig;
+			e.target.value = e.target.value.replace(text,'')
 			_formroom[e.target.id] = e.target.value;
 			setformbooking({ ..._formroom });
+			console.log('_formroom',_formroom)
+		}else if(e.target.id === 'monthlyprice' ){
+			let text = /[^0-9]/ig;
+			e.target.value = e.target.value.replace(text,'')
+			_formroom[e.target.id] = e.target.value;
+			setformbooking({ ..._formroom });
+			console.log('_formroom',_formroom)
+
+		}else{
+			_formroom[e.target.id] = e.target.value;
+			setformbooking({ ..._formroom });
+			console.log('_formroom',_formroom)
+
 		}
 	};
 	const handleChangedformbooking = (e) => {
@@ -233,8 +248,29 @@ export const Booking = () => {
 		console.log('e', e.target.value, e.target.id, _formbooking[e.target.id]);
 
 		if (e.target.id && _formbooking.hasOwnProperty(e.target.id)) {
-			_formbooking[e.target.id] = e.target.value;
-			setformbooking({ ..._formbooking });
+			if(e.target.id === 'customer_name' || e.target.id === 'customer_lastname' || e.target.id === 'customer_address'){
+				let text = /[^0-9a-zA-Zก-๙]/ig;
+                e.target.value = e.target.value.replace(text,'')
+				_formbooking[e.target.id] = e.target.value;
+				setformbooking({ ..._formbooking });
+			}else if(e.target.id === 'customer_tel' || e.target.id === 'deposit'){
+				let text = /[^0-9 -]/ig;
+                e.target.value = e.target.value.replace(text,'')
+				_formbooking[e.target.id] = e.target.value;
+				setformbooking({ ..._formbooking });
+
+			}else if(e.target.id === 'booking_number'){
+				let text = /[^0-9a-zA-Z]/ig;
+                e.target.value = e.target.value.replace(text,'')
+				_formbooking[e.target.id] = e.target.value;
+				setformbooking({ ..._formbooking });
+			}
+			else{
+				_formbooking[e.target.id] = e.target.value;
+				setformbooking({ ..._formbooking });
+
+			}
+			
 		}
 	};
 

@@ -205,6 +205,18 @@ export const Menubar = () => {
                     </a>
                 </div>
                 <div>
+                    <a href='/Insurance'>
+                        <button>
+                            <div>
+                                <Book />
+                            </div>
+                            <div>
+                                คืนเงินประกัน
+                            </div>
+                        </button>
+                    </a>
+                </div>
+                <div>
                     <a href="/contract">
                         <button>
                             <div>
