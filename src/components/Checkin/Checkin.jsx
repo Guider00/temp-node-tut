@@ -481,9 +481,10 @@ export const Checkin = () => {
 				let  updateroom = 	GET_Rooms.data.Rooms.find(room => room.id === selectedroom.id)
 			
 				let _selectedroom = selectedroom
-	
+				// อย่างลืมแก้ไขให้มีการ update พร้อมกัน //
 				_selectedroom.data = updateroom.data
 				_selectedroom.members = updateroom.members
+				_selectedroom.checkin = updateroom.checkin
 						setselectedroom({..._selectedroom})
 				
 			
@@ -1107,7 +1108,7 @@ export const Checkin = () => {
 										<input type="text" id="insurance" 
 										disabled={true}
 										value={formroomtype.insurance} 
-										 onChange={()=>{}}
+										  onChange={handlerchangeformroomtype}
 										></input>
 									</div>
 								</div>
@@ -1122,9 +1123,9 @@ export const Checkin = () => {
 										<label>ไฟฟ้า</label>
 									</div>
 									<div className={styles.input}>
-										<input type="text" id="RoomType" 
+										<input type="text" id="rate_electrical" 
 										value={formroomtype.rate_electrical} 
-										 onChange={()=>{}}
+										 onChange={handlerchangeformroomtype}
 										></input>
 										<button>
 											อ่านค่าจาก Meter
@@ -1139,7 +1140,7 @@ export const Checkin = () => {
 									<div className={styles.input}>
 										<input type="date" id="inmemory_kwh_date"
 										value={formroomtype.inmemory_kwh_date} 
-										  onChange={()=>{}}
+										onChange={handlerchangeformroomtype}
 										></input>
 									</div>
 								</div>
@@ -1151,7 +1152,7 @@ export const Checkin = () => {
 									<div className={styles.input}>
 										<input type="text" id="rate_water"  
 										value={formroomtype.rate_water} 
-										onChange={()=>{}}
+										onChange={handlerchangeformroomtype}
 										></input>
 										<button>
 											อ่านค่าจาก Meter
@@ -1165,7 +1166,7 @@ export const Checkin = () => {
 									<div className={styles.input}>
 										<input type="date" id="inmemory_water_date" 
 										value={formroomtype.inmemory_water_date} 
-										 onChange={()=>{}}
+										onChange={handlerchangeformroomtype}
 										></input>
 									</div>
 								</div>
