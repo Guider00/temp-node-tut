@@ -17,7 +17,14 @@ import { useQuery, useMutation } from '@apollo/client';
 import { API_UPDATE_MemberInRoom, API_DELET_MemberInRoom } from '../../API/Schema/Room/Room';
 import { API_UPDATE_Room ,API_GET_Rooms} from '../../API/Schema/Room/Room'
 import { API_createMember , API_updateMember} from '../../API/Schema/Member/Member'
-import { API_ADD_Invoice } from '../../API/Schema/Invoice/Invoice'
+
+import { API_ADD_Invoice , API_UPDATE_Invoice } from '../../API/Schema/Invoice/Invoice'
+import { API_CREATE_Checkin ,API_DELETE_Checkin , API_UPDATE_Checkin } from '../../API/Schema/Checkin/Checkin'
+import { API_CREATE_Contract , API_DELETE_Contract , API_UPDATE_Contract } from '../../API/Schema/Contract/Contract'
+import { API_CREATE_Receipt }  from '../../API/Schema/Receipt/Receipt'
+
+import {  export_Receipt_pdf  , export_Contract , export_Invoice_pdf   } from '../../general_functions/pdf/export/export_pdf';
+
 
 
  // icon 
@@ -154,6 +161,13 @@ export const Checkin = () => {
 	const [ updateMember,mutationupdateMember] = useMutation(API_updateMember) 
 
 	const [ crateInvoice ] = useMutation(API_ADD_Invoice)
+	const [ updateInvoice ] = useMutation(API_UPDATE_Invoice)
+
+	const [ createCheckin ] = useMutation(API_CREATE_Checkin)
+
+	const [ createContract] = useMutation(API_CREATE_Contract)
+
+	const [ createReceipt ]  = useMutation(API_CREATE_Receipt) 
 
 	const [ modalselectmember , setmodalselectmember ] = useState(false)
 
@@ -162,6 +176,7 @@ export const Checkin = () => {
 
 
 	const [ formcheckin , setformcheckin] = useState({
+		id_contact:"",
 		checkinnumber:"",
 		checkin_type:"",
 		rental_period:"",
@@ -246,6 +261,7 @@ export const Checkin = () => {
 	//  function in file
 	const  clearformcheckin  = () =>{
 		setformcheckin({
+				id_contact:"",
 				checkinnumber:"",
 				checkintype:"",
 				rental_period:"",
@@ -273,10 +289,16 @@ export const Checkin = () => {
 	}
 
 	
-
+	
 	const refetch_roomMember = () =>{
-		GET_Rooms.refetch() // << refect data room 
 		setreselectedroom(true)
+		try{
+			GET_Rooms.refetch() // << refect data room 
+		}catch(e){
+
+		}
+		console.log('update reselect')
+
 	}
 	const handleSelectMember  = ( e )=>{
 		console.log('select member ')
@@ -314,9 +336,12 @@ export const Checkin = () => {
 							name:_formmember.name,
 							lastname:_formmember.lastname,
 							personalid:_formmember.personalid,
+							taxnumber:_formmember.taxnumber,
+							address:_formmember.address,
 							tel:_formmember.tel,
 							email:_formmember.email,
 							carid:_formmember.carid,
+							note:_formmember.note,
 						}
 					}
 				})
@@ -330,10 +355,12 @@ export const Checkin = () => {
 							name:_formmember.name,
 							lastname:_formmember.lastname,
 							personalid:_formmember.personalid,
+							taxnumber:_formmember.personalid,
+							address:_formmember.address,
 							tel:_formmember.tel,
 							email:_formmember.email,
 							carid:_formmember.carid,
-
+							note:_formmember.note
 						}
 					}
 				})
@@ -351,9 +378,12 @@ export const Checkin = () => {
 							name:_formmember.name,
 							lastname:_formmember.lastname,
 							personalid:_formmember.personalid,
+							taxnumber:_formmember.taxnumber,
+							address:_formmember.address,
 							tel:_formmember.tel,
 							email:_formmember.email,
 							carid:_formmember.carid,
+							note:_formmember.note
 
 						}
 					}
@@ -433,29 +463,37 @@ export const Checkin = () => {
 
 	useEffect( ()=>{
 		
-				console.log('update Rooms')
-				if( GET_Rooms.data ){
-				let Rooms = Rooms_to_table(GET_Rooms.data.Rooms)
+		console.log('update Rooms',reselectedroom)
+		if( GET_Rooms.data ){
+		let Rooms = Rooms_to_table(GET_Rooms.data.Rooms)
 
-				console.log('Rooms', Rooms);
-				let _filter_rooms  =[]
-				_filter_rooms = filter_rooms([...Rooms] , options_search)
-				setrooms(_filter_rooms);
-				setloading(true);
-
-				}
-	if(reselectedroom){
-		if(selectedroom.id){
-
-			console.log('update new member',);
-			let  updateroom = 	GET_Rooms.data.Rooms.find(room => room.id === selectedroom.id)
-			setselectedroom(updateroom)
-			setreselectedroom(false)
-
-			console.log('RoomType')
+		console.log('Rooms', Rooms);
+		let _filter_rooms  =[]
+		_filter_rooms = filter_rooms([...Rooms] , options_search)
+		setrooms(_filter_rooms);
+		setloading(true);
 
 		}
-	}
+		if(reselectedroom){
+			if(selectedroom.id){
+
+				console.log('update new member',);
+				let  updateroom = 	GET_Rooms.data.Rooms.find(room => room.id === selectedroom.id)
+			
+				let _selectedroom = selectedroom
+				// อย่างลืมแก้ไขให้มีการ update พร้อมกัน //
+				_selectedroom.data = updateroom.data
+				_selectedroom.members = updateroom.members
+				_selectedroom.checkin = updateroom.checkin
+						setselectedroom({..._selectedroom})
+				
+			
+				setreselectedroom(false)
+
+				console.log('RoomType')
+
+			}
+		}
 	
 	},[GET_Rooms,loading])
 	console.log('GET_Rooms',GET_Rooms)
@@ -478,6 +516,7 @@ export const Checkin = () => {
 												personalid:_member.personalid,
 												taxnumber:_member.taxnumber,
 												address:_member.address,
+												email:_member.email,
 												tel:_member.tel,
 												carid:_member.carid,
 												note:_member.note
@@ -564,22 +603,73 @@ export const Checkin = () => {
 														setselectedroom(room);
 															console.log('ROOM_SELECTED',room)
 															
+															if(room && room.data && room.data.bookings && room.data.bookings.length > 0 ){
+																if(room.data.members  && room.data.members.length > 0 && room.data.members[0] ){
+																	setformmember({
+																		id:"",
+																		nametitle:"",
+																		name: "",
+																		lastname: "",
+																		personalid:"",
+																		email:"",
+																		taxnumber:room.data.members[0].taxnumber,
+																		address:room.data.members[0].address ,
+																		tel:room.data.members[0].tel,
+																		carid:"",
+																		note:""
+																	})
+																}else{
+																	setformmember({
+																		id:"",
+																		nametitle:"",
+																		name:   room.data.bookings[0].customer_name ?room.data.bookings[0].customer_name :"",
+																		lastname: room.data.bookings[0].customer_lastname ?room.data.bookings[0].customer_lastname :"",
+																		personalid:"",
+																		email:"",
+																		taxnumber:"",
+																		address: room.data.bookings[0].customer_address ?room.data.bookings[0].customer_address:"",
+																		tel:room.data.bookings[0].customer_tel ?room.data.bookings[0].customer_tel:"",
+																		carid:"",
+																		note:""
+																	})
+																}
+																
 
-															setformcheckin({
-																checkin_date:room && room.data  && room.data.hasOwnProperty('bookings')  && room.data.bookings.length > 0 && 
-																			room.data.bookings[0].checkin_date ? formatDate(new Date(Number(room.data.bookings[0].checkin_date)) ) :"2021-12-08" ,
-																checkin_type:room && room.data  && room.data.hasOwnProperty('bookings')  && room.data.bookings.length > 0 && 
-																			room.data.bookings[0].checkin_type ?  room.data.bookings[0].checkin_type : "",
-																rental_period:room && room.data  && room.data.hasOwnProperty('bookings')  && room.data.bookings.length > 0 && 
-																			room.data.bookings[0].checkin_date &&  room.data.bookings[0].checkin_date_exp  ?
-																			DiffDate(new Date(Number(room.data.bookings[0].checkin_date)) , new Date(Number(room.data.bookings[0].checkin_date_exp))): "",
-																rental_deposit: room && room.data  && room.data.hasOwnProperty('bookings')  && room.data.bookings.length > 0 && 
-																				room.data.bookings[0].deposit ? room.data.bookings[0].deposit :"",
-																rental_period_day: "",
-																branch:"",
+															}
 
+															if( room && room.data && room.data.checkin && room.data.checkin.id){
+																console.log('update checkin',room.data.checkin.id_contact)
+																setformcheckin({
+																	id_contact:room.data.checkin.id_contact,
+																	checkin_date:room.data.checkin.checkin_date ,
+																	checkin_type:room.data.checkin.checkin_type  ?  room.data.checkin.checkin_type  : "",
+																	rental_period:room && room.data  && room.data.hasOwnProperty('bookings')  && room.data.bookings.length > 0 && 
+																				room.data.bookings[0].checkin_date &&  room.data.bookings[0].checkin_date_exp  ?
+																				DiffDate(new Date(Number(room.data.bookings[0].checkin_date)) , new Date(Number(room.data.bookings[0].checkin_date_exp))): "",
+																	rental_deposit: room.data.checkin.rental_deposit  ?  room.data.checkin.rental_deposit  : "",
+																	rental_period_day: "",
+																	branch:room.data.checkin.branch,
+																})
 
-															})
+															}else{
+																setformcheckin({
+																	id_contact:"",
+																	checkin_date:room && room.data  && room.data.hasOwnProperty('bookings')  && room.data.bookings.length > 0 && 
+																				room.data.bookings[0].checkin_date ? formatDate(new Date(Number(room.data.bookings[0].checkin_date)) ) :"2021-12-08" ,
+																	checkin_type:room && room.data  && room.data.hasOwnProperty('bookings')  && room.data.bookings.length > 0 && 
+																				room.data.bookings[0].checkin_type ?  room.data.bookings[0].checkin_type : "",
+																	rental_period:room && room.data  && room.data.hasOwnProperty('bookings')  && room.data.bookings.length > 0 && 
+																				room.data.bookings[0].checkin_date &&  room.data.bookings[0].checkin_date_exp  ?
+																				DiffDate(new Date(Number(room.data.bookings[0].checkin_date)) , new Date(Number(room.data.bookings[0].checkin_date_exp))): "",
+																	rental_deposit: room && room.data  && room.data.hasOwnProperty('bookings')  && room.data.bookings.length > 0 && 
+																					room.data.bookings[0].deposit ? room.data.bookings[0].deposit :"",
+																	rental_period_day: "",
+																	branch:"",
+																})
+															}
+															
+
+														
 													
 													
 													
@@ -657,7 +747,7 @@ export const Checkin = () => {
 									<label>เลขที่สัญญา</label>
 								</div>
 								<div className={styles.input}>
-									<input type="text" value={formcheckin.checkinnumber}  id="checkinnumber"  onChange={handlechangeformcheckin}/>
+									<input type="text" value={formcheckin.id_contact}  id="id_contact"  onChange={handlechangeformcheckin}/>
 								</div>
 							</div>
 							<div className={styles.row}>
@@ -708,7 +798,7 @@ export const Checkin = () => {
 								    <label>สาขา</label>
                                 </div>
 								<div className={styles.input}>
-									<input  value={formcheckin.branch} type="text" id="branch"   />
+									<input  value={formcheckin.branch} type="text" id="branch"   onChange={handlechangeformcheckin}  />
 								</div>
 							</div>
 						</div>
@@ -844,7 +934,7 @@ export const Checkin = () => {
                         <div className={styles.body}>
                             <div className={styles.rowtable}>
                                 <div className={styles.tableroommember}>
-									<TableRoomMember  data={selectedroom} 
+									<TableRoomMember  data={  JSON.parse(JSON.stringify (selectedroom)) } 
 									handlerdelete={ async (member)=>{
 										console.log('member id = ',member.id)
 											let _selectedroom = selectedroom
@@ -866,7 +956,8 @@ export const Checkin = () => {
 									}}
 									handleredit={(member)=>{
 										let _member  =  JSON.parse( JSON.stringify (member))
-										setformmember(  
+										if(_member && _member.id){
+											setformmember(  
 												{
 												id:_member.id,
 												nametitle:_member.nametitle,
@@ -875,12 +966,13 @@ export const Checkin = () => {
 												personalid:_member.personalid,
 												taxnumber:_member.taxnumber,
 												address:_member.address,
+												email:_member.email,
 												tel:_member.tel,
 												carid:_member.carid,
 												note:_member.note
 											} )
 											setmodeformmember('edit')
-										
+										}
 										
 									}}
 									/> 
@@ -1016,7 +1108,7 @@ export const Checkin = () => {
 										<input type="text" id="insurance" 
 										disabled={true}
 										value={formroomtype.insurance} 
-										 onChange={()=>{}}
+										  onChange={handlerchangeformroomtype}
 										></input>
 									</div>
 								</div>
@@ -1031,9 +1123,9 @@ export const Checkin = () => {
 										<label>ไฟฟ้า</label>
 									</div>
 									<div className={styles.input}>
-										<input type="text" id="RoomType" 
+										<input type="text" id="rate_electrical" 
 										value={formroomtype.rate_electrical} 
-										 onChange={()=>{}}
+										 onChange={handlerchangeformroomtype}
 										></input>
 										<button>
 											อ่านค่าจาก Meter
@@ -1048,7 +1140,7 @@ export const Checkin = () => {
 									<div className={styles.input}>
 										<input type="date" id="inmemory_kwh_date"
 										value={formroomtype.inmemory_kwh_date} 
-										  onChange={()=>{}}
+										onChange={handlerchangeformroomtype}
 										></input>
 									</div>
 								</div>
@@ -1060,7 +1152,7 @@ export const Checkin = () => {
 									<div className={styles.input}>
 										<input type="text" id="rate_water"  
 										value={formroomtype.rate_water} 
-										onChange={()=>{}}
+										onChange={handlerchangeformroomtype}
 										></input>
 										<button>
 											อ่านค่าจาก Meter
@@ -1074,7 +1166,7 @@ export const Checkin = () => {
 									<div className={styles.input}>
 										<input type="date" id="inmemory_water_date" 
 										value={formroomtype.inmemory_water_date} 
-										 onChange={()=>{}}
+										onChange={handlerchangeformroomtype}
 										></input>
 									</div>
 								</div>
@@ -1101,6 +1193,7 @@ export const Checkin = () => {
 														<th>{topic}</th>
 														
 														)}
+														<th>รายการรายเดือน</th>
 														{ tableoption.disableedit ? <th></th>:null }
 														
 													</tr>
@@ -1111,6 +1204,7 @@ export const Checkin = () => {
 														<td><input type="text" value={data.name}   name="name" onChange={(e)=>handlerchangetableoption(e,index)}
 														disabled={ !tableoption.disableedit }/></td>
 														<td><input  type="text"value={data.price}  name="price" onChange={(e)=>handlerchangetableoption(e,index)}  disabled={ !tableoption.disableedit }/></td>
+														<td><input type='checkbox' value={true} /> </td>
 														{ (tableoption && tableoption.disableedit) ? <td><button onClick={()=>{
 															let _tableoption  =tableoption
 															_tableoption.body.splice(index, 1)
@@ -1135,55 +1229,59 @@ export const Checkin = () => {
 									  // ส่ง table option ไปบันทึกไว้ใน ห้อง 
 									// upload Room status
 									console.log('บันทึกรายการ',tableoption)
-									let _tableoption = tableoption
-									let _updatetableoption   = _tableoption.body.map(obj  =>{
-										return ({name:obj.name , price:obj.price})
-									})
+									console.log('formcheckin',formcheckin)
+						
+									 /// สร้าง checkin  //
 									try{
-										let _res_createInvoice = await crateInvoice({
-											variables:{
+										let _res_createCheckin = await createCheckin({
+												variables:{
 												input:{
-													status:"รอชำระเงิน",
-													  lists:[..._updatetableoption]
+													id_contact: formcheckin.id_contact,
+													checkin_date : formcheckin.checkin_date,
+													checkin_type: formcheckin.checkin_type,
+													rental_deposit: formcheckin.rental_deposit,
+												
+													number_day_rent: formcheckin.number_day_rent,
+													branch: formcheckin.branch,
+													Checkinoption: null
 												}
 											}
 										})
-										if(_res_createInvoice && _res_createInvoice.data && _res_createInvoice.data.addInvoice.id){ 
-											 // สร้างใบเสร็จสำเร็จ //
-											console.log('create invoice',_res_createInvoice)
-											let _idinvoce = _res_createInvoice.data.addInvoice.id
-											let _room = selectedroom
-											if(_room && _room.id){
-												let _res = await updateRoom({
-														variables: {
-															id: _room.id,
-															input: {
-																status:"ย้ายเข้า",
-																checkinInvoiceid:_idinvoce
+												
+										if(_res_createCheckin && _res_createCheckin.data)
+											{
+												
+												let _idcheckin = _res_createCheckin.data.createCheckin.id
+												let _room = selectedroom
+												if(_room && _room.id){
+													let _res = await updateRoom({
+															variables: {
+																id: _room.id,
+																input: {
+																
+																	checkinid:_idcheckin
+																}
 															}
+														});
+													if(_res && _res.data){
+														try{
+															refetch_roomMember()
+														}catch(e){
+															console.log(e)
 														}
-													});
-												if(_res){
-													console.log('update status Room ')
-													GET_Rooms.refetch() 
-													setselectedroom(null)
-													clerformroomtype();
-													let _tableoption = tableoption
-													_tableoption.disableedit = !tableoption.disableedit
-													settableoption({...tableoption})
-													// reface page
+													}
 												}
 											}
-										}
-
-
-
-
 									}catch(e){
 										console.log(e)
 									}
-									
+									// End create check in  // 
+
+									 
 					
+									
+									
+								 	
 								} }>บันทึก รายการ <SaveIcon/> </button>
 								 <button onClick={ async ()=>{
 									 //ลบ รายการ invoices
@@ -1199,6 +1297,11 @@ export const Checkin = () => {
 													}
 												});
 											if(_res && _res.data){
+												try{
+														GET_Rooms.refetch() 
+													}catch(e){
+														console.log(e)
+													}
 
 											}else{
 												console.log('communication Error ')
@@ -1217,22 +1320,237 @@ export const Checkin = () => {
 								</div>
 
 								<div className={styles.rowmenu} style={{float:"right"}}>
-									<button  onClick={()=>{
-										// ดึงข้อมูลจาก checkin-list ไป สร้างใบแจ้งหนี้
-									}}>ออกเอกสารสัญญา <ReceiptIcon/></button>
-									<button  onClick={()=>{
-										// ดึงข้อมูลจาก checkin-list ไป สร้างใบแจ้งหนี้
-									}}>สร้างใบแจ้งหนี้ <PaidIcon/></button>
-									 {/* ออกใบแจ้งหนี้ */}
-									<button  onClick={()=>{
-										// เปลี่ยน สถานะ ใบแจ้งหนี้  เป็นชำระเงิน
+								
+									<button disabled={ 
+										 	selectedroom &&  selectedroom.data && selectedroom.data.checkin ? false : true
+										}
+										onClick={async ()=>{
+										if(selectedroom && selectedroom.data && selectedroom.data.checkin){
+										console.log('Export Contract',selectedroom)
+												/// สร้าง Contract // 
+											try{
+												let _room = selectedroom
+												if(_room && _room.id){
+													let _res = await createContract({
+															variables:{
+															input:{
+																roomid:_room.id
+															}
+														}
+													})
+														
+													if(_res && _res.data)
+													{
+														
+														let _idcontract = _res.data.createContract.id
+														let _room = selectedroom
+														if(_room && _room.id){
+															let _res = await updateRoom({
+																	variables: {
+																		id: _room.id,
+																		input: {
+																			contractid:_idcontract
+																		}
+																	}
+																});
+																if(_res && _res.data){
+																	try{
+																				refetch_roomMember()
+																		}catch(e){
+																			console.log(e)
+																		}
 
+																}else{
+																	console.log('communication Error ')
+																}
+														}
+													}
+												}
+											}catch(e){
+												console.log(e)
+											}
+
+											// End create Contract // 
+											export_Contract()
+
+
+									
+
+										}
+								
+										// ดึงข้อมูลจาก checkin-list ไป สร้างใบแจ้งหนี้
+									}}> ออกเอกสารสัญญา <ReceiptIcon/></button>
+									
+									<button 
+										disabled={ 
+										 	selectedroom &&  selectedroom.data && selectedroom.data.Contract &&
+											 selectedroom.data.Contract.id ? false : true
+										}
+									 onClick={async ()=>{
+
+										// create Invoice //
+										let _tableoption = tableoption
+										let _updatetableoption   = _tableoption.body.map(obj  =>{
+											return ({name:obj.name , price:obj.price})
+										})
+
+											try{
+												let _res = await crateInvoice({
+													variables:{
+														input:{
+															status:"รอการชำระเงิน",
+															lists:[..._updatetableoption]
+														}
+													}
+												})
+												
+												if(_res && _res.data && _res.data.addInvoice && _res.data.addInvoice.id){ 
+															// สร้างใบแจ้งหนี้สำเร็จ //
+														
+															let _idreceipt = _res.data.addInvoice.id
+															let _room = selectedroom
+															if(_room && _room.id){
+																let _res = await updateRoom({
+																		variables: {
+																			id: _room.id,
+																			input: {
+																		
+																				checkinInvoiceid:_idreceipt
+																			}
+																		}
+																	});
+																	if(_res && _res.data){
+																	try{
+																			refetch_roomMember()
+																		}catch(e){
+																			console.log(e)
+																		}
+
+																	}else{
+																		console.log('communication Error ')
+																	}
+															}
+													}
+
+
+												
+											}catch(e){
+												console.log(e)
+											}
+											// End create Invoice // 
+										
+											export_Invoice_pdf(selectedroom)
+
+										
+											// ดึงข้อมูลจาก checkin-list ไป สร้างใบแจ้งหนี้
+									}}>สร้างใบแจ้งหนี้ <PaidIcon/></button>
+
+									 
+									<button   
+										disabled={ 
+										 	selectedroom &&  selectedroom.data && selectedroom.data.checkinInvoice ? false : true
+										}
+										onClick={async ()=>{
+										// เปลี่ยน สถานะ ใบแจ้งหนี้  เป็นชำระเงิน
+										console.log("เปลี่ยนสถาะนะใบแจ้งหนี้ ",selectedroom)
+										if(selectedroom && selectedroom.data && selectedroom.data.checkinInvoice && selectedroom.data.checkinInvoice.id){
+											try{
+												let _res =  await updateInvoice({
+													variables: {
+															id: selectedroom.data.checkinInvoice.id,
+															input: {
+																status:"สำเร็จ"
+															}
+														}
+												})
+												if(_res && _res.data){
+													console.log('update กำชำระเงินสำเร็จ')
+													try{
+															refetch_roomMember()
+														}catch(e){
+															console.log(e)
+													}
+
+															
+												}
+
+											}catch(e){
+
+											}
+
+										}
+									
 										 // update Invoice  status เป็นชำระเงิน
 									}}>ชำระเงิน <PaidIcon/></button>
-									  {/* ออกใบเสร็จ */}
-									<button   onClick={()=>{
-										// ดึงข้อมูลใบแจ้งหนี้ ที่ชำระเงินแล้ว มาสร้างใบเสร็จ
-									}}> ออกใบเสร็จ  <ReceiptIcon/></button>
+									  
+									<button  
+									  	disabled={ 
+										 	selectedroom &&  selectedroom.data && selectedroom.data.checkinInvoice 
+											&& selectedroom.data.checkinInvoice.status === 'สำเร็จ' ? false : true
+										}
+										onClick={async ()=>{
+											// ดึงข้อมูลใบแจ้งหนี้ ที่ชำระเงินแล้ว มาสร้างใบเสร็จ
+											// สร้างใบเสร็จ // 
+											try{
+												let _room = selectedroom
+												if(_room && _room.id){
+													let _res = await createReceipt({
+															variables:{
+															input:{
+																status:"รอการพิมพ์",
+																invoiceid:selectedroom.data.checkinInvoice.id
+															}
+														}
+													})
+													if(_res && _res.data && _res.data.createReceipt.id){ 
+															// สร้างใบแจ้งหนี้สำเร็จ //
+														
+															let _idreceipt = _res.data.createReceipt.id
+															let _room = selectedroom
+															if(_room && _room.id){
+																let _res = await updateRoom({
+																		variables: {
+																			id: _room.id,
+																			input: {
+																				status:"มีคนอยู่",
+																				checkinReceiptid:_idreceipt
+																			}
+																		}
+																	});
+																if(_res && _res.data){
+																	try{
+																			refetch_roomMember()
+																			
+																		}catch(e){
+																			console.log(e)
+																		}
+
+																}else{
+																	console.log('communication Error ')
+																}
+															}
+													}
+												}
+											}catch(e){
+												console.log(e)
+											}
+											// End Recipte // 
+										
+											console.log('selectedroom',selectedroom)
+											export_Receipt_pdf({
+												customer_name : selectedroom.data.members[0].name,
+												customer_lastname : selectedroom.data.members[0].lastname,
+												customer_address :  selectedroom.data.members[0].address,
+												Room : {...selectedroom.data}
+											},'checkin')
+
+											try{
+												refetch_roomMember()
+											}catch(e){
+												console.log(e)
+											}}
+										}
+									> ออกใบเสร็จ  <ReceiptIcon/></button>
 								</div>
 								
 

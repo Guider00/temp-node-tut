@@ -1,8 +1,6 @@
 
 
 const  { db }  =  require( "../../../models/Receipt/Receipt");
-const { queryRoomByid  ,addbookingsinRoom ,deletebookingsinRoom }  = require ('../Room/Room')
-const mongoose = require("mongoose")
 
  const _Receiptschema = `
  input Receipt_listInput{
@@ -26,6 +24,7 @@ type Receipt {
     status:String,
     note:String,
     lists:[Receipt_list]
+    Invoice:Invoice
   }
 
 input ReceiptInput {
@@ -33,6 +32,7 @@ input ReceiptInput {
     status:String,
     note:String,
     lists:[Receipt_listInput]
+    invoiceid:String
   } 
 `
 
@@ -67,6 +67,10 @@ const _queryReceiptByid = async(payload ,payload2) =>{
         let resulted = await db.findById({_id:payload.id})
         if(!resulted) { return null}
 
+        if(resulted.invoiceid){
+            resulted.Invoice = await require (`../Invoice/Invoice`).queryInvoiceByid({id : resulted.invoiceid } )
+        }
+
         return (
             resulted
         )
@@ -81,7 +85,9 @@ const _Receipts =async (filter) =>{
         let _datas =  await Promise.all( resulted.map(payload => payload._doc).map( async payload => {
             if(payload){
                 payload.id = payload._id.toString()
-                
+                let _invoice = await require (`../Invoice/Invoice`).queryInvoiceByid({id:payload.invoiceid})
+                payload.Invoice  = _invoice
+
                 return payload
             }else{
                 return null 

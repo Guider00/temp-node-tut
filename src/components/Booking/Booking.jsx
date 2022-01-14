@@ -763,6 +763,24 @@ export const Booking = () => {
 							// 	console.log('elete Error')
 							// }
 						}}
+						handleUpdateconfirm_booking = {async (_booking)=>{
+							let _confirm_booking  = ( (_booking && _booking.confirm_booking === 'ยืนยันการเข้าพัก' ) ? 'รอการยืนยัน':'ยืนยันการเข้าพัก' )
+							try{
+								let _res = await updateBooking({
+													variables: {
+														id: _booking.id,
+														input: {
+															confirm_booking : _confirm_booking,
+														}
+													}
+												});
+								if(_res){
+									booking.refetch();
+								}
+							}catch(e){
+								console.log(e)
+							}
+						}}
 						handleUpdatecompletestatus = { async (_booking)=>{
 								let _status =  ( (_booking && _booking.status === 'สำเร็จ' ) ? 'รอการชำระเงิน':'สำเร็จ' )
 							
@@ -797,7 +815,7 @@ export const Booking = () => {
 												}
 											}
 										});
-									if(_res_updateroom && _res_updateroom){
+									if(_res_updateroom && _res_updateroom.data){
 										console.log('update status Room ','จอง')
 										// reface page
 									}
@@ -814,12 +832,15 @@ export const Booking = () => {
 								console.log('booking' , _booking , 'file_image',_file_image)
 									
 								if(_file_image){
+									
 									try{
 											res = await uploadFile({ variables : {file:_file_image} } );
+											console.log('receipt_number' ,res)
 									}catch(error){
 										console.log('fetch upload error ')
 									}	
 								}
+								
 								if(res && res.data && res.data.singleUpload && res.data.singleUpload.url){
 									let _res = null 
 									try{
@@ -907,6 +928,7 @@ export const Booking = () => {
 							export_booking_pdf(_booking);
 						}}
 						handleExportReceipt ={(_booking)=>{
+					
 							export_Receipt_pdf(_booking , 'booking');
 						}}
 					/>

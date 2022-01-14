@@ -15,16 +15,18 @@ const schemaDefinition = new mongoose.Schema({
     meterroom:{ type:String},
     RoomType : {type:String},
 
+    contractid:{type:String},
+
     checkinid:{type:String},
     
     checkinInvoiceid: {type:String},
-    checkinReceipt:{type:String},
+    checkinReceiptid:{type:String},
 
-    monthlyInvoice:{type:String},
-    monthlyReceipt:{type:String},
+    monthlyInvoiceid:{type:String},
+    monthlyReceiptid:{type:String},
 
-    checkoutInvoice:{type:String},
-    checkoutReceipt:{type:String},
+    checkoutInvoiceid:{type:String},
+    checkoutReceiptid:{type:String},
 
     version:{ type: String ,default: "0.0.1"},
    
