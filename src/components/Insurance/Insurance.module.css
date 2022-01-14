@@ -40,6 +40,7 @@
     height: 25px;
     margin: 1rem;
     font-size: medium;
+    text-align: center;
 }
 .container>.main>.header>.headerall{
     width: 5%;
@@ -47,15 +48,37 @@
     height: 25px;
     margin: 1rem auto;
     font-size: medium;
+    background: none;
+    transition: 0.3s;
+    border-radius: 8px;
 }
+.container>.main>.header>.headerall:hover{
+    transform: translate(0,-6px);
+    box-shadow: 10px -10px 25px 0 rgba(31, 204, 89, 0.5),-10px 10px 25px 0 rgba(10, 143, 81, 0.5);
+    cursor: pointer;
+}
+
 .container>.main>.header>.headerdefault{
     width: 5%;
     min-width: 60px;
     height: 25px;
     margin: 1rem ;
     font-size: medium;
+    background: none;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: 0.3s;
+   
+    
+    
     
 }
+.container>.main>.header>.headerdefault:hover{
+    transform: translate(0,-6px);
+    box-shadow: 10px -10px 25px 0 rgba(31, 204, 89, 0.5),-10px 10px 25px 0 rgba(10, 143, 81, 0.5);
+    cursor: pointer;
+}
+
 
 
 
@@ -109,6 +132,7 @@
     height:40px;
     font-size: 15px;
     border-radius: 10px;
+    transition: 0.3s;
     
     
     
@@ -116,7 +140,7 @@
 }
 .container>.main>.button:hover{
     transform: translate(0,-6px);
-    box-shadow: 10px -10px 25px 0 rgba(175, 50, 192, 0.5),-10px 10px 25px 0 rgba(28, 2, 100, 0.5);
+    box-shadow: 10px -10px 25px 0 rgba(50, 192, 69, 0.5),-10px 10px 25px 0 rgba(10, 143, 81, 0.5);
     cursor: pointer;
 }
 

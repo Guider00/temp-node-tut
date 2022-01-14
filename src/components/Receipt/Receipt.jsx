@@ -25,6 +25,7 @@ export const Receipt = () => {
         if (day < 10) day = "0" + day;
 
         let today = year + "-" + month + "-" + day;
+        
         return today
     }
     const lengthdate = (Inputdate1 , Inputdate2) =>{
@@ -54,7 +55,6 @@ export const Receipt = () => {
             }else if( e.target.id === 'enddate' ){
                  _formsearch.lenghthdispaly  = lengthdate (_formsearch.startdate,e.target.value)
             }
-           
 			setformsearch({ ..._formsearch });
 		}
     }
@@ -129,7 +129,7 @@ export const Receipt = () => {
                                 </div>
                                 <p>
                                     <lable >อาคาร</lable>
-                                    <input className ={styles.Building}  value ={formsearch.building} onChange={handleChangeformsearch} ></input>
+                                    <input className ={styles.Building} id="building" value ={formsearch.building} onChange={handleChangeformsearch} ></input>
                                 </p>
                                 <table className ={styles.table}>
 
@@ -239,7 +239,7 @@ export const Receipt = () => {
                                 </p>
                                 <p>
                                 <label>รายละเอียดใบเสร็จ</label>
-                                <input className={styles.text}></input>
+                                <input disabled = 'disabled' className={styles.text}/>
 
                                 <button className = {styles.button2} >
                                     <i className = {styles.icon}><EditOutlinedIcon/></i>

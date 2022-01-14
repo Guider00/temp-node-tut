@@ -134,6 +134,7 @@
     height: 50px;
     border-collapse: collapse;
     margin: auto;
+    overflow: auto;
     
     
     
@@ -143,7 +144,8 @@
 .container>.zone1>.body>.test>.table>.head{
     font-size:medium;
     background-color: darkgray;
-    
+    position: sticky;
+    top: 0;
     
 }
 .container>.zone1>.body>.test>.table>.body{

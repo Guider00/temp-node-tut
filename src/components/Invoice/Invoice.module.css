@@ -283,13 +283,14 @@
     margin: 1rem auto;
     width: 95%;
     border-collapse: collapse;
-    
+    overflow: auto;
        
 }
 .container>.display>.zone2>.box2>.table{
     margin: 1rem auto;
     width: 95%;
     border-collapse: collapse;
+    overflow: auto;
     
        
 }
@@ -297,6 +298,8 @@
 .container>.display>.zone1>.box1>.table>.header{
     background-color: rgb(168, 168, 170);
     text-align: center;
+    position: sticky;
+    top: 0;
     
     
        
@@ -305,7 +308,8 @@
     
     background-color: rgb(168, 168, 170);
     text-align: center;
-    
+    position: sticky;
+    top: 0;
        
 }
 .container>.display>.zone1>.box1>.table>.body{
