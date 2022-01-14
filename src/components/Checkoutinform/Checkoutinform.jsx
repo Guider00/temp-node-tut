@@ -214,7 +214,7 @@ export const Checkoutinform = () => {
                                     <td>{head_table[5]}</td>
                                     <td>{head_table[6]}</td>
                                     <td>{head_table[7]}</td>
-                                    <td>{head_table[8]}</td>
+                                    {/* <td>{head_table[8]}</td> */}
                                 </tr>
 
                             </thead>
@@ -253,7 +253,7 @@ export const Checkoutinform = () => {
                                                                 }
                                                             }}
                                                             /></td>
-                                                    <td width={'60px'} >
+                                                    {/* <td width={'60px'} >
                                                         <button 
                                                     className={styles.CheckButton}
                                                     onClick={() =>{
@@ -313,7 +313,7 @@ export const Checkoutinform = () => {
                                                     
                                                     
                                                     
-                                                    </td>
+                                                    </td> */}
                                                 </tr>
                                             ) : null
                                     )}
