@@ -14,7 +14,20 @@ const schemaDefinition = new mongoose.Schema({
     bookings:{ type:[String] },
     meterroom:{ type:String},
     RoomType : {type:String},
-    checkinid: {type:String},
+
+    contractid:{type:String},
+
+    checkinid:{type:String},
+    
+    checkinInvoiceid: {type:String},
+    checkinReceiptid:{type:String},
+
+    monthlyInvoiceid:{type:String},
+    monthlyReceiptid:{type:String},
+
+    checkoutInvoiceid:{type:String},
+    checkoutReceiptid:{type:String},
+
     version:{ type: String ,default: "0.0.1"},
    
 

@@ -6,6 +6,8 @@ import { API_GET_Receipt,API_ADD_Receipt,API_DELETE_Receipt,API_UPDATE_Receipt} 
 import { useQuery } from '@apollo/client';
 import { set } from 'mongoose';
 
+import {  export_Receipt_pdf , export_taxinvoice_pdf  } from '../../general_functions/pdf/export/export_pdf';
+
 export const Receipt = () => {
 
     const Receipt = useQuery(API_GET_Receipt)
@@ -185,14 +187,14 @@ export const Receipt = () => {
                                             </td>
                                             <td width={'100px'}>{data.id ? data.id : "---"}</td>
                                             <td width={'120px'}  onClick={()=>{
-                                                console.log(data.lists[0])
-                                            }} >{data.monthlybilling ? data.monthlybilling : "---"}</td>
-                                            <td width={'80px'}>{data.note ? data.note : "---"}</td>
-                                            <td width={'50px'}>{data.lists[0].number ? data.lists[0].number : "---"}</td>
-                                            <td width={'100px'}>{data.lists[0].name ? data.lists[0].name : "---"}</td>
-                                            <td width={'50px'}>{data.status ? data.status : "---"}</td>
-                                            <td width={'50px'}>{data.status ? data.status : "---"}</td>
-                                            <td width={'50px'}>{data.lists[0].selectvat ? data.lists[0].selectvat : "---"}</td>
+                                               
+                                            }} >{ data.Invoice && data.Invoice.id ?  data.Invoice.id: "---"}</td>
+                                            <td width={'80px'}>{ data.note ? data.note : "---"}</td>
+                                            <td width={'50px'}>{  data.lists[0] && data.lists[0].number ? data.lists[0].number : "---"}</td>
+                                            <td width={'100px'}>{ data.lists[0] && data.lists[0].name ? data.lists[0].name : "---"}</td>
+                                            <td width={'50px'}>{ data.lists[0] && data.status ? data.status : "---"}</td>
+                                            <td width={'50px'}>{ data.lists[0] && data.status ? data.status : "---"}</td>
+                                            <td width={'50px'}>{ data.lists[0] && data.lists[0].selectvat ? data.lists[0].selectvat : "---"}</td>
 
 
                                             
@@ -211,8 +213,16 @@ export const Receipt = () => {
 
                                 </table>
                                 <div className={styles.button}>
-                                    <button className={styles.press} >พิมพ์ใบเสร็จที่เลือก</button>
-                                    <button className={styles.press}>พิมพ์ใบกำกับภาษีที่เลือก</button>
+                                    <button className={styles.press} 
+                                        onClick={()=>{
+                                            export_Receipt_pdf({})
+                                        }}
+                                    > พิมพ์ใบเสร็จที่เลือก </button>
+                                    <button className={styles.press}
+                                        onClick={()=>{
+                                            export_taxinvoice_pdf()
+                                        }}
+                                    > พิมพ์ใบกำกับภาษีที่เลือก </button>
 
                                 </div>
                                 

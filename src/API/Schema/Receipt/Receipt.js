@@ -16,12 +16,33 @@ query{
                     price
                     vat
                     selectvat
-        }
+                }
+                Invoice{
+                    id
+                    status
+                    lists
+                    {
+                        id
+                        name
+                        number
+                        price
+                        vat
+                        selectvat
+                    }
+                    Room{
+                        id
+                        name
+                        member{
+                            name
+                            lastname
+                        }
+                    }
+                }
       }
 }
 
 `;
-export const API_ADD_Receipt = gql`
+export const API_CREATE_Receipt = gql`
     mutation createReceipt($input:ReceiptInput!){
         createReceipt(input: $input){
             id

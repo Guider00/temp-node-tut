@@ -27,6 +27,10 @@ const { RoomTypeschema,RoomTypeschema_query,RoomTypeschema_mutation ,queryRoomTy
 const { RoomPriceschema} = require('./Roomprice/Roomprice')
 const { Portmeterschema } = require('./PortMeter/PortMeter')
 const { MeterRoomschema } = require('./MeterRoom/MeterRoom')
+
+
+
+
 const {Roomschema,Roomschema_query,Roomschema_mutation ,
 queryRooms ,queryRoomByid ,createRoom,deleteRoom,updateRoom,
 addmemberinRoom, deletememberinRoom, querymembersinRoom,
@@ -53,7 +57,11 @@ const Checkoutinformation = {
 
 }
 
-const{Contractschema,Contract_query,Contract_mutation,Contractquery,createContract,updateContract,deleteContract} = require('./Contract/Contract')
+const{Contractschema,Contract_query,Contract_mutation,Contracts , queryContractByid ,createContract,updateContract,deleteContract} = require('./Contract/Contract')
+const Contractquery = {
+      Contracts : Contracts,
+      queryContractByid :queryContractByid
+}
 const Contractmation = {
   createContract:createContract,
   updateContract:updateContract,
@@ -68,10 +76,11 @@ const Contractmation = {
   updateAddress:updateAddress,
   }
 
-const { Invoiceschema , Invoicesschema_query ,Invoiceschema_mutation,Invoices , countInvoices , addInvoice , updateInvoice , deleteInvoice} = require('./Invoice/Invoice')
+const { Invoiceschema , Invoicesschema_query ,Invoiceschema_mutation,Invoices,queryInvoiceByid , countInvoices , addInvoice , updateInvoice , deleteInvoice} = require('./Invoice/Invoice')
 const Invoicequery = {
   Invoices:Invoices,
   countInvoices : countInvoices,
+  queryInvoiceByid :queryInvoiceByid
 }
 const Invoicemutation = {
  addInvoice: addInvoice,
@@ -79,10 +88,10 @@ const Invoicemutation = {
  deleteInvoice:deleteInvoice
 }
 
-const {Receiptschema , Receiptschema_query , Receiptschema_mutation, Receipts,countReceipts , createReceipt ,updateReceiptlist, updateReceipt , deleteReceipt} = require('./Receipt/Receipt')
+const {Receiptschema , Receiptschema_query , Receiptschema_mutation, Receipts,queryReceiptByid,countReceipts , createReceipt ,updateReceiptlist, updateReceipt , deleteReceipt} = require('./Receipt/Receipt')
 const Receiptquery = {
   Receipts:Receipts,
-
+  queryReceiptByid :queryReceiptByid,
   countReceipts: countReceipts
 }
 const Receiptmutation = {
@@ -93,17 +102,30 @@ const Receiptmutation = {
 
 }
 
-const {Checkinschema , Checkinschema_query , Checkinschema_mutation, Checkins,countCheckins ,CheckinByid, createCheckin , updateCheckin , deleteCheckin} = require('./Checkin/Checkin')
+const {Checkinschema , Checkinschema_query , Checkinschema_mutation, Checkins,countCheckins ,queryCheckinByid, createCheckin , updateCheckin , deleteCheckin} = require('./Checkin/Checkin')
 
 const Checkinquery ={
    Checkins : Checkins,
-   CheckinByid: CheckinByid,
+   queryCheckinByid: queryCheckinByid,
    countCheckins : countCheckins
 }
 const Checkinmutation ={
    createCheckin : createCheckin,
    updateCheckin :updateCheckin,
    deleteCheckin: deleteCheckin
+}
+
+
+const{Reimbursementschema ,Reimbursementschema_query , Reimbursementschema_mutation,Reimbursements,queryReimbursementByid,createReimbursement ,deleteReimbursement , updateReimbursement } = require('./Reimbursement/Reimbursement')
+const Reimbursementquery ={
+   Reimbursements : Reimbursements,
+   queryReimbursementByid: queryReimbursementByid,
+
+}
+const Reimbursementmutation ={
+   createReimbursement : createReimbursement,
+   updateReimbursement :updateReimbursement,
+   deleteReimbursement: deleteReimbursement
 }
 
 
@@ -189,6 +211,7 @@ ${Fileschema}
 ${Invoiceschema}
 ${Receiptschema}
 ${Alertschema}
+${Reimbursementschema}
 
 
 type SubMQTTServerstatus{
@@ -263,6 +286,7 @@ type Message {
     ${Invoicesschema_query}
     ${Receiptschema_query}
     ${Checkinschema_query}
+    ${Reimbursementschema_query}
 
     submqttserverstatus:[SubMQTTServerstatus]
     mqtthistory_packets:[MQTTHistory_packets]
@@ -288,6 +312,7 @@ type Message {
      ${Invoiceschema_mutation}
      ${Receiptschema_mutation}
      ${Checkinschema_mutation}
+     ${Reimbursementschema_mutation}
 
     postMessage(user: String!, content: String!): ID!
     signup (email:String! , password:String! ,level:String!) : Signup
@@ -365,22 +390,25 @@ const resolvers = {
     CreateInvoices :CreateInvoicequery,
 
     Checkoutinforms : Checkoutinformquery,
-    Contracts : Contractquery,
+
 
     Addresss:Addressquery,
 
     RoomTypes : queryRoomTypes,
     RoomTypeByid : queryRoomTypeByid,
 
+  
+      
     Rooms :queryRooms,
-    RoomByid : queryRoomByid,
+     RoomByid : queryRoomByid,
     querymembersinRoom: querymembersinRoom,
     querybookingsinRoom: querybookingsinRoom,
 
- 
+    ...Contractquery,
     ...Invoicequery,
-      ...Receiptquery,
-      ...Checkinquery,
+    ...Receiptquery,
+    ...Checkinquery,
+    ...Reimbursementquery,
 
 
   },
@@ -425,7 +453,7 @@ const resolvers = {
     ...Contractmation,
     ...Receiptmutation,
     ...Checkinmutation,
-   
+    ...Reimbursementmutation,
     
  
 
