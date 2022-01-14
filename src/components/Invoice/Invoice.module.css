@@ -291,8 +291,7 @@
     margin: 1rem auto;
     width: 95%;
     border-collapse: collapse;
- 
-       
+
 }
 .container>.display>.zone1>.box1>.tablecontent>table>.header{
    width: 100%;
@@ -302,6 +301,8 @@
 .container>.display>.zone1>.box1>.tablecontent>table>.header{
     background-color: rgb(168, 168, 170);
     text-align: center;
+    position: sticky;
+    top: 0;
     
     
        
@@ -310,7 +311,8 @@
     
     background-color: rgb(168, 168, 170);
     text-align: center;
-    
+    position: sticky;
+    top: 0;
        
 }
 .container>.display>.zone1>.box1>.tablecontent>table>.body{

@@ -113,17 +113,9 @@ export const Checkoutinform = () => {
     const [rooms , setrooms] = useState([]);
     const [filterrooms , setfilterrooms] = useState([]);
     const [ loadingpage, setloadingpage ] = useState(false);
-
     const Checkoutinform = useQuery(API_GET_Rooms);
-
     const [checkoutinforms,setcheckoutinforms] = useState()
     const [updateStatus , mutationupdatestatus] = useMutation(API_UPDATE_Room)
-
-
-
-   
-
-
     useEffect(() => {
         
         if(Checkoutinform && Checkoutinform.data && Checkoutinform.data.Rooms){
@@ -144,6 +136,7 @@ export const Checkoutinform = () => {
                 let Rooms = await getRooms();
                 setrooms(Rooms);
                 setfilterrooms(Rooms);
+                console.log("Rooms",Rooms)
             }
             fetchData();
             setloadingpage(true);
@@ -169,9 +162,14 @@ export const Checkoutinform = () => {
 										type="text"
 										value={options_search.text}
 										onChange={(e) => {
-											let _options_search = options_search
-											_options_search.text = e.target.value 
-											setoptions_search({..._options_search})
+                                            let text = /[^0-9a-zA-Zก-๙]/ig;
+                                            e.target.value = e.target.value.replace(text,'')
+
+                                            let _options_search = options_search
+                                                _options_search.text = e.target.value 
+                                                setoptions_search({..._options_search})
+                                           
+											
 										}}
 									/>
                             <select className={styles.selectstyles}
@@ -232,7 +230,29 @@ export const Checkoutinform = () => {
                                                     <td width={'80px'} >{room.status ? room.status : '---'}</td>
                                                     <td width={'100px'} >{room.name}</td>
                                                     <td width={'100px'} >{room.surname}</td>
-                                                    <td width={'80px'} >{room.checkout ? room.checkout : '---'}</td>
+                                                    <td width={'80px'} >
+                                                        <input type = 'date'
+                                                        value={room.checkout}
+                                                        onChange={(e)=>{
+                                                                try{
+                                                                    let _res = updateStatus({
+                                                            
+                                                                        variables: {
+                                                                            id:`${room.id}`,
+                                                                            input:{
+                                                                                checkout_date: `${e.target.value}`
+                                                                                }
+                                                                            }});
+        
+                                                                    if(_res){
+                                                                        Checkoutinform.refetch()
+                                                                    }
+
+                                                                }catch(error){
+                                                                    console.log(error)
+                                                                }
+                                                            }}
+                                                            /></td>
                                                     <td width={'60px'} >
                                                         <button 
                                                     className={styles.CheckButton}

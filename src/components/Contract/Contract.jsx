@@ -11,43 +11,49 @@ import {
     API_UPDATE_Contract
 } from '../../API/Schema/Contract/Contract'
 
+
+import { API_UPDATE_Room ,API_GET_Rooms} from '../../API/Schema/Room/Room'
 import {  export_Contract   } from '../../general_functions/pdf/export/export_pdf';
 
-
-const filter_room = (rooms , options_search) =>{
+const filter_rooms = (rooms , formfilter ,getStart,getEnd) =>{
     let _filter_table = []
-    if(rooms && options_search){
+    if(rooms && formfilter){
         _filter_table = rooms.filter(room =>{
             if(room){
-                if(options_search.keyword === 'ทั้งหมด'){
-                    return (room.Contractnumber && room.Contractnumber.search(options_search.text) !== -1 ) ||
-                    (room.RoomType && room.RoomType.search(options_search.text) !== -1 ) || 
-                    (room.RoomName && room.RoomName.search(options_search.text) !== -1 ) ||
-                    (room.RentType && room.RentType.search(options_search.text) !== -1 ) ||
-                    (room.name && room.name.search(options_search.text) !== -1 ) ||
-                    (room.surname && room.surname.search(options_search.text) !== -1 ) ||
-                    (room.Check_in && room.Check_in.search(options_search.text) !== -1 ) ||
-                    (room.status && room.status.search(options_search.text) !== -1 ) ||
-                    (room.Check_out && room.Check_out.search(options_search.text) !== -1 ) ||
-                    (options_search.text === '')	
-                    ;
-
-                }else if (options_search.keyword === 'ชื่อห้อง'){
-                    return (room.RoomName.search(options_search.text) !== -1 )||
-                    (options_search.text === '')	
-                }else if( options_search.keyword === 'สถานะ' ){
-                    return (room.status.search(options_search.text) !== -1 )	||
-                    (options_search.text === '')	
-                }else if( options_search.keyword === 'ประเภทห้อง'){
-                    return (room.RoomType && room.RoomType.search(options_search.text) !== -1 )	||
-                    (options_search.text === '')		
-                }else{
-                    return false; 
+                if(formfilter.option_search === 'เลือกอาคารทั้งหมด' && getStart == 17356266000000 && getEnd == 19249722000000 ){
+                    console.log('All')
+                    return ( room.Contractnumber && room.Contractnumber.search(formfilter.text) !==-1) ||
+                    ( room.RoomType && room.RoomType.search(formfilter.text) !==-1) ||
+                    ( room.RoomName && room.RoomName.search(formfilter.text) !==-1) ||
+                    ( room.RentType && room.RentType.search(formfilter.text) !==-1) ||
+                    ( room.name && room.name.search(formfilter.text) !==-1) ||
+                    ( room.surname && room.surname.search(formfilter.text) !==-1) ||
+                    ( room.Check_in && room.Check_in.search(formfilter.text) !==-1) ||
+                    ( room.Check_out && room.Check_out.search(formfilter.text) !==-1) ||
+                    ( room.status && room.status.search(formfilter.text) !==-1) ||
+                    (formfilter.text === '')
+                }else if(formfilter.option_search === 'เลือกอาคารทั้งหมด' && formfilter.text === ''){
+                    console.log('Date select')
+                    return ( room.Check_out && (new Date(room.Check_out).getTime().toString()) > getStart && (new Date(room.Check_out).getTime().toString()) < getEnd)
+                    
+                        
+                }else if(formfilter.option_search === 'เลือกอาคารทั้งหมด' ){
+                    console.log('Date Text select')
+                    if( room.Check_out && (new Date(room.Check_out).getTime().toString()) > getStart && (new Date(room.Check_out).getTime().toString()) < getEnd ){
+                        return ( room.RoomType && room.RoomType.search(formfilter.text) !==-1) ||
+                        ( room.RoomName && room.RoomName.search(formfilter.text) !==-1) ||
+                        ( room.name && room.name.search(formfilter.text) !==-1) ||
+                        ( room.surname && room.surname.search(formfilter.text) !==-1)
+                    }       
+                }
+                
+                
+                else{
+                    return false
                 }
             }else{
                 return false;
             }
-
         })
     }
     return _filter_table
@@ -57,10 +63,152 @@ const filter_room = (rooms , options_search) =>{
 
 
 
+
+
+
+
+
 export const Contract = () => {
+    
+    const getRooms = useQuery(API_GET_Rooms)
 
 
     const Contract = useQuery(API_GET_Contract);
+    const [ loadingpage, setloadingpage] = useState(false)
+    const [ rooms , setrooms ] = useState([])
+    const [building ,setbuilding] = useState([])
+    const [filterrooms , setfilterrooms] = useState([]);
+    const [ IDrooms , setIDrooms]=useState([]);
+    const [dateRange,setdateRange] = useState([]);
+    const [getStart , setgetStart] = useState({});
+    const [getEnd , setgetEnd] = useState([]);
+    const [minDate , setminDate] = useState([]);
+    const [maxDate , setmaxDate] = useState([]);
+    
+
+    const [defaultformfilter ,setdefaultformfilter] = useState({
+        id: null,
+        checkin_date: '01/01/2520',
+        checkin_date_exp: '01/01/2580',
+        option_search:'เลือกอาคารทั้งหมด',
+        text:'',
+        
+    })
+    const [ formfilter , setformfilter ] = useState({
+        id: null,
+        checkin_date: '01/01/2520',
+        checkin_date_exp: '01/01/2580',
+        option_search:'เลือกอาคารทั้งหมด',
+        text:'',
+        
+
+    })
+    
+
+
+    const hadleChangedformfilterTodefault = () =>{
+        setformfilter(defaultformfilter)
+        console.log("setdefault-formfilter",formfilter)
+    }
+
+    const handleChangedformfilter = (e) => {
+        let _formfilter = formfilter ;
+        console.log('e', e.target.value, e.target.id, _formfilter)
+
+        if(e.target.id && _formfilter.hasOwnProperty(e.target.id)){
+            if( e.target.id === "option_search" ){
+                _formfilter[e.target.id] = e.target.value;
+                setformfilter({..._formfilter})
+                console.log('_formfilter',_formfilter)
+
+            }else if(e.target.id === "checkin_date_exp"){
+                _formfilter[e.target.id] = e.target.value;
+                setformfilter({..._formfilter})
+                setmaxDate(e.target.value)
+                console.log('_formfilter',_formfilter)
+
+                
+            }else if(e.target.id === "checkin_date"){
+                _formfilter[e.target.id] = e.target.value;
+                setformfilter({..._formfilter})
+                setminDate(e.target.value)
+                console.log('_formfilter',_formfilter)
+
+            }else if(e.target.id === "text"){
+                let text = /[^0-9a-zA-Zก-๙]/ig;
+                e.target.value = e.target.value.replace(text,'')
+                _formfilter[e.target.id] = e.target.value;
+                setformfilter({..._formfilter})
+                console.log('_formfilter',_formfilter)
+
+            }else{
+                return false
+            }
+
+        }
+        if(formfilter.checkin_date && formfilter.checkin_date_exp){
+            let _checkin = new Date(formfilter.checkin_date).getTime().toString()
+            let _checkout = new Date(formfilter.checkin_date_exp).getTime().toString()
+            
+            if(_checkin > _checkout){
+                alert('Can not Checkin > Checkout')
+                hadleChangedformfilterTodefault()
+            }
+            else{
+                console.log('complete')
+            }
+            
+
+
+
+        }
+    }
+    const Rooms_to_table = (Rooms) =>{
+        let table = [];
+            table = Rooms.map((data)=>{
+                let _data = data;
+                return{
+                    building:
+						data.floor && data.floor.building && data.floor.building.name
+							? data.floor.building.name 
+							: '---' 
+                }
+            })
+        return table
+    }
+    const selectAll = () =>{
+        let myCheckboxId = document.querySelector('#myCheckboxId')
+        let myCheckboxMain = document.querySelector('#select-all');
+        let myCheckboxName = document.getElementsByName('myCheckboxName');
+        let myCheckboxNameLen = myCheckboxName.length
+
+        if(myCheckboxMain.checked == true  ){
+            
+            for (var x=0; x<myCheckboxNameLen; x++){
+                myCheckboxName[x].checked=true;
+                
+                }
+
+            let _IDrooms = filterrooms.map((room)=> {
+                return {...room}
+            })
+            setIDrooms(_IDrooms);
+            console.log("IDrooms-if",_IDrooms)
+
+        }
+        else{
+            for (var x=0; x<myCheckboxNameLen; x++){
+                myCheckboxName[x].checked=false;
+                }
+            
+            let _IDrooms = IDrooms.filter(item => item !== item)
+            setIDrooms(_IDrooms)
+            console.log("IDrooms-else",_IDrooms)
+
+        }
+        
+    }
+    
     
     
 
@@ -187,14 +335,44 @@ export const Contract = () => {
 
     }
 
+    
 
 
     
 
-    const [ loadingpage, setloadingpage] = useState(false)
-    const [ rooms , setrooms ] = useState([])
-    
+    useEffect(  () =>{        
+        if(getRooms.data){  
+            let Rooms = Rooms_to_table(getRooms.data.Rooms)
+            let _building = building
+            _building = [...new Set(Rooms.map(item => item.building))]
+            setbuilding(_building)
+        
 
+            
+            
+        }
+        if(formfilter){
+            const startDate = new Date(formfilter.checkin_date)
+            const startEnd = new Date(formfilter.checkin_date_exp)
+
+            let _getStart = getStart
+            _getStart = startDate.getTime().toString()
+            setgetStart(_getStart)
+
+            let _getEnd = getEnd
+            _getEnd = startEnd.getTime().toString()
+            setgetEnd(_getEnd)
+
+            console.log('_getStart',_getStart)
+            console.log('_getEnd',_getEnd)
+
+        }
+
+       
+        setloadingpage(true);
+    },[getRooms, loadingpage,formfilter])
+    
+   
    
 
     useEffect(() =>{
@@ -202,8 +380,7 @@ export const Contract = () => {
             let _contract = rooms
             _contract = [...Contract.data.Contracts]
             setrooms([..._contract]);
-            console.log('1',_contract)
-            
+            setfilterrooms([..._contract])
         }
         
         setloadingpage(true);
@@ -226,15 +403,21 @@ export const Contract = () => {
                         </div>
                         <div className={styles.dateinput}>
                             <label className={styles.date}>วันที่ :</label>
-                            <input type='date' className={styles.inputdate}></input>
+                            <input  id = 'checkin_date'type='date' min= "2015-01-01" max={maxDate} className={styles.inputdate} onChange={handleChangedformfilter}></input>
                             <label className={styles.to}>ถึง :</label>
-                            <input type='date' className={styles.inputdate}></input>
+                            <input id = 'checkin_date_exp' type='date' min= {minDate} className={styles.inputdate} onChange={handleChangedformfilter}></input>
                             <br/>
-                            <label className={styles.selectAll}>เลือกทั้งหมด</label>
-                            <input type = 'checkbox' className={styles.checkbox}></input>
+                            <label className={styles.selectAll} >เลือกทั้งหมด</label>
+                            <input type = 'checkbox' className={styles.checkbox} name ="selectAll" id="select-all" onChange={selectAll}></input>
                             <label className={styles.building}>อาคาร :</label>
-                            <select className={styles.select}>
-                                <option>อาคารทั้งหมด</option>
+                            <select id = 'option_search' className={styles.select} onChange={handleChangedformfilter}>
+                                <option> เลือกอาคารทั้งหมด </option>
+                                { building.map((room)=> room ? (
+                                    <option>{room}</option>
+                                ) : null)
+                                
+                                }
+                               
                             </select>
                         </div>
                         
@@ -242,48 +425,77 @@ export const Contract = () => {
                     </div>
                     <div className={styles.body}>
                         <div className={styles.filter}>
-                            <input className={styles.input}></input>
-                            <button className={styles.button}>กรอง</button>
-                            <button className={styles.button}>ทั้งหมด</button>
+                            <input id = 'text' className={styles.input} onChange={handleChangedformfilter}></input>
+                            <button className={styles.button} onClick={
+                                async () => {
+                                    let _filter_rooms = []
+                                    _filter_rooms = filter_rooms(rooms, formfilter ,getStart , getEnd)
+                                    setfilterrooms(_filter_rooms)
+                                    console.log("_filter_rooms-1",_filter_rooms)
+                                    
+                                }
+                            }>กรอง</button>
+                            <button className={styles.button} onClick={hadleChangedformfilterTodefault}>ทั้งหมด</button>
                         </div>
-                        <table className={styles.table}>
-                            <thead className={styles.head}>
-                                <tr>
-                                    <td>{head_table[0]}</td>
-                                    <td>{head_table[1]}</td>
-                                    <td>{head_table[2]}</td>
-                                    <td>{head_table[3]}</td>
-                                    <td>{head_table[4]}</td>
-                                    <td>{head_table[5]}</td>
-                                    <td>{head_table[6]}</td>
-                                    <td>{head_table[7]}</td>
-                                    <td>{head_table[8]}</td>
-                                    <td>{head_table[9]}</td>
-                                </tr>
-                            </thead>
-                            <tbody className={styles.body}>{
-                                rooms.map((item) => 
-                            <tr>
-                                <td>
-                                    <input type='checkbox' ></input>
-                                </td>
-                                <td>{ item && item.Contractnumber ?  item.Contractnumber  : "---"}</td>
-                                <td>{ item && item.Room && item.Room.RoomType.name ?  item.Room.RoomType.name :  "---"}</td>
-                                <td>{ item && item.Room && item.Room.name ? item.Room.name : "---"}</td>
-                                <td>{ item && item.Room && item.Room.checkin && item.Room.checkin.checkin_type ? item.Room.checkin.checkin_type  :"---"}</td>
-                                <td>{ item && item.Room && item.Room.members &&  item.Room.members.length>0  &&  item.Room.members[0].name ?  item.Room.members[0].name :"---"  }</td>
-                                <td>{ item && item.Room && item.Room.members &&  item.Room.members.length>0  &&  item.Room.members[0].lastname ?  item.Room.members[0].lastname :"---" }</td>
-                                <td>{ item && item.Room && item.Room.checkin &&  item.Room.checkin.checkin_date ? item.Room.checkin.checkin_date : "---"}</td>
-                                <td>{ item && item.status ? item.status :"---"}</td>
-                                <td>{ item && item.Room && item.Room.checkout &&  item.Room.checkout.checkout_date ?  item.Room.checkout.checkout_date : "---" }</td>
-                            </tr>
-                            
-                            )}
-                                
-                                          
-        
-                            </tbody>
-                        </table>
+
+                        <div className={styles.test}>
+
+                        
+                            <table className={styles.table}>
+                                <thead className={styles.head}>
+                                    <tr>
+                                        <td>{head_table[0]}</td>
+                                        <td>{head_table[1]}</td>
+                                        <td>{head_table[2]}</td>
+                                        <td>{head_table[3]}</td>
+                                        <td>{head_table[4]}</td>
+                                        <td>{head_table[5]}</td>
+                                        <td>{head_table[6]}</td>
+                                        <td>{head_table[7]}</td>
+                                        <td>{head_table[8]}</td>
+                                        <td>{head_table[9]}</td>
+                                    </tr>
+                                </thead>
+                                <tbody className={styles.body}>{
+                                    filterrooms.map((item) => item ?
+                                (   <tr>
+                                        <td>
+                                            <input type='checkbox' name = "myCheckboxName" id="myCheckboxId"
+                                            onChange={(e)=>{
+                                                const check = e.target.checked
+                                                const id = item.id
+                                                if(check){
+                                                    let _IDrooms = IDrooms
+                                                    _IDrooms = [..._IDrooms,item]
+                                                    setIDrooms(_IDrooms)
+                                                    console.log('_IDrooms',_IDrooms)
+
+                                                }else{
+                                                    let _IDrooms = IDrooms.filter(item => item.id !== id)
+                                                    setIDrooms(_IDrooms)
+                                                    console.log('_IDrooms',_IDrooms)
+                                                    
+                        
+                                                }
+                                            }}/>
+                                        </td>
+                                        <td>{ item && item.Contractnumber ?  item.Contractnumber  : "---"}</td>
+                                        <td>{ item && item.Room && item.Room.RoomType.name ?  item.Room.RoomType.name :  "---"}</td>
+                                        <td>{ item && item.Room && item.Room.name ? item.Room.name : "---"}</td>
+                                        <td>{ item && item.Room && item.Room.checkin && item.Room.checkin.checkin_type ? item.Room.checkin.checkin_type  :"---"}</td>
+                                        <td>{ item && item.Room && item.Room.members &&  item.Room.members.length>0  &&  item.Room.members[0].name ?  item.Room.members[0].name :"---"  }</td>
+                                        <td>{ item && item.Room && item.Room.members &&  item.Room.members.length>0  &&  item.Room.members[0].lastname ?  item.Room.members[0].lastname :"---" }</td>
+                                        <td>{ item && item.Room && item.Room.checkin &&  item.Room.checkin.checkin_date ? item.Room.checkin.checkin_date : "---"}</td>
+                                        <td>{ item && item.status ? item.status :"---"}</td>
+                                        <td>{ item && item.Room && item.Room.checkout &&  item.Room.checkout.checkout_date ?  item.Room.checkout.checkout_date : "---" }</td>
+                                    </tr> 
+                                    ) : null )}
+                                    
+                                            
+            
+                                </tbody>
+                            </table>
+                        </div>
 
 
                     </div>
