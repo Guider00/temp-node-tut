@@ -87,7 +87,15 @@ export const  Insurance = () => {
                                 <tbody className={styles.tbody}> {body_table.map( (data2) =>
                                         <tr>
                                             <td>    
-                                                <input type="checkbox" name = "myCheckboxName" id="myCheckboxId"></input>
+                                                <input type="checkbox" name = "myCheckboxName" id="myCheckboxId"
+                                                onChange={(e)=>{
+                                                    const check = e.target.checked
+                                                    if(check){
+                                                        console.log('check')
+                                                    }else{
+                                                        console.log('Uncheck')
+                                                    }
+                                                }}></input>
                                             </td>
                                             <td>{data2["อาคาร"]}</td>
                                             <td>{data2["ชื่อห้อง"]}</td>
