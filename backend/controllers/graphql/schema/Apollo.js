@@ -116,6 +116,19 @@ const Checkinmutation ={
 }
 
 
+const{Reimbursementschema ,Reimbursementschema_query , Reimbursementschema_mutation,Reimbursements,queryReimbursementByid,createReimbursement ,deleteReimbursement , updateReimbursement } = require('./Reimbursement/Reimbursement')
+const Reimbursementquery ={
+   Reimbursements : Reimbursements,
+   queryReimbursementByid: queryReimbursementByid,
+
+}
+const Reimbursementmutation ={
+   createReimbursement : createReimbursement,
+   updateReimbursement :updateReimbursement,
+   deleteReimbursement: deleteReimbursement
+}
+
+
 const { Fileschema ,  UploadFile_query  ,  UploadFileschema_mutation  , UploadFile , singleUpload }  = require('./UploadFile/UploadFile') 
 
 const { getAllMeter , adddevicelist }  = require ('../../../MQTT/server/devicemeters')
@@ -198,6 +211,7 @@ ${Fileschema}
 ${Invoiceschema}
 ${Receiptschema}
 ${Alertschema}
+${Reimbursementschema}
 
 
 type SubMQTTServerstatus{
@@ -272,6 +286,7 @@ type Message {
     ${Invoicesschema_query}
     ${Receiptschema_query}
     ${Checkinschema_query}
+    ${Reimbursementschema_query}
 
     submqttserverstatus:[SubMQTTServerstatus]
     mqtthistory_packets:[MQTTHistory_packets]
@@ -297,6 +312,7 @@ type Message {
      ${Invoiceschema_mutation}
      ${Receiptschema_mutation}
      ${Checkinschema_mutation}
+     ${Reimbursementschema_mutation}
 
     postMessage(user: String!, content: String!): ID!
     signup (email:String! , password:String! ,level:String!) : Signup
@@ -388,10 +404,11 @@ const resolvers = {
     querymembersinRoom: querymembersinRoom,
     querybookingsinRoom: querybookingsinRoom,
 
-  ...Contractquery,
+    ...Contractquery,
     ...Invoicequery,
-      ...Receiptquery,
-      ...Checkinquery,
+    ...Receiptquery,
+    ...Checkinquery,
+    ...Reimbursementquery,
 
 
   },
@@ -436,7 +453,7 @@ const resolvers = {
     ...Contractmation,
     ...Receiptmutation,
     ...Checkinmutation,
-   
+    ...Reimbursementmutation,
     
  
 
