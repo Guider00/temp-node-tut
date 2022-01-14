@@ -39,6 +39,10 @@
     height: 500px;
     margin:1rem auto;
     border-radius: 15px;
+    max-height: 50rem;
+    overflow-y: auto;
+    justify-content: center;
+    text-align: center;
     
 }
 

@@ -82,6 +82,8 @@ export const queryRooms = () =>{
                 tel
                 email
                 personalid
+                taxnumber
+                address
                 carid
             }
             meterroom{
@@ -187,24 +189,23 @@ export const API_GET_Rooms = gql`
             checkin_date
             checkout_date
             bookings{
+                id
                 booking_number
-                checkin_type
-                checkin_date_exp
+                customer_name
+                customer_lastname
+                customer_tel
+                customer_address
+                checkin_type 
                 checkin_date
+                checkin_date_exp
                 payment_method
                 deposit
+                note
+                receipt_number
                 status
-                customer_tel
-                customer_name
-                customer_address
+                confirm_booking
             }
-            member{
-                id
-                name
-                lastname
-                email
-                personalid
-            }
+
             floor{
                 id
                 name
@@ -220,6 +221,10 @@ export const API_GET_Rooms = gql`
                 lastname
                 email
                 personalid
+                taxnumber
+                address
+                carid
+                note
             }
             members{
                 id
@@ -228,7 +233,10 @@ export const API_GET_Rooms = gql`
                 tel
                 email
                 personalid
+                taxnumber
+                address
                 carid
+                note
             }
             meterroom{
                 id
@@ -266,6 +274,100 @@ export const API_GET_Rooms = gql`
                     price
                 }
                 
+            }
+            checkin{
+                id
+                id_contact
+                checkin_type
+                checkin_date
+                rental_deposit
+                number_day_rent
+                branch
+                Checkinoption{
+                    name
+                    price
+                }
+            }
+
+            checkinInvoice{
+                id
+                status
+                printstatus
+                lists{
+                    id
+                    name
+                    price
+                    number
+                    vat
+                    selectvat
+                }
+            }
+            checkinReceipt{
+                id
+                status
+                lists{
+                    id
+                    name
+                    price
+                    number
+                    vat
+                    selectvat
+                }
+            }
+            
+            monthlyInvoice{
+                id
+                status
+                printstatus
+                lists{
+                    id
+                    name
+                    price
+                    number
+                    vat
+                    selectvat
+                }
+            }
+            monthlyReceipt{
+                id
+                status
+                lists{
+                    id
+                    name
+                    price
+                    number
+                    vat
+                    selectvat
+                }
+            }
+
+            checkoutInvoice{
+                id
+                status
+                printstatus
+                lists{
+                    id
+                    name
+                    price
+                    number
+                }
+            }
+            checkoutReceipt{
+                id
+                status
+                lists{
+                    id
+                    name
+                    price
+                    number
+                    vat
+                    selectvat
+                }
+            }
+
+            Contract{
+                id
+                status
             }
         }
     }

@@ -1,8 +1,8 @@
 
 const { db } = require('../../../models/Booking/Booking')
 
-const { queryRoomByid  ,addbookingsinRoom ,deletebookingsinRoom }  = require ('../Room/Room')
-
+ const { queryRoomByid  ,addbookingsinRoom ,deletebookingsinRoom }  = require ('../Room/Room')
+console.log('Booking ',queryRoomByid)
 
 const _Bookingschema = 
 `

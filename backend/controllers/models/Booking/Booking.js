@@ -14,8 +14,8 @@ const schemaDefinition = new mongoose.Schema({
   checkin_date : {type:Date},  // YYYY-MM-DDTHH:MM:SS
   checkin_date_exp : {type:Date},  // YYYY-MM-DDTHH:MM:SS
   note: {type:String},
-  status: {type:String},
-  confirm_booking : {type:String}, // << ยืนยันการเข้าพัก
+  status: {type:String , default :"รอการชำระเงิน"},
+  confirm_booking : {type:String , default:"รอการยืนยัน"}, // << ยืนยันการเข้าพัก
   img_receipt : {type:String}, // image
   receipt_number : {type:String}
 })

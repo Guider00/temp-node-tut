@@ -1,8 +1,6 @@
 
 
 const  { db }  =  require( "../../../models/Receipt/Receipt");
-const { queryRoomByid  ,addbookingsinRoom ,deletebookingsinRoom }  = require ('../Room/Room')
-const mongoose = require("mongoose")
 
  const _Receiptschema = `
  input Receipt_listInput{
@@ -26,6 +24,7 @@ type Receipt {
     status:String,
     note:String,
     lists:[Receipt_list]
+    Invoice:Invoice
   }
 
 input ReceiptInput {
@@ -33,12 +32,14 @@ input ReceiptInput {
     status:String,
     note:String,
     lists:[Receipt_listInput]
+    invoiceid:String
   } 
 `
 
 const _Receiptschema_query =`
     Receipts :[Receipt]
     countReceipts : String 
+    queryReceiptByid: Receipt
 `
 const _Receiptschema_mutation = `
     createReceipt(input:ReceiptInput):MessageCreate!,
@@ -56,13 +57,37 @@ const _countReceipts = async (filter) =>{
      }
 
 }
+const _queryReceiptByid = async(payload ,payload2) =>{
+    if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
+
+    try {
+        if(!payload){ return null }
+        if(!payload.id){ return null }
+        if(!payload.id.match(/^[0-9a-fA-F]{24}$/)) { return "Error Format ID"}
+        let resulted = await db.findById({_id:payload.id})
+        if(!resulted) { return null}
+
+        if(resulted.invoiceid){
+            resulted.Invoice = await require (`../Invoice/Invoice`).queryInvoiceByid({id : resulted.invoiceid } )
+        }
+
+        return (
+            resulted
+        )
+    } catch (error) {
+        return error
+    }
+}
+
 const _Receipts =async (filter) =>{
     try{
         let resulted =  await db.find(filter)
         let _datas =  await Promise.all( resulted.map(payload => payload._doc).map( async payload => {
             if(payload){
                 payload.id = payload._id.toString()
-                
+                let _invoice = await require (`../Invoice/Invoice`).queryInvoiceByid({id:payload.invoiceid})
+                payload.Invoice  = _invoice
+
                 return payload
             }else{
                 return null 
@@ -165,6 +190,7 @@ exports.countReceipts = _countReceipts
 
 
 exports.Receipts  =_Receipts 
+exports.queryReceiptByid = _queryReceiptByid
 
 exports.createReceipt = _createReceipt
 

@@ -11,6 +11,9 @@ import { API_GET_Invoice,API_DELETE_Invoice,API_UPDATE_Invoice} from '../../API/
 import { useQuery , useMutation } from '@apollo/client';
 import { useEffect , useState } from 'react';
 
+// invoice 
+import {  export_Invoice_pdf   } from '../../general_functions/pdf/export/export_pdf';
+//
 
 const filter_rooms = (rooms , options_search) =>{
     let _filter_table = []
@@ -64,7 +67,8 @@ export const Invoice = () => {
     const [rooms , setrooms] = useState([])
     const [ filterrooms , setfilterrooms] = useState([])
     const [ deleteInvoice , mutationdeleteInvoice] = useMutation(API_DELETE_Invoice);
-    const [ selectrooms , setselectrooms ] = useState([])
+    const [ selectroom , setselectroom ] = useState(null)
+
 
     const selectAll = () =>{
         let myCheckboxMain = document.querySelector('#select-all');
@@ -113,12 +117,10 @@ export const Invoice = () => {
             _rooms = Invoice.data.Invoices
             setrooms(_rooms)
             setfilterrooms(_rooms)
-            console.log(Invoice.data.Invoices)
+            console.log('Invoice.data',Invoice.data.Invoices)
             
         }
-        
-        
-        
+
 
     },[ Invoice ,rooms ,IDrooms])
 
@@ -126,7 +128,7 @@ export const Invoice = () => {
     let header_table = ["","เลขที่ใบแจ้งหนี้","ชื่อห้อง","วันที่ออก","สถานะ","สถานะการพิมพ์","รอบบิล"]
     let sim_table = [{"":"","เลขที่ใบแจ้งหนี้":"INMV20190030000097","ชื่อห้อง":"201","วันที่ออก":"30/12/2021","สถานะ":"รอชำระเงิน","สถานะการพิมพ์":"ยังไม่พิมพ์","รอบบิล":"04/2562"}]
 
-    let header_table2 = ["รายการ","ชื่อรายการค่าใช้จ่าย","จำนวน","จำนวนเงิน","ราคา","ภาษีมูลค่าเพิ่ม","จำนวนเงิน","ภาษี"]
+    let header_table2 = ["รายการ","ชื่อรายการค่าใช้จ่าย","จำนวน","จำนวนเงิน","ราคา","ภาษีมูลค่าเพิ่ม","ผลรวม","ภาษี"]
     let sim_table2 = [{"รายการ":"1","ชื่อรายการค่าใช้จ่าย":"INMV20190030000097","จำนวน":"1","จำนวนเงิน":"1200.00","ราคา":"100.00","ภาษีมูลค่าเพิ่ม":"888.00","จำนวนเงิน":"888.00","ภาษี":""}]
 
 
@@ -215,77 +217,90 @@ export const Invoice = () => {
 
 
                             </div>
-                            <table className ={styles.table}>
-                                <thead className ={styles.header}>
-                                    <tr >
-                                        <td>{header_table[0]}</td>
-                                        <td>{header_table[1]}</td>
-                                        <td>{header_table[2]}</td>
-                                        <td>{header_table[3]}</td>
-                                        <td>{header_table[4]}</td>
-                                        <td>{header_table[5]}</td>
-                                        <td>{header_table[6]}</td>
-                                    </tr>
-                                </thead>
-                                <tbody className ={styles.body}>{filterrooms.map( (data) =>
-                                    <tr
-                                    onClick={()=>{
-
-                                        let _selectrooms = selectrooms
-                                        _selectrooms = data.id
-                                        setselectrooms(_selectrooms)
-                                        console.log(_selectrooms)
-                                    }}
-                                    style={{
-                                        background: selectrooms === data.id ? 'lightgray' : 'none'
-
-
-                                    }}>
-                                        <td>    
-                                            <input type="checkbox" 
-                                            name = "myCheckboxName" 
-                                            id="myCheckboxId"
-                                            onChange={(e)=>{
-                                                const checked = e.target.checked
-                                                const id = data.id
-                                                if(checked){
-                                                    let _IDrooms = IDrooms
-                                                    _IDrooms = [..._IDrooms,data]
-                                                    setIDrooms(_IDrooms)
-                                                    console.log("check",_IDrooms)
-
-                                                    
-                                                }
-                                                else{
-                                                    let _IDrooms = IDrooms.filter(item => item.id !== id)
-                                                    setIDrooms(_IDrooms)
-                                                    console.log('uncheck',_IDrooms)
-                                                }
-                                            }}
-                                            />
-                                            </td>
-                                        <td>{data.id}</td>
-                                        <td>{data && data.room && data.room.name ? data.room.name : '---'}</td>
-                                        <td>{data && data.duedateinvoice ? data.duedateinvoice : '---'}</td>
-                                        <td>{data && data.status ? data.status : '---'}</td>
-                                        <td>{data && data.printstatus ? data.printstatus : '---'}</td>
-                                        <td>{data && data.monthlybilling ? data.monthlybilling : '---'}</td>
-                                        
-                                    </tr>
-                                        )
-                                            }                
-                                </tbody>
-
-
-
-
-                            </table>
+                            <div className ={styles.tablecontent} >
+                                <table >
+                                    <thead className ={styles.header}>
+                                        <tr >
+                                            <td>{header_table[0]}</td>
+                                            <td>{header_table[1]}</td>
+                                            <td>{header_table[2]}</td>
+                                            <td>{header_table[3]}</td>
+                                            <td>{header_table[4]}</td>
+                                            <td>{header_table[5]}</td>
+                                            <td>{header_table[6]}</td>
+                                        </tr>
+                                    </thead>
                             
+                                    <tbody className ={styles.body}>{filterrooms.map( (data) =>
+                                        <tr
+                                        onClick={()=>{
+
+                                            let _selectroom = selectroom
+                                            _selectroom = data
+                                            setselectroom(_selectroom)
+                                
+                                        }}
+                                        style={{
+                                            background:  (selectroom && (selectroom.id === data.id)) ? 'lightgray' : 'none'
+
+
+                                        }}>
+                                            <td>    
+                                                <input type="checkbox" 
+                                                name = "myCheckboxName" 
+                                                id="myCheckboxId"
+                                                onChange={(e)=>{
+                                                    const checked = e.target.checked
+                                                    const id = data.id
+                                                    if(checked){
+                                                        let _IDrooms = IDrooms
+                                                        _IDrooms = [..._IDrooms,data]
+                                                        setIDrooms(_IDrooms)
+                                                        console.log("check",_IDrooms)
+
+                                                        
+                                                    }
+                                                    else{
+                                                        let _IDrooms = IDrooms.filter(item => item.id !== id)
+                                                        setIDrooms(_IDrooms)
+                                                        console.log('uncheck',_IDrooms)
+                                                    }
+                                                }}
+                                                />
+                                                </td>
+                                            <td>{data && data.id}</td>
+                                            <td>{data && data.Room && data.Room.name ? data.Room.name : '---'}</td>
+                                            <td>{data && data.duedateinvoice ? data.duedateinvoice : '---'}</td>
+                                            <td>{data && data.status ? data.status : '---'}</td>
+                                            <td>{data && data.printstatus ? data.printstatus : '---'}</td>
+                                            <td>{data && data.monthlybilling ? data.monthlybilling : '---'}</td>
+                                            
+                                        </tr>
+                                            )
+                                                }                
+                                    </tbody>
+
+
+
+
+                                </table>
+                            </div>
                             
             
                         </div>
                         <div className = {styles.box3}> 
-                            <button className = {styles.button1}>
+                            <button className = {styles.button1}
+                            onClick={()=>{
+                                if(selectroom && selectroom.Room &&  selectroom.lists){
+                                    console.log('exportInvoice',selectroom)
+                                    let _room = {data: selectroom.Room } 
+                                    export_Invoice_pdf(_room ,selectroom.lists)
+                                }else{
+                                    console.error('ไม่พบข้อมูลห้อง',selectroom)
+                                }
+                                
+                            }}
+                            >
                                 <i><LocalPrintshopIcon/></i>
                                 <div>พิมพ์ทั้งหมดที่เลือก</div>
                             </button>
@@ -425,22 +440,20 @@ export const Invoice = () => {
                                             <td>{header_table2[7]}</td>
                                         </tr>
                                     </thead>
-                                    <tbody className ={styles.body}>{sim_table2.map( (data) =>
+                                    {console.log('selectroom',selectroom,rooms.fi)}
+                                    <tbody className ={styles.body}>{
+                                        (selectroom ? selectroom.lists : []  ).map( (data) =>
                                         <tr>
-                                            <td>{data["รายการ"]}</td>
-                                            <td>{data["ชื่อรายการค่าใช้จ่าย"]}</td>
-                                            <td>{data["จำนวน"]}</td>
-                                            <td>{data["จำนวนเงิน"]}</td>
-                                            <td>{data["ราคา"]}</td>
-                                            <td>{data["ภาษีมูลค่าเพิ่ม"]}</td>
-                                            <td>{data["จำนวนเงิน"]}</td>
+                                            <td>{ data && data.id ?  data.id : "" }</td>
+                                            <td>{ data && data.name ?  data.name : ""}</td>
+                                            <td>{ data && data.number ?  data.number : 1}</td>
+                                            <td>{ data && data.price ?  data.price : 0}</td>
+                                            <td>{ (data && data.number ?  data.number : 1  ) * (data && data.price ?  data.price : 0)     }</td>
+                                            <td>{ (data && data.number ?  data.number : 1  ) * (data && data.price ?  data.price : 0) *0.07     }</td>
+                                            <td>{ (data && data.number ?  data.number : 1  ) * (data && data.price ?  data.price : 0) *1.07  }</td>
                                             <td>    
                                                 <input type="checkbox" 
-                                         
-                                    
-                                                
-                                
-                                                
+                                                    checked={data && data.selectvat  ? data.selectvat : true}
                                                 />
                                             </td>
                                         </tr>

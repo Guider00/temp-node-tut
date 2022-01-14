@@ -80,14 +80,23 @@ export const Tablebooking =(props)=>{
                                 <a href={booking.receipt_number ? booking.receipt_number:''}>{booking.receipt_number ? booking.receipt_number:'---'}</a>
                              </td>
                             <td>
-                                
-                                  { (booking.status && booking.status === 'ยืนยันการเข้าพัก')?<CheckIcon/>:"---" }
-                                
+                                <button onClick={()=>props.handleUpdateconfirm_booking(booking )}>
+                                     { (booking.confirm_booking && booking.confirm_booking === 'ยืนยันการเข้าพัก')?<CheckIcon/>:"---" }
+                                </button>
+                                 
                              </td>
                              <td>
                               
 
-                                 <button     className={styles.blink_me}> <NotificationsIcon /></button>
+                                 <button    
+                                  
+                                  className={  
+                                    ( formatDate( new Date(Number(booking.checkin_date) ) ) === formatDate( new Date()) ||
+                                    new Date(Number(booking.checkin_date) )  <= new Date() ) &&  booking.confirm_booking !== 'ยืนยันการเข้าพัก' ? styles.blink_me :null
+                                    }  
+                                  > 
+                                 <NotificationsIcon />
+                                 </button>
                              </td>
                             <td>
                            

@@ -45,6 +45,34 @@
     padding-right: 2rem;
     font-size: medium;
 }
+.zone2>.formcontact>.card>.cardbody>.zonetablelist{
+    margin-top: 1rem;
+    display: flex;
+    flex-basis: 100%;
+    flex-grow: 1;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+.zone2>.formcontact>.card>.cardbody>.zonetablelist>.menutablelist{
+    margin-top: 1rem;
+    display: flex;
+    flex-basis: 100%;
+    margin-bottom: 1rem;
+    align-items: center;
+    justify-content: center;
+}
+.zone2>.formcontact>.card>.cardbody>.zonetablelist>.menutablelist>button{
+    margin: 0.5rem;
+    padding: 0.25rem;
+}
+.zone2>.formcontact>.card>.cardbody>.zonetablelist>.tablelist{
+    justify-content: center;
+    flex-basis: 100%;
+    display: flex;
+
+    max-height:20rem;
+    overflow-y: auto;
+}
 .zone2>.formcontact>.card>.cardbody>.row{
     margin-top: 1rem;
     display: flex;

@@ -14,11 +14,35 @@ query{
         Check_in
         status
         Check_out
+        Room{
+            id
+            name
+            members{
+                name
+                lastname
+            }
+            checkin{
+                id
+                id_contact
+                rental_deposit
+                checkin_type
+                checkin_date
+            }
+            RoomType{
+                name
+                dailyprice
+                monthlyprice
+                rate_water
+                rate_electrical
+                unit_water
+                unit_electrical
+            }
+        }
     }
 }
 
 `;
-export const API_ADD_Contract = gql`
+export const API_CREATE_Contract = gql`
     mutation createContract($input:ContractInput!){
         createContract(input: $input){
             id

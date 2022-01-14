@@ -1,10 +1,24 @@
 
 
 const  { db }  =  require( "../../../models/Invoice/Invoice");
-const { queryRoomByid  ,addbookingsinRoom ,deletebookingsinRoom }  = require ('../Room/Room')
+
 
  const _Invoiceschema = `
-
+input Invoice_listInput{
+        name:String,
+        number:String,
+        price:String,
+        vat:String,
+        selectvat :String,
+}
+type Invoice_list {
+        id:ID
+        name:String,
+        number:String,
+        price:String,
+        vat:String,
+        selectvat :String,
+}
 type Invoice {
     id:ID!
     duedateinvoice : String
@@ -12,7 +26,9 @@ type Invoice {
     monthlybilling : String,
     printstatus : String ,
     status : String,
-    room:Room
+    lists:[Invoice_list]
+    Room:Room
+  
   }
 
 input InvoicInput {
@@ -23,12 +39,14 @@ input InvoicInput {
     printstatus : String ,
     status : String,
     roomid: String,
+    lists:[Invoice_listInput]
   } 
 `
 
 const _Invoicesschema_query =`
     Invoices :[Invoice]
     countInvoices : String 
+    queryInvoiceByid :Invoice
 `
 const _Invoiceschema_mutation = `
     addInvoice(input:InvoicInput):MessageCreate!,
@@ -45,6 +63,61 @@ const _countInvoices = async (filter) =>{
      }
 
 }
+
+const _queryInvoiceByid_raw = async (payload) =>{
+        try {
+        if(!payload){ return null }
+        if(!payload.id){ return null }
+        if(!payload.id.match(/^[0-9a-fA-F]{24}$/)) { return "Error Format ID"}
+        let resulted = await db.findById({_id:payload.id})
+        if(!resulted) { return null}
+        return (
+            resulted
+        )
+    } catch (error) {
+        return error
+    }
+
+}
+
+const _queryInvoicedetailsByid = async(payload ,payload2) =>{
+    if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
+
+    try {
+        if(!payload){ return null }
+        if(!payload.id){ return null }
+        if(!payload.id.match(/^[0-9a-fA-F]{24}$/)) { return "Error Format ID"}
+        let resulted = await db.findById({_id:payload.id})
+        if(!resulted) { return null}
+       
+        return (
+            resulted
+        )
+    } catch (error) {
+        return error
+    }
+}
+
+
+const _queryInvoiceByid = async(payload ,payload2) =>{
+    if(payload === undefined && payload2){ payload = payload2 } //<< function for graphqlexpress , Apollo 
+
+    try {
+        if(!payload){ return null }
+        if(!payload.id){ return null }
+        if(!payload.id.match(/^[0-9a-fA-F]{24}$/)) { return "Error Format ID"}
+        let resulted = await db.findById({_id:payload.id})
+        if(!resulted) { return null}
+        if(resulted.roomid ){
+            resulted.Room = await require (`../Room/Room`).queryRoomByid ({id : resulted.roomid } )
+        }
+        return (
+            resulted
+        )
+    } catch (error) {
+        return error
+    }
+}
 const _Invoices =async (filter) =>{
     try{
         let resulted =  await db.find(filter)
@@ -53,7 +126,7 @@ const _Invoices =async (filter) =>{
                 payload.id = payload._id.toString()
                 if(payload.roomid){
                     try{
-                        payload.room = await  queryRoomByid( {id : payload.roomid })
+                        payload.Room = await require("../Room/Room").queryRoomByid( {id : payload.roomid })
                         return (payload)
                     }catch(e){
                         return null 
@@ -132,11 +205,14 @@ const _deleteInvoice = async (payload,payload2) =>{
 
 
 
-
+exports.queryInvoiceByid_raw = _queryInvoiceByid_raw
 exports.countInvoices = _countInvoices
 
 
 exports.Invoices  =_Invoices 
+exports.queryInvoiceByid = _queryInvoiceByid
+exports.queryInvoicedetailsByid = _queryInvoicedetailsByid
+
 
 exports.addInvoice = _addInvoice
 

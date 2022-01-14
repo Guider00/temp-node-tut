@@ -1,6 +1,6 @@
 const  {  db  }  = require('../../../models/Note/Note')
 const { queryRoomByid } = require('../Room/Room')
-
+console.log('Note',queryRoomByid)
 const _Noteschema = `
 input NoteInput {
 
