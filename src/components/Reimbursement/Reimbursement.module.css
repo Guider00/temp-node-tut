@@ -7,7 +7,7 @@
     padding: 20px;
     border: 1px solid black;
     border-radius: 20px;
-    min-width: 580px;
+    min-width: 700px;
 }
 .container>.main{
     max-width: 95%;
@@ -73,6 +73,7 @@
     
     
 }
+
 .container>.main>.header>.headerdefault:hover{
     transform: translate(0,-6px);
     box-shadow: 10px -10px 25px 0 rgba(31, 204, 89, 0.5),-10px 10px 25px 0 rgba(10, 143, 81, 0.5);
@@ -80,7 +81,31 @@
 }
 
 
+@media only screen and (max-width:1400px) {
+    .container>.main>.table>.tablestyles>.thead{
+        width: 100%;
+        position: sticky;
+        top: 0;
+        background-color: rgb(255, 0, 0);
+        font-size: small;
+        
+        
+    }
+    .container>.main>.table>.tablestyles>.tbody{
+        
+        
+        
+        table-layout: fixed;
+        max-height: 5px;
+        overflow: auto;
+        font-size: small;
+        
+        
+        
+    }
 
+    
+}
 
 
 .container>.main>.table{
@@ -110,7 +135,7 @@
     position: sticky;
     top: 0;
     background-color: darkgray;
-    font-size: 15px;
+    
     
     
 }
@@ -121,7 +146,7 @@
     table-layout: fixed;
     max-height: 5px;
     overflow: auto;
-    font-size: 15px;
+    
     
     
     
@@ -144,6 +169,24 @@
     cursor: pointer;
 }
 
+.container>.main>.buttonDelete{
+    margin: 1rem ;
+    width: 6%;
+    min-width: 80px;
+    height:40px;
+    font-size: 15px;
+    border-radius: 10px;
+    transition: 0.3s;
+    
+    
+    
+    
+}
+.container>.main>.buttonDelete:hover{
+    transform: translate(0,-6px);
+    box-shadow: 10px -10px 25px 0 rgba(50, 192, 69, 0.5),-10px 10px 25px 0 rgba(10, 143, 81, 0.5);
+    cursor: pointer;
+}
 
 
 

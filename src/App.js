@@ -21,7 +21,7 @@ import { Overview } from './components/Overview/Overview'
 
 import { Checkoutinform } from './components/Checkoutinform/Checkoutinform'
 
-import { Insurance } from './components/Insurance/Insurance';
+import { Reimbursement } from './components/Reimbursement/Reimbursement';
 
 import { FormLogin } from './components/Login/Login'
 import { FormSignup } from './components/Signup/Signup'
@@ -90,9 +90,9 @@ const Checkout_inform = () =>(
   </>
 )
 
-const _Insurance = () =>(
+const _Reimbursement = () =>(
   <>
-    <Insurance></Insurance>
+    <Reimbursement></Reimbursement>
   </>
 )
 
@@ -226,7 +226,7 @@ function App() {
             <Route exact path="/overviewmeter" component={_OverviewMeter} />
             <Route exact path="/Address" component={_Address} />
             <Route exact path="/checkoutinform" component={Checkout_inform} />
-            <Route exact path="/Insurance" component={_Insurance} />
+            <Route exact path="/Reimbursement" component={_Reimbursement} />
           
 
             <Route exact path="/booking" component={_Booking} />
