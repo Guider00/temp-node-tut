@@ -3,6 +3,8 @@ import styles from './Reimbursement.module.css';
 import { useEffect,useState } from "react";
 import { useMutation,useQuery } from "@apollo/client";
 import { API_GET_Reimbursement,API_ADD_Reimbursement,API_DELETE_Reimbursement,API_UPDATE_Reimbursement} from '../../API/Schema/Reimbursement/Reimbursement'
+import {  export_Reimbursement_pdf } from '../../general_functions/pdf/export/export_pdf';
+
 
 const filter_rooms = (rooms , formFilter) =>{
     let _filter_table = []
@@ -69,6 +71,7 @@ export const  Reimbursement = () => {
     const [FilterRooms,setFilterRooms] = useState([]);
     const [ IDrooms , setIDrooms]=useState([]);
     const [deleteReimbursement , mutationdeleteReimbursement] = useMutation(API_DELETE_Reimbursement)
+    
     const [formFilter ,setFormfilter] = useState({
         id: null,
         option_search:'ทั้งหมด',
@@ -243,7 +246,12 @@ export const  Reimbursement = () => {
                    
 
                 </div>
-                <button className={styles.button}>คืนเงินประกันภัย</button>  
+                <button className={styles.button}
+                onClick={(IDrooms)=>{
+                    export_Reimbursement_pdf(IDrooms , 'IDrooms')
+                    
+                }}
+                >คืนเงินประกันภัย</button>  
                 <button className={styles.buttonDelete}
                 onClick={()=>{
 

@@ -4,7 +4,7 @@
     background: rgb(245, 248, 248);
     margin: 20px auto;
     padding: 20px;
-    border: 1px solid black;
+    border: 1px solixd black;
     border-radius: 20px;
     
     
@@ -73,27 +73,7 @@
     
 }
 
-.container>.inputbox>.inputstyle{
-    margin: 0.5rem auto;
-   
-    width: 100%;
-    height: 50%;
-    
-}
-.container>.inputbox>.inputstyle>.text{
-    font-size: 1rem;
-    font-weight: 700;
-    padding: 10px 20px;
-   
-    
-}
 
-.container>.inputbox>.inputstyle>.input{
-    margin-left: 1rem;
-    background-color: rgb(255, 255, 255);
-    height: 20px;
-    
-}
 
 .container>.imgbox>.content{
     width: 100%;
@@ -188,4 +168,230 @@
         
         
         
+}
+
+.container>.inputbox>.inputstyle{
+    margin: 0.5rem auto;
+    display: flex;
+    width: 100%;
+    height: 50%;
+    
+}
+.container>.inputbox>.inputstyle>.text{
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 10px 20px;
+   
+    
+}
+
+.container>.inputbox>.inputstyle>.input{
+    margin: 1rem;
+    background-color: rgb(255, 255, 255);
+    height: 20px;
+    
+}
+
+
+
+.containernumber{
+    max-width: 95%;
+    background: rgb(162, 241, 208);
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solixd black;
+    border-radius: 20px;
+
+}
+.containernumber>.inputbox{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr ;
+    margin: 1rem auto;
+    width: 90%;
+    height: 100%;
+    
+   
+}
+.containernumber>.inputbox>.inputstyle{
+    margin: 0.5rem auto;
+    display: flex;
+    width: 100%;
+    height: 50%;
+    
+}
+.containernumber>.inputbox>.inputstyle>.deleteOne{
+    
+    margin: 0.7rem;
+    cursor: pointer;
+    height: 30px;
+}
+.containernumber>.inputbox>.inputstyle>.text{
+   
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 10px 20px;
+}
+.containernumber>.inputbox>.inputstyle>.input{
+    margin: 1rem;
+    background-color: rgb(255, 255, 255);
+    height: 20px;
+    
+}
+.containernumber>.header{
+    font-size: 2rem;
+    font-style:initial;
+    
+    
+    
+
+}
+.containernumber>.save{
+    display: flex;
+    justify-content: center;
+   
+    
+    
+    
+}
+.containernumber>.save>.savestyle{
+    width: 5%;
+    min-width: 60px;
+    font-size: 15px;
+    border-radius: 25px;
+    cursor: pointer;
+    text-transform: uppercase;
+    box-shadow: 1px 1px 5px black; 
+    padding: 5px;
+    margin: 0.2rem auto;
+    
+        
+        
+        
+}
+
+@media only screen and (max-width:480px) {
+    .containernumber>.inputbox{
+        
+        grid-template-columns: 1fr;
+        width: 100%;
+        height: 100%;
+            
+    }
+    .containernumber>.header{
+        font-size: 1.5rem;
+        font-style:initial;
+        
+        
+        
+        
+    
+    }
+
+    
+}
+
+
+.containerDialog{
+    width:500px;
+    max-width: 100%;
+    margin: 0 auto;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 999;
+    padding: 10px 20px 40px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(198, 198, 218);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.containerDialog>.titleClose{
+ display: flex;
+ justify-content: flex-end;
+}
+.containerDialog>.titleClose>.close{
+   
+    background-color: rgb(198, 198, 218);
+    color: crimson;
+    cursor: pointer;
+    font-size: larger;
+    border: none;
+   }
+   .containerDialog>.titleClose>.close:hover{
+    box-shadow: 0px 5px 15px;
+    border-radius: 40px;
+   }
+
+  
+
+.containerDialog>.body{
+    display: inline-block;
+    text-align: center;
+    margin-top: 5px;
+    
+   }
+   .containerDialog>.footer{
+       text-align: center;
+      
+   }
+
+   .containerDialog>.footer>.confirm{
+    width: 80px;
+    height: 40px;
+    margin: 10px;
+    margin-left: 40px;
+    border: none;
+    cursor: pointer;
+    background-color: royalblue;
+    border-radius: 10px;
+   }
+   .containerDialog>.footer>.confirm{
+    width: 80px;
+    height: 40px;
+    margin: 10px;
+    margin-left: 40px;
+    border: none;
+    cursor: pointer;
+    background-color: royalblue;
+    border-radius: 10px;
+   }
+
+
+   .containerDialog>.footer>.confirm:hover{
+    transform: translate(0,-6px);
+    box-shadow: 10px -10px 25px 0 rgba(57, 168, 202, 0.5),-10px 10px 25px 0 rgba(34, 138, 223, 0.5);
+    cursor: pointer;
+   
+   }
+   .containerDialog>.footer>.cancel{
+    width: 80px;
+    height: 40px;
+    margin: 10px;
+    border: none;
+    cursor: pointer;
+    background-color: crimson;
+    border-radius: 10px;
+   }
+   .containerDialog>.footer>.cancel:hover{
+    transform: translate(0,-6px);
+    box-shadow: 10px -10px 25px 0 rgba(224, 83, 83, 0.5),-10px 10px 25px 0 rgba(228, 133, 133, 0.5);
+    cursor: pointer;
+   }
+  
+.span{
+    margin: 1rem;
+    color: red;
+    height: 20px;
+    display: none;
+}
+
+
+input:invalid ~ .span{
+    display: block;
+}
+
+input:invalid[focused = "true"]{
+    border: 1px solid red;
 }
