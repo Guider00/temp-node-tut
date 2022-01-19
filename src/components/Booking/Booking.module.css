@@ -33,6 +33,14 @@
     flex-basis: 100%;
     display: flex;
     text-align: center;
+    margin: 0.5rem;
+}
+.headertable>.input>.zoneselect_checkincheckout{
+    flex-basis: 100%;
+    display: flex;
+    text-align: justify;
+    align-items: center;
+    justify-content: space-evenly;
 }
 .headertable>.input>.zonetextbox{
     display: flex;
@@ -53,11 +61,13 @@
     flex-basis: 40%;
 }
 .headertable>.input>.zonebtn>select{
-    font-size: initial;
+    display: flex;
+    font-size: large;
     
 }
 .headertable>.input>.zonebtn>button{
-    font-size: initial;
+    display: flex;
+    font-size: large;
     
 }
 .zonetable{

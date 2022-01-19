@@ -207,9 +207,19 @@
     flex-basis: 100%;
     display: flex;
     text-align: center;
+    margin: 0.5rem;
+}
+.headertable>.input>.zoneselect_checkincheckout{
+    flex-basis: 100%;
+    display: flex;
+    text-align: justify;
+    align-items: center;
+    justify-content: space-evenly;
 }
 .headertable>.input>.zonetextbox{
-    flex-basis: 60%;
+    display: flex;
+    flex-basis: 70%;
+    align-items: center;
 }
 
 .headertable>.input>.zonetextbox>input{
@@ -222,14 +232,16 @@
 .headertable>.input>.zonebtn{
     display: flex;
     justify-content: space-evenly;
-    flex-basis: 40%;
+    flex-basis: 30%;
 }
 .headertable>.input>.zonebtn>select{
-    font-size: x-large;
+    display: flex;
+    font-size: large;
     
 }
 .headertable>.input>.zonebtn>button{
-    font-size: x-large;
+    display: flex;
+    font-size: large;
     
 }
 .bodytable{

@@ -10,10 +10,16 @@ import {
     API_DELETE_Contract,
     API_UPDATE_Contract
 } from '../../API/Schema/Contract/Contract'
+import {
+     API_GET_RoomType 
+} from '../../API/Schema/RoomType/RoomType'
 
 
 import { API_UPDATE_Room ,API_GET_Rooms} from '../../API/Schema/Room/Room'
 import {  export_Contract   } from '../../general_functions/pdf/export/export_pdf';
+
+
+import  { FileUploader  }  from './FileUploader/FileUploader'
 
 const filter_rooms = (rooms , formfilter ,getStart,getEnd) =>{
     let _filter_table = []
@@ -74,6 +80,13 @@ export const Contract = () => {
 
 
     const Contract = useQuery(API_GET_Contract);
+  
+    const [ deleteContract, mutationdeleteContract ] = useMutation(API_DELETE_Contract);
+    const updateContract = useMutation(API_UPDATE_Contract);
+
+    const query_RoomType = useQuery(API_GET_RoomType);
+
+    const [ roomtypes , setroomtypes ] = useState([])
     const [ loadingpage, setloadingpage] = useState(false)
     const [ rooms , setrooms ] = useState([])
     const [building ,setbuilding] = useState([])
@@ -85,6 +98,7 @@ export const Contract = () => {
     const [minDate , setminDate] = useState([]);
     const [maxDate , setmaxDate] = useState([]);
     
+    const [selectedcontract,setselectedcontract] = useState(null)
 
     const [defaultformfilter ,setdefaultformfilter] = useState({
         id: null,
@@ -103,8 +117,38 @@ export const Contract = () => {
         
 
     })
-    
 
+    const handlerUpdateContract = (contract) =>{
+        try{
+                updateContract({
+                    	variables: {
+                        }
+                })
+
+                
+        }catch(e){
+            console.log(e)
+        }
+    }
+
+
+    const handlerDeleteContract = async (contract) =>{
+        try{
+            console.log(contract.id)
+              let res = await  deleteContract({
+                        	variables: { 
+                                id:`${contract.id}`
+                            }
+                        })
+                if(res && res.data){
+                     Contract.refetch() //<<
+                }else{
+                    // <<
+                }
+        }catch(e){
+            console.log(e)
+        }
+    }
 
     const hadleChangedformfilterTodefault = () =>{
         setformfilter(defaultformfilter)
@@ -382,16 +426,21 @@ export const Contract = () => {
             setrooms([..._contract]);
             setfilterrooms([..._contract])
         }
+         if(query_RoomType && query_RoomType.data && query_RoomType.data.RoomTypes){
+            let _roomtypes = roomtypes
+            _roomtypes = [...query_RoomType.data.RoomTypes]
+            setroomtypes([..._roomtypes])
+        }
         
         setloadingpage(true);
 
-    },[loadingpage , Contract])
+    },[loadingpage , Contract , query_RoomType])
 
    
 
 
 
-    let head_table = ['','เลขที่สัญญา','ประเภทห้อง','ชื่อห้อง','ประเภทสัญญา','ชื่อผู้เช่า','นามสกุล','วันที่ขอสัญญา','สถานะ','วันที่ปิดสัญญา']
+    let head_table = ['','เลขที่สัญญา','ประเภทห้อง','ชื่อห้อง','ประเภทสัญญา','ชื่อผู้เช่า','นามสกุล','วันที่ขอสัญญา','สถานะ','ไฟล์เอกสารสัญญา','วันที่ปิดสัญญา']
 
     return (
         <>
@@ -454,11 +503,23 @@ export const Contract = () => {
                                         <td>{head_table[7]}</td>
                                         <td>{head_table[8]}</td>
                                         <td>{head_table[9]}</td>
+                                        <td>{head_table[10]}</td>
+
                                     </tr>
                                 </thead>
                                 <tbody className={styles.body}>{
                                     filterrooms.map((item) => item ?
-                                (   <tr>
+                                (   <tr 
+                                        onClick={()=>{
+                                            let _selectedcontract = selectedcontract
+                                            _selectedcontract = item
+                                            setselectedcontract({..._selectedcontract})
+                                            console.log(item)
+                                        }}
+                                        style={{
+														background:  (selectedcontract && selectedcontract.id === item.id) ? 'lightgray' : 'none'
+										}}
+                                    >
                                         <td>
                                             <input type='checkbox' name = "myCheckboxName" id="myCheckboxId"
                                             onChange={(e)=>{
@@ -488,6 +549,9 @@ export const Contract = () => {
                                         <td>{ item && item.Room && item.Room.checkin &&  item.Room.checkin.checkin_date ? item.Room.checkin.checkin_date : "---"}</td>
                                         <td>{ item && item.status ? item.status :"---"}</td>
                                         <td>{ item && item.Room && item.Room.checkout &&  item.Room.checkout.checkout_date ?  item.Room.checkout.checkout_date : "---" }</td>
+
+                                        <td>{ item && item.Room && item.Room.checkout &&  item.Room.checkout.checkout_date ?  item.Room.checkout.checkout_date : "---" }</td>
+
                                     </tr> 
                                     ) : null )}
                                     
@@ -501,11 +565,27 @@ export const Contract = () => {
                     </div>
                     <div className={styles.button}>
                         <button className={styles.print}
-                            onClick={()=>{
-                                export_Contract()
+                          
+                            onClick={async ()=>{
+                                try{
+                                  
+                                    if( IDrooms && IDrooms.length > 0 ){
+                                        export_Contract( IDrooms )
+                                        // let res_s =  await Promise.all( await IDrooms.map(async  idroom=>{ 
+                                        //     console.log(idroom)
+                                         
+                                        //     return idroom
+                                        //  } ))
+                                        // console.log('res_s',res_s)
+                                        // if(res_s){
+                                            
+                                        // }
+                                    }
+                                }catch(e){
+                                    console.log(e)
+                                }
                             }}
                         >พิมพ์</button>
-                        <button className={styles.importfile}>แนบไฟล์</button>
                     </div>
 
                 </div>
@@ -517,9 +597,15 @@ export const Contract = () => {
                     </div>
                     <div className={styles.subheader}>
                         <lable className={styles.subheadertext}>ชื่อประเภทห้อง :</lable>
-                        <select className={styles.subheaderselect}>
-                            <option>Air</option>
-                            <option>Fan</option>
+                        <select className={styles.subheaderselect} 
+                             value={selectedcontract && selectedcontract.Room && selectedcontract.Room.RoomType &&
+                            selectedcontract.Room.RoomType.name ?  selectedcontract.Room.RoomType.name :"" }
+                        >
+                            {console.log('roomtypes',roomtypes)}
+                            {roomtypes.map(roomtype => <option>{roomtype && roomtype.name ?roomtype.name:"---"}</option>)
+
+                            }
+
                         </select>
 
                     </div>
@@ -528,12 +614,21 @@ export const Contract = () => {
                         <h1 className={styles.line}></h1>
                         <div  className={styles.month}>
                             <lable className={styles.month}>รายเดือน :</lable>
-                            <input id = 'month' type = 'radio' checked = 'true' className={styles.check} onChange={monthPage}/>
+                            <input id = 'month' type = 'radio'  className={styles.check} onChange={monthPage}
+                                  checked = {selectedcontract && selectedcontract.Room && selectedcontract.Room.RoomType && selectedcontract.Room.RoomType.type && 
+                                     selectedcontract.Room.RoomType.type  === "รายเดือน"?   true: false }
+                            />
                             <div className={styles.input1}>
                                 <lable className={styles.inputtext1}>ค่าเช่าห้อง :</lable>
-                                <input id = 'D1' placeholder='0.00' className={styles.inputbox1}></input>
+                                <input id = 'D1' placeholder='0.00' className={styles.inputbox1}
+                                 defaultValue={selectedcontract && selectedcontract.Room && selectedcontract.Room.RoomType &&
+                                     selectedcontract.Room.RoomType.monthlyprice ?  selectedcontract.Room.RoomType.monthlyprice :"" }
+                                ></input>
                                 <lable className={styles.inputtext2}>ค่าประกัน :</lable>
-                                <input  id = 'D2' placeholder='0.00' className={styles.inputbox2}></input>
+                                <input  id = 'D2' placeholder='0.00' className={styles.inputbox2}
+                                defaultValue={selectedcontract && selectedcontract.Room &&  selectedcontract.Room.checkin &&
+                                selectedcontract.Room.checkin.rental_deposit ? selectedcontract.Room.checkin.rental_deposit :""}
+                                ></input>
                                 <br/>
                                 <lable className={styles.inputtext3}>ค่าเช่าล่วงหน้า :</lable>
                                 <input id = 'D3' placeholder='0.00' className={styles.inputtext3}></input>
@@ -546,21 +641,37 @@ export const Contract = () => {
                                 <lable className={styles.inputtext4}>เหมาจ่าย</lable>
                                 <br/>
                                 <lable className={styles.inputtext5}>ไฟฟ้า :</lable>
-                                <input id = 'D4' placeholder='0.00' className={styles.inputtext6} type = 'checkbox'/>
-                                <input id = 'D5' placeholder='0.00' className={styles.inputbox1}></input>
-                                <input id = 'D6' placeholder='0.00' className={styles.inputbox2}></input>
+                                <input id = 'D4' placeholder='0.00' className={styles.inputtext6} type = 'checkbox'
+                                
+                                />
+                                {console.log('rate_electrical',selectedcontract)}
+                                <input id = 'D5' placeholder='0.00' className={styles.inputbox1}  
+                                  defaultValue={selectedcontract && selectedcontract.Room && selectedcontract.Room.RoomType &&
+                                   selectedcontract.Room.RoomType.rate_electrical ? selectedcontract.Room.RoomType.rate_electrical : ""}
+                                ></input>
+                              
+                                <input id = 'D6' placeholder='0.00' className={styles.inputbox2}/>
                                 <lable>บาท</lable>
                                 <input id = 'D7' placeholder='0.00' className={styles.checkbox2} type = 'checkbox'/>
-                                <input id = 'D8' placeholder='0.00' className={styles.inputbox3}></input>
+                                <input id = 'D8' placeholder='0.00' className={styles.inputbox3}
+                                   defaultValue={selectedcontract && selectedcontract.Room && selectedcontract.Room.RoomType &&
+                                   selectedcontract.Room.RoomType.totalprice_electrical ? selectedcontract.Room.RoomType.totalprice_electrical : ""}
+                                />
                                 <lable>บาท</lable>
                                 <br/>
                                 <lable className={styles.inputtext7}>น้ำ :</lable>
                                 <input id = 'D9' placeholder='0.00' className={styles.inputtext6} type = 'checkbox'/>
-                                <input id = 'D10' placeholder='0.00' className={styles.inputbox1}></input>
+                                <input id = 'D10' placeholder='0.00' className={styles.inputbox1}
+                                    defaultValue={selectedcontract && selectedcontract.Room && selectedcontract.Room.RoomType &&
+                                   selectedcontract.Room.RoomType.rate_water ? selectedcontract.Room.RoomType.rate_water : ""}
+                                />
                                 <input id = 'D11' placeholder='0.00' className={styles.inputbox2}></input>
                                 <lable>บาท</lable>
                                 <input id = 'D12' placeholder='0.00' className={styles.checkbox2} type = 'checkbox'/>
-                                <input id = 'D13' placeholder='0.00' className={styles.inputbox3}></input>
+                                <input id = 'D13' placeholder='0.00' className={styles.inputbox3}
+                                     defaultValue={selectedcontract && selectedcontract.Room && selectedcontract.Room.RoomType &&
+                                   selectedcontract.Room.RoomType.totalprice_water ? selectedcontract.Room.RoomType.totalprice_water : ""}
+                                />
                                 <lable>บาท</lable>
                             </div>
                
@@ -568,10 +679,17 @@ export const Contract = () => {
                         <h1 className={styles.line}></h1>
                         <div className={styles.day}>
                                 <lable className={styles.day}>รายวัน :</lable>
-                                <input id = 'day' type='radio' className={styles.check} onChange={dayPage}/>
+                                <input id = 'day' type='radio' className={styles.check} onChange={dayPage}
+                                    checked = {selectedcontract && selectedcontract.Room && selectedcontract.Room.RoomType && selectedcontract.Room.RoomType.type && 
+                                     selectedcontract.Room.RoomType.type  === "รายวัน"?   true: false }
+                                 
+                                />
                                 <div className={styles.input1}>
                                     <lable className={styles.inputtext1}>ค่าเช่าห้อง :</lable>
-                                    <input id = 'D14' disabled = 'disabled' placeholder='0.00' className={styles.inputbox1}></input>
+                                    <input id = 'D14' disabled = 'disabled' placeholder='0.00' className={styles.inputbox1}
+                                        defaultValue={selectedcontract && selectedcontract.Room && selectedcontract.Room.RoomType &&
+                                        selectedcontract.Room.RoomType.dailyprice ? selectedcontract.Room.RoomType.dailyprice : ""}
+                                    />
                                 </div>
                                 <lable className={styles.subday}>ค่าสาธารณูปโภค</lable>
                                 <div className={styles.input2}>
@@ -598,36 +716,48 @@ export const Contract = () => {
                                     <input id = 'D24' disabled = 'disabled' placeholder='0.00' className={styles.inputbox3}></input>
                                     <lable>บาท</lable>
                                 </div>
+                                  <h1 className={styles.line}></h1>
+                                <div className={styles.input3} >
+                                    <FileUploader handleFile={(file)=>
+                                         console.log('file',file)
+                                    }/>
+                                   
+                                </div>
+                                  
+                                <div>
+                                      <h1 className={styles.line}></h1>
+                                </div>
+                  
+                                <div className={styles.buttonzone}>
+                     
+                                    <button className={styles.save}   disabled={(selectedcontract?false:true)} >
+                                        <SaveIcon/>
+                                        <br/>
+                                        บันทึก
+                                    </button>
+
                                 
+                                    
+                                    <button className={styles.cancel} disabled={(selectedcontract?false:true)}
+                                        onClick={()=>{  handlerDeleteContract(selectedcontract) }}
+                                    >
+                                        <CancelIcon/>
+                                        <br/>
+                                        ยกเลิกสัญญา
+                                    </button>
+
+                                </div>
 
                         </div>
                         
+
+          
 
                         
 
                     </div>
                     
-                    <div className={styles.button}>
-                        <h1 className={styles.line}></h1>
-                        <button className={styles.save}>
-                            <SaveIcon/>
-                            <br/>
-                            บันทึก
-                        </button>
 
-                        <button className={styles.edit}>
-                            <EditIcon/>
-                            <br/>
-                            แก้ไข
-                        </button>
-                        
-                        <button className={styles.cancel}>
-                            <CancelIcon/>
-                            <br/>
-                            ยกเลิก
-                        </button>
-
-                    </div>
                 </div>
                
             </div>
