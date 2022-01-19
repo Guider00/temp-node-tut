@@ -69,6 +69,13 @@ const Contractmation = {
 
 }
 
+const{Receiptnumber_query,Receiptnumber_mutation,Receiptnumberschema,Receiptnumberquery,addReceiptnumber,deleteReceiptnumber,updateReceiptnumber}= require('./Receiptnumber/Receiptnumber')
+const Receiptnumbermutation = {
+  deleteReceiptnumber:deleteReceiptnumber,
+  addReceiptnumber:addReceiptnumber,
+  updateReceiptnumber:updateReceiptnumber,
+  }
+
   const{ Address_query,Address_mutation ,Addressschema,Addressquery,deleteAddress,addAddress,updateAddress} = require('./Address/Address')
  const Addressmutation = {
   deleteAddress:deleteAddress,
@@ -202,6 +209,7 @@ ${CreateInvoiceschema}
 ${Checkoutinformschema}
 ${Contractschema}
 ${Addressschema}
+${Receiptnumberschema}
 ${Portmeterschema}
 ${MeterRoomschema}
 ${RoomPriceschema}
@@ -281,6 +289,7 @@ type Message {
     ${Contract_query}
     ${Checkoutinform_query}
     ${Address_query}
+    ${Receiptnumber_query}
     ${RoomTypeschema_query}
     ${Roomschema_query}
     ${Invoicesschema_query}
@@ -306,6 +315,7 @@ type Message {
      ${Checkoutinform_mutation}
      ${Contract_mutation}
      ${Address_mutation}
+     ${Receiptnumber_mutation}
      ${RoomTypeschema_mutation}
      ${Roomschema_mutation}
      ${UploadFileschema_mutation}
@@ -393,6 +403,7 @@ const resolvers = {
 
 
     Addresss:Addressquery,
+    Receiptnumbers:Receiptnumberquery,
 
     RoomTypes : queryRoomTypes,
     RoomTypeByid : queryRoomTypeByid,
@@ -450,6 +461,7 @@ const resolvers = {
     ...CreateInvoicetion,
     ...Checkoutinformation,
     ...Addressmutation,
+    ...Receiptnumbermutation,
     ...Contractmation,
     ...Receiptmutation,
     ...Checkinmutation,
