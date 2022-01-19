@@ -30,12 +30,22 @@ query{
             }
             RoomType{
                 name
+                type
                 dailyprice
                 monthlyprice
+                insurance
+                
+                type_price_water
                 rate_water
-                rate_electrical
                 unit_water
+                totalprice_water
+
+                type_price_electrical
+                rate_electrical
                 unit_electrical
+                totalprice_electrical
+
+                
             }
         }
     }
@@ -50,7 +60,7 @@ export const API_CREATE_Contract = gql`
     }
 `;
 export const API_DELETE_Contract = gql`
-	mutation deleteContract($id: ID) {
+	mutation deleteContract($id:ID!) {
 		deleteContract(id: $id) {
 			n
 			deletedCount

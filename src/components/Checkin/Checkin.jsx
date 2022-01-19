@@ -477,15 +477,16 @@ export const Checkin = () => {
 		if(reselectedroom){
 			if(selectedroom.id){
 
-				console.log('update new member',);
+				
 				let  updateroom = 	GET_Rooms.data.Rooms.find(room => room.id === selectedroom.id)
 			
 				let _selectedroom = selectedroom
+					console.log('update new member');
+					console.log(_selectedroom, updateroom)
 				// อย่างลืมแก้ไขให้มีการ update พร้อมกัน //
-				_selectedroom.data = updateroom.data
-				_selectedroom.members = updateroom.members
-				_selectedroom.checkin = updateroom.checkin
-						setselectedroom({..._selectedroom})
+				_selectedroom.data = updateroom // status checkin ,
+				_selectedroom.members = updateroom.members // update member 
+				setselectedroom({..._selectedroom})
 				
 			
 				setreselectedroom(false)
@@ -535,7 +536,17 @@ export const Checkin = () => {
 					<div className={styles.tableroomselect}>
 						<div className={styles.headertable}>
 							<div className={styles.text}> รายการห้องว่างและถูกจอง </div>
+							<div  className={styles.input} >
+								<div className={styles.zoneselect_checkincheckout}>
+									<label> วันเที่ข้าพัก </label>
+									<input type='date' name="input_searchdatecheckin"/>
+									<label> วันที่เข้าย้ายออก </label>
+									<input type='date' name="input_searchdatecheckout"/>
+								</div>
+							</div>
 							<div className={styles.input}>
+							
+
 								<div className={styles.zonetextbox}>
 									<input
 										type="text"
@@ -564,6 +575,7 @@ export const Checkin = () => {
 										<option>ชื่อคนจอง</option>
 										<option>เบอร์ติดต่อจอง</option>
 									</select>
+
 									<button onClick={async () => { 
 										
 										try{
@@ -580,6 +592,7 @@ export const Checkin = () => {
 										ค้นหา<SearchIcon />{' '}
 									</button>
 								</div>
+
 							</div>
 						</div>
 						<div className={styles.bodytable}>

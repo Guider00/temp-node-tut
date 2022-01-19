@@ -292,11 +292,11 @@ export const Booking = () => {
 		<div>
 			{alert && alert.show ?
 			<ModalAlert
-			 handleaccept ={ () =>{
+			 handleaccept ={ async () =>{
 				let _alert = alert 
 				console.log('alert item ',alert)
 				try{
-					let res = deleteBooking_and_BookinginRoom({ variables: { id: _alert.item.id  ,id_room:_alert.item.Room.id   } });
+					let res = await deleteBooking_and_BookinginRoom({ variables: { id: _alert.item.id  ,id_room:_alert.item.Room.id   } });
 					if(res){
 					_alert.show = false
 					booking.refetch();
@@ -306,7 +306,7 @@ export const Booking = () => {
 					setalert({_alert})
 				}catch(e){
 					if(_alert.item.Room === null ){
-						let res = deleteBooking({ variables: { id: _alert.item.id  ,id_room:""   } });
+						let res = await deleteBooking({ variables: { id: _alert.item.id  ,id_room:""   } });
 						if(res){
 							_alert.show = false
 							booking.refetch();
@@ -334,6 +334,14 @@ export const Booking = () => {
 					<div className={styles.tableroomselect}>
 						<div className={styles.headertable}>
 							<div className={styles.text}> รายการห้องว่างและย้ายออก </div>
+							<div  className={styles.input} >
+								<div className={styles.zoneselect_checkincheckout}>
+									<label> วันเที่ข้าพัก </label>
+									<input type='date' name="input_searchdatecheckin"/>
+									<label> วันที่เข้าย้ายออก </label>
+									<input type='date' name="input_searchdatecheckout"/>
+								</div>
+							</div>
 							<div className={styles.input}>
 								<div className={styles.zonetextbox}>
 									<input
