@@ -1223,6 +1223,237 @@ export const export_Reimbursement_pdf =  ( booking , type  ) =>{
 
 }
 
-export const export_taxinvoice_pdf = () =>{
+
+
+export const export_taxinvoice_pdf =  ( room ,table_price) =>{
+
+    let business_Address_1 = "119 ซอยสีม่วงอนุสรณ์ ถนน สุทธิสาร"
+    let business_Address_2 = "แขวง ดินแดง เขต ดินแดง กรุงเทพ 10400"
+    let Taxid = "01055360118036666"
+    let Phone = "026937005"
+    let Email = "sales@primusthai.com" 
+
+    let Vat = 7;
+    let Name =  room && room.data && room.data.members && room.data.members.length > 0 
+                     ? `${room.data.members[0].name}  ${room.data.members[0].lastname} ` : '--------'
+    let Address1 = "........................................."   // ที่อยู่ ของผู้รับบิล
+    let Address2 = "........................................."    // ที่อยู่ ของผู้รับบิล
+    let No =  ( room && room.data  &&  room.data.id )  ? room.data.id : "---"
+    let _Date =  formatDate(new Date())
+    let HoneNo = room.name ? room.name : "------"
+    let Month = "12/2021"
+    let Grand = "144.00"
+    let Backforward = "0.00"
+   
+    let Money  = "0.00"
+    let credit = "  ...คนออกบิล... "
+    let Time = toHHMMSS(new Date())
+    let note = "เลขที่บัญชี 2878-xxxxxx-x"
+
+    let table_prices = table_price ? table_price :[{ 
+                    name:`----` ,
+                    unit:"1",
+                    price:`---`,
+                    amount:`---`
+                 }]
+    let _total_price = 0
+
+    table_prices.map(item => _total_price += (item && item.price ) ?  Number(item.price) : 0 )
+    let Grandtotal = `${_total_price}`
+    const names = table_prices.map(table_prices => table_prices.name);
+    const Units = table_prices.map(table_prices => (table_prices.unit !== undefined   ) ?  `${table_prices.unit}`:'1' );
+    const Price = table_prices.map(table_prices => `${table_prices.price}`);
+    const Amount = table_prices.map(table_prices =>  `${Number(table_prices.price)*Number( (table_prices.unit !== undefined   ) ?  `${table_prices.unit}`:'1')}`  );
+
+    const doc = new jsPDF('l', 'mm', [297, 210]);
+   
+
+    AddTH_font(doc ,'yourCustomFont.ttf' )
+    doc.addFont('yourCustomFont.ttf', 'yourCustomFont', 'normal');
+    doc.setFont('yourCustomFont');
+
+    //bill box
+    doc.setDrawColor(204,253,245)
+    doc.setFillColor(204,253,245)
+    doc.roundedRect(200, 8, 78, 13, 6, 6, 'FD')
+
+
+    //main box
+    doc.setDrawColor(156, 250, 235)
+    doc.setFillColor(156, 250, 235)
+    doc.rect(15,25,265,160 , 'FD')
+
+    //address box
+    doc.setDrawColor(204,253,245)
+    doc.setFillColor(204,253,245)
+    doc.roundedRect(17,27,173,46,6,6, 'FD')
+
+    doc.roundedRect(193,27,38,10,6,6 , 'FD')
+    doc.roundedRect(232,27,47,10,6,6 , 'FD')
+    doc.roundedRect(193,39,38,10,6,6 , 'FD')
+    doc.roundedRect(232,39,47,10,6,6 , 'FD')
+    doc.roundedRect(193,51,38,10,6,6 , 'FD')
+    doc.roundedRect(232,51,47,10,6,6 , 'FD')
+    doc.roundedRect(193,63,38,10,6,6 , 'FD')
+    doc.roundedRect(232,63,47,10,6,6 , 'FD')
+
+    //topic box
+    doc.setDrawColor(40, 120, 50)
+    doc.setFillColor(110, 250, 230)
+    doc.rect(17,75,138,15, 'FD' )
+    doc.rect(155,75,38,15, 'FD' )
+    doc.rect(193,75,38,15, 'FD' )
+    doc.rect(231,75,46,15, 'FD' )
+
+    doc.setDrawColor(40, 120, 50)
+    doc.setFillColor(204,253,245)
     
+    //result box
+    doc.rect(17,90,138,60, 'FD' )
+    doc.rect(155,90,38,60, 'FD' )
+    doc.rect(193,90,38,60, 'FD' )
+    doc.rect(231,90,46,60, 'FD' )
+
+    //last box
+    doc.setFillColor(255,255,255)
+    doc.rect(17,152,138,31, 'FD' )
+    doc.setFillColor(240,253,245)
+    doc.rect(155,152,76,10, 'FD' )
+    doc.rect(155,162,76,11, 'FD' )
+    doc.rect(155,173,76,10, 'FD' )
+    
+    doc.rect(231,152,46,10, 'FD' )
+    doc.rect(231,162,46,11, 'FD' )
+    doc.rect(231,173,46,10, 'FD' )
+
+    
+    doc.setFontSize(16)
+    doc.text(business_Address_1 ,15, 11, {align: 'left'})
+    doc.setFontSize(14)
+    doc.text(business_Address_2 ,15, 16, {align: 'left'})
+
+    doc.setFontSize(14)
+    doc.text("Tax ID : ",15, 21, {align: 'left'})
+    doc.text(Taxid,27, 21, {align: 'left'})
+    doc.text("โทร : ",60, 21, {align: 'left'})
+    doc.text(Phone,68, 21, {align: 'left'})
+    doc.text("Email :",90, 21, {align: 'left'})
+    doc.text(Email,101, 21, {align: 'left'})
+
+    doc.setFontSize(18)
+    doc.text("ใบกำกับภาษี / TAX INVOICE" ,210, 16, {align: 'left'})
+
+    doc.setFontSize(14)
+    doc.text("ชื่อ/Name :" ,20, 40, {align: 'left'})
+    doc.setFontSize(16)
+    doc.text(Name ,50, 40, {align: 'left'})
+   
+   
+    doc.setFontSize(14)
+    doc.text("ที่อยู่/Address :" ,20, 55, {align: 'left'})
+    doc.setFontSize(16)
+    doc.text(Address1 ,50, 55, {align: 'left'})
+    doc.text(Address2 ,50, 60, {align: 'left'})
+
+    doc.setFontSize(14)
+    doc.text("เลขที่/No. " ,205, 33, {align: 'left'})
+    doc.setFontSize(12)
+    doc.text(No ,240, 33, {align: 'left'})
+    doc.setFontSize(14)
+    doc.text("วันที่/Date " ,205, 45, {align: 'left'})
+    doc.setFontSize(16)
+    doc.text(_Date ,245, 45, {align: 'left'})
+    doc.setFontSize(14)
+    doc.text("ประจำเดือน/Month " ,198, 57, {align: 'left'})
+    doc.setFontSize(16)
+    doc.text(Month ,245, 57, {align: 'left'})
+    doc.setFontSize(14)
+    doc.text("บ้านเลขที่/Home No. " ,198, 69, {align: 'left'})
+    doc.setFontSize(16)
+    doc.text(HoneNo ,245, 69, {align: 'left'})
+
+    
+    doc.setFontSize(16)
+    doc.text("รายการ" ,73, 82, {align: 'left'})
+    doc.text("Description" ,70, 86, {align: 'left'})
+    
+    doc.text("จำนวนหน่วย" ,163, 82, {align: 'left'})
+    doc.text("Units" ,167, 86, {align: 'left'})
+    
+    doc.text("ราคาต่อหน่วย" ,202, 82, {align: 'left'})
+    doc.text("Unit /Price" ,203 , 86, {align: 'left'})
+
+    doc.text("จำนวนเงิน" ,246, 82, {align: 'left'})
+    doc.text("Amount" ,247 , 86, {align: 'left'})
+
+    let Cash = "-------"
+    let Cheque = "-------"
+    let ChequeNo = "-------"
+    let ChequeDate = "-------"
+    let Transfer = "-------"
+    let TransferDate = "-------"
+    doc.text("การชำระเงิน/Condition of Payments " ,55, 158, {align: 'left'})
+    doc.setFontSize(15)
+    doc.text("เงินสด :",20, 165, {align: 'left'})
+    doc.text(Cash,42, 165, {align: 'left'})
+    doc.text("บาท",60, 165, {align: 'left'})
+
+    doc.text("เช็คธนาคาร :",20, 172, {align: 'left'})
+    doc.text(Cheque,42, 172, {align: 'left'})
+    doc.text("บาท",60, 172, {align: 'left'})
+    doc.text("วันที่",68, 172, {align: 'left'})
+    doc.text(ChequeDate,80, 172, {align: 'left'})
+    doc.text("เลขที่",98, 172, {align: 'left'})
+    doc.text(ChequeNo,108, 172, {align: 'left'})
+
+
+    doc.text("เงินโอน :",20, 179, {align: 'left'})
+    doc.text(Transfer,42, 179, {align: 'left'})
+    doc.text("บาท",60, 179, {align: 'left'})
+    doc.text("วันที่",68, 179, {align: 'left'})
+    doc.text(TransferDate,80, 179, {align: 'left'})
+
+
+
+
+
+
+    doc.setFontSize(16)
+
+    doc.text(`รวมทั้งหมด/Total` ,168, 160, {align: 'left'})
+    doc.text(Grandtotal ,250, 160, {align: 'center'})
+
+    doc.text(`Vat  ${Vat} %` ,168 , 170, {align: 'left'})
+    doc.text( `${ Number(Grandtotal*(Vat/100)).toFixed(2) }` ,250 , 170, {align: 'center'})
+
+    doc.text("รวมเงินทั้งสิ้น/Grand Total" ,168 , 181, {align: 'left'})
+    doc.text( `${ (Grandtotal *(1+ (Vat/100)) ).toFixed(2) }`  ,250 , 181, {align: 'center'})
+
+    doc.setFontSize(20)
+    doc.text("เงินฝากสำรองคงเหลือ :" ,220 , 192, {align: 'left'})
+    doc.text(Money,270 , 192, {align: 'left'})
+    doc.setFontSize(14)
+    doc.text("เขียนโดย" ,200 , 198, {align: 'left'})
+    doc.text(credit,215 , 198, {align: 'left'})
+    doc.text("วันที่" ,240 , 198, {align: 'left'})
+    doc.text(_Date ,248 , 198, {align: 'left'})
+    doc.text(Time ,268 , 198, {align: 'left'})
+
+    doc.setFontSize(16)
+    doc.text(names ,20, 95, {align: 'left'})
+    doc.text(Units ,170, 95, {align: 'left'})
+    doc.text(Price ,210, 95, {align: 'left'})
+    doc.text(Amount ,250, 95, {align: 'left'})
+
+    let src_pdf = doc.output('datauristring');
+
+    const iframe = `<iframe width='100%' type="application/pdf"   height='100%' src="${src_pdf}"></iframe>`
+    const x = window.open();
+    x.document.title = "preview booking"
+    x.document.open();
+    x.document.write(iframe);
+    x.document.close();
+
+
+
 }
