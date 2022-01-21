@@ -9,6 +9,7 @@ export const API_GET_Receiptnumber = gql`
             reimbursement_number
             booking_number
             bill_number
+			account_number
 		}
 	}
 `;

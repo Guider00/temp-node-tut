@@ -1232,6 +1232,12 @@ export const export_taxinvoice_pdf =  ( room ,table_price) =>{
     let Taxid = "01055360118036666"
     let Phone = "026937005"
     let Email = "sales@primusthai.com" 
+    let Cash = "-------"
+    let Cheque = "-------"
+    let ChequeNo = "-------"
+    let ChequeDate = "-------"
+    let Transfer = "-------"
+    let TransferDate = "-------"
 
     let Vat = 7;
     let Name =  room && room.data && room.data.members && room.data.members.length > 0 
@@ -1386,12 +1392,6 @@ export const export_taxinvoice_pdf =  ( room ,table_price) =>{
     doc.text("จำนวนเงิน" ,246, 82, {align: 'left'})
     doc.text("Amount" ,247 , 86, {align: 'left'})
 
-    let Cash = "-------"
-    let Cheque = "-------"
-    let ChequeNo = "-------"
-    let ChequeDate = "-------"
-    let Transfer = "-------"
-    let TransferDate = "-------"
     doc.text("การชำระเงิน/Condition of Payments " ,55, 158, {align: 'left'})
     doc.setFontSize(15)
     doc.text("เงินสด :",20, 165, {align: 'left'})

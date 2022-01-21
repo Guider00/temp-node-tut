@@ -6,6 +6,7 @@ const schemaDefinition = new mongoose.Schema({
     reimbursement_number: {type:String},
     booking_number: {type:String},
     bill_number: {type:String},
+    account_number: {type:String},
     
 
 
