@@ -579,7 +579,7 @@ export const Address = () => {
 
     const validate = (values) =>{
         const errors = {}
-        const text = /[a-zA-z0-9]/;
+        const text = /^[A-Za-z0-9]+$/;
         if(!values.receipt){
             errors.receipt = "receipt is required!"
         }else if(!text.test(values.receipt)){
@@ -643,7 +643,7 @@ export const Address = () => {
 
     const validateAddress = (values) =>{
         const errors = {}
-        const text = /[a-zA-z0-9]/;
+        const text = /^[A-Za-z0-9ก-๙]+$/;
         //address
 
         if(!values.name){
@@ -1012,7 +1012,7 @@ export const Address = () => {
                             <lable className={styles.error}>{formErrorsAddress.province}</lable>           
                         </div>
                         <div className={styles.inputstyle}>
-                            <lable className={styles.text}>เลขไปรษณี</lable>
+                            <lable className={styles.text}>เลขไปรษณีย์</lable>
                             <input className={styles.input}
                             id='code'
                             name='code'  
