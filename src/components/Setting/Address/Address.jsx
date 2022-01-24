@@ -108,7 +108,7 @@ export const Address = () => {
         let inputBox3 = document.getElementsByName('reimbursement')
         let inputBox4 = document.getElementsByName('booking')
         let inputBox5 = document.getElementsByName('bill')
-                
+        let inputBox6 = document.getElementsByName('accNo')
         if(saveButton.click){
             
             inputBox1[0].disabled=true;
@@ -116,6 +116,7 @@ export const Address = () => {
             inputBox3[0].disabled=true;
             inputBox4[0].disabled=true;
             inputBox5[0].disabled=true;
+            inputBox6[0].disabled=true;
             console.log("save page")
 
             }
@@ -174,6 +175,7 @@ export const Address = () => {
         let inputBox3 = document.getElementsByName('reimbursement')
         let inputBox4 = document.getElementsByName('booking')
         let inputBox5 = document.getElementsByName('bill')
+        let inputBox6 = document.getElementsByName('accNo')
         
 
         if(editButton.click){
@@ -183,6 +185,7 @@ export const Address = () => {
         inputBox3[0].disabled=false;
         inputBox4[0].disabled=false;
         inputBox5[0].disabled=false;
+        inputBox6[0].disabled=false;
 
             }
         
@@ -242,6 +245,7 @@ export const Address = () => {
         let inputBox3 = document.getElementsByName('reimbursement')
         let inputBox4 = document.getElementsByName('booking')
         let inputBox5 = document.getElementsByName('bill')
+        let inputBox6 = document.getElementsByName('accNo')
         if(Address && Address.data  ){
 
                 inputBox1[0].disabled=false;
@@ -249,6 +253,7 @@ export const Address = () => {
                 inputBox3[0].disabled=false;
                 inputBox4[0].disabled=false;
                 inputBox5[0].disabled=false;  
+                inputBox6[0].disabled=false;
             
             
             
@@ -288,6 +293,7 @@ export const Address = () => {
                             reimbursement_number:`${defaultData.reimbursement}`,
                             booking_number:`${defaultData.booking}`,
                             bill_number:`${defaultData.bill}`,
+                            account_number:`${defaultData.accNo}`,
                             }
                         }
                     });
@@ -429,6 +435,7 @@ export const Address = () => {
         reimbursement:"",
         booking:"",
         bill:"",
+        accNo:"",
     })
     
     const [defaultData , setdefaultData] = useState({
@@ -438,6 +445,7 @@ export const Address = () => {
         reimbursement:"",
         booking:"",
         bill:"",
+        accNo:"",
     })
 
 
@@ -453,11 +461,13 @@ export const Address = () => {
                 let inputBox3 = document.getElementsByName('reimbursement')
                 let inputBox4 = document.getElementsByName('booking')
                 let inputBox5 = document.getElementsByName('bill')
+                let inputBox6 = document.getElementsByName('accNo')
                 inputBox1[0].disabled=true;
                 inputBox2[0].disabled=true;
                 inputBox3[0].disabled=true;
                 inputBox4[0].disabled=true;
                 inputBox5[0].disabled=true;
+                inputBox6[0].disabled=true;
                     
                
                 
@@ -469,6 +479,7 @@ export const Address = () => {
                 _defaultData['reimbursement'] = Receiptnumber.data.Receiptnumbers[0].reimbursement_number
                 _defaultData['booking'] = Receiptnumber.data.Receiptnumbers[0].booking_number
                 _defaultData['id'] = Receiptnumber.data.Receiptnumbers[0].id
+                _defaultData['accNo'] = Receiptnumber.data.Receiptnumbers[0].account_number
                 setdefaultData(_defaultData)
 
 
@@ -568,7 +579,7 @@ export const Address = () => {
 
     const validate = (values) =>{
         const errors = {}
-        const text = /[a-zA-z0-9]/;
+        const text = /^[A-Za-z0-9]+$/;
         if(!values.receipt){
             errors.receipt = "receipt is required!"
         }else if(!text.test(values.receipt)){
@@ -610,6 +621,14 @@ export const Address = () => {
             errors.bill = "bill is not Format!"
         }
 
+        if(!values.accNo){
+            errors.accNo = "accNo is required!"
+        }else if(!text.test(values.accNo)){
+            errors.accNo = "accNo is not Format!"
+        }else if(values.accNo.length > 10){
+            errors.accNo = "accNo is not Format!"
+        }
+
 
         
 
@@ -624,7 +643,7 @@ export const Address = () => {
 
     const validateAddress = (values) =>{
         const errors = {}
-        const text = /[a-zA-z0-9]/;
+        const text = /^[A-Za-z0-9ก-๙]+$/;
         //address
 
         if(!values.name){
@@ -759,7 +778,15 @@ export const Address = () => {
             console.log('set',_defaultData)
 
             
+        }else if(e.target.id === "accNo"){
+            _defaultData[e.target.id] = e.target.value;
+            setdefaultData({..._defaultData})
+            setFormErrors(validate(_defaultData))
+            console.log('set',_defaultData)
+
+            
         }
+        
 
         console.log("FormErrors",formErrors)
         
@@ -894,7 +921,7 @@ export const Address = () => {
                             style={formErrorsAddress.name === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                             onChange={handleOnchangeAddress}
                             />
-                            <lable>{formErrorsAddress.name}</lable>           
+                            <lable className={styles.error}>{formErrorsAddress.name}</lable>           
                         </div>
                         <div className={styles.inputstyle}>
                             <lable className={styles.text}>เบอร์โทร</lable>
@@ -905,7 +932,7 @@ export const Address = () => {
                             style={formErrorsAddress.tel === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                             onChange={handleOnchangeAddress}
                             />
-                            <lable>{formErrorsAddress.tel}</lable>           
+                            <lable className={styles.error}>{formErrorsAddress.tel}</lable>           
                         </div>
                         <div className={styles.inputstyle}>
                             <lable className={styles.text}>เลขที่</lable>
@@ -916,7 +943,7 @@ export const Address = () => {
                             style={formErrorsAddress.no === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                             onChange={handleOnchangeAddress}
                             />
-                            <lable>{formErrorsAddress.no}</lable>           
+                            <lable className={styles.error}>{formErrorsAddress.no}</lable>           
                         </div>
                         <div className={styles.inputstyle}>
                             <lable className={styles.text}>ถนน</lable>
@@ -927,7 +954,7 @@ export const Address = () => {
                             style={formErrorsAddress.road === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                             onChange={handleOnchangeAddress}
                             />
-                            <lable>{formErrorsAddress.road}</lable>           
+                            <lable className={styles.error}>{formErrorsAddress.road}</lable>           
                         </div>
                         <div className={styles.inputstyle}>
                             <lable className={styles.text}>หมู่บ้าน</lable>
@@ -938,7 +965,7 @@ export const Address = () => {
                             style={formErrorsAddress.village === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                             onChange={handleOnchangeAddress}
                             />
-                            <lable>{formErrorsAddress.village}</lable>           
+                            <lable className={styles.error}>{formErrorsAddress.village}</lable>           
                         </div>
                         <div className={styles.inputstyle}>
                             <lable className={styles.text}>ตรอก/ซอย</lable>
@@ -949,7 +976,7 @@ export const Address = () => {
                             style={formErrorsAddress.alley === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                             onChange={handleOnchangeAddress}
                             />
-                            <lable>{formErrorsAddress.alley}</lable>           
+                            <lable className={styles.error}>{formErrorsAddress.alley}</lable>           
                         </div>
                         <div className={styles.inputstyle}>
                             <lable className={styles.text}>ตำบล/แขวง</lable>
@@ -960,7 +987,7 @@ export const Address = () => {
                             style={formErrorsAddress.boundary === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                             onChange={handleOnchangeAddress}
                             />
-                            <lable>{formErrorsAddress.boundary}</lable>           
+                            <lable className={styles.error}>{formErrorsAddress.boundary}</lable>           
                         </div>
                         <div className={styles.inputstyle}>
                             <lable className={styles.text}>อำเภอ/เขต</lable>
@@ -971,7 +998,7 @@ export const Address = () => {
                             style={formErrorsAddress.district === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                             onChange={handleOnchangeAddress}
                             />
-                            <lable>{formErrorsAddress.district}</lable>           
+                            <lable className={styles.error}>{formErrorsAddress.district}</lable>           
                         </div>
                         <div className={styles.inputstyle}>
                             <lable className={styles.text}>จังหวัด</lable>
@@ -982,10 +1009,10 @@ export const Address = () => {
                             style={formErrorsAddress.province === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                             onChange={handleOnchangeAddress}
                             />
-                            <lable>{formErrorsAddress.province}</lable>           
+                            <lable className={styles.error}>{formErrorsAddress.province}</lable>           
                         </div>
                         <div className={styles.inputstyle}>
-                            <lable className={styles.text}>เลขไปรษณี</lable>
+                            <lable className={styles.text}>เลขไปรษณีย์</lable>
                             <input className={styles.input}
                             id='code'
                             name='code'  
@@ -993,7 +1020,7 @@ export const Address = () => {
                             style={formErrorsAddress.code === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                             onChange={handleOnchangeAddress}
                             />
-                            <lable>{formErrorsAddress.code}</lable>           
+                            <lable className={styles.error}>{formErrorsAddress.code}</lable>           
                         </div>
                         
                     
@@ -1038,7 +1065,7 @@ export const Address = () => {
                         style={formErrors.receipt === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                         onChange={handleOnchangeReceipt}
                         />
-                        <lable>{formErrors.receipt}</lable>
+                        <lable className={styles.error}>{formErrors.receipt}</lable>
                         <button className={styles.deleteOne} 
                         onClick={()=>{
                             let _defaultData = defaultData
@@ -1061,7 +1088,7 @@ export const Address = () => {
                         style={formErrors.invoice === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                         onChange={handleOnchangeReceipt}
                         />
-                        <lable>{formErrors.invoice}</lable>
+                        <lable className={styles.error}>{formErrors.invoice}</lable>
                         <button className={styles.deleteOne} 
                         onClick={()=>{
                             let _defaultData = defaultData
@@ -1085,7 +1112,7 @@ export const Address = () => {
                         style={formErrors.reimbursement === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                         onChange={handleOnchangeReceipt}
                         />
-                        <lable>{formErrors.reimbursement}</lable>
+                        <lable className={styles.error}>{formErrors.reimbursement}</lable>
                         <button className={styles.deleteOne} 
                         onClick={()=>{
                             let _defaultData = defaultData
@@ -1109,7 +1136,7 @@ export const Address = () => {
                         style={formErrors.booking === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                         onChange={handleOnchangeReceipt}
                         />
-                        <lable>{formErrors.booking}</lable>
+                        <lable className={styles.error}>{formErrors.booking}</lable>
                         <button className={styles.deleteOne}  
                         onClick={()=>{
                             let _defaultData = defaultData
@@ -1123,6 +1150,7 @@ export const Address = () => {
 
 
                     </div>
+                    
                     <div className={styles.inputstyle}>
                         
                         <lable className={styles.text}>รหัสใบแจ้งหนี้</lable>
@@ -1133,7 +1161,7 @@ export const Address = () => {
                         style={formErrors.bill === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                         onChange={handleOnchangeReceipt}
                         />
-                        <lable>{formErrors.bill}</lable>
+                        <lable className={styles.error}>{formErrors.bill}</lable>
                         <button className={styles.deleteOne} 
                         onClick={()=>{
                             let _defaultData = defaultData
@@ -1146,6 +1174,35 @@ export const Address = () => {
 
                         }}
                         ><DeleteOutlineIcon/></button>
+                        
+
+
+                    </div>
+
+                    <div className={styles.inputstyle}>
+                        
+                        <lable className={styles.text}>เลขที่บัญชี</lable>
+                        <input  className={styles.input} 
+                        name = 'accNo'
+                        id = 'accNo'
+                        value={defaultData.accNo}
+                        style={formErrors.accNo === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
+                        onChange={handleOnchangeReceipt}
+                        />
+                        <lable className={styles.error}>{formErrors.accNo}</lable>
+                        <button className={styles.deleteOne} 
+                        onClick={()=>{
+                            let _defaultData = defaultData
+                            let inputBox = document.getElementsByName('accNo')
+                            let e = ''
+                            inputBox[0].disabled=false;
+                            _defaultData['accNo'] = e
+                            setdefaultData({..._defaultData})
+                            
+
+                        }}
+                        ><DeleteOutlineIcon/></button>
+                        
 
 
                     </div>
