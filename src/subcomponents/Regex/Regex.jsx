@@ -1,4 +1,21 @@
-
+export const Blocktext  = (type,text)=>{
+        let _regex = /.*/ig;
+        switch (type) {
+            case 'customer_name':
+            case 'customer_lastname':
+                _regex = /[^0-9a-zA-Zก-๙ ]/ig
+                text = text.replace(_regex,"")
+            break;
+            case 'customer_address':
+                _regex = /[^0-9\u0E00-\u0E7Fa-zA-Z' .\n]/ig
+            break;
+        
+            default:
+                break;
+        }
+        text = text.replace(_regex,"");
+        return text 
+}
 
 export const Validate = (type , text)=>{
     let reg= ''
@@ -45,7 +62,14 @@ export const Validate = (type , text)=>{
             reg  =  /^[a-zA-Z0-9_.]{1,32}$/
             resulte =  reg.test(String(text));
         break;
-
+        case 'customer_address':
+            reg =  /[^0-9\u0E00-\u0E7Fa-zA-Z' .\n]{1,200}$/;
+             resulte =  reg.test(String(text));
+        break;
+        case 'tel':
+            reg =  /[^0-9+\n]{1,32}$/;
+             resulte =  reg.test(String(text));
+        break;
         
         default:
             resulte =  false

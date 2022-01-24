@@ -8,6 +8,7 @@ query{
         id_contact
         checkin_type
         checkin_date
+        checkin_date_exp
         rental_deposit
         number_day_rent
         branch

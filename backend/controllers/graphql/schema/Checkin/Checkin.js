@@ -6,17 +6,20 @@ input CheckinoptionInput{
    
     name:String,
     price:String,
+    price_type:String,
 }
 type Checkinoption{
     id:String,
     name:String,
     price:String,
+    price_type:String,
 }
 type Checkin{
     id:String
     id_contact:String
     checkin_type:String 
     checkin_date:String
+    checkin_date_exp:String
     rental_deposit:String
     number_day_rent:String
     branch:String
@@ -28,6 +31,7 @@ input CheckinInput{
     id_contact:String
     checkin_type:String 
     checkin_date:String
+    checkin_date_exp:String
     rental_deposit:String
     number_day_rent:String
     branch:String

@@ -240,8 +240,17 @@ export const Checkin = () => {
 				value: ""
 			}
 		},
+		{
+			label:"type_price",
+			property:"type_price",
+			form:{
+				displayform:"checkbox",
+				type: "checkbox",
+				value:""
+			}
+		}
 		
-				]
+		]
 
 	})
 	const handlerchangetableoption = (e ,index) =>{
@@ -251,7 +260,15 @@ export const Checkin = () => {
 				tableoption.body[index][e.target.name] =  e.target.value 
 
 			}else{
-					tableoption.body[index][e.target.name] =  e.target.value 
+					if(e.target.type ==="checkbox"){
+						console.log(tableoption.body,index ,e.target.name,e.target.checked )
+					
+						tableoption.body[index][e.target.name]  = (e.target.checked)?"รายเดือน":"ครั้งเดียว"
+					
+					}else{
+						tableoption.body[index][e.target.name] =  e.target.value 
+					}
+					
 			}
 		
 			
@@ -264,6 +281,7 @@ export const Checkin = () => {
 				id_contact:"",
 				checkinnumber:"",
 				checkintype:"",
+				checkin_date_exp:"",
 				rental_period:"",
 				rental_deposit:"",
 				rental_period_day:"",
@@ -443,7 +461,18 @@ export const Checkin = () => {
 		let _formmember = formmember
 			console.log('change',e.target.id , _formmember)
 		if (e.target.id && _formmember.hasOwnProperty(e.target.id) ) {
-			_formmember[e.target.id] = e.target.value;
+			
+			if( e.target.id === 'name' || e.target.id === 'lastname' ){
+				let text = /[^0-9a-zA-Zก-๙ ]/ig;
+                e.target.value = e.target.value.replace(text,'')
+				_formmember[e.target.id] = e.target.value;
+			
+			}else if( e.target.id === 'address'){
+				let text = /[^0-9\u0E00-\u0E7Fa-zA-Z' ./\n]/ig;
+                e.target.value = e.target.value.replace(text,'')
+			}else{
+				_formmember[e.target.id] = e.target.value;
+			}
 			setformmember({ ..._formmember });
 		}
 	}
@@ -655,6 +684,7 @@ export const Checkin = () => {
 																setformcheckin({
 																	id_contact:room.data.checkin.id_contact,
 																	checkin_date:room.data.checkin.checkin_date ,
+																	checkin_date_exp:room.data.checkin.checkin_date_exp ,
 																	checkin_type:room.data.checkin.checkin_type  ?  room.data.checkin.checkin_type  : "",
 																	rental_period:room && room.data  && room.data.hasOwnProperty('bookings')  && room.data.bookings.length > 0 && 
 																				room.data.bookings[0].checkin_date &&  room.data.bookings[0].checkin_date_exp  ?
@@ -669,6 +699,8 @@ export const Checkin = () => {
 																	id_contact:"",
 																	checkin_date:room && room.data  && room.data.hasOwnProperty('bookings')  && room.data.bookings.length > 0 && 
 																				room.data.bookings[0].checkin_date ? formatDate(new Date(Number(room.data.bookings[0].checkin_date)) ) :"2021-12-08" ,
+																	checkin_date_exp:room && room.data  && room.data.hasOwnProperty('bookings')  && room.data.bookings.length > 0 && 
+																				room.data.bookings[0].checkin_date ? formatDate(new Date(Number(room.data.bookings[0].checkin_date_exp)) ) :"2021-12-08" ,			
 																	checkin_type:room && room.data  && room.data.hasOwnProperty('bookings')  && room.data.bookings.length > 0 && 
 																				room.data.bookings[0].checkin_type ?  room.data.bookings[0].checkin_type : "",
 																	rental_period:room && room.data  && room.data.hasOwnProperty('bookings')  && room.data.bookings.length > 0 && 
@@ -676,7 +708,9 @@ export const Checkin = () => {
 																				DiffDate(new Date(Number(room.data.bookings[0].checkin_date)) , new Date(Number(room.data.bookings[0].checkin_date_exp))): "",
 																	rental_deposit: room && room.data  && room.data.hasOwnProperty('bookings')  && room.data.bookings.length > 0 && 
 																					room.data.bookings[0].deposit ? room.data.bookings[0].deposit :"",
-																	rental_period_day: "",
+																	rental_period_day: room && room.data  && room.data.hasOwnProperty('bookings')  && room.data.bookings.length > 0 && 
+																				room.data.bookings[0].checkin_date &&  room.data.bookings[0].checkin_date_exp  ?
+																				DiffDate(new Date(Number(room.data.bookings[0].checkin_date)) , new Date(Number(room.data.bookings[0].checkin_date_exp))): "",
 																	branch:"",
 																})
 															}
@@ -706,18 +740,21 @@ export const Checkin = () => {
 															})
 															let _tableoption = tableoption
 															
-															if(room.data.checkinInvoice !== null ){
-																console.log('room.data',room.data.checkinInvoice)
-																if(room.data.checkinInvoice.lists &&  room.data.checkinInvoice.lists.length > 0){
-																	let _body = room.data.checkinInvoice.lists.map(obj =>{
-																		return {name:obj.name,price:obj.price };
+															if(room && room.data && room.data.checkin && room.data.checkin.Checkinoption !== null ){
+																console.log('room.data',room.data.checkin.Checkinoption)
+																if(room.data.checkin.Checkinoption && room.data.checkin.Checkinoption.length > 0){
+																	let _body = room.data.checkin.Checkinoption.map(obj =>{
+																		return {name:obj.name,price:obj.price ,price_type:obj.price_type};
 																		});
 																		
 																	_tableoption.body  = [..._body]
 																}	
 															}else{
 																 // ดึงข้อมูลจาก รายการเบิ้องต้นจากประเภทห้อง
-																_tableoption.body = room.data.RoomType.listoptionroom
+																_tableoption.body = [...room.data.RoomType.listoptionroom].map(data =>{
+																	return ( {...data , ...{price_type:"รายเดือน"}})
+																})
+																
 															}
 															
 															console.log('_tableoption.body',_tableoption.body)
@@ -769,6 +806,14 @@ export const Checkin = () => {
 								</div>
 								<div className={styles.input}>
 									<input  type="date" value={formcheckin.checkin_date}   id="checkin_date" onChange={handlechangeformcheckin}/>
+								</div>
+							</div>
+							<div className={styles.row}>
+								<div className={styles.label}>
+									<label>วันครบกำหนดสัญญา</label>
+								</div>
+								<div className={styles.input}>
+									<input  type="date" value={formcheckin.checkin_date_exp}   id="checkin_date_exp" onChange={handlechangeformcheckin}/>
 								</div>
 							</div>
 							<div className={styles.row}>
@@ -880,7 +925,10 @@ export const Checkin = () => {
 								    <label>ที่อยู่ตามบัตรประชาชน</label>
                                 </div>
                                 <div className={styles.input}>
-								    <input type="text"  id="address" value={formmember.address}   onChange={handlechangeformmember} />
+								    <textarea
+									 cols="25"
+									 rows="5"
+									 type="text"  id="address" value={formmember.address}   onChange={handlechangeformmember} />
                                 </div>
 							</div>
 							<div className={styles.row}>
@@ -1189,7 +1237,7 @@ export const Checkin = () => {
 											<button onClick={()=> {
 												let _tableoption = tableoption
 												_tableoption.disableedit = true
-												_tableoption.body = [..._tableoption.body , {name:"",price:"0"}]
+												_tableoption.body = [..._tableoption.body , {name:"",price:"0",price_type:"รายเดือน"}]
 												settableoption({..._tableoption})
 											}}>เพิ่มรายการ</button>
 											<button onClick={()=>{
@@ -1217,7 +1265,10 @@ export const Checkin = () => {
 														<td><input type="text" value={data.name}   name="name" onChange={(e)=>handlerchangetableoption(e,index)}
 														disabled={ !tableoption.disableedit }/></td>
 														<td><input  type="text"value={data.price}  name="price" onChange={(e)=>handlerchangetableoption(e,index)}  disabled={ !tableoption.disableedit }/></td>
-														<td><input type='checkbox' value={true} /> </td>
+														<td><input type='checkbox'  checked={ (data.price_type === "รายเดือน"? true:false)  }  name="price_type"
+															onClick={(e)=>handlerchangetableoption(e,index)}
+																		// onChange={(e)=>handlerchangetableoption(e,index)} 
+														 /> </td>
 														{ (tableoption && tableoption.disableedit) ? <td><button onClick={()=>{
 															let _tableoption  =tableoption
 															_tableoption.body.splice(index, 1)
@@ -1246,17 +1297,23 @@ export const Checkin = () => {
 						
 									 /// สร้าง checkin  //
 									try{
+											console.log('tableoption.body',JSON.parse(JSON.stringify(tableoption.body)));
 										let _res_createCheckin = await createCheckin({
 												variables:{
 												input:{
 													id_contact: formcheckin.id_contact,
 													checkin_date : formcheckin.checkin_date,
+													checkin_date_exp : formcheckin.checkin_date_exp,
 													checkin_type: formcheckin.checkin_type,
 													rental_deposit: formcheckin.rental_deposit,
 												
 													number_day_rent: formcheckin.number_day_rent,
 													branch: formcheckin.branch,
-													Checkinoption: null
+													Checkinoption: [...tableoption.body.map(item=>{
+														return ({name: item.name,
+																	price: item.price,
+																	price_type: item.price_type})
+																})]
 												}
 											}
 										})
@@ -1296,6 +1353,7 @@ export const Checkin = () => {
 									
 								 	
 								} }>บันทึก รายการ <SaveIcon/> </button>
+								
 								 <button onClick={ async ()=>{
 									 //ลบ รายการ invoices
 									let _room = selectedroom
@@ -1305,7 +1363,8 @@ export const Checkin = () => {
 													variables: {
 														id: _room.id,
 														input: {
-															checkinInvoiceid:null
+															checkinInvoiceid:null,
+															checkinid:null
 														}
 													}
 												});
@@ -1434,6 +1493,7 @@ export const Checkin = () => {
 																	});
 																	if(_res && _res.data){
 																	try{
+																			export_Invoice_pdf(selectedroom , [..._updatetableoption])
 																			refetch_roomMember()
 																		}catch(e){
 																			console.log(e)
@@ -1452,7 +1512,7 @@ export const Checkin = () => {
 											}
 											// End create Invoice // 
 										
-											export_Invoice_pdf(selectedroom)
+										
 
 										
 											// ดึงข้อมูลจาก checkin-list ไป สร้างใบแจ้งหนี้

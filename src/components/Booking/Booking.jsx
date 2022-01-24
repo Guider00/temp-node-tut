@@ -248,13 +248,20 @@ export const Booking = () => {
 		console.log('e', e.target.value, e.target.id, _formbooking[e.target.id]);
 
 		if (e.target.id && _formbooking.hasOwnProperty(e.target.id)) {
-			if(e.target.id === 'customer_name' || e.target.id === 'customer_lastname' || e.target.id === 'customer_address'){
-				let text = /[^0-9a-zA-Zก-๙]/ig;
+			if(e.target.id === 'customer_name' || e.target.id === 'customer_lastname' ){
+				let text = /[^0-9a-zA-Zก-๙ ]/ig;
                 e.target.value = e.target.value.replace(text,'')
 				_formbooking[e.target.id] = e.target.value;
 				setformbooking({ ..._formbooking });
+			}else if(  e.target.id === 'customer_address' ) {
+				
+				let text = /[^0-9\u0E00-\u0E7Fa-zA-Z' ./\n]/ig;
+                e.target.value = e.target.value.replace(text,'')
+				_formbooking[e.target.id] = e.target.value;
+				setformbooking({ ..._formbooking });
+
 			}else if(e.target.id === 'customer_tel' || e.target.id === 'deposit'){
-				let text = /[^0-9 -]/ig;
+				let text = /[^\d+(\.\d)?\d*$]/ig;
                 e.target.value = e.target.value.replace(text,'')
 				_formbooking[e.target.id] = e.target.value;
 				setformbooking({ ..._formbooking });
@@ -529,7 +536,9 @@ export const Booking = () => {
 										<label> ที่อยู่ตามบัตรประชาชน </label>
 									</div>
 									<div>
-										<input
+										<textarea 
+											cols="25"
+											rows="5"
 											id="customer_address"
 											type="text"
 											value={formbooking.customer_address}
