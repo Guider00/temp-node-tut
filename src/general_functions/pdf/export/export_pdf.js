@@ -360,6 +360,7 @@ const  numbertothailanguage = (number) =>{
         }
         return null
 }
+
 export const export_Contract = (contracts ) =>{
 
 
@@ -594,7 +595,7 @@ function openInNewTab(href) {
   }).click();
 }
  // ใบแจ้งหนี้  // 
-export const export_Invoice_pdf =  ( room ,table_price) =>{
+export const export_Invoice_pdf =  ( room ,table_prices) =>{
 
     let business_Address_1 = "119 ซอยสีม่วงอนุสรณ์ ถนน สุทธิสาร"
     let business_Address_2 = "แขวง ดินแดง เขต ดินแดง กรุงเทพ 10400"
@@ -619,7 +620,7 @@ export const export_Invoice_pdf =  ( room ,table_price) =>{
     let Time = toHHMMSS(new Date())
     let note = "เลขที่บัญชี 2878-xxxxxx-x"
 
-    let table_prices = table_price ? table_price :[{ 
+    let _table_prices = table_prices ? table_prices :[{ 
                     name:`----` ,
                     unit:"1",
                     price:`---`,
@@ -627,12 +628,12 @@ export const export_Invoice_pdf =  ( room ,table_price) =>{
                  }]
     let _total_price = 0
 
-    table_prices.map(item => _total_price += (item && item.price ) ?  Number(item.price) : 0 )
+    _table_prices.map(item => _total_price += (item && item.price ) ?  Number(item.price) : 0 )
     let Grandtotal = `${_total_price}`
-    const names = table_prices.map(table_prices => table_prices.name);
-    const Units = table_prices.map(table_prices => (table_prices.unit !== undefined   ) ?  `${table_prices.unit}`:'1' );
-    const Price = table_prices.map(table_prices => `${table_prices.price}`);
-    const Amount = table_prices.map(table_prices =>  `${Number(table_prices.price)*Number( (table_prices.unit !== undefined   ) ?  `${table_prices.unit}`:'1')}`  );
+    const names = _table_prices.map(_table_prices => _table_prices.name);
+    const Units = _table_prices.map(_table_prices => (_table_prices.unit !== undefined   ) ?  `${_table_prices.unit}`:'1' );
+    const Price = _table_prices.map(_table_prices => `${_table_prices.price}`);
+    const Amount = _table_prices.map(_table_prices =>  `${Number(_table_prices.price)*Number( (_table_prices.unit !== undefined   ) ?  `${_table_prices.unit}`:'1')}`  );
 
     const doc = new jsPDF('l', 'mm', [297, 210]);
    
@@ -798,16 +799,20 @@ export const export_Invoice_pdf =  ( room ,table_price) =>{
 
  // ใบเสร็จ  //
  
-export const export_Receipt_pdf =  ( booking , type  ) =>{
+/**
+ * @param  {} booking
+ * @param  {} type
+ */
+export const export_Receipt_pdf =  ( booking :Booking, type , table_prices  ) =>{
     
     if(booking  === undefined){
         alert('ไม่มีข้อมูลในการสร้าง ใบเสร็จ')
         return
     }
-      let table_prices = []
+      let _table_prices =  table_prices ? table_prices :[]
     if(type === 'booking')
     {
-        table_prices = [{ 
+        _table_prices = [{ 
                     name:`เงินจองห้อง ${booking.Room.name}` ,
                     unit:"1",
                     price:booking.deposit ? booking.deposit:"0",
@@ -841,12 +846,14 @@ export const export_Receipt_pdf =  ( booking , type  ) =>{
     let Time = toHHMMSS(new Date())
   
     let _total_price = 0
-    table_prices.map(item => _total_price += (item && item.price ) ?  Number(item.price) : 0 )
+    _table_prices.map(item => _total_price += (item && item.price ) ?  Number(item.price) : 0 )
     let Grandtotal = `${_total_price}`
-    const names = table_prices.map(table_prices => table_prices.name);
-    const Units = table_prices.map(table_prices => table_prices.unit);
-    const Price = table_prices.map(table_prices => table_prices.price);
-    const Amount = table_prices.map(table_prices => table_prices.amount);
+    const names = _table_prices.map(_table_prices => _table_prices.name);
+    const Units = _table_prices.map(_table_prices => (_table_prices.unit !== undefined   ) ?  `${_table_prices.unit}`:'1' );
+    const Price = _table_prices.map(_table_prices => `${_table_prices.price}`);
+    const Amount = _table_prices.map(_table_prices =>  `${Number(_table_prices.price)*Number( (_table_prices.unit !== undefined   ) ?  `${_table_prices.unit}`:'1')}`  );
+
+
 
     const doc = new jsPDF('l', 'mm', [297, 210]);
    
@@ -1017,10 +1024,10 @@ export const export_Reimbursement_pdf =  ( booking , type  ) =>{
         alert('ไม่มีข้อมูลในการสร้าง ใบเสร็จ')
         return
     }
-      let table_prices = []
+      let _table_prices = []
     if(type === 'booking')
     {
-        table_prices = [{ 
+        _table_prices = [{ 
                     name:`เงินจองห้อง ${booking.Room.name}` ,
                     unit:"1",
                     price:booking.deposit ? booking.deposit:"0",
@@ -1054,12 +1061,12 @@ export const export_Reimbursement_pdf =  ( booking , type  ) =>{
     let Time = toHHMMSS(new Date())
   
     let _total_price = 0
-    table_prices.map(item => _total_price += (item && item.price ) ?  Number(item.price) : 0 )
+    _table_prices.map(item => _total_price += (item && item.price ) ?  Number(item.price) : 0 )
     let Grandtotal = `${_total_price}`
-    const names = table_prices.map(table_prices => table_prices.name);
-    const Units = table_prices.map(table_prices => table_prices.unit);
-    const Price = table_prices.map(table_prices => table_prices.price);
-    const Amount = table_prices.map(table_prices => table_prices.amount);
+    const names = _table_prices.map(_table_prices => _table_prices.name);
+    const Units = _table_prices.map(_table_prices => _table_prices.unit);
+    const Price = _table_prices.map(_table_prices => _table_prices.price);
+    const Amount = _table_prices.map(_table_prices => _table_prices.amount);
 
     const doc = new jsPDF('l', 'mm', [297, 210]);
    

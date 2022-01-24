@@ -27,6 +27,7 @@ query{
                 rental_deposit
                 checkin_type
                 checkin_date
+                checkin_date_exp
             }
             RoomType{
                 name
