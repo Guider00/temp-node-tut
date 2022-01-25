@@ -1,0 +1,78 @@
+.container{
+    width:30%;
+    height: 50%;
+    max-width: 100%;
+    margin: 0 auto;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 999;
+    padding: 10px 20px 40px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(217, 238, 243);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.container>.mainCalendar{
+    text-align: center;
+   margin: auto;
+   align-items: center;
+   width: 100%;
+   
+    
+}
+.container>.mainCalendar>.Calendar{
+    
+    display: flex;
+    justify-content: center;
+
+    
+}
+
+
+.container>.mainCalendar>.titleClose{
+    position:absolute;
+    right: 10px;
+    top: 10px;
+}
+.container>.mainCalendar>.titleClose>.close{
+    
+    color: crimson;
+    cursor: pointer;
+    font-size: larger;
+    border: none;
+    background-color:rgb(217, 238, 243) ;
+    }
+.container>.mainCalendar>.titleClose>.close:hover{
+    transform:scale(1.2) ;
+}
+
+.container>.mainCalendar>.footer{
+   
+    align-items: center;
+    width: 100%;
+    margin-top: 1rem;
+    
+}
+.container>.mainCalendar>.footer>.confirm{
+    width: 80px;
+    height: 40px;
+    margin: 10px;
+    margin-left: 40px;
+    border: none;
+    cursor: pointer;
+    background-color: royalblue;
+    border-radius: 10px;
+   }
+
+.container>.mainCalendar>.footer>.cancel{
+    width: 80px;
+    height: 40px;
+    margin: 10px;
+    border: none;
+    cursor: pointer;
+    background-color: crimson;
+    border-radius: 10px;
+}

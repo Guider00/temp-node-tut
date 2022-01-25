@@ -18,7 +18,8 @@ import { API_queryRooms, API_queryBuildings, API_updateMeterRoomkwh, API_updateM
 
 import { export_booking_pdf  , export_Receipt_pdf } from '../../general_functions/pdf/export/export_pdf';
 
-
+import CalendarPicker from '../../subcomponents/Calendar/Calendar.js';
+import EventNoteIcon from '@mui/icons-material/EventNote';
 
 import {
 	API_GET_Booking,
@@ -281,6 +282,92 @@ export const Booking = () => {
 		}
 	};
 
+
+
+
+	//Calendar
+
+
+	const [defaultCalendar, setdefaultCalendar] = useState({
+        isLoading: false
+    });
+	const [DateStart , setDateStart] = useState([''])
+	const [DateEnd , setDateEnd] = useState([''])
+	const[DateRange, setDateRange] = useState([])
+
+
+	const handleCalendar = (isLoading) =>{
+		setdefaultCalendar({
+			isLoading:isLoading,
+		})
+	}
+
+	const handleStart = (data) =>{
+		setDateRange(data)
+		console.log("DateRange",DateRange)
+	}
+
+	const CalendarDate = (choose) =>{
+
+		if(choose){
+			if(DateRange.from){
+				let iDay = parseInt(DateRange.from.day, 10);
+				let iMonth = parseInt(DateRange.from.month, 10);
+					
+				if(iDay < 10 && iMonth < 10){
+				let _DateStart = DateStart
+				_DateStart = DateRange.from.year + "-0" + DateRange.from.month + "-0" + DateRange.from.day
+				setDateStart(_DateStart)
+					
+				}if(iDay < 10 && iMonth >= 10){
+				let _DateStart = DateStart
+				_DateStart = DateRange.from.year + "-" + DateRange.from.month + "-0" + DateRange.from.day
+				setDateStart(_DateStart)
+	
+				}if(iDay >= 10 && iMonth < 10){
+				let _DateStart = DateStart
+				_DateStart = DateRange.from.year + "-0" + DateRange.from.month + "-" + DateRange.from.day
+				setDateStart(_DateStart)
+	
+				}
+					
+			}
+			if(DateRange.to){
+				
+	
+				let iDay = parseInt(DateRange.to.day, 10);
+				let iMonth = parseInt(DateRange.to.month, 10);
+	
+				if(iDay < 10 && iMonth < 10){
+				let _DateEnd = DateEnd
+				_DateEnd = DateRange.to.year + "-0" + DateRange.to.month + "-0" + DateRange.to.day
+				setDateEnd(_DateEnd)
+						
+				}if(iDay < 10 && iMonth >= 10){
+				let _DateEnd = DateEnd
+				_DateEnd = DateRange.to.year + "-" + DateRange.to.month + "-0" + DateRange.to.day
+				setDateEnd(_DateEnd)
+		
+				}if(iDay >= 10 && iMonth < 10){
+				let _DateEnd = DateEnd
+				_DateEnd = DateRange.to.year + "-0" + DateRange.to.month + "-" + DateRange.to.day
+				setDateEnd(_DateEnd)
+		
+				}
+				
+			}
+
+			console.log("11111")
+			handleCalendar(false);
+		}else{
+			handleCalendar(false);
+			console.log("2222")
+		}
+
+	}
+
+	//Calendar
+
 	useEffect(
 		() => {
 			async function fetchData() {
@@ -288,15 +375,28 @@ export const Booking = () => {
 				console.log('Rooms', Rooms);
 				setrooms(Rooms);
 			}
+			
+			
 			fetchData();
 			setloadingpage(true);
+
+			
 		},
-		[ loadingpage ]
+		[loadingpage,DateRange ]
 	);
+
+	
 	// console.log('rooms', rooms);
 	// console.log('selectedroom', selectedroom);
+
+	
+
+
+	
+
 	return (
 		<div>
+			{defaultCalendar.isLoading && <CalendarPicker onCalendar={CalendarDate} start={handleStart} />}
 			{alert && alert.show ?
 			<ModalAlert
 			 handleaccept ={ async () =>{
@@ -335,6 +435,7 @@ export const Booking = () => {
 
 			/>
 			:null }
+
 			
 			<div className={styles.zone1}>
 				<div className={styles.bigbox}>
@@ -343,10 +444,17 @@ export const Booking = () => {
 							<div className={styles.text}> รายการห้องว่างและย้ายออก </div>
 							<div  className={styles.input} >
 								<div className={styles.zoneselect_checkincheckout}>
-									<label> วันเที่ข้าพัก </label>
-									<input type='date' name="input_searchdatecheckin"/>
+									<label> วันเที่เข้าพัก </label>
+									<input type='date' name="input_searchdatecheckin" value={DateStart}/>
 									<label> วันที่เข้าย้ายออก </label>
-									<input type='date' name="input_searchdatecheckout"/>
+									<input type='date' name="input_searchdatecheckout" value={DateEnd}/>
+									<button
+									onClick={()=>{
+										setdefaultCalendar({
+											isLoading:true
+										})
+									}}
+									><EventNoteIcon/></button>
 								</div>
 							</div>
 							<div className={styles.input}>
