@@ -4,11 +4,13 @@ const  { db }  =  require( "../../../models/Invoice/Invoice");
 
 
  const _Invoiceschema = `
+ scalar Date
 input Invoice_listInput{
         name:String,
         number:String,
         price:String,
         vat:String,
+        type_price:String,
         selectvat :String,
 }
 type Invoice_list {
@@ -17,13 +19,14 @@ type Invoice_list {
         number:String,
         price:String,
         vat:String,
+        type_price:String,
         selectvat :String,
 }
+
 type Invoice {
     id:ID!
     duedateinvoice : String
-
-    monthlybilling : String,
+    monthlybilling : Date,
     printstatus : String ,
     status : String,
     lists:[Invoice_list]
@@ -34,8 +37,7 @@ type Invoice {
 input InvoicInput {
     id:ID
     duedateinvoice:String 
-
-    monthlybilling : String,
+    monthlybilling : Date,
     printstatus : String ,
     status : String,
     roomid: String,

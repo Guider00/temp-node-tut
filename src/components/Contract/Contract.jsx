@@ -1,6 +1,8 @@
 import styles from './Contract.module.css';
 import SaveIcon from '@mui/icons-material/Save';
 import EditIcon from '@mui/icons-material/Edit';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useEffect, useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
@@ -101,6 +103,8 @@ export const Contract = () => {
     const [getEnd , setgetEnd] = useState([]);
     const [minDate , setminDate] = useState([]);
     const [maxDate , setmaxDate] = useState([]);
+
+    const [tbsortingstyle_newmetoold , settbsortingstyle_newmetoold] = useState(true);
     
     const [selectedcontract,setselectedcontract] = useState(null)
 
@@ -600,7 +604,12 @@ export const Contract = () => {
                             <table className={styles.table}>
                                 <thead className={styles.head}>
                                     <tr>
-                                        <td>{head_table[0]}</td>
+                                        <td onClick={
+                                            ()=>{
+                                                let _tbsortingstyle_newtoold = tbsortingstyle_newmetoold
+                                                settbsortingstyle_newmetoold(!_tbsortingstyle_newtoold)
+                                            }
+                                            }>{tbsortingstyle_newmetoold?<ArrowDropDownIcon/>:<ArrowDropUpIcon/>}</td>
                                         <td>{head_table[1]}</td>
                                         <td>{head_table[2]}</td>
                                         <td>{head_table[3]}</td>
@@ -614,8 +623,9 @@ export const Contract = () => {
 
                                     </tr>
                                 </thead>
+                                {console.log("filterrooms",filterrooms,[...filterrooms].reverse())}
                                 <tbody className={styles.body}>{
-                                    filterrooms.map((item) => item ?
+                                (tbsortingstyle_newmetoold ?  [...filterrooms].reverse():filterrooms ).map((item) => item ?
                                 (   <tr 
                                         onClick={()=>{
                                             let _selectedcontract = selectedcontract
@@ -629,6 +639,7 @@ export const Contract = () => {
                                     >
                                         <td>
                                             <input type='checkbox' name = "myCheckboxName" id="myCheckboxId"
+                                            checked={ (IDrooms.findIndex(x=>x.id ===item.id) !== -1 )  ?true:false}
                                             onChange={(e)=>{
                                                 const check = e.target.checked
                                                 const id = item.id
@@ -642,9 +653,8 @@ export const Contract = () => {
                                                     let _IDrooms = IDrooms.filter(item => item.id !== id)
                                                     setIDrooms(_IDrooms)
                                                     console.log('_IDrooms',_IDrooms)
-                                                    
-                        
                                                 }
+                                                
                                             }}/>
                                         </td>
                                         <td>{ item && item.Contractnumber ?  item.Contractnumber  : "---"}</td>

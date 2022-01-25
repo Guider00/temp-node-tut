@@ -22,6 +22,7 @@ export const API_GET_Invoice = gql`
                 number
 				price
                 selectvat
+				type_price
                 vat
 			}
 		}

@@ -421,7 +421,7 @@ export const CreateInvoic = () =>{
                                         input:{
                                             status:`${room.status}`,
                                             roomid: `${room.id}`,
-                                            monthlybilling: `${ date == '' ? '00-00-0000': date}`,
+                                            monthlybilling: `${ date === '' ? Date.now() : date}`,
                                             
                                         }
                                         

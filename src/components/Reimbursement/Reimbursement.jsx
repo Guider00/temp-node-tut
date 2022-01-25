@@ -117,7 +117,7 @@ export const  Reimbursement = () => {
                 return{
                     id:data.id,
                     building:
-                    data.Invoice && data.Invoice.Room.floor && data.Invoice.Room.floor.building && data.Invoice.Room.floor.building.name ? 
+                    data.Invoice && data.Invoice.Room  && data.Invoice.Room.floor && data.Invoice.Room.floor.building && data.Invoice.Room.floor.building.name ? 
                     data.Invoice.Room.floor.building.name : '---',
                     roomName: data.Contract && data.Contract.RoomName ? data.Contract.RoomName
                     : '---',

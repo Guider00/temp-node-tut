@@ -159,6 +159,11 @@
     font-size: initial;
    margin: 0.5rem;
 }
+.form_input>.body>div>div:nth-child(2)>textarea{
+    font-size: initial;
+   margin: 0.5rem;
+}
+
 
 
 .form_input>.body_inputroom>div{
