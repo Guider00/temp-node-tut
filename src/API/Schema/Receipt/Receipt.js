@@ -16,6 +16,7 @@ query{
                     price
                     vat
                     selectvat
+                    type_price
                 }
                 Invoice{
                     id
@@ -28,6 +29,7 @@ query{
                         price
                         vat
                         selectvat
+                        type_price
                     }
                     Room{
                         id

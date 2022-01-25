@@ -25,6 +25,7 @@ import { API_CREATE_Receipt }  from '../../API/Schema/Receipt/Receipt'
 
 import {  export_Receipt_pdf  , export_Contract , export_Invoice_pdf   } from '../../general_functions/pdf/export/export_pdf';
 
+import { Blocktext  } from '../../general_functions/regex/regex'
 
 
  // icon 
@@ -256,19 +257,22 @@ export const Checkin = () => {
 	const handlerchangetableoption = (e ,index) =>{
 		if( (e && e.target && e.target.value !== null)   ){
 			let _tableoption = tableoption
-			if(e.target.name === 'price'){
+			if(e.target.name === 'price'||  e.target.name === 'name'){
 				tableoption.body[index][e.target.name] =  e.target.value 
 
-			}else{
+			}else if(e.target.name === 'calculate_mode'){ 
 					if(e.target.type ==="checkbox"){
-						console.log(tableoption.body,index ,e.target.name,e.target.checked )
-					
 						tableoption.body[index][e.target.name]  = (e.target.checked)?"รายเดือน":"ครั้งเดียว"
-					
 					}else{
 						tableoption.body[index][e.target.name] =  e.target.value 
 					}
 					
+			}else if(e.target.name === 'type_price'){
+					if(e.target.type ==="checkbox"){
+						tableoption.body[index][e.target.name]  = (e.target.checked)?"ราคาไม่รวมvat":"ราคารวมvat"
+					}else{
+						tableoption.body[index][e.target.name] =  e.target.value 
+					}
 			}
 		
 			
@@ -461,18 +465,18 @@ export const Checkin = () => {
 		let _formmember = formmember
 			console.log('change',e.target.id , _formmember)
 		if (e.target.id && _formmember.hasOwnProperty(e.target.id) ) {
-			
-			if( e.target.id === 'name' || e.target.id === 'lastname' ){
-				let text = /[^0-9a-zA-Zก-๙ ]/ig;
-                e.target.value = e.target.value.replace(text,'')
-				_formmember[e.target.id] = e.target.value;
-			
-			}else if( e.target.id === 'address'){
-				let text = /[^0-9\u0E00-\u0E7Fa-zA-Z' ./\n]/ig;
-                e.target.value = e.target.value.replace(text,'')
-			}else{
-				_formmember[e.target.id] = e.target.value;
-			}
+
+			e.target.value = Blocktext( e.target.id ,e.target.value)
+			// if( e.target.id === 'name' || e.target.id === 'lastname' ){
+			// 	let text = /[^0-9a-zA-Zก-๙ ]/ig;
+            //     e.target.value = e.target.value.replace(text,'')
+			// }else if( e.target.id === 'address'){
+			// 	let text = /[^0-9\u0E00-\u0E7Fa-zA-Z' ./\n]/ig;
+            //     e.target.value = e.target.value.replace(text,'')
+			// }else{
+				
+			// }
+			_formmember[e.target.id] = e.target.value;
 			setformmember({ ..._formmember });
 		}
 	}
@@ -744,7 +748,9 @@ export const Checkin = () => {
 																console.log('room.data',room.data.checkin.Checkinoption)
 																if(room.data.checkin.Checkinoption && room.data.checkin.Checkinoption.length > 0){
 																	let _body = room.data.checkin.Checkinoption.map(obj =>{
-																		return {name:obj.name,price:obj.price ,price_type:obj.price_type};
+																		return {name:obj.name,price:obj.price ,
+																			calculate_mode :obj.calculate_mode,
+																			type_price:obj.type_price};
 																		});
 																		
 																	_tableoption.body  = [..._body]
@@ -752,7 +758,7 @@ export const Checkin = () => {
 															}else{
 																 // ดึงข้อมูลจาก รายการเบิ้องต้นจากประเภทห้อง
 																_tableoption.body = [...room.data.RoomType.listoptionroom].map(data =>{
-																	return ( {...data , ...{price_type:"รายเดือน"}})
+																	return ( {...data , ...{type_price:"ราคาไม่รวมvat"}, ...{calculate_mode:"รายเดือน"}})
 																})
 																
 															}
@@ -927,7 +933,7 @@ export const Checkin = () => {
                                 <div className={styles.input}>
 								    <textarea
 									 cols="25"
-									 rows="5"
+									 rows="3"
 									 type="text"  id="address" value={formmember.address}   onChange={handlechangeformmember} />
                                 </div>
 							</div>
@@ -1237,7 +1243,7 @@ export const Checkin = () => {
 											<button onClick={()=> {
 												let _tableoption = tableoption
 												_tableoption.disableedit = true
-												_tableoption.body = [..._tableoption.body , {name:"",price:"0",price_type:"รายเดือน"}]
+												_tableoption.body = [..._tableoption.body , {name:"",price:"0",type_price:"ราคาไม่รวมvat", calculate_mode:"รายเดือน"}]
 												settableoption({..._tableoption})
 											}}>เพิ่มรายการ</button>
 											<button onClick={()=>{
@@ -1255,6 +1261,7 @@ export const Checkin = () => {
 														
 														)}
 														<th>รายการรายเดือน</th>
+														<th>รูปแบบราคาไม่รวมvat</th>
 														{ tableoption.disableedit ? <th></th>:null }
 														
 													</tr>
@@ -1265,10 +1272,13 @@ export const Checkin = () => {
 														<td><input type="text" value={data.name}   name="name" onChange={(e)=>handlerchangetableoption(e,index)}
 														disabled={ !tableoption.disableedit }/></td>
 														<td><input  type="text"value={data.price}  name="price" onChange={(e)=>handlerchangetableoption(e,index)}  disabled={ !tableoption.disableedit }/></td>
-														<td><input type='checkbox'  checked={ (data.price_type === "รายเดือน"? true:false)  }  name="price_type"
+														<td><input type='checkbox'  checked={ (data.calculate_mode === "รายเดือน"? true:false)  }  name="calculate_mode"
 															onClick={(e)=>handlerchangetableoption(e,index)}
-																		// onChange={(e)=>handlerchangetableoption(e,index)} 
 														 /> </td>
+														<td><input type='checkbox'  checked={ (data.type_price === "ราคาไม่รวมvat"? true:false)  }  name="type_price"
+															onClick={(e)=>handlerchangetableoption(e,index)}
+														 />
+														</td>
 														{ (tableoption && tableoption.disableedit) ? <td><button onClick={()=>{
 															let _tableoption  =tableoption
 															_tableoption.body.splice(index, 1)
@@ -1312,7 +1322,8 @@ export const Checkin = () => {
 													Checkinoption: [...tableoption.body.map(item=>{
 														return ({name: item.name,
 																	price: item.price,
-																	price_type: item.price_type})
+																	calculate_mode:item.calculate_mode,
+																	type_price: item.type_price})
 																})]
 												}
 											}
@@ -1463,14 +1474,15 @@ export const Checkin = () => {
 										// create Invoice //
 										let _tableoption = tableoption
 										let _updatetableoption   = _tableoption.body.map(obj  =>{
-											return ({name:obj.name , price:obj.price})
+											return ({name:obj.name , price:obj.price, type_price:obj.type_price})
 										})
-
+										const now =	new Date()
 											try{
 												let _res = await crateInvoice({
 													variables:{
 														input:{
 															status:"รอการชำระเงิน",
+															monthlybilling : Date.now().toString(),
 															lists:[..._updatetableoption]
 														}
 													}
@@ -1493,6 +1505,7 @@ export const Checkin = () => {
 																	});
 																	if(_res && _res.data){
 																	try{
+																			console.log('_updatetableoption',_updatetableoption)
 																			export_Invoice_pdf(selectedroom , [..._updatetableoption])
 																			refetch_roomMember()
 																		}catch(e){
@@ -1610,12 +1623,16 @@ export const Checkin = () => {
 											// End Recipte // 
 										
 											console.log('selectedroom',selectedroom)
+											let _tableoption = tableoption
+											let _updatetableoption   = _tableoption.body.map(obj  =>{
+												return ({name:obj.name , price:obj.price ,type_price:obj.type_price})
+											})
 											export_Receipt_pdf({
 												customer_name : selectedroom.data.members[0].name,
 												customer_lastname : selectedroom.data.members[0].lastname,
 												customer_address :  selectedroom.data.members[0].address,
 												Room : {...selectedroom.data}
-											},'checkin')
+											},'checkin',[..._updatetableoption] )
 
 											try{
 												refetch_roomMember()

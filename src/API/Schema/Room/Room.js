@@ -287,7 +287,8 @@ export const API_GET_Rooms = gql`
                 Checkinoption{
                     name
                     price
-                    price_type
+                    calculate_mode
+                    type_price
                 }
             }
 
@@ -302,6 +303,7 @@ export const API_GET_Rooms = gql`
                     number
                     vat
                     selectvat
+                    type_price
                 }
             }
             checkinReceipt{
@@ -314,6 +316,7 @@ export const API_GET_Rooms = gql`
                     number
                     vat
                     selectvat
+                    type_price
                 }
             }
             
@@ -328,6 +331,8 @@ export const API_GET_Rooms = gql`
                     number
                     vat
                     selectvat
+                    type_price
+  
                 }
             }
             monthlyReceipt{
@@ -340,6 +345,7 @@ export const API_GET_Rooms = gql`
                     number
                     vat
                     selectvat
+                    type_price
                 }
             }
 
@@ -364,6 +370,7 @@ export const API_GET_Rooms = gql`
                     number
                     vat
                     selectvat
+                    type_price
                 }
             }
 
