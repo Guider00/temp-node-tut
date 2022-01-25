@@ -143,11 +143,12 @@ export const Address = () => {
         let inputBox9 = document.getElementsByName('village')
         let inputBox10 = document.getElementsByName('road')
         
+        
 
         
 
         if(editButton.click){
-            
+            setDisabledAddress(false)
             inputBox1[0].disabled=false;
             inputBox2[0].disabled=false;
             inputBox3[0].disabled=false;
@@ -158,6 +159,7 @@ export const Address = () => {
             inputBox8[0].disabled=false;
             inputBox9[0].disabled=false;
             inputBox10[0].disabled=false;
+            
 
 
             }
@@ -179,7 +181,7 @@ export const Address = () => {
         
 
         if(editButton.click){
-            
+        setDisabledReceipt(false)
         inputBox1[0].disabled=false;
         inputBox2[0].disabled=false;
         inputBox3[0].disabled=false;
@@ -208,7 +210,7 @@ export const Address = () => {
         let inputBox9 = document.getElementsByName('village')
         let inputBox10 = document.getElementsByName('road')
         if(Address && Address.data  ){
-
+            setDisabledAddress(false)
             inputBox1[0].disabled=false;
             inputBox2[0].disabled=false;
             inputBox3[0].disabled=false;
@@ -246,8 +248,9 @@ export const Address = () => {
         let inputBox4 = document.getElementsByName('booking')
         let inputBox5 = document.getElementsByName('bill')
         let inputBox6 = document.getElementsByName('accNo')
-        if(Address && Address.data  ){
+        if(Address && Address.data ){
 
+                setDisabledReceipt(false)
                 inputBox1[0].disabled=false;
                 inputBox2[0].disabled=false;
                 inputBox3[0].disabled=false;
@@ -448,6 +451,9 @@ export const Address = () => {
         accNo:"",
     })
 
+    const [disabledAddress, setDisabledAddress] = useState(true)
+    const [disabledReceipt, setDisabledReceipt] = useState(true)
+
 
     useEffect(()=>{
         if(Receiptnumber && Receiptnumber.data && Receiptnumber.data.Receiptnumbers){
@@ -643,7 +649,7 @@ export const Address = () => {
 
     const validateAddress = (values) =>{
         const errors = {}
-        const text = /^[A-Za-z0-9ก-๙]+$/;
+        const text = /^[A-Za-z0-9ก-๙/]+$/;
         //address
 
         if(!values.name){
@@ -1026,7 +1032,7 @@ export const Address = () => {
                     
             </div>
             <div className={styles.save}>
-                <button id="D1" onClick={()=>{
+                <button disabled={disabledAddress} id="D1" onClick={()=>{
                     if( Object.keys(formErrorsAddress).length === 0 ){
                         setdefaultDialog({
                             message:"Are you sure you want to save address?",
@@ -1208,7 +1214,10 @@ export const Address = () => {
                     </div>
                 </div>
                 <div className={styles.save}>
-                <button id = "D6" className={styles.savestyle} onClick={()=>{
+                <button id = "D6" 
+                className={styles.savestyle} 
+                disabled = {disabledReceipt}
+                onClick={()=>{
                    if( Object.keys(formErrors).length === 0 ){
                     setdefaultDialog({
                         message:"Are you sure you want to save receipt?",
@@ -1231,7 +1240,7 @@ export const Address = () => {
                     
                 }}>SAVE</button>
                 <button  id = "D7" className={styles.savestyle} onClick={editPage2}>EDIT</button>
-                <button id = "D8" className={styles.savestyle} onClick={clearPage2}>CLEAR-ALL</button>
+                <button  id = "D8" className={styles.savestyle} onClick={clearPage2}>CLEAR-ALL</button>
                 
                 </div>
                 
