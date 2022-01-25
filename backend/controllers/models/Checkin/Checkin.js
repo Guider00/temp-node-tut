@@ -12,7 +12,8 @@ const schemaDefinition = new mongoose.Schema({
         {
         name:{type:String ,default:""},
         price:{type:String ,default:""},
-        price_type:{type:String ,default:"ครั้งเดียว"}
+        calculate_mode:{type:String ,default:"ครั้งเดียว"},
+        type_price:{type:String ,default:"ราคาไม่รวมvat"}
         }
     ]
 })

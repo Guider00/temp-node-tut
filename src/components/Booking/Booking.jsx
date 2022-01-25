@@ -538,7 +538,7 @@ export const Booking = () => {
 									<div>
 										<textarea 
 											cols="25"
-											rows="5"
+											rows="3"
 											id="customer_address"
 											type="text"
 											value={formbooking.customer_address}

@@ -100,7 +100,7 @@ export const Contract = () => {
     const [minDate , setminDate] = useState([]);
     const [maxDate , setmaxDate] = useState([]);
 
-    const [tbsortingstyle_newtoold , settbsortingstyle_newtoold] = useState(true);
+    const [tbsortingstyle_newmetoold , settbsortingstyle_newmetoold] = useState(true);
     
     const [selectedcontract,setselectedcontract] = useState(null)
 
@@ -499,10 +499,10 @@ export const Contract = () => {
                                     <tr>
                                         <td onClick={
                                             ()=>{
-                                                let _tbsortingstyle_newtoold = tbsortingstyle_newtoold
-                                                settbsortingstyle_newtoold(!_tbsortingstyle_newtoold)
+                                                let _tbsortingstyle_newtoold = tbsortingstyle_newmetoold
+                                                settbsortingstyle_newmetoold(!_tbsortingstyle_newtoold)
                                             }
-                                            }>{tbsortingstyle_newtoold?<ArrowDropDownIcon/>:<ArrowDropUpIcon/>}</td>
+                                            }>{tbsortingstyle_newmetoold?<ArrowDropDownIcon/>:<ArrowDropUpIcon/>}</td>
                                         <td>{head_table[1]}</td>
                                         <td>{head_table[2]}</td>
                                         <td>{head_table[3]}</td>
@@ -518,7 +518,7 @@ export const Contract = () => {
                                 </thead>
                                 {console.log("filterrooms",filterrooms,[...filterrooms].reverse())}
                                 <tbody className={styles.body}>{
-                                (tbsortingstyle_newtoold ?  [...filterrooms].reverse():filterrooms ).map((item) => item ?
+                                (tbsortingstyle_newmetoold ?  [...filterrooms].reverse():filterrooms ).map((item) => item ?
                                 (   <tr 
                                         onClick={()=>{
                                             let _selectedcontract = selectedcontract
@@ -546,9 +546,8 @@ export const Contract = () => {
                                                     let _IDrooms = IDrooms.filter(item => item.id !== id)
                                                     setIDrooms(_IDrooms)
                                                     console.log('_IDrooms',_IDrooms)
-                                                    
-                        
                                                 }
+                                                
                                             }}/>
                                         </td>
                                         <td>{ item && item.Contractnumber ?  item.Contractnumber  : "---"}</td>
