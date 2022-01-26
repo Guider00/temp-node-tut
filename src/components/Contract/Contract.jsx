@@ -6,6 +6,10 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useEffect, useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
+
+import CalendarPicker from '../../subcomponents/Calendar/Calendar.js';
+import EventNoteIcon from '@mui/icons-material/EventNote';
+
 import {
     API_GET_Contract,
     API_CREATE_Contract,
@@ -169,14 +173,14 @@ export const Contract = () => {
                 setformfilter({..._formfilter})
                 console.log('_formfilter',_formfilter)
 
-            }else if(e.target.id === "checkin_date_exp"){
+            }if(e.target.id === "checkin_date_exp"){
                 _formfilter[e.target.id] = e.target.value;
                 setformfilter({..._formfilter})
                 setmaxDate(e.target.value)
                 console.log('_formfilter',_formfilter)
 
                 
-            }else if(e.target.id === "checkin_date"){
+            }if(e.target.id === "checkin_date"){
                 _formfilter[e.target.id] = e.target.value;
                 setformfilter({..._formfilter})
                 setminDate(e.target.value)
@@ -383,6 +387,102 @@ export const Contract = () => {
 
     }
 
+    	//Calendar
+
+
+	const [defaultCalendar, setdefaultCalendar] = useState({
+        isLoading: false
+    });
+	const [DateStart , setDateStart] = useState([''])
+	const [DateEnd , setDateEnd] = useState([''])
+	const[DateRange, setDateRange] = useState([])
+
+
+	const handleCalendar = (isLoading) =>{
+		setdefaultCalendar({
+			isLoading:isLoading,
+		})
+	}
+
+	const handleStart = (data) =>{
+		setDateRange(data)
+		console.log("DateRange",DateRange)
+	}
+
+	const CalendarDate = (choose) =>{
+
+		if(choose){
+			if(DateRange.from){
+				let iDay = parseInt(DateRange.from.day, 10);
+				let iMonth = parseInt(DateRange.from.month, 10);
+                let _formfilter = formfilter ;
+					
+				if(iDay < 10 && iMonth < 10){
+				let _DateStart = DateStart
+				_DateStart = DateRange.from.year + "-0" + DateRange.from.month + "-0" + DateRange.from.day
+                _formfilter['checkin_date'] = _DateStart
+                setformfilter({..._formfilter})
+                setDateStart(_DateStart)
+					
+				}if(iDay < 10 && iMonth >= 10){
+				let _DateStart = DateStart
+				_DateStart = DateRange.from.year + "-" + DateRange.from.month + "-0" + DateRange.from.day
+                _formfilter['checkin_date'] = _DateStart
+                setformfilter({..._formfilter})
+				setDateStart(_DateStart)
+	
+				}if(iDay >= 10 && iMonth < 10){
+				let _DateStart = DateStart
+				_DateStart = DateRange.from.year + "-0" + DateRange.from.month + "-" + DateRange.from.day
+                _formfilter['checkin_date'] = _DateStart
+                setformfilter({..._formfilter})
+				setDateStart(_DateStart)
+	
+				}
+					
+			}
+			if(DateRange.to){
+				
+	
+				let iDay = parseInt(DateRange.to.day, 10);
+				let iMonth = parseInt(DateRange.to.month, 10);
+                let _formfilter = formfilter ;
+	
+				if(iDay < 10 && iMonth < 10){
+				let _DateEnd = DateEnd
+				_DateEnd = DateRange.to.year + "-0" + DateRange.to.month + "-0" + DateRange.to.day
+                _formfilter['checkin_date_exp'] = _DateEnd
+                setformfilter({..._formfilter})
+				setDateEnd(_DateEnd)
+						
+				}if(iDay < 10 && iMonth >= 10){
+				let _DateEnd = DateEnd
+				_DateEnd = DateRange.to.year + "-" + DateRange.to.month + "-0" + DateRange.to.day
+                _formfilter['checkin_date_exp'] = _DateEnd
+                setformfilter({..._formfilter})
+				setDateEnd(_DateEnd)
+		
+				}if(iDay >= 10 && iMonth < 10){
+				let _DateEnd = DateEnd
+				_DateEnd = DateRange.to.year + "-0" + DateRange.to.month + "-" + DateRange.to.day
+                _formfilter['checkin_date_exp'] = _DateEnd
+                setformfilter({..._formfilter})
+				setDateEnd(_DateEnd)
+		
+				}
+				
+			}
+            console.log('Confirm')
+			handleCalendar(false);
+		}else{
+            console.log('cancel')
+			handleCalendar(false);
+		}
+
+	}
+
+	//Calendar
+
     
 
 
@@ -448,6 +548,7 @@ export const Contract = () => {
 
     return (
         <>
+            {defaultCalendar.isLoading && <CalendarPicker onCalendar={CalendarDate} start={handleStart} />}
             <div className={styles.container}>
                 <div className={styles.zone1}>
                     <div className={styles.header}>
@@ -456,9 +557,15 @@ export const Contract = () => {
                         </div>
                         <div className={styles.dateinput}>
                             <label className={styles.date}>วันที่ :</label>
-                            <input  id = 'checkin_date'type='date' min= "2015-01-01" max={maxDate} className={styles.inputdate} onChange={handleChangedformfilter}></input>
+                            <input  id = 'checkin_date'type='date' value={DateStart} className={styles.inputdate} onChange={handleChangedformfilter}></input>
                             <label className={styles.to}>ถึง :</label>
-                            <input id = 'checkin_date_exp' type='date' min= {minDate} className={styles.inputdate} onChange={handleChangedformfilter}></input>
+                            <input id = 'checkin_date_exp' type='date' value={DateEnd} className={styles.inputdate} onChange={handleChangedformfilter}></input>
+                            <button className={styles.to}
+                            onClick={()=>{
+                                setdefaultCalendar({
+                                    isLoading:true
+                                })
+                            }}><EventNoteIcon/></button>
                             <br/>
                             <label className={styles.selectAll} >เลือกทั้งหมด</label>
                             <input type = 'checkbox' className={styles.checkbox} name ="selectAll" id="select-all" onChange={selectAll}></input>
