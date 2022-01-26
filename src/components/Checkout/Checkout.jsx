@@ -698,7 +698,8 @@ export const Checkout = () => {
 																		name: data.name,
 																		number: `${data.number}`,
 																		price: `${data.price}`,
-																		selectvat : `${data.addvat}`
+																		selectvat : `${data.addvat}`,
+																		type_price : `ราคาไม่รวมvat`
 																		}
 															})
 															console.log('_list',_list)

@@ -7,6 +7,10 @@ import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
 
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+
+
 import { API_GET_Invoice,API_DELETE_Invoice,API_UPDATE_Invoice} from '../../API/Schema/Invoice/Invoice'
 import { useQuery , useMutation } from '@apollo/client';
 import { useEffect , useState } from 'react';
@@ -198,8 +202,11 @@ const CalendarDate = (choose) =>{
   
 
     }
-
-    
+    const [tbsortingstyle_newmetoold , settbsortingstyle_newmetoold] = useState(true);
+    const handlerchangesortingstyle =() =>{
+         let _tbsortingstyle_newtoold = tbsortingstyle_newmetoold
+         settbsortingstyle_newmetoold(!_tbsortingstyle_newtoold)
+    }
 
 
     useEffect (()=>{
@@ -222,6 +229,8 @@ const CalendarDate = (choose) =>{
 
     let header_table2 = ["รายการ","ชื่อรายการค่าใช้จ่าย","จำนวน","จำนวนเงิน","ราคา","ภาษีมูลค่าเพิ่ม","ผลรวม","ภาษี"]
     let sim_table2 = [{"รายการ":"1","ชื่อรายการค่าใช้จ่าย":"INMV20190030000097","จำนวน":"1","จำนวนเงิน":"1200.00","ราคา":"100.00","ภาษีมูลค่าเพิ่ม":"888.00","จำนวนเงิน":"888.00","ภาษี":""}]
+
+     
 
 
     return (
@@ -323,7 +332,7 @@ const CalendarDate = (choose) =>{
                                 <table >
                                     <thead className ={styles.header}>
                                         <tr >
-                                            <td>{header_table[0]}</td>
+                                            <td  onClick={handlerchangesortingstyle}> {tbsortingstyle_newmetoold?<ArrowDropDownIcon/>:<ArrowDropUpIcon/>} </td>
                                             <td>{header_table[1]}</td>
                                             <td>{header_table[2]}</td>
                                             <td>{header_table[3]}</td>
@@ -333,7 +342,8 @@ const CalendarDate = (choose) =>{
                                         </tr>
                                     </thead>
                             
-                                    <tbody className ={styles.body}>{filterrooms.map( (data) =>
+                                    <tbody className ={styles.body}>{
+                                    ( tbsortingstyle_newmetoold? filterrooms :  [...filterrooms].reverse()).map( (data) =>
                                         <tr
                                         onClick={()=>{
 
@@ -351,6 +361,7 @@ const CalendarDate = (choose) =>{
                                                 <input type="checkbox" 
                                                 name = "myCheckboxName" 
                                                 id="myCheckboxId"
+                                                 checked={ (IDrooms.findIndex(x=>x.id === data.id) !== -1 )  ?true:false}
                                                 onChange={(e)=>{
                                                     const checked = e.target.checked
                                                     const id = data.id
@@ -523,7 +534,7 @@ const CalendarDate = (choose) =>{
                                     <input className = {styles.input3} placeholder='0.00'/>
                                 </div>
                                 
-                                        
+                                       
                             </div>
                             <div className = {styles.topic}>
                                 รายการใช้จ่าย
@@ -532,7 +543,7 @@ const CalendarDate = (choose) =>{
                             <table className ={styles.table}>
                                     <thead className ={styles.header}>
                                         <tr >
-                                            <td>{header_table2[0]}</td>
+                                            <td> {header_table2[0]} </td>
                                             <td>{header_table2[1]}</td>
                                             <td>{header_table2[2]}</td>
                                             <td>{header_table2[3]}</td>

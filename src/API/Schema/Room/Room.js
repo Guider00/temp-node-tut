@@ -280,12 +280,15 @@ export const API_GET_Rooms = gql`
                 id_contact
                 checkin_type
                 checkin_date
+                checkin_date_exp
                 rental_deposit
                 number_day_rent
                 branch
                 Checkinoption{
                     name
                     price
+                    calculate_mode
+                    type_price
                 }
             }
 
@@ -300,6 +303,7 @@ export const API_GET_Rooms = gql`
                     number
                     vat
                     selectvat
+                    type_price
                 }
             }
             checkinReceipt{
@@ -312,6 +316,7 @@ export const API_GET_Rooms = gql`
                     number
                     vat
                     selectvat
+                    type_price
                 }
             }
             
@@ -326,6 +331,8 @@ export const API_GET_Rooms = gql`
                     number
                     vat
                     selectvat
+                    type_price
+  
                 }
             }
             monthlyReceipt{
@@ -338,6 +345,7 @@ export const API_GET_Rooms = gql`
                     number
                     vat
                     selectvat
+                    type_price
                 }
             }
 
@@ -362,6 +370,7 @@ export const API_GET_Rooms = gql`
                     number
                     vat
                     selectvat
+                    type_price
                 }
             }
 

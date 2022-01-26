@@ -31,12 +31,13 @@ export const API_GET_Reimbursement = gql`
                       }
                 }
                         lists {
-                            id
-                            name
-                    number
-                            price
-                    selectvat
-                    vat
+                                id
+                                name
+                                number
+                                price
+                                selectvat
+                                type_price
+                                vat
                         }
                     }
                 

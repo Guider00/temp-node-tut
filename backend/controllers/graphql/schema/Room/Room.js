@@ -91,7 +91,7 @@ type BookinginRoom{
 type InvoiceinRoom{
     id:ID!
     duedateinvoice : String
-    monthlybilling : String,
+    monthlybilling : Date,
     printstatus : String ,
     status : String,
     lists:[Invoice_list]

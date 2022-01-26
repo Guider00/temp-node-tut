@@ -8,6 +8,7 @@ const  { db }  =  require( "../../../models/Receipt/Receipt");
         number:String,
         price:String,
         vat:String,
+        type_price:String,
         selectvat :String,
  }
 type Receipt_list {
@@ -16,20 +17,23 @@ type Receipt_list {
         number:String,
         price:String,
         vat:String,
+        type_price:String,
         selectvat :String,
 }
 type Receipt {
     id:ID!
-    monthlybilling:String,  
+    monthlybilling:Date,  
     status:String,
+    printstatus : String,
     note:String,
     lists:[Receipt_list]
     Invoice:Invoice
   }
 
 input ReceiptInput {
-    monthlybilling:String, 
+    monthlybilling:Date, 
     status:String,
+    printstatus : String,
     note:String,
     lists:[Receipt_listInput]
     invoiceid:String

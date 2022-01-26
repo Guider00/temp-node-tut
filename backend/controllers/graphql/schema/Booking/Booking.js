@@ -134,6 +134,7 @@ const _createBooking = async (payload , payload2) =>{
                             payment_method :data.payment_method,
                             deposit :data.deposit,
                             checkin_date : data.checkin_date,
+                            checkin_date_exp : data.checkin_date_exp,
                             note: data.note,
                             status: data.status,
                             confirm_booking : data.confirm_booking,

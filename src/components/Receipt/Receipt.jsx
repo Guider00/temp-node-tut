@@ -6,6 +6,11 @@ import { API_GET_Receipt,API_ADD_Receipt,API_DELETE_Receipt,API_UPDATE_Receipt} 
 import { useQuery } from '@apollo/client';
 import { set } from 'mongoose';
 
+
+
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+
 import {  export_Receipt_pdf , export_taxinvoice_pdf  } from '../../general_functions/pdf/export/export_pdf';
 
 export const Receipt = () => {
@@ -60,6 +65,13 @@ export const Receipt = () => {
 			setformsearch({ ..._formsearch });
 		}
     }
+
+    const [tbsortingstyle_newmetoold , settbsortingstyle_newmetoold] = useState(true);
+    const handlerchangesortingstyle =() =>{
+         let _tbsortingstyle_newtoold = tbsortingstyle_newmetoold
+         settbsortingstyle_newmetoold(!_tbsortingstyle_newtoold)
+    }
+
     const building = () =>{
 
 
@@ -137,7 +149,7 @@ export const Receipt = () => {
 
                                     <thead className ={styles.header}>
                                         <tr >
-                                            <td>{header_table[0]}</td>
+                                            <td onClick={handlerchangesortingstyle}> {tbsortingstyle_newmetoold?<ArrowDropDownIcon/>:<ArrowDropUpIcon/>}  </td>
                                             <td>{header_table[1]}</td>
                                             <td>{header_table[2]}</td>
                                             <td>{header_table[3]}</td>
@@ -149,7 +161,7 @@ export const Receipt = () => {
                                         </tr>
                                     </thead>
                                     <tbody className ={styles.body}>
-                                        {receipt.map( (data) =>
+                                        { ( tbsortingstyle_newmetoold? receipt :  [...receipt].reverse() ).map( (data) =>
                                         <tr onClick={()=>{
 
                                             let _selectrooms = selectrooms
@@ -168,16 +180,21 @@ export const Receipt = () => {
                                                 <input type="checkbox" 
                                                 name = "myCheckboxName" 
                                                 id="myCheckboxId" 
+                                                 checked={ (IDrooms.findIndex(x=>x.id === data.id) !== -1 )  ?true:false}
+
                                                 onChange={(e)=>{
-                                                    const checked = e.target.checked
+                                                  const checked = e.target.checked
                                                     const id = data.id
                                                     if(checked){
                                                         let _IDrooms = IDrooms
-                                                        _IDrooms = [..._IDrooms,id]
+                                                        _IDrooms = [..._IDrooms,data]
                                                         setIDrooms(_IDrooms)
                                                         console.log("check",_IDrooms)
-                                                    }else{
-                                                        let _IDrooms = IDrooms.filter(item => item != id)
+
+                                                        
+                                                    }
+                                                    else{
+                                                        let _IDrooms = IDrooms.filter(item => item.id !== id)
                                                         setIDrooms(_IDrooms)
                                                         console.log('uncheck',_IDrooms)
                                                     }
