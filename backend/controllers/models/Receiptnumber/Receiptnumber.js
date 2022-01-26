@@ -7,6 +7,7 @@ const schemaDefinition = new mongoose.Schema({
     booking_number: {type:String},
     bill_number: {type:String},
     account_number: {type:String},
+    bill_date: {type:String},
     
 
 

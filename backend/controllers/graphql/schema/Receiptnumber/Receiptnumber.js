@@ -10,6 +10,7 @@ type Receiptnumber{
     booking_number: String
     bill_number:String
     account_number:String
+    bill_date:String
 
 }
 input ReceiptnumberInput{
@@ -19,6 +20,7 @@ input ReceiptnumberInput{
     booking_number: String
     bill_number:String
     account_number:String
+    bill_date:String
 
 
 }

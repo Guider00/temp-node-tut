@@ -164,10 +164,23 @@
     box-shadow: 1px 1px 5px black; 
     padding: 5px;
     margin: 0.2rem auto;
+    transition: 0.3s;
     
         
         
         
+}
+.saveDisabled{
+    width: 5%;
+    min-width: 100px;
+    font-size: 15px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    box-shadow: 1px 1px 5px black; 
+    padding: 5px;
+    margin: 0.2rem auto;
+    
+
 }
 .container>.save>.savestyle:hover{
     transform:scale(1.1) ;
@@ -249,6 +262,14 @@
     height: 20px;
     
 }
+.containernumber>.inputbox>.inputstyle>.billDate{
+    margin: 1rem;
+    margin-top: 0.5rem;
+    background-color: rgb(255, 255, 255);
+    min-width: 160px;
+    height: 25px;
+    
+}
 .containernumber>.header{
     font-size: 2rem;
     font-style:initial;
@@ -275,6 +296,7 @@
     box-shadow: 1px 1px 5px black; 
     padding: 5px;
     margin: 0.2rem auto;
+    transition: 0.3s;
     
         
         
@@ -378,6 +400,7 @@
     cursor: pointer;
     background-color: royalblue;
     border-radius: 10px;
+    transition: 0.3s;
    }
 
 
@@ -385,6 +408,7 @@
     transform: translate(0,-6px);
     box-shadow: 10px -10px 25px 0 rgba(57, 168, 202, 0.5),-10px 10px 25px 0 rgba(34, 138, 223, 0.5);
     cursor: pointer;
+    
    
    }
    .containerDialog>.footer>.cancel{
@@ -395,6 +419,7 @@
     cursor: pointer;
     background-color: crimson;
     border-radius: 10px;
+    transition: 0.3s;
    }
    .containerDialog>.footer>.cancel:hover{
     transform: translate(0,-6px);

@@ -93,6 +93,7 @@ export const Address = () => {
         booking:"",
         bill:"",
         accNo:"",
+        billDate:"",
     })
     
     const [defaultData , setdefaultData] = useState({
@@ -103,6 +104,7 @@ export const Address = () => {
         booking:"",
         bill:"",
         accNo:"",
+        billDate:"",
     })
     const savePage = () => {
         let saveButton = document.querySelector('#D1')
@@ -241,6 +243,7 @@ export const Address = () => {
                             booking_number:`${defaultData.booking}`,
                             bill_number:`${defaultData.bill}`,
                             account_number:`${defaultData.accNo}`,
+                            bill_date:`${defaultData.billDate}`,
                             }
                         }
                     });
@@ -255,6 +258,7 @@ export const Address = () => {
     
             }
             handleDialog('',false)
+            setDisabledReceipt(true)
 
         }else if(choose && defaultDialog.type === '2' ){
 
@@ -327,6 +331,7 @@ export const Address = () => {
     
             }
             handleDialog('',false)
+            setDisabledAddress(true)
 
 
 
@@ -362,7 +367,8 @@ export const Address = () => {
         
         let _defaultData = defaultData
 
-        if(e.target.id === "receipt" || e.target.id === "invoice" || e.target.id === "reimbursement" || e.target.id === "booking" || e.target.id === "bill" || e.target.id === "accNo"){
+        if(e.target.id === "receipt" || e.target.id === "invoice" || e.target.id === "reimbursement" || e.target.id === "booking" 
+        || e.target.id === "bill" || e.target.id === "accNo" ||  e.target.id === "billDate" ){
             _defaultData[e.target.id] = e.target.value;
             setdefaultData({..._defaultData})
             setFormErrors(validate(_defaultData))
@@ -450,6 +456,14 @@ export const Address = () => {
             errors.accNo = "accNo is not Format!"
         }else if(values.accNo.length > 10){
             errors.accNo = "accNo is not Format!"
+        }
+
+        if(!values.billDate){
+            errors.billDate = "billDate is required!"
+        }else if(!(/^[A-Za-z0-9-]+$/).test(values.billDate)){
+            errors.billDate = "billDate is not Format!"
+        }else if(values.billDate.length > 10){
+            errors.billDate = "billDate is not Format!"
         }
 
 
@@ -582,6 +596,7 @@ export const Address = () => {
                 _defaultData['booking'] = Receiptnumber.data.Receiptnumbers[0].booking_number
                 _defaultData['id'] = Receiptnumber.data.Receiptnumbers[0].id
                 _defaultData['accNo'] = Receiptnumber.data.Receiptnumbers[0].account_number
+                _defaultData['billDate'] = Receiptnumber.data.Receiptnumbers[0].bill_date
                 setdefaultData(_defaultData)
 
             }
@@ -803,7 +818,10 @@ export const Address = () => {
                     
             </div>
             <div className={styles.save}>
-                <button disabled={disabledAddress} id="D1" onClick={()=>{
+                <button disabled={disabledAddress} 
+                id="D1" 
+                className={disabledAddress === false? styles.savestyle : styles.saveDisabled}
+                onClick={()=>{
                     if( Object.keys(formErrorsAddress).length === 0 ){
                         setdefaultDialog({
                             message:"Are you sure you want to save address?",
@@ -823,7 +841,7 @@ export const Address = () => {
                     }
                     
                     
-                }} className={styles.savestyle}>SAVE</button>
+                }} >SAVE</button>
                 <button 
                 id="D2" 
                 name="edit-address"
@@ -1004,10 +1022,40 @@ export const Address = () => {
 
 
                     </div>
+                    <div className={styles.inputstyle}>
+                        
+                        <lable className={styles.text}>วันที่คิดรอบบิล</lable>
+                        <input  className={styles.billDate} 
+                        name = 'billDate'
+                        id = 'billDate'
+                        type='date'
+                        disabled = {disableReceipt.disabled}
+                        value={defaultData.billDate}
+                        style={formErrors.billDate === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
+                        onChange={handleOnchangeReceipt}
+                        />
+                        <lable className={styles.error}>{formErrors.billDate}</lable>
+                        <button className={styles.deleteOne} 
+                        onClick={()=>{
+                            let _defaultData = defaultData
+                            let inputBox = document.getElementsByName('billDate')
+                            let e = ''
+                            inputBox[0].disabled=false;
+                            setDisabledReceipt(false)
+                            _defaultData['billDate'] = e
+                            setdefaultData({..._defaultData})
+                            
+
+                        }}
+                        ><DeleteOutlineIcon/></button>
+                        
+
+
+                    </div>
                 </div>
                 <div className={styles.save}>
                 <button id = "D6" 
-                className={styles.savestyle} 
+                className={disabledReceipt == false ? styles.savestyle : styles.saveDisabled} 
                 disabled = {disabledReceipt}
                 onClick={()=>{
                    if( Object.keys(formErrors).length === 0 ){

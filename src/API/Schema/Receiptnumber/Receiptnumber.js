@@ -10,6 +10,7 @@ export const API_GET_Receiptnumber = gql`
             booking_number
             bill_number
 			account_number
+			bill_date
 		}
 	}
 `;

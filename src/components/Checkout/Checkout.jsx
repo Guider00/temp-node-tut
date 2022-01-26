@@ -610,36 +610,36 @@ export const Checkout = () => {
 																 }}
 																 > {editmodetableprice ? "ยกเลิกการแก้ไข": "แก้ไขรายการค่าใช้จ่าย"} </button>
 															</div>
-															<div className={styles.tableroomselect} >
+															<div className={styles.table}>
 															
-																<table>
-																	<thead>
+																<table className={styles.tableStyles}>
+																	<thead className={styles.thead}>
 																		<tr>
-																			<th>#</th>
+																			<th  width={'50px'}>#</th>
 																			<th>ชื่อรายการ</th>
 																			<th>จำนวน</th>
 																			<th>ราคา</th>
-																			<th>ภาษี</th>
-																			<th>ราคาทั้งหมด</th>
-																			<th>ภาษี</th>
+																			<th width={'120px'}>ภาษี</th>
+																			<th width={'120px'}>ราคาทั้งหมด</th>
+																			<th width={'120px'} >ภาษี</th>
 																			 {editmodetableprice ? <th></th>:null}
 																		</tr>
 																	</thead>
-																	<tbody>
+																	<tbody className={styles.tbody}>
 																		{
 																		tableprice.map( (list,index) => 
 																		<tr>
 																			<td>{index}</td>
 																			<td>
-																			<input value={list.name}   type="text"  disabled={ !editmodetableprice} 
+																			<input  style={{textAlign : 'center'}} value={list.name}   type="text"  disabled={ !editmodetableprice} 
 																			 onChange ={(e)=>handleronChangetableprice(e,index,'name')}
 																			/>
 
 																			</td>
-																			<td><input value={list.number} type="text"  disabled={ !editmodetableprice} 
+																			<td><input style={{textAlign : 'center'}} value={list.number} type="text"  disabled={ !editmodetableprice} 
 																			onChange ={(e)=>handleronChangetableprice(e,index,'number')}
 																			/></td>
-																			<td><input value={list.price}  type="text"  disabled={ !editmodetableprice}
+																			<td><input style={{textAlign : 'center'}} value={list.price}  type="text"  disabled={ !editmodetableprice}
 																				onChange ={(e)=>handleronChangetableprice(e,index,'price')}
 																			/></td>
 																			<td>{list.costvat}</td>
