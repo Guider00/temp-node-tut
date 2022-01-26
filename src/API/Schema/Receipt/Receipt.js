@@ -12,21 +12,22 @@ query{
                 {
                     id
                     name
-                    number
                     price
+                    number_item
                     vat
                     selectvat
                     type_price
                 }
                 Invoice{
                     id
+                    monthlybilling
                     status
                     lists
                     {
                         id
                         name
-                        number
                         price
+                        number_item
                         vat
                         selectvat
                         type_price

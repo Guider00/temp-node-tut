@@ -287,20 +287,25 @@ export const API_GET_Rooms = gql`
                 Checkinoption{
                     name
                     price
+                    number_item
                     calculate_mode
+                    selectvat
                     type_price
                 }
             }
 
             checkinInvoice{
                 id
+                docnumber
+                monthlybilling
+                duedateinvoice
                 status
                 printstatus
                 lists{
                     id
                     name
                     price
-                    number
+                    number_item
                     vat
                     selectvat
                     type_price
@@ -309,11 +314,12 @@ export const API_GET_Rooms = gql`
             checkinReceipt{
                 id
                 status
+                monthlybilling
                 lists{
                     id
                     name
                     price
-                    number
+                    number_item
                     vat
                     selectvat
                     type_price
@@ -328,7 +334,7 @@ export const API_GET_Rooms = gql`
                     id
                     name
                     price
-                    number
+                    number_item
                     vat
                     selectvat
                     type_price
@@ -342,7 +348,7 @@ export const API_GET_Rooms = gql`
                     id
                     name
                     price
-                    number
+                    number_item
                     vat
                     selectvat
                     type_price
@@ -357,7 +363,10 @@ export const API_GET_Rooms = gql`
                     id
                     name
                     price
-                    number
+                    number_item
+                    vat
+                    selectvat
+                    type_price
                 }
             }
             checkoutReceipt{
@@ -367,7 +376,7 @@ export const API_GET_Rooms = gql`
                     id
                     name
                     price
-                    number
+                    number_item
                     vat
                     selectvat
                     type_price

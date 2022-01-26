@@ -10,10 +10,12 @@ const schemaDefinition = new mongoose.Schema({
     branch:{type: String,default:""},
     Checkinoption:[
         {
-        name:{type:String ,default:""},
-        price:{type:String ,default:""},
-        calculate_mode:{type:String ,default:"ครั้งเดียว"},
-        type_price:{type:String ,default:"ราคาไม่รวมvat"}
+            name:{type:String ,default:""},
+            price:{type:String ,default:0},
+            number_item:{type:String ,default:1},
+            calculate_mode:{type:String ,default:"ครั้งเดียว"},
+            type_price:{type:String ,default:"ราคาไม่รวมvat"},
+            selectvat:{type:String ,default:"คิดvat"},
         }
     ]
 })

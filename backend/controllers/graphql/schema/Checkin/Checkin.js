@@ -6,16 +6,19 @@ input CheckinoptionInput{
    
     name:String,
     price:String,
+    number_item:String,
     calculate_mode:String,
     type_price:String,
-
+    selectvat:String,
 }
 type Checkinoption{
     id:String,
     name:String,
+    number_item:String,
     price:String,
     calculate_mode:String,
     type_price:String,
+    selectvat:String,
 }
 type Checkin{
     id:String

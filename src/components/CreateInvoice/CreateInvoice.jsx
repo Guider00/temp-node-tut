@@ -5,9 +5,10 @@ import { useEffect, useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { API_queryRooms} from '../../API/index';
 import { API_GET_Invoice,API_ADD_Invoice,API_DELETE_Invoice,API_UPDATE_Invoice} from '../../API/Schema/Invoice/Invoice'
+import { API_GET_Rooms , API_UPDATE_Room } from '../../API/Schema/Room/Room'
 
 
-
+ // new fileter room 
 const filter_rooms = (rooms , options_search) =>{
     let _filter_table = []
     if(rooms  &&  options_search){
@@ -15,24 +16,24 @@ const filter_rooms = (rooms , options_search) =>{
                 if(room){
                     if(options_search.keyword === 'ทั้งหมด'){
                         console.log("all")
-                        return (room.room && room.room.search(options_search.text) !== -1 ) ||
-                        (room.building && room.building.search(options_search.text) !== -1 ) || 
-                        (room.floor && room.floor.search(options_search.text) !== -1 ) ||
-                        (room.RoomType && room.RoomType.search(options_search.text) !== -1 ) ||
+                        return (room.name && room.name.search(options_search.text) !== -1 ) ||
+                        (room.floor.building && room.floor.building.name.search(options_search.text) !== -1 ) || 
+                        (room.floor && room.floor.name.search(options_search.text) !== -1 ) ||
+                        (room.RoomType && room.RoomType.name.search(options_search.text) !== -1 ) ||
                         (room.status && room.status.search(options_search.text) !== -1 ) ||
                         (options_search.text === '')	
                         ;
                     }else if (options_search.keyword === 'ห้อง'){                      
-                        return (room.room.search(options_search.text) !== -1 )||
+                        return (room.name.search(options_search.text) !== -1 )||
                         (options_search.text === '')	
                     }else if (options_search.keyword === 'อาคาร'){
-                        return (room.building.search(options_search.text) !== -1 )||
+                        return (room.floor.building.name.search(options_search.text) !== -1 )||
                         (options_search.text === '')	
                     }else if( options_search.keyword === 'ชั้น' ){
-                        return (room.floor.search(options_search.text) !== -1 )	||
+                        return (room.floor.name.search(options_search.text) !== -1 )	||
                         (options_search.text === '')	
                     }else if( options_search.keyword === 'ประเภทห้อง'){
-                        return (room.RoomType && room.RoomType.search(options_search.text) !== -1 )	||
+                        return (room.RoomType && room.RoomType.name.search(options_search.text) !== -1 )	||
                         (options_search.text === '')		
                     }else{
                         return false; 
@@ -62,8 +63,10 @@ export const CreateInvoic = () =>{
     const [addInvoice ,mutationaddInvoice ] = useMutation(API_ADD_Invoice);
     const [deleteInvoice ,mutationdeleteInvoice ] = useMutation(API_DELETE_Invoice);
     const [date , setdate ] = useState([]);
+
     const invoices = useQuery(API_GET_Invoice)
-    console.log('invoices',invoices)
+    const GET_Rooms = useQuery(API_GET_Rooms)
+
 
 
 
@@ -108,21 +111,37 @@ export const CreateInvoic = () =>{
     
 
 
-
-
     useEffect(
-        () => {
-            async function fetchData() {
-                let Rooms = await getRooms();
-                setrooms(Rooms);
-                setfilterrooms(Rooms);
-            }
+	 ()=>{	
+        if( GET_Rooms.data ){
+		let Rooms = GET_Rooms.data.Rooms
+        
+		console.log('Rooms', Rooms);
+	//	let _filter_rooms  =[]
+	//	_filter_rooms = filter_rooms([...Rooms] , options_search)
+		setrooms(Rooms);
+        setfilterrooms(Rooms);
+		setloadingpage(true);
 
-            fetchData();
-            setloadingpage(true);
-        },
-        [ loadingpage ]
+		}
+     },
+    [GET_Rooms ]    
     );
+
+    // useEffect(
+    //     () => {
+    //         async function fetchData() {
+    //             let Rooms = await getRooms();
+    //             console.log('Rooms',Rooms)
+    //             setrooms(Rooms);
+    //             setfilterrooms(Rooms);
+    //         }
+
+    //         fetchData();
+    //         setloadingpage(true);
+    //     },
+    //     [ loadingpage ]
+    // );
 
 
     
@@ -215,20 +234,22 @@ export const CreateInvoic = () =>{
     let sim_table = [{"":"","อาคาร":"อาคารเอ","ชั้น":"01","ประเภทห้อง":"ห้องแอร์","ชื่อห้อง":"101","ประเภทการเช่า":"รายเดือน"},{"":"","อาคาร":"อาคารเอ","ชั้น":"01","ประเภทห้อง":"ห้องแอร์","ชื่อห้อง":"101","ประเภทการเช่า":"รายเดือน"}]
     return (
         <div className = {styles.zone}>
-            
+           
             <div className = {styles.bigbox}>
+            
                 <div className = {styles.flex}>
                     <lable className = {styles.head}>ออกใบแจ้งหนี้</lable>
                     <div className = {styles.topic}> รอบบิล 
-                    <input type = "date" onChange={
-                        (e)=>{
-                            let _date = date
-                            _date =  e.target.value
-                            setdate(_date)
-                        }
-                    }/>
+                        <input type = "date" onChange={
+                            (e)=>{
+                                let _date = date
+                                _date =  e.target.value
+                                setdate(_date)
+                            }
+                        }/>
+                    </div>
                 </div>
-                </div>
+
                 <div className = {styles.normalbox}>
                     
                     <div className = {styles.displaybox}>
@@ -368,10 +389,10 @@ export const CreateInvoic = () =>{
                                                         
                                                     }}
                                                     /></td>
-                                                    <td width={'60px'} >{room.building ? room.building : '---'}</td>
-                                                    <td width={'60px'} >{room.floor ? room.floor : '---'}</td>
-                                                    <td width={'80px'} >{room.RoomType ? room.RoomType : '---'}</td>
-                                                    <td width={'60px'}>{room.room ? room.room : '---'}</td>
+                                                    <td width={'60px'} >{room.floor && room.floor.building ? room.floor.building.name : '---'}</td>
+                                                    <td width={'60px'} >{room.floor ? room.floor.name : '---'}</td>
+                                                    <td width={'80px'} >{room.RoomType ? room.RoomType.name : '---'}</td>
+                                                    <td width={'60px'}> {room.name ? room.name : '---'}</td>
                                                     <td width={'80px'} >{room.status ? room.status : '---'}</td>
                                                     
                                                 </tr>
@@ -411,15 +432,26 @@ export const CreateInvoic = () =>{
 
 
                 </div>
+                
                 <div className={styles.lastbutton}>
                     <button className = {styles.button} onClick={ ()=>{
+                        console.log('IDrooms',IDrooms)
                         IDrooms.map((room) =>{
 
                             try{
+                                
                                 let _res = addInvoice({
                                     variables: {
                                         input:{
-                                            status:`${room.status}`,
+                                            lists: room.checkin.Checkinoption.map(option =>{
+                                                if(option.calculate_mode === 'ครั้งเดียว' ){
+                                                    return null
+                                                }else{
+                                                    return {name :option.name ,price:option.price,number_item:option.number_item, type_price:option.type_price ,selectvat:option.selectvat }
+                                                }
+
+                                            }).filter(item=>item),
+                                          
                                             roomid: `${room.id}`,
                                             monthlybilling: `${ date === '' ? Date.now() : date}`,
                                             
@@ -465,7 +497,7 @@ export const CreateInvoic = () =>{
                         <i><CancelRoundedIcon/></i>
                         <div>ยกเลิก</div>
                 </button>
-            </div>
+                </div>
                 
             </div>
 

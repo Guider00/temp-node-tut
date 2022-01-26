@@ -5,8 +5,8 @@ const  { db }  =  require( "../../../models/Receipt/Receipt");
  const _Receiptschema = `
  input Receipt_listInput{
         name:String,
-        number:String,
         price:String,
+        number_item:String,
         vat:String,
         type_price:String,
         selectvat :String,
@@ -14,14 +14,15 @@ const  { db }  =  require( "../../../models/Receipt/Receipt");
 type Receipt_list {
         id:ID
         name:String,
-        number:String,
         price:String,
+         number_item:String,
         vat:String,
         type_price:String,
         selectvat :String,
 }
 type Receipt {
     id:ID!
+    docnumber:String,
     monthlybilling:Date,  
     status:String,
     printstatus : String,
@@ -31,6 +32,7 @@ type Receipt {
   }
 
 input ReceiptInput {
+    docnumber:String,
     monthlybilling:Date, 
     status:String,
     printstatus : String,

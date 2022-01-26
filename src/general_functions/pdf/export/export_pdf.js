@@ -6,6 +6,7 @@ const { AddTH_font }  =require('../AddFont/AddFont.js')
 const { formatDate , toHHMMSS }  = require('../../convert.js')
 
 export const export_booking_pdf = ( booking , owner , customer_details   ) =>{
+    const document_name ='ใบจอง'
     if(booking){
         console.log("Export booking ",booking)
 
@@ -279,7 +280,9 @@ export const export_booking_pdf = ( booking , owner , customer_details   ) =>{
     
 
     let src_pdf = doc.output('datauristring');
-    const iframe = `<iframe width='100%' type="application/pdf"   height='100%' src="${src_pdf}"></iframe>`
+    const iframe = `
+    <title>${document_name}</title>
+    <iframe width='100%' type="application/pdf"   height='100%' src="${src_pdf}"></iframe>`
     const x = window.open();
     x.document.title = "preview booking"
     x.document.open();
@@ -362,7 +365,7 @@ const  numbertothailanguage = (number) =>{
 }
 
 export const export_Contract = (contracts ) =>{
-
+    const document_name ='เอกสารสัญญา'
 
     
     if( contracts  && Array.isArray(contracts) ){
@@ -574,7 +577,7 @@ export const export_Contract = (contracts ) =>{
 
     let src_pdf = doc.output('datauristring');
     const iframe = `
-    <title>เอกสารสัญญา</title>
+    <title>${document_name}</title>
     <iframe width='100%' type="application/pdf"   height='100%' src="${src_pdf}"></iframe>
     `
     const x = window.open();
@@ -595,8 +598,8 @@ function openInNewTab(href) {
   }).click();
 }
  // ใบแจ้งหนี้  // 
-export const export_Invoice_pdf =  ( room ,table_prices) =>{
-   
+export const export_Invoice_pdf =  ( room ,table_prices , monthlybilling) =>{
+    const document_name ='ใบแจ้งหนี้'
     let business_Address_1 = "119 ซอยสีม่วงอนุสรณ์ ถนน สุทธิสาร"
     let business_Address_2 = "แขวง ดินแดง เขต ดินแดง กรุงเทพ 10400"
     let Taxid = "0105536011803"
@@ -606,12 +609,12 @@ export const export_Invoice_pdf =  ( room ,table_prices) =>{
     let Vat = 7;
     let Name =  room && room.data && room.data.members && room.data.members.length > 0 
                      ? `${room.data.members[0].name}  ${room.data.members[0].lastname} ` : '--------'
-    let Address1 = "........................................."   // ที่อยู่ ของผู้รับบิล
+    let Address1 =  room && room.data && room.data.members && room.data.members.length > 0 &&  room.data.members[0].address ?  room.data.members[0].address: "........................................."   // ที่อยู่ ของผู้รับบิล
     let Address2 = "........................................."    // ที่อยู่ ของผู้รับบิล
     let No =  ( room && room.data  &&  room.data.id )  ? room.data.id : "---"
     let _Date =  formatDate(new Date())
-    let HoneNo = room.name ? room.name : "------"
-    let Month = "12/2021"
+    let HoneNo = room && room.data.name ? room.data.name : "------"
+    let Month = monthlybilling ? monthlybilling:"-----"
     let Grand = "144.00"
     let Backforward = "0.00"
    
@@ -626,13 +629,19 @@ export const export_Invoice_pdf =  ( room ,table_prices) =>{
                     price:`---`,
                     amount:`---`
                  }]
-    let _total_price = 0
 
-    _table_prices.map(item => _total_price += (item && item.price ) ? 
-    
-     (item.type_price === "ราคารวมvat" ? Number(item.price * 100.0/107.0 ):Number(item.price) )
-     : 0 )
+    let _total_price = 0
+    let _total_vat = 0
+    _table_prices.map(item =>{ 
+       let _price  = (item && item.price ) ? (item.type_price === "ราคารวมvat" ? Number(item.price * 100.0/107.0 ):Number(item.price) ) : 0
+        _total_price +=_price;
+        _total_vat  +=  (item.selectvat === "คิดvat" ? _price*(Vat/100) : 0)
+        return 1;
+    })
     let Grandtotal = `${_total_price.toFixed(2)}`
+    let Vat_Grandtotal  =`${_total_vat.toFixed(2)}`
+    let End_Grandtotal = `${(_total_price+_total_vat).toFixed(2)}`
+
     const names = _table_prices.map(_table_prices => _table_prices.name);
     const Units = _table_prices.map(_table_prices => (_table_prices.unit !== undefined   ) ?  `${_table_prices.unit}`:'1' );
     let Price = 0
@@ -774,10 +783,10 @@ export const export_Invoice_pdf =  ( room ,table_prices) =>{
     doc.text(Grandtotal ,250, 160, {align: 'center'})
 
     doc.text(`Vat  ${Vat} %` ,168 , 170, {align: 'left'})
-    doc.text( `${ Number(Grandtotal*(Vat/100)).toFixed(2) }` ,250 , 170, {align: 'center'})
+    doc.text( `${ Number(Vat_Grandtotal).toFixed(2) }` ,250 , 170, {align: 'center'})
 
     doc.text("รวมเงินทั้งสิ้น/Grand Total" ,168 , 181, {align: 'left'})
-    doc.text( `${ (Grandtotal *(1+ (Vat/100)) ).toFixed(2) }`  ,250 , 181, {align: 'center'})
+    doc.text( `${ Number(End_Grandtotal).toFixed(2) }`  ,250 , 181, {align: 'center'})
 
     doc.setFontSize(14)
     doc.text("เขียนโดย" ,200 , 198, {align: 'left'})
@@ -794,7 +803,9 @@ export const export_Invoice_pdf =  ( room ,table_prices) =>{
 
     let src_pdf = doc.output('datauristring');
 
-    const iframe = `<iframe width='100%' type="application/pdf"   height='100%' src="${src_pdf}"></iframe>`
+    const iframe = `
+    <title>${document_name}</title>
+    <iframe width='100%' type="application/pdf"   height='100%' src="${src_pdf}"></iframe>`
     const x = window.open();
     x.document.title = "preview booking"
     x.document.open();
@@ -804,8 +815,6 @@ export const export_Invoice_pdf =  ( room ,table_prices) =>{
 
 
 }
-
-
  // ใบเสร็จ  //
  
 /**
@@ -813,6 +822,7 @@ export const export_Invoice_pdf =  ( room ,table_prices) =>{
  * @param  {} type
  */
 export const export_Receipt_pdf =  ( booking :Booking, type , table_prices  ) =>{
+    const document_name = 'ใบเสร็จ'
     let Vat = 7;
     if(booking  === undefined){
         alert('ไม่มีข้อมูลในการสร้าง ใบเสร็จ')
@@ -856,10 +866,17 @@ export const export_Receipt_pdf =  ( booking :Booking, type , table_prices  ) =>
     let Time = toHHMMSS(new Date())
   
     let _total_price = 0
-    _table_prices.map(item => _total_price += (item && item.price ) ? 
-     (item.type_price === "ราคารวมvat" ? Number(item.price * 100.0/107.0 ):Number(item.price) )
-     : 0 )
+    let _total_vat = 0
+    _table_prices.map(item =>{ 
+       let _price  = (item && item.price ) ? (item.type_price === "ราคารวมvat" ? Number(item.price * 100.0/107.0 ):Number(item.price) ) : 0
+        _total_price +=_price;
+        _total_vat  +=  (item.selectvat === "คิดvat" ? _price*(Vat/100) : 0)
+        return 1;
+    })
     let Grandtotal = `${_total_price.toFixed(2)}`
+    let Vat_Grandtotal  =`${_total_vat.toFixed(2)}`
+    let End_Grandtotal = `${(_total_price+_total_vat).toFixed(2)}`
+
     const names = _table_prices.map(_table_prices => _table_prices.name);
     const Units = _table_prices.map(_table_prices => (_table_prices.unit !== undefined   ) ?  `${_table_prices.unit}`:'1' );
     const Price = _table_prices.map(_table_prices => `${
@@ -1001,11 +1018,11 @@ export const export_Receipt_pdf =  ( booking :Booking, type , table_prices  ) =>
     doc.text("ชำระโดย" ,22, 160, {align: 'left'})
 
     doc.text(`Vat ${Vat}%` ,168 , 171, {align: 'left'})
-    doc.text(`${ Number(Grandtotal*(Vat/100)).toFixed(2) }` ,250 , 171, {align: 'left'})
+    doc.text(`${ Number(Vat_Grandtotal).toFixed(2) }` ,250 , 171, {align: 'left'})
     
 
     doc.text("รวมเงินทั้งสิ้น/Grand Total" ,168 , 181, {align: 'left'})
-    doc.text( `${ (Grandtotal *(1+ (Vat/100)) ).toFixed(2) }`  ,250 , 181, {align: 'left'})
+    doc.text( `${ Number(End_Grandtotal).toFixed(2) }`  ,250 , 181, {align: 'left'})
 
 
     doc.text(".................................................................................." ,50, 199, {align: 'left'})
@@ -1035,8 +1052,9 @@ export const export_Receipt_pdf =  ( booking :Booking, type , table_prices  ) =>
 
 }
 
-
-export const export_Reimbursement_pdf =  ( booking , type  ) =>{
+  // ใบคืนเงินประกัน
+export const export_Reimbursement_pdf =  ( booking , type ,table_price  ) =>{
+    const document_name = 'ใบคืนเงินประกัน'
     let Vat = 7;
     if(booking  === undefined){
         alert('ไม่มีข้อมูลในการสร้าง ใบเสร็จ')
@@ -1252,7 +1270,10 @@ export const export_Reimbursement_pdf =  ( booking , type  ) =>{
 
     let src_pdf = doc.output('datauristring');
 
-    const iframe = `<iframe width='100%' type="application/pdf"   height='100%' src="${src_pdf}"></iframe>`
+    const iframe = `
+    <title>${document_name}</title>
+    <iframe width='100%' type="application/pdf"   height='100%' src="${src_pdf}"></iframe>
+    `
     const x = window.open();
     x.document.title = "preview booking"
     x.document.open();
@@ -1264,9 +1285,9 @@ export const export_Reimbursement_pdf =  ( booking , type  ) =>{
 }
 
 
-
+    // ใบกำกับภาษี
 export const export_taxinvoice_pdf =  ( room ,table_price) =>{
-
+    const document_name = 'ใบกำกับภาษี'
     let business_Address_1 = "119 ซอยสีม่วงอนุสรณ์ ถนน สุทธิสาร"
     let business_Address_2 = "แขวง ดินแดง เขต ดินแดง กรุงเทพ 10400"
     let Taxid = "01055360118036666"
@@ -1487,7 +1508,10 @@ export const export_taxinvoice_pdf =  ( room ,table_price) =>{
 
     let src_pdf = doc.output('datauristring');
 
-    const iframe = `<iframe width='100%' type="application/pdf"   height='100%' src="${src_pdf}"></iframe>`
+    const iframe = `
+     <title>${document_name}</title>
+    <iframe width='100%' type="application/pdf"   height='100%' src="${src_pdf}"></iframe>
+    `
     const x = window.open();
     x.document.title = "preview booking"
     x.document.open();

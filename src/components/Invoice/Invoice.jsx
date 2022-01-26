@@ -17,7 +17,10 @@ import { useEffect , useState } from 'react';
 
 // invoice 
 import {  export_Invoice_pdf   } from '../../general_functions/pdf/export/export_pdf';
+import {  toYYMM , toYYMMDD   } from '../../general_functions/convert';
+
 //
+
 
 const filter_rooms = (rooms , options_search) =>{
     let _filter_table = []
@@ -58,6 +61,7 @@ const filter_rooms = (rooms , options_search) =>{
 
 
 
+
 export const Invoice = () => {
 
     const Invoice = useQuery(API_GET_Invoice)
@@ -71,15 +75,44 @@ export const Invoice = () => {
     const [rooms , setrooms] = useState([])
     const [ filterrooms , setfilterrooms] = useState([])
     const [ deleteInvoice , mutationdeleteInvoice] = useMutation(API_DELETE_Invoice);
+    const [ updateInvoice , mutationupdateInvoice] = useMutation(API_UPDATE_Invoice);
+    
     const [ selectroom , setselectroom ] = useState(null)
 
+    const sumlists_to_show  = (lists)=>{
+        if(lists && lists.length >0){
+            let _totalprice = 0
+            let _totalvat = 0
+            let _grandtotal  = 0
+            lists.map(list=>{
+                _totalprice += Number(list_to_show(list).price)
+                _totalvat += Number(list_to_show(list).vat)
+                _grandtotal += Number(list_to_show(list).total)
+            })
+
+            return ({totalprice : Number(_totalprice).toFixed(2) ,totalvat: Number(_totalvat).toFixed(2)  , grandtotal: Number(_grandtotal).toFixed(2) })
+        }else{
+            return ({totalprice : 0 ,totalvat:0, grandtotal:0 })
+        }
+    }
+    const list_to_show = (list) =>{
+        let data= list
+        let _price =  Number( (data && data.number_item ?  Number (data.number_item) : 1  ) * (data && data.price ?
+         Number( data.type_price === 'ราคารวมvat' ? Number( data.price )*100/107 : Number( data.price ) ) : 0)).toFixed(2)
+
+         let _vat =  Number(data.selectvat === 'คิดvat' ? _price* Number(data.vat)/100 : 0 ).toFixed(2)
+        
+         let total = Number( Number(_price) + Number(_vat) ).toFixed(2)
+
+        return ({price:_price ,vat:_vat , total: total})
+    }
 
     const selectAll = () =>{
         let myCheckboxMain = document.querySelector('#select-all');
         let myCheckboxName = document.getElementsByName('myCheckboxName');
         let myCheckboxNameLen = myCheckboxName.length
         
-        if(myCheckboxMain.checked == true  ){
+        if(myCheckboxMain.checked === true  ){
             for (var x=0; x<myCheckboxNameLen; x++){
                 myCheckboxName[x].checked=true;
                 
@@ -129,7 +162,7 @@ export const Invoice = () => {
         }
 
 
-    },[ Invoice ,rooms ,IDrooms])
+    },[ Invoice,Invoice.data ,rooms ,IDrooms])
 
 
     let header_table = ["","เลขที่ใบแจ้งหนี้","ชื่อห้อง","วันที่ออก","สถานะ","สถานะการพิมพ์","รอบบิล"]
@@ -241,7 +274,7 @@ export const Invoice = () => {
                                     </thead>
                             
                                     <tbody className ={styles.body}>{
-                                    ( tbsortingstyle_newmetoold? filterrooms :  [...filterrooms].reverse()).map( (data) =>
+                                    ( tbsortingstyle_newmetoold? [...filterrooms].reverse()  : [...filterrooms] ).map( (data) =>
                                         <tr
                                         onClick={()=>{
 
@@ -281,10 +314,10 @@ export const Invoice = () => {
                                                 </td>
                                             <td>{data && data.id}</td>
                                             <td>{data && data.Room && data.Room.name ? data.Room.name : '---'}</td>
-                                            <td>{data && data.duedateinvoice ? data.duedateinvoice : '---'}</td>
+                                            <td>{data && data.duedateinvoice ? toYYMMDD(data.duedateinvoice) : '---'}</td>
                                             <td>{data && data.status ? data.status : '---'}</td>
                                             <td>{data && data.printstatus ? data.printstatus : '---'}</td>
-                                            <td>{data && data.monthlybilling ? data.monthlybilling : '---'}</td>
+                                            <td>{data && data.monthlybilling ? toYYMM(data.monthlybilling) : '---'}</td>
                                             
                                         </tr>
                                             )
@@ -302,12 +335,37 @@ export const Invoice = () => {
                         <div className = {styles.box3}> 
                             <button className = {styles.button1}
                             onClick={()=>{
-                                if(selectroom && selectroom.Room &&  selectroom.lists){
-                                    console.log('exportInvoice',selectroom)
-                                    let _room = {data: selectroom.Room } 
-                                    export_Invoice_pdf(_room ,selectroom.lists)
+                                if(IDrooms && IDrooms.length > 0 ){
+                                    console.log('IDrooms',IDrooms)
+                                   
+                                   export_Invoice_pdf({data:IDrooms[0].Room} ,IDrooms[0].lists,toYYMM(IDrooms[0].monthlybilling) )
+
+                                    Promise.all(IDrooms).then((IDrooms)=>{
+                                       IDrooms.map(async (invoice)=>{
+                                           try{
+                                            let _res = await updateInvoice({
+                                                            variables: {
+                                                                id: invoice.id,
+                                                                input: {
+                                                                    printstatus:"พิมพ์สำเร็จ"
+                                                                }
+                                                            }
+                                            })
+                                            if(_res){
+                                                 console.log('เปลี่ยนสถานะการพิมพ์สำเร็จ')
+                                                 Invoice.refetch();
+                                            
+                                            }else{
+                                                 console.error('ไม่สามารถ update สถานะ Invoice ')
+                                            }
+                                           }catch(e){
+                                               console.error('ไม่สามารถ update สถานะ Invoice ')
+                                           }
+                                       })
+                                    })
+
                                 }else{
-                                    console.error('ไม่พบข้อมูลห้อง',selectroom)
+                                    console.error('ไม่ได้ทำการเลือกห้อง',IDrooms)
                                 }
                                 
                             }}
@@ -316,10 +374,37 @@ export const Invoice = () => {
                                 <div>พิมพ์ทั้งหมดที่เลือก</div>
                             </button>
                             <button className = {styles.button2}
+                             onClick={ async ()=>{
+                                
+                                  Promise.all(IDrooms).then((IDrooms)=>{
+                                       IDrooms.map(async (invoice)=>{
+                                           try{
+                                            let _res = await updateInvoice({
+                                                            variables: {
+                                                                id: invoice.id,
+                                                                input: {
+                                                                    status:"สำเร็จ"
+                                                                }
+                                                            }
+                                            })
+                                            if(_res){
+                                                 console.log('เปลี่ยนสถานะสำเร็จ')
+                                                 Invoice.refetch();
+                                            
+                                            }else{
+                                                 console.error('ไม่สามารถ update สถานะ Invoice ')
+                                            }
+                                           }catch(e){
+                                               console.error('ไม่สามารถ update สถานะ Invoice ')
+                                           }
+                                       })
+                                  })
+
+                             }}
                             >
                                 <i><PaymentIcon/></i>
                                 <div>ชำระทั้งหมดที่เลือก</div>
-                                </button>
+                            </button>
                             <button className = {styles.button3} 
                             onClick={ async ()=>{
                                 let myCheckboxName = document.getElementsByName('myCheckboxName');
@@ -341,7 +426,6 @@ export const Invoice = () => {
                                             for (var x=0; x<myCheckboxNameLen; x++){
                                                 myCheckboxName[x].checked=false;
                                                 }
-                                            
                                             let _IDrooms = IDrooms.filter(item => item !== item)
                                             setIDrooms(_IDrooms)
     
@@ -355,16 +439,6 @@ export const Invoice = () => {
                                         else{
                                             console.log('error')
                                             }
-    
-                                            
-                                            
-                                            
-    
-    
-    
-                                            
-    
-                                       
                                     }
                                     
                                     )
@@ -459,12 +533,13 @@ export const Invoice = () => {
                                             <td>{ data && data.name ?  data.name : ""}</td>
                                             <td>{ data && data.number ?  data.number : 1}</td>
                                             <td>{ data && data.price ?  data.price : 0}</td>
-                                            <td>{ (data && data.number ?  data.number : 1  ) * (data && data.price ?  data.price : 0)     }</td>
-                                            <td>{ (data && data.number ?  data.number : 1  ) * (data && data.price ?  data.price : 0) *0.07     }</td>
-                                            <td>{ (data && data.number ?  data.number : 1  ) * (data && data.price ?  data.price : 0) *1.07  }</td>
+                                            <td>{  list_to_show( data ).price }</td>
+                                            <td>{  list_to_show( data ).vat }</td>
+                                            <td>{  list_to_show( data ).total }</td>
+                                          
                                             <td>    
                                                 <input type="checkbox" 
-                                                    checked={data && data.selectvat  ? data.selectvat : true}
+                                                    checked={data && data.selectvat && data.selectvat === 'คิดvat' ? true : false}
                                                 />
                                             </td>
                                         </tr>
@@ -482,17 +557,24 @@ export const Invoice = () => {
                                 <div className = {styles.lastresult}>
                                     <div className = {styles.head} >
                                         <lable>รวม</lable>
-                                        <input className = {styles.onerem} placeholder='0.00'></input>
+                                        <input className = {styles.onerem} placeholder='0.00' value={sumlists_to_show(
+                                           selectroom && selectroom.lists ? selectroom.lists:  []
+                                            ).totalprice}>
+                                            </input>
                                         <lable className = {styles.onerem}>บาท</lable>
                                     </div>
                                     <div className = {styles.head}>
                                         <lable>ภาษีมูลค่าเพิ่ม 7%</lable>
-                                        <input className = {styles.onerem} placeholder='0.00'></input>
+                                        <input className = {styles.onerem} placeholder='0.00'value={sumlists_to_show(
+                                           selectroom && selectroom.lists ? selectroom.lists:  []
+                                            ).totalvat}></input>
                                         <lable className = {styles.onerem}>บาท</lable>
                                     </div>
                                     <div className = {styles.head}>
                                         <lable>รวมยอกเงินสุทธิ</lable>
-                                        <input className = {styles.onerem} placeholder='0.00'></input>
+                                        <input className = {styles.onerem} placeholder='0.00'value={sumlists_to_show(
+                                           selectroom && selectroom.lists ? selectroom.lists:  []
+                                            ).grandtotal}></input>
                                         <lable className = {styles.onerem}>บาท</lable>
                                     </div>
                                     

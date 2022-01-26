@@ -88,14 +88,7 @@ type BookinginRoom{
     confirm_booking:String
     receipt_number :String
 }
-type InvoiceinRoom{
-    id:ID!
-    duedateinvoice : String
-    monthlybilling : Date,
-    printstatus : String ,
-    status : String,
-    lists:[Invoice_list]
-}
+
 
 
   type Room {
@@ -115,13 +108,13 @@ type InvoiceinRoom{
 
     checkin : Checkin,
 
-    checkinInvoice:InvoiceinRoom,
+    checkinInvoice:Invoice,
     checkinReceipt:Receipt,
 
-    monthlyInvoice:InvoiceinRoom,
+    monthlyInvoice:Invoice,
     monthlyReceipt:Receipt,
 
-    checkoutInvoice:InvoiceinRoom,
+    checkoutInvoice:Invoice,
     checkoutReceipt:Receipt,
 
     Contract:Contract
