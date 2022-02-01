@@ -16,6 +16,10 @@ import { API_GET_Invoice,API_DELETE_Invoice,API_UPDATE_Invoice} from '../../API/
 import { useQuery , useMutation } from '@apollo/client';
 import { useEffect , useState } from 'react';
 
+//calendar
+import CalendarPicker from '../../subcomponents/Calendar/Calendar.js';
+import EventNoteIcon from '@mui/icons-material/EventNote';
+
 // invoice 
 import {  export_Invoices_pdf   } from '../../general_functions/pdf/export/export_pdf';
 import {  toYYMM , toYYMMDD   } from '../../general_functions/convert';
@@ -69,6 +73,90 @@ const filter_rooms = (datas , options_search) =>{
 
 
 export const Invoice = () => {
+
+
+    //Calendar
+
+
+const [defaultCalendar, setdefaultCalendar] = useState({
+    isLoading: false
+});
+const [DateStart , setDateStart] = useState([''])
+const [DateEnd , setDateEnd] = useState([''])
+const[DateRange, setDateRange] = useState([])
+
+
+const handleCalendar = (isLoading) =>{
+    setdefaultCalendar({
+        isLoading:isLoading,
+    })
+}
+
+const handleStart = (data) =>{
+    setDateRange(data)
+    console.log("DateRange",DateRange)
+}
+
+const CalendarDate = (choose) =>{
+
+    if(choose){
+        if(DateRange.from){
+            let iDay = parseInt(DateRange.from.day, 10);
+            let iMonth = parseInt(DateRange.from.month, 10);
+                
+            if(iDay < 10 && iMonth < 10){
+            let _DateStart = DateStart
+            _DateStart = DateRange.from.year + "-0" + DateRange.from.month + "-0" + DateRange.from.day
+            setDateStart(_DateStart)
+                
+            }if(iDay < 10 && iMonth >= 10){
+            let _DateStart = DateStart
+            _DateStart = DateRange.from.year + "-" + DateRange.from.month + "-0" + DateRange.from.day
+            setDateStart(_DateStart)
+
+            }if(iDay >= 10 && iMonth < 10){
+            let _DateStart = DateStart
+            _DateStart = DateRange.from.year + "-0" + DateRange.from.month + "-" + DateRange.from.day
+            setDateStart(_DateStart)
+
+            }
+                
+        }
+        if(DateRange.to){
+            
+
+            let iDay = parseInt(DateRange.to.day, 10);
+            let iMonth = parseInt(DateRange.to.month, 10);
+
+            if(iDay < 10 && iMonth < 10){
+            let _DateEnd = DateEnd
+            _DateEnd = DateRange.to.year + "-0" + DateRange.to.month + "-0" + DateRange.to.day
+            setDateEnd(_DateEnd)
+                    
+            }if(iDay < 10 && iMonth >= 10){
+            let _DateEnd = DateEnd
+            _DateEnd = DateRange.to.year + "-" + DateRange.to.month + "-0" + DateRange.to.day
+            setDateEnd(_DateEnd)
+    
+            }if(iDay >= 10 && iMonth < 10){
+            let _DateEnd = DateEnd
+            _DateEnd = DateRange.to.year + "-0" + DateRange.to.month + "-" + DateRange.to.day
+            setDateEnd(_DateEnd)
+    
+            }
+            
+        }
+
+        console.log("11111")
+        handleCalendar(false);
+    }else{
+        handleCalendar(false);
+        console.log("2222")
+    }
+
+}
+
+//Calendar
 
     const Invoice = useQuery(API_GET_Invoice)
 
@@ -213,6 +301,7 @@ export const Invoice = () => {
 
     return (
         <>
+        {defaultCalendar.isLoading && <CalendarPicker onCalendar={CalendarDate} start={handleStart} />}
             <div className = {styles.container}>
                 <div className = {styles.display}>
                     <div className = {styles.zone1}>
@@ -224,10 +313,19 @@ export const Invoice = () => {
                                 <div className = {styles.part1}>
                                     <input  type = "radio"></input>
                                     <lable className = {styles.onerem}>วันที่</lable>
-                                    <input className = {styles.side1} type = 'date'/>
+                                    <input className = {styles.side1} type = 'date' value={DateStart}/>
 
                                     <lable>ถึง</lable>
-                                    <input className = {styles.side2} type = 'date'/>
+                                    <input className = {styles.side2} type = 'date' value={DateEnd}/>
+
+                                    <button 
+                                    className={styles.calendar}
+									onClick={()=>{
+										setdefaultCalendar({
+											isLoading:true
+										})
+									}}
+									><EventNoteIcon/></button>
 
                                     <lable>แสดงผล</lable>
                                     <input className = {styles.side3} placeholder='0.00'></input>

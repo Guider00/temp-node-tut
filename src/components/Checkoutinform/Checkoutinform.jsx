@@ -12,7 +12,7 @@ import {
 
 import { API_UPDATE_Room ,API_GET_Rooms} from '../../API/Schema/Room/Room'
 import { API_queryRooms, API_queryBuildings, API_updateMeterRoomkwh, API_updateMeterRoomwater } from '../../API/index';
-import fetchData from '../../cores/axios';
+
 
 
 
@@ -147,7 +147,7 @@ export const Checkoutinform = () => {
 
 
 
-    let head_table = ["ห้อง" ,"อาคาร" ,"ชั้น" ,"ประเภทห้อง" ,"สถานะ" ,"ชื่อ" ,"นามสกุล" ,"เวลาที่ต้องย้ายออก","แจ้งย้ายออก"]
+    let head_table = ["ห้อง" ,"อาคาร" ,"ชั้น" ,"ประเภทห้อง" ,"สถานะ" ,"ชื่อ" ,"นามสกุล" ,"เวลาที่ต้องย้ายออก","ยกเลิกแจ้งย้ายออก"]
     let body_table = [{"ห้อง":"226","อาคาร":"อาคาร B","ชั้น":"2","ประเภทห้อง":"ห้องแอร์","สถานะ":"เช่า","ชื่อ":"ใจดี","นามสกุล":"มากมาย","วันที่ต้องย้ายออก":"12/12/2564"}]
     return (
         
@@ -214,7 +214,7 @@ export const Checkoutinform = () => {
                                     <td>{head_table[5]}</td>
                                     <td>{head_table[6]}</td>
                                     <td>{head_table[7]}</td>
-                                    {/* <td>{head_table[8]}</td> */}
+                                    <td>{head_table[8]}</td>
                                 </tr>
 
                             </thead>
@@ -253,67 +253,31 @@ export const Checkoutinform = () => {
                                                                 }
                                                             }}
                                                             /></td>
-                                                    {/* <td width={'60px'} >
+                                                    <td width={'50px'} >
                                                         <button 
-                                                    className={styles.CheckButton}
-                                                    onClick={() =>{
-        
-                                                        try{
-                                                            let _res = updateStatus({
-                                                            
-                                                                variables: {
-                                                                    id:`${room.id}`,
-                                                                    input:{
-                                                                        status: "ย้ายออก"
-                                                                        }
-                                                                    }});
+                                                        className={styles.cancelButton}
+                                                        onClick={()=>{
+                                                            try{
+                                                                let _res = updateStatus({
+                                                        
+                                                                    variables: {
+                                                                        id:`${room.id}`,
+                                                                        input:{
+                                                                            checkout_date: ``
+                                                                            }
+                                                                        }});
+    
+                                                                if(_res){
+                                                                    Checkoutinform.refetch()
+                                                                }
 
-                                                            if(_res){
-                                                                Checkoutinform.refetch()
-                                                            }
-//                                                            window.location.reload();
-                                    
-                                                        }catch(error){
-                                                            console.log(error)
-                                                        }
-                                                                
-                                                                
-                                                    }}
-                                                    
-                                                    ><CheckIcon/></button>
-                                                    <button
-                                                    className={styles.ClearButton}
-                                                    onClick={() =>{
-        
-                                                        try{
-                                                            let _res = updateStatus({
-                                                            
-                                                                variables: {
-                                                                    id:`${room.id}`,
-                                                                    input:{
-                                                                        status: "มีคนอยู่"
-                                                                        }
-                                                                    }});
-
-                                                            if(_res){
-                                                                Checkoutinform.refetch()
+                                                            }catch(error){
+                                                                console.log(error)
                                                             }
 
-                                    
-                                                        }catch(error){
-                                                            console.log(error)
-                                                        }
-                                                                
-                                                                
-                                                    }}
-                                                    ><ClearIcon/></button>
-                                                    
-                                                    
-                                                    
-                                                    
-                                                    
-                                                    
-                                                    </td> */}
+                                                        }}
+                                                        ><ClearIcon/></button>
+                                                    </td>
                                                 </tr>
                                             ) : null
                                     )}

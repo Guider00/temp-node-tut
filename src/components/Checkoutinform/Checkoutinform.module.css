@@ -150,3 +150,24 @@
     
     
 }
+
+.cancelButton{
+
+    cursor: pointer;
+    background-color: #fff;
+    border-radius:50px;
+    transition: 0.3s;
+    
+    
+    
+}
+.cancelButton:hover{
+
+    transform: scale(1.1);
+    color: red;
+    
+    
+    
+    
+    
+}

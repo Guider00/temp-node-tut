@@ -55,6 +55,57 @@ export const Address = () => {
             type:type,
         })
     }
+
+    const [blankAddress , setblankblankAddress] = useState({
+        id:"",
+        name:"",
+        code:"", 
+        tel:"",
+        no:"",
+        province:"",
+        road:"",
+        village:"",
+        boundary:"",
+        district:"",
+        alley:"",
+    })
+    
+    const [defaultAddress , setdefaultAddress] = useState({
+        id:"",
+        name:"",
+        code:"",
+        tel:"",
+        no:"",
+        province:"",
+        road:"",
+        village:"",
+        boundary:"",
+        district:"",
+        alley:"",
+    })
+
+   
+    const [blankReceipt , setblankReceipt] = useState({
+        id:"",
+        receipt:"",
+        invoice:"",
+        reimbursement:"",
+        booking:"",
+        bill:"",
+        accNo:"",
+        billDate:"",
+    })
+    
+    const [defaultData , setdefaultData] = useState({
+        id:"",
+        receipt:"",
+        invoice:"",
+        reimbursement:"",
+        booking:"",
+        bill:"",
+        accNo:"",
+        billDate:"",
+    })
     const savePage = () => {
         let saveButton = document.querySelector('#D1')
         let inputBox1 = document.getElementsByName('name')
@@ -128,157 +179,52 @@ export const Address = () => {
 
     }
 
-    const editPage = () => {
-
-        
-        let editButton = document.querySelector('#D2')
-        let inputBox1 = document.getElementsByName('name')
-        let inputBox2 = document.getElementsByName('code')
-        let inputBox3 = document.getElementsByName('no')
-        let inputBox4 = document.getElementsByName('tel')
-        let inputBox5 = document.getElementsByName('province')
-        let inputBox6 = document.getElementsByName('alley')
-        let inputBox7 = document.getElementsByName('district')
-        let inputBox8 = document.getElementsByName('boundary')
-        let inputBox9 = document.getElementsByName('village')
-        let inputBox10 = document.getElementsByName('road')
-        
-        
-
-        
-
-        if(editButton.click){
-            setDisabledAddress(false)
-            inputBox1[0].disabled=false;
-            inputBox2[0].disabled=false;
-            inputBox3[0].disabled=false;
-            inputBox4[0].disabled=false;
-            inputBox5[0].disabled=false;  
-            inputBox6[0].disabled=false;
-            inputBox7[0].disabled=false;
-            inputBox8[0].disabled=false;
-            inputBox9[0].disabled=false;
-            inputBox10[0].disabled=false;
-            
-
-
-            }
-        
-
-
-
-
-    }
-    const editPage2 = () => {
-
-        let editButton = document.querySelector('#D7')
-        let inputBox1 = document.getElementsByName('receipt')
-        let inputBox2 = document.getElementsByName('invoice')
-        let inputBox3 = document.getElementsByName('reimbursement')
-        let inputBox4 = document.getElementsByName('booking')
-        let inputBox5 = document.getElementsByName('bill')
-        let inputBox6 = document.getElementsByName('accNo')
-        
-
-        if(editButton.click){
-        setDisabledReceipt(false)
-        inputBox1[0].disabled=false;
-        inputBox2[0].disabled=false;
-        inputBox3[0].disabled=false;
-        inputBox4[0].disabled=false;
-        inputBox5[0].disabled=false;
-        inputBox6[0].disabled=false;
-
-            }
-        
-
-
-
-
-    }
+   
+   
+ 
     
-    const clearPage = async () => {
 
-        let inputBox1 = document.getElementsByName('name')
-        let inputBox2 = document.getElementsByName('code')
-        let inputBox3 = document.getElementsByName('no')
-        let inputBox4 = document.getElementsByName('tel')
-        let inputBox5 = document.getElementsByName('province')
-        let inputBox6 = document.getElementsByName('alley')
-        let inputBox7 = document.getElementsByName('district')
-        let inputBox8 = document.getElementsByName('boundary')
-        let inputBox9 = document.getElementsByName('village')
-        let inputBox10 = document.getElementsByName('road')
-        if(Address && Address.data  ){
-            setDisabledAddress(false)
-            inputBox1[0].disabled=false;
-            inputBox2[0].disabled=false;
-            inputBox3[0].disabled=false;
-            inputBox4[0].disabled=false;
-            inputBox5[0].disabled=false;  
-            inputBox6[0].disabled=false;
-            inputBox7[0].disabled=false;
-            inputBox8[0].disabled=false;
-            inputBox9[0].disabled=false;
-            inputBox10[0].disabled=false;  
+    const[disableReceipt , setDisableReceipt] = useState({
+        disabled : true ,
+        disabled2 : true
+    })
 
-
-            try{
-                
-                setdefaultAddress(blankAddress)
-            
-
-            } catch(error){
-                console.log(error)
-                
-            }        
+    const handleClick = (e) =>{
+        const {name} = e.target
+        if(name === 'clearPage-receipt'){
+            let tempDisabled = {...disableReceipt , disabled : false}
+            setDisableReceipt(tempDisabled)
+            setdefaultData(blankReceipt)
+            setDisabledReceipt(false)
 
         }
-       
-        
-    }
-
-    
-
-    const clearPage2 = async () => {
-
-        let inputBox1 = document.getElementsByName('receipt')
-        let inputBox2 = document.getElementsByName('invoice')
-        let inputBox3 = document.getElementsByName('reimbursement')
-        let inputBox4 = document.getElementsByName('booking')
-        let inputBox5 = document.getElementsByName('bill')
-        let inputBox6 = document.getElementsByName('accNo')
-        if(Address && Address.data ){
-
-                setDisabledReceipt(false)
-                inputBox1[0].disabled=false;
-                inputBox2[0].disabled=false;
-                inputBox3[0].disabled=false;
-                inputBox4[0].disabled=false;
-                inputBox5[0].disabled=false;  
-                inputBox6[0].disabled=false;
-            
-            
-            
-
-
-            try{
-                setdefaultData(blankReceipt)
-                
-                   
-    
-               
-
-            } catch(error){
-                console.log(error.message)
-            }        
+        if(name === 'edit-receipt'){
+            let tempDisabled = {...disableReceipt , disabled : false}
+            setDisableReceipt(tempDisabled)
+            setDisabledReceipt(false)
 
         }
-       
-        
+        if(name === 'clearPage-address'){
+            let tempDisabled = {...disableReceipt , disabled2 : false}
+            setDisableReceipt(tempDisabled)
+            setdefaultAddress(blankAddress)
+            setDisabledAddress(false)
+
+        }
+        if(name === 'edit-address'){
+            let tempDisabled = {...disableReceipt , disabled2 : false}
+            setDisableReceipt(tempDisabled)
+            setDisabledAddress(false)
+
+        }
     }
+
+    
+
+    
 
     const checkData = async (choose) =>{
+        
         if(choose && defaultDialog.type === '1' ){
             if(Receiptnumber && Receiptnumber.data && Receiptnumber.data.Receiptnumbers.length > 0 ){
                 // console.log('No-data')
@@ -297,10 +243,12 @@ export const Address = () => {
                             booking_number:`${defaultData.booking}`,
                             bill_number:`${defaultData.bill}`,
                             account_number:`${defaultData.accNo}`,
+                            bill_date:`${defaultData.billDate}`,
                             }
                         }
                     });
                     console.log(_res)
+                    
                     savePage2();
     
                 } catch(error){
@@ -310,6 +258,7 @@ export const Address = () => {
     
             }
             handleDialog('',false)
+            setDisabledReceipt(true)
 
         }else if(choose && defaultDialog.type === '2' ){
 
@@ -382,6 +331,7 @@ export const Address = () => {
     
             }
             handleDialog('',false)
+            setDisabledAddress(true)
 
 
 
@@ -402,185 +352,58 @@ export const Address = () => {
         
 
     }
-    const [blankAddress , setblankblankAddress] = useState({
-        id:"",
-        name:"",
-        code:"", 
-        tel:"",
-        no:"",
-        province:"",
-        road:"",
-        village:"",
-        boundary:"",
-        district:"",
-        alley:"",
-    })
-    
-    const [defaultAddress , setdefaultAddress] = useState({
-        id:"",
-        name:"",
-        code:"",
-        tel:"",
-        no:"",
-        province:"",
-        road:"",
-        village:"",
-        boundary:"",
-        district:"",
-        alley:"",
-    })
-
    
-    const [blankReceipt , setblankReceipt] = useState({
-        id:"",
-        receipt:"",
-        invoice:"",
-        reimbursement:"",
-        booking:"",
-        bill:"",
-        accNo:"",
-    })
-    
-    const [defaultData , setdefaultData] = useState({
-        id:"",
-        receipt:"",
-        invoice:"",
-        reimbursement:"",
-        booking:"",
-        bill:"",
-        accNo:"",
-    })
 
     const [disabledAddress, setDisabledAddress] = useState(true)
     const [disabledReceipt, setDisabledReceipt] = useState(true)
 
-
-    useEffect(()=>{
-        if(Receiptnumber && Receiptnumber.data && Receiptnumber.data.Receiptnumbers){
-            let _ReceiptNumber = ReceiptNumber
-            _ReceiptNumber = Receiptnumber.data.Receiptnumbers
-            setReceiptNumber(_ReceiptNumber);
-            if(Receiptnumber && Receiptnumber.data && Receiptnumber.data.Receiptnumbers.length > 0){
-
-                let inputBox1 = document.getElementsByName('receipt')
-                let inputBox2 = document.getElementsByName('invoice')
-                let inputBox3 = document.getElementsByName('reimbursement')
-                let inputBox4 = document.getElementsByName('booking')
-                let inputBox5 = document.getElementsByName('bill')
-                let inputBox6 = document.getElementsByName('accNo')
-                inputBox1[0].disabled=true;
-                inputBox2[0].disabled=true;
-                inputBox3[0].disabled=true;
-                inputBox4[0].disabled=true;
-                inputBox5[0].disabled=true;
-                inputBox6[0].disabled=true;
-                    
-               
-                
-
-                let _defaultData = defaultData
-                _defaultData['receipt'] = Receiptnumber.data.Receiptnumbers[0].receipt_number
-                _defaultData['bill'] = Receiptnumber.data.Receiptnumbers[0].bill_number
-                _defaultData['invoice'] = Receiptnumber.data.Receiptnumbers[0].invoice_number
-                _defaultData['reimbursement'] = Receiptnumber.data.Receiptnumbers[0].reimbursement_number
-                _defaultData['booking'] = Receiptnumber.data.Receiptnumbers[0].booking_number
-                _defaultData['id'] = Receiptnumber.data.Receiptnumbers[0].id
-                _defaultData['accNo'] = Receiptnumber.data.Receiptnumbers[0].account_number
-                setdefaultData(_defaultData)
-
-
-
-               
-                
-
-                
-            }
-        }
-       
-        
-        
-    },[Receiptnumber])
-    
-
-
-    useEffect(() =>{
-        if(images.length < 1) return;
-        const newImgeUrls = [];
-        images.forEach(image => newImgeUrls.push(URL.createObjectURL(image)));
-        setimageURLs(newImgeUrls);
-    }, [images])
-
-    function onImageChange(e) {
-        setImages([...e.target.files]);
-        
-    }
-
-    useEffect( () =>{
-        
-
-        if(Address && Address.data && Address.data.Addresss){
-            let _address = address
-            _address = [...Address.data.Addresss]
-            setaddress([..._address])
-
-            
-            
-            if(Address && Address.data &&  Address.data.Addresss.length > 0 ){
-
-                let saveButton = document.querySelector('#D1')
-                let inputBox1 = document.getElementsByName('name')
-                let inputBox2 = document.getElementsByName('code')
-                let inputBox3 = document.getElementsByName('no')
-                let inputBox4 = document.getElementsByName('tel')
-                let inputBox5 = document.getElementsByName('province')
-                let inputBox6 = document.getElementsByName('alley')
-                let inputBox7 = document.getElementsByName('district')
-                let inputBox8 = document.getElementsByName('boundary')
-                let inputBox9 = document.getElementsByName('village')
-                let inputBox10 = document.getElementsByName('road')
-
-                inputBox1[0].disabled=true;
-                inputBox2[0].disabled=true;
-                inputBox3[0].disabled=true;
-                inputBox4[0].disabled=true;
-                inputBox5[0].disabled=true;  
-                inputBox6[0].disabled=true;
-                inputBox7[0].disabled=true;
-                inputBox8[0].disabled=true;
-                inputBox9[0].disabled=true;
-                inputBox10[0].disabled=true;
-
-                let _defaultData = defaultAddress
-                _defaultData['name'] = Address.data.Addresss[0].name
-                _defaultData['code'] = Address.data.Addresss[0].code
-                _defaultData['id'] = Address.data.Addresss[0].id
-                _defaultData['tel'] = Address.data.Addresss[0].tel
-                _defaultData['no'] = Address.data.Addresss[0].no
-                _defaultData['province'] = Address.data.Addresss[0].province
-                _defaultData['road'] = Address.data.Addresss[0].road
-                _defaultData['village'] = Address.data.Addresss[0].village
-                _defaultData['boundary'] = Address.data.Addresss[0].boundary
-                _defaultData['district'] = Address.data.Addresss[0].district
-                _defaultData['alley'] = Address.data.Addresss[0].alley
-                setdefaultAddress(_defaultData)
-                
-            }
-            console.log('defaultAddressdefaultAddress',defaultAddress)           
-            
-        }
-        else{
-            Address.refetch()
-        }
-    },[Address]
-
-  
-    
-   )
-
-
+    //handleForm
 
     const [formErrors , setFormErrors] = useState({})
     const [formErrorsAddress , setFormErrorsAddress] = useState({})
+
+
+    const handleOnchangeReceipt = (e) =>{
+        
+        let _defaultData = defaultData
+
+        if(e.target.id === "receipt" || e.target.id === "invoice" || e.target.id === "reimbursement" || e.target.id === "booking" 
+        || e.target.id === "bill" || e.target.id === "accNo" ||  e.target.id === "billDate" ){
+            _defaultData[e.target.id] = e.target.value;
+            setdefaultData({..._defaultData})
+            setFormErrors(validate(_defaultData))
+            console.log('set',_defaultData)
+
+            
+        }
+        
+
+        console.log("FormErrors",formErrors)
+        
+
+    }
+
+    const handleOnchangeAddress = (e) =>{
+        
+        let _defaultAddress = defaultAddress
+
+        if(e.target.id === "name" || e.target.id === "tel" || e.target.id === "no" || e.target.id === "road" || e.target.id === "village"
+        || e.target.id === "alley" || e.target.id === "boundary" || e.target.id === "district" || e.target.id === "province" || e.target.id === "code"){
+            _defaultAddress[e.target.id] = e.target.value;
+            setdefaultAddress({..._defaultAddress})
+            setFormErrorsAddress(validateAddress(_defaultAddress))
+            console.log('set',_defaultAddress)
+
+            
+        }  
+        console.log("formErrorsAddress",formErrorsAddress)
+        
+
+    }
+
+    //handleForm
+
+    //validate
 
 
     const validate = (values) =>{
@@ -633,6 +456,14 @@ export const Address = () => {
             errors.accNo = "accNo is not Format!"
         }else if(values.accNo.length > 10){
             errors.accNo = "accNo is not Format!"
+        }
+
+        if(!values.billDate){
+            errors.billDate = "billDate is required!"
+        }else if(!(/^[A-Za-z0-9-]+$/).test(values.billDate)){
+            errors.billDate = "billDate is not Format!"
+        }else if(values.billDate.length > 10){
+            errors.billDate = "billDate is not Format!"
         }
 
 
@@ -745,148 +576,93 @@ export const Address = () => {
         return errors
 
     }
-    const handleOnchangeReceipt = (e) =>{
-        
-        let _defaultData = defaultData
 
-        if(e.target.id === "receipt"){
-            _defaultData[e.target.id] = e.target.value;
-            setdefaultData({..._defaultData})
-            setFormErrors(validate(_defaultData))
-            console.log('set',_defaultData)
+    //validate
 
-            
-        }else if(e.target.id === "invoice"){
-            _defaultData[e.target.id] = e.target.value;
-            setdefaultData({..._defaultData})
-            setFormErrors(validate(_defaultData))
-            console.log('set',_defaultData)
 
-            
-        }else if(e.target.id === "reimbursement"){
-            _defaultData[e.target.id] = e.target.value;
-            setdefaultData({..._defaultData})
-            setFormErrors(validate(_defaultData))
-            console.log('set',_defaultData)
+    useEffect(()=>{
+        if(Receiptnumber && Receiptnumber.data && Receiptnumber.data.Receiptnumbers){
+            let _ReceiptNumber = ReceiptNumber
+            _ReceiptNumber = Receiptnumber.data.Receiptnumbers
+            setReceiptNumber(_ReceiptNumber);
+            if(Receiptnumber && Receiptnumber.data && Receiptnumber.data.Receiptnumbers.length > 0){
 
-            
-        }else if(e.target.id === "booking"){
-            _defaultData[e.target.id] = e.target.value;
-            setdefaultData({..._defaultData})
-            setFormErrors(validate(_defaultData))
-            console.log('set',_defaultData)
 
-            
-        }else if(e.target.id === "bill"){
-            _defaultData[e.target.id] = e.target.value;
-            setdefaultData({..._defaultData})
-            setFormErrors(validate(_defaultData))
-            console.log('set',_defaultData)
+                let _defaultData = defaultData
+                _defaultData['receipt'] = Receiptnumber.data.Receiptnumbers[0].receipt_number
+                _defaultData['bill'] = Receiptnumber.data.Receiptnumbers[0].bill_number
+                _defaultData['invoice'] = Receiptnumber.data.Receiptnumbers[0].invoice_number
+                _defaultData['reimbursement'] = Receiptnumber.data.Receiptnumbers[0].reimbursement_number
+                _defaultData['booking'] = Receiptnumber.data.Receiptnumbers[0].booking_number
+                _defaultData['id'] = Receiptnumber.data.Receiptnumbers[0].id
+                _defaultData['accNo'] = Receiptnumber.data.Receiptnumbers[0].account_number
+                _defaultData['billDate'] = Receiptnumber.data.Receiptnumbers[0].bill_date
+                setdefaultData(_defaultData)
 
-            
-        }else if(e.target.id === "accNo"){
-            _defaultData[e.target.id] = e.target.value;
-            setdefaultData({..._defaultData})
-            setFormErrors(validate(_defaultData))
-            console.log('set',_defaultData)
-
-            
+            }
         }
+       
         
-
-        console.log("FormErrors",formErrors)
         
-
-    }
-
-    const handleOnchangeAddress = (e) =>{
-        
-        let _defaultAddress = defaultAddress
-
-        if(e.target.id === "name"){
-            _defaultAddress[e.target.id] = e.target.value;
-            setdefaultAddress({..._defaultAddress})
-            setFormErrorsAddress(validateAddress(_defaultAddress))
-            console.log('set',_defaultAddress)
-
-            
-        }else if(e.target.id === "tel"){
-            _defaultAddress[e.target.id] = e.target.value;
-            setdefaultAddress({..._defaultAddress})
-            setFormErrorsAddress(validateAddress(_defaultAddress))
-            console.log('set',_defaultAddress)
-
-            
-        }else if(e.target.id === "no"){
-            _defaultAddress[e.target.id] = e.target.value;
-            setdefaultAddress({..._defaultAddress})
-            setFormErrorsAddress(validateAddress(_defaultAddress))
-            console.log('set',_defaultAddress)
-
-            
-        }else if(e.target.id === "road"){
-            _defaultAddress[e.target.id] = e.target.value;
-            setdefaultAddress({..._defaultAddress})
-            setFormErrorsAddress(validateAddress(_defaultAddress))
-            console.log('set',_defaultAddress)
-
-            
-        }else if(e.target.id === "village"){
-            _defaultAddress[e.target.id] = e.target.value;
-            setdefaultAddress({..._defaultAddress})
-            setFormErrorsAddress(validateAddress(_defaultAddress))
-            console.log('set',_defaultAddress)
-
-            
-        }else if(e.target.id === "alley"){
-            _defaultAddress[e.target.id] = e.target.value;
-            setdefaultAddress({..._defaultAddress})
-            setFormErrorsAddress(validateAddress(_defaultAddress))
-            console.log('set',_defaultAddress)
-
-            
-        }else if(e.target.id === "boundary"){
-            _defaultAddress[e.target.id] = e.target.value;
-            setdefaultAddress({..._defaultAddress})
-            setFormErrorsAddress(validateAddress(_defaultAddress))
-            console.log('set',_defaultAddress)
-
-            
-        }else if(e.target.id === "district"){
-            _defaultAddress[e.target.id] = e.target.value;
-            setdefaultAddress({..._defaultAddress})
-            setFormErrorsAddress(validateAddress(_defaultAddress))
-            console.log('set',_defaultAddress)
-
-            
-        }else if(e.target.id === "province"){
-            _defaultAddress[e.target.id] = e.target.value;
-            setdefaultAddress({..._defaultAddress})
-            setFormErrorsAddress(validateAddress(_defaultAddress))
-            console.log('set',_defaultAddress)
-
-            
-        }else if(e.target.id === "code"){
-            _defaultAddress[e.target.id] = e.target.value;
-            setdefaultAddress({..._defaultAddress})
-            setFormErrorsAddress(validateAddress(_defaultAddress))
-            console.log('set',_defaultAddress)
-
-            
-        }
-
-        
-        console.log("formErrorsAddress",formErrorsAddress)
-        
-
-    }
-
+    },[Receiptnumber])
     
 
 
+    useEffect(() =>{
+        if(images.length < 1) return;
+        const newImgeUrls = [];
+        images.forEach(image => newImgeUrls.push(URL.createObjectURL(image)));
+        setimageURLs(newImgeUrls);
+    }, [images])
 
+    function onImageChange(e) {
+        setImages([...e.target.files]);
+        
+    }
 
+    useEffect( () =>{
+        
+
+        if(Address && Address.data && Address.data.Addresss){
+            let _address = address
+            _address = [...Address.data.Addresss]
+            setaddress([..._address])
+
+            
+            
+            if(Address && Address.data &&  Address.data.Addresss.length > 0 ){
+
+                
+
+                let _defaultData = defaultAddress
+                _defaultData['name'] = Address.data.Addresss[0].name
+                _defaultData['code'] = Address.data.Addresss[0].code
+                _defaultData['id'] = Address.data.Addresss[0].id
+                _defaultData['tel'] = Address.data.Addresss[0].tel
+                _defaultData['no'] = Address.data.Addresss[0].no
+                _defaultData['province'] = Address.data.Addresss[0].province
+                _defaultData['road'] = Address.data.Addresss[0].road
+                _defaultData['village'] = Address.data.Addresss[0].village
+                _defaultData['boundary'] = Address.data.Addresss[0].boundary
+                _defaultData['district'] = Address.data.Addresss[0].district
+                _defaultData['alley'] = Address.data.Addresss[0].alley
+                setdefaultAddress(_defaultData)
+                
+            }
+            console.log('defaultAddressdefaultAddress',defaultAddress)           
+            
+        }
+        else{
+            Address.refetch()
+        }
+    },[Address]
+
+  
     
+   )
+
+
+
     
     return (
         <div >
@@ -923,6 +699,7 @@ export const Address = () => {
                             <input className={styles.input}
                             id='name'
                             name='name'  
+                            disabled ={disableReceipt.disabled2}
                             value={defaultAddress.name}
                             style={formErrorsAddress.name === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                             onChange={handleOnchangeAddress}
@@ -934,6 +711,7 @@ export const Address = () => {
                             <input className={styles.input}
                             id='tel'
                             name='tel'  
+                            disabled ={disableReceipt.disabled2}
                             value={defaultAddress.tel}
                             style={formErrorsAddress.tel === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                             onChange={handleOnchangeAddress}
@@ -945,6 +723,7 @@ export const Address = () => {
                             <input className={styles.input}
                             id='no'
                             name='no'  
+                            disabled ={disableReceipt.disabled2}
                             value={defaultAddress.no}
                             style={formErrorsAddress.no === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                             onChange={handleOnchangeAddress}
@@ -956,6 +735,7 @@ export const Address = () => {
                             <input className={styles.input}
                             id='road'
                             name='road'  
+                            disabled ={disableReceipt.disabled2}
                             value={defaultAddress.road}
                             style={formErrorsAddress.road === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                             onChange={handleOnchangeAddress}
@@ -967,6 +747,7 @@ export const Address = () => {
                             <input className={styles.input}
                             id='village'
                             name='village'  
+                            disabled ={disableReceipt.disabled2}
                             value={defaultAddress.village}
                             style={formErrorsAddress.village === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                             onChange={handleOnchangeAddress}
@@ -978,6 +759,7 @@ export const Address = () => {
                             <input className={styles.input}
                             id='alley'
                             name='alley'  
+                            disabled ={disableReceipt.disabled2}
                             value={defaultAddress.alley}
                             style={formErrorsAddress.alley === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                             onChange={handleOnchangeAddress}
@@ -989,6 +771,7 @@ export const Address = () => {
                             <input className={styles.input}
                             id='boundary'
                             name='boundary'  
+                            disabled ={disableReceipt.disabled2}
                             value={defaultAddress.boundary}
                             style={formErrorsAddress.boundary === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                             onChange={handleOnchangeAddress}
@@ -1000,6 +783,7 @@ export const Address = () => {
                             <input className={styles.input}
                             id='district'
                             name='district'  
+                            disabled ={disableReceipt.disabled2}
                             value={defaultAddress.district}
                             style={formErrorsAddress.district === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                             onChange={handleOnchangeAddress}
@@ -1011,6 +795,7 @@ export const Address = () => {
                             <input className={styles.input}
                             id='province'
                             name='province'  
+                            disabled ={disableReceipt.disabled2}
                             value={defaultAddress.province}
                             style={formErrorsAddress.province === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                             onChange={handleOnchangeAddress}
@@ -1022,6 +807,7 @@ export const Address = () => {
                             <input className={styles.input}
                             id='code'
                             name='code'  
+                            disabled ={disableReceipt.disabled2}
                             value={defaultAddress.code}
                             style={formErrorsAddress.code === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                             onChange={handleOnchangeAddress}
@@ -1032,7 +818,10 @@ export const Address = () => {
                     
             </div>
             <div className={styles.save}>
-                <button disabled={disabledAddress} id="D1" onClick={()=>{
+                <button disabled={disabledAddress} 
+                id="D1" 
+                className={disabledAddress === false? styles.savestyle : styles.saveDisabled}
+                onClick={()=>{
                     if( Object.keys(formErrorsAddress).length === 0 ){
                         setdefaultDialog({
                             message:"Are you sure you want to save address?",
@@ -1052,9 +841,18 @@ export const Address = () => {
                     }
                     
                     
-                }} className={styles.savestyle}>SAVE</button>
-                <button id="D2" className={styles.savestyle} onClick={editPage}>EDIT</button>
-                <button id="D4" type="reset" className={styles.savestyle} onClick={clearPage}>CLEAR-ALL</button>
+                }} >SAVE</button>
+                <button 
+                id="D2" 
+                name="edit-address"
+                className={styles.savestyle} 
+                onClick={handleClick}>EDIT</button>
+                <button 
+                id="D4" 
+                type="reset" 
+                name="clearPage-address"
+                className={styles.savestyle} 
+                onClick={handleClick}>CLEAR-ALL</button>
 
             </div>
             </div>
@@ -1067,6 +865,7 @@ export const Address = () => {
                         <input  className={styles.input} 
                         name = 'receipt'
                         id = 'receipt'
+                        disabled = {disableReceipt.disabled}
                         value={defaultData.receipt}
                         style={formErrors.receipt === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                         onChange={handleOnchangeReceipt}
@@ -1078,6 +877,7 @@ export const Address = () => {
                             let inputBox = document.getElementsByName('receipt')
                             let e = ''
                             inputBox[0].disabled=false;
+                            setDisabledReceipt(false)
                             _defaultData['receipt'] = e
                             setdefaultData({..._defaultData})
                             
@@ -1090,6 +890,7 @@ export const Address = () => {
                         <input  className={styles.input}
                         name = 'invoice' 
                         id = 'invoice'
+                        disabled = {disableReceipt.disabled}
                         value={defaultData.invoice}
                         style={formErrors.invoice === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                         onChange={handleOnchangeReceipt}
@@ -1101,6 +902,7 @@ export const Address = () => {
                             let inputBox = document.getElementsByName('invoice')
                             let e = ''
                             inputBox[0].disabled=false;
+                            setDisabledReceipt(false)
                             _defaultData['invoice'] = e
                             setdefaultData({..._defaultData})
                             
@@ -1114,6 +916,7 @@ export const Address = () => {
                         <input  className={styles.input} 
                         name = 'reimbursement'
                         id = 'reimbursement'
+                        disabled = {disableReceipt.disabled}
                         value={defaultData.reimbursement}
                         style={formErrors.reimbursement === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                         onChange={handleOnchangeReceipt}
@@ -1125,6 +928,7 @@ export const Address = () => {
                             let inputBox = document.getElementsByName('reimbursement')
                             let e = ''
                             inputBox[0].disabled=false;
+                            setDisabledReceipt(false)
                             _defaultData['reimbursement'] = e
                             setdefaultData({..._defaultData})
                             
@@ -1138,6 +942,7 @@ export const Address = () => {
                         <input  className={styles.input} 
                         name = 'booking'
                         id = 'booking'
+                        disabled = {disableReceipt.disabled}
                         value={defaultData.booking}
                         style={formErrors.booking === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                         onChange={handleOnchangeReceipt}
@@ -1149,6 +954,7 @@ export const Address = () => {
                             let inputBox = document.getElementsByName('booking')
                             let e = ''
                             inputBox[0].disabled=false;
+                            setDisabledReceipt(false)
                             _defaultData['booking'] = e
                             setdefaultData({..._defaultData})
                             
@@ -1163,6 +969,7 @@ export const Address = () => {
                         <input  className={styles.input} 
                         name = 'bill'
                         id = 'bill'
+                        disabled = {disableReceipt.disabled}
                         value={defaultData.bill}
                         style={formErrors.bill === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                         onChange={handleOnchangeReceipt}
@@ -1174,6 +981,7 @@ export const Address = () => {
                             let inputBox = document.getElementsByName('bill')
                             let e = ''
                             inputBox[0].disabled=false;
+                            setDisabledReceipt(false)
                             _defaultData['bill'] = e
                             setdefaultData({..._defaultData})
                             
@@ -1191,6 +999,7 @@ export const Address = () => {
                         <input  className={styles.input} 
                         name = 'accNo'
                         id = 'accNo'
+                        disabled = {disableReceipt.disabled}
                         value={defaultData.accNo}
                         style={formErrors.accNo === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
                         onChange={handleOnchangeReceipt}
@@ -1202,7 +1011,38 @@ export const Address = () => {
                             let inputBox = document.getElementsByName('accNo')
                             let e = ''
                             inputBox[0].disabled=false;
+                            setDisabledReceipt(false)
                             _defaultData['accNo'] = e
+                            setdefaultData({..._defaultData})
+                            
+
+                        }}
+                        ><DeleteOutlineIcon/></button>
+                        
+
+
+                    </div>
+                    <div className={styles.inputstyle}>
+                        
+                        <lable className={styles.text}>วันที่คิดรอบบิล</lable>
+                        <input  className={styles.billDate} 
+                        name = 'billDate'
+                        id = 'billDate'
+                        type='date'
+                        disabled = {disableReceipt.disabled}
+                        value={defaultData.billDate}
+                        style={formErrors.billDate === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
+                        onChange={handleOnchangeReceipt}
+                        />
+                        <lable className={styles.error}>{formErrors.billDate}</lable>
+                        <button className={styles.deleteOne} 
+                        onClick={()=>{
+                            let _defaultData = defaultData
+                            let inputBox = document.getElementsByName('billDate')
+                            let e = ''
+                            inputBox[0].disabled=false;
+                            setDisabledReceipt(false)
+                            _defaultData['billDate'] = e
                             setdefaultData({..._defaultData})
                             
 
@@ -1215,7 +1055,7 @@ export const Address = () => {
                 </div>
                 <div className={styles.save}>
                 <button id = "D6" 
-                className={styles.savestyle} 
+                className={disabledReceipt == false ? styles.savestyle : styles.saveDisabled} 
                 disabled = {disabledReceipt}
                 onClick={()=>{
                    if( Object.keys(formErrors).length === 0 ){
@@ -1239,8 +1079,16 @@ export const Address = () => {
                     
                     
                 }}>SAVE</button>
-                <button  id = "D7" className={styles.savestyle} onClick={editPage2}>EDIT</button>
-                <button  id = "D8" className={styles.savestyle} onClick={clearPage2}>CLEAR-ALL</button>
+                <button  
+                id = "D7" 
+                name = 'edit-receipt'
+                className={styles.savestyle} 
+                onClick={handleClick}>EDIT</button>
+                <button  
+                id = "D8" 
+                name = 'clearPage-receipt'
+                className={styles.savestyle} 
+                onClick={handleClick}>CLEAR-ALL</button>
                 
                 </div>
                 

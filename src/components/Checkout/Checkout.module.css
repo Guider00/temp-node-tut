@@ -103,6 +103,7 @@
     justify-content: center;
     margin-bottom: 2rem;
     margin-left: 2rem;
+    
 }
 .headertable{
     flex-basis: 100%;
@@ -171,4 +172,33 @@
     flex-basis: 100%;
     margin-left: 2rem;
     margin-right: 2rem;
+}
+
+
+.table{
+    width: 100%;
+    height: 100%;
+    margin: 0.5rem ;
+    
+}
+.table>.tableStyles{
+    
+    margin: 1rem ;
+    text-align: center;
+    align-items: center;
+    
+}
+.table>.tableStyles>.thead{
+    background-color: rgb(192, 119, 85);
+    margin: 1rem ;
+    text-align: center;
+    align-items: center;
+    
+}
+.table>.tableStyles>.tbody{
+    
+    margin: 1rem ;
+    text-align: center;
+    align-items: center;
+    
 }

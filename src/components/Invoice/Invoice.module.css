@@ -12,6 +12,9 @@
 
     
 }
+.calendar{
+    margin-right: 0.5rem ;
+}
 
 
 
@@ -176,8 +179,8 @@
 
 .container>.display>.zone1>.box1>.date>.part1>.side3{
     
-    width: 20%;
-    margin: 1rem;
+    width: 15%;
+    margin: 0.5rem;
     
     
     

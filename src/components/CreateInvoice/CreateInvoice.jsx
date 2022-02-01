@@ -113,6 +113,54 @@ export const CreateInvoic = () =>{
     };
     
 
+   
+    const handleChange = (e) =>{
+        const {name , checked } = e.target
+        if(name === 'selectAll'){
+            let tempRoom = filterrooms.filter((room) => (room && room.status === 'จอง') || room.status === 'มีคนอยู่').map((room)=>{
+                return{...room , isChecked:checked}
+            })
+            setfilterrooms(tempRoom)
+            let data = tempRoom.filter(item => item.isChecked === true)
+            setIDrooms(data)
+
+        }else{
+            let tempRoom = filterrooms.map((room)=> room.id === name ?{...room , isChecked: checked} : room)
+            setfilterrooms(tempRoom)
+            let data = tempRoom.filter(item => item.isChecked === true)
+            setIDrooms(data)
+        }
+        console.log("IDrooms",IDrooms)
+
+
+    }
+
+
+
+
+    const [disabled , setDisabled] = useState({
+        disabled : true ,
+        D1 : true , 
+        D2 : false
+    })
+    
+    const handleChangeRadio = (e) =>{
+        const { name } = e.target
+        if(name === 'D1'){
+            let D2 = {...disabled , D1 : true , D2 : false , disabled : true}
+            setDisabled(D2)
+            
+        }
+        if(name === 'D2'){
+            let D1 = {...disabled , D1 : false , D2 : true , disabled : false}
+            setDisabled(D1)
+            
+            
+        }
+        
+        
+        
+    }
 
     useEffect(
 	 ()=>{	
@@ -228,6 +276,7 @@ export const CreateInvoic = () =>{
 
     }
    
+
     
     
 
@@ -264,11 +313,11 @@ export const CreateInvoic = () =>{
                             
 
                             <div className = {styles.radio1}>
-                            <input type = "radio" id = 'D1' name = 'D1' checked = 'true' onChange={supPage}></input>
+                            <input type = "radio" id = 'D1' name = 'D1' checked = {disabled.D1} onChange={handleChangeRadio}/>
                             <lable>ออกตามรอบบิล</lable>
                             </div>
                             <div className = {styles.radio2}>
-                            <input type = "radio" id = 'D2' name = 'D2'  onChange={mainPage}></input>
+                            <input type = "radio" id = 'D2' name = 'D2' checked = {disabled.D2} onChange={handleChangeRadio}/>
                             <lable>กำหนดเอง</lable>
                             </div>
 
@@ -284,13 +333,13 @@ export const CreateInvoic = () =>{
                                 <p>คิดค่าเช่า</p>
                             </div>
                             <div className = {styles.inputbox} >
-                                <input type = "date" name = 'D3' disabled = 'disabled'></input>
+                                <input type = "date" name = 'D3' disabled = {disabled.disabled}></input>
                                 <p></p>
-                                <input type = "date" name = 'D3' disabled = 'disabled'></input>
+                                <input type = "date" name = 'D3' disabled = {disabled.disabled}></input>
                                 <p></p>
-                                <input type = "checkbox" name = 'D3' disabled = 'disabled'></input>
+                                <input type = "checkbox" name = 'D3' disabled = {disabled.disabled}></input>
                                 <p></p>
-                                <input type = "text" name = 'D3' disabled = 'disabled'></input>
+                                <input type = "text" name = 'D3' disabled = {disabled.disabled}></input>
                             </div>
                         </div>
                             
@@ -301,7 +350,7 @@ export const CreateInvoic = () =>{
                         </div>
                         <div  className = {styles.text}>
                             <div className = {styles.flex}>
-                                <input className = {styles.checkbox}  type = "checkbox" name ="selectAll" id="select-all" onChange={selectAll} ></input>
+                                <input className = {styles.checkbox}  type = "checkbox" name ="selectAll" id="select-all" onChange={handleChange} ></input>
                                 <div className = {styles.all} >เลือกทั้งหมด </div>
 
                             </div>
@@ -368,29 +417,12 @@ export const CreateInvoic = () =>{
                                         (room) =>
                                             room ? (
                                                 <tr>
-                                                    <td width={'20px'} ><input type='checkbox' 
-                                                    name = "myCheckboxName" 
+                                                    <td width={'20px'} ><input 
+                                                    type='checkbox' 
+                                                    name = {room.id}
                                                     id="myCheckboxId"
-                                                    
-                                                    onChange={(e)=>{
-                                                        const checked = e.target.checked
-                                                        const id = room.id
-                                                        if(checked){
-                                                            let _IDrooms = IDrooms
-                                                        _IDrooms = [..._IDrooms,room]
-                                                        setIDrooms(_IDrooms)
-                                                        console.log('_IDrooms',_IDrooms)
-
-                                                        }
-                                                        else{
-                                                            let _IDrooms = IDrooms.filter(item => item.id !== id)
-                                                            setIDrooms(_IDrooms)
-                                                            console.log('_IDrooms',_IDrooms)
-                                                            
-                                
-                                                        }
-                                                        
-                                                    }}
+                                                    checked = {room.isChecked}
+                                                    onChange={handleChange}
                                                     /></td>
                                                     <td width={'60px'} >{room.floor && room.floor.building ? room.floor.building.name : '---'}</td>
                                                     <td width={'60px'} >{room.floor ? room.floor.name : '---'}</td>
