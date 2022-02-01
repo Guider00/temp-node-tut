@@ -6,6 +6,7 @@ const { AddTH_font }  =require('../AddFont/AddFont.js')
 const { formatDate , toHHMMSS }  = require('../../convert.js')
 
 export const export_booking_pdf = ( booking , owner , customer_details   ) =>{
+    const document_name ='ใบจอง'
     if(booking){
         console.log("Export booking ",booking)
 
@@ -279,7 +280,9 @@ export const export_booking_pdf = ( booking , owner , customer_details   ) =>{
     
 
     let src_pdf = doc.output('datauristring');
-    const iframe = `<iframe width='100%' type="application/pdf"   height='100%' src="${src_pdf}"></iframe>`
+    const iframe = `
+    <title>${document_name}</title>
+    <iframe width='100%' type="application/pdf"   height='100%' src="${src_pdf}"></iframe>`
     const x = window.open();
     x.document.title = "preview booking"
     x.document.open();
@@ -362,7 +365,7 @@ const  numbertothailanguage = (number) =>{
 }
 
 export const export_Contract = (contracts ) =>{
-
+    const document_name ='เอกสารสัญญา'
 
     
     if( contracts  && Array.isArray(contracts) ){
@@ -574,7 +577,7 @@ export const export_Contract = (contracts ) =>{
 
     let src_pdf = doc.output('datauristring');
     const iframe = `
-    <title>เอกสารสัญญา</title>
+    <title>${document_name}</title>
     <iframe width='100%' type="application/pdf"   height='100%' src="${src_pdf}"></iframe>
     `
     const x = window.open();
@@ -595,8 +598,8 @@ function openInNewTab(href) {
   }).click();
 }
  // ใบแจ้งหนี้  // 
-export const export_Invoice_pdf =  ( room ,table_prices) =>{
-   
+export const export_Invoice_pdf =  ( room ,table_prices , monthlybilling) =>{
+    const document_name ='ใบแจ้งหนี้'
     let business_Address_1 = "119 ซอยสีม่วงอนุสรณ์ ถนน สุทธิสาร"
     let business_Address_2 = "แขวง ดินแดง เขต ดินแดง กรุงเทพ 10400"
     let Taxid = "0105536011803"
@@ -606,12 +609,12 @@ export const export_Invoice_pdf =  ( room ,table_prices) =>{
     let Vat = 7;
     let Name =  room && room.data && room.data.members && room.data.members.length > 0 
                      ? `${room.data.members[0].name}  ${room.data.members[0].lastname} ` : '--------'
-    let Address1 = "........................................."   // ที่อยู่ ของผู้รับบิล
+    let Address1 =  room && room.data && room.data.members && room.data.members.length > 0 &&  room.data.members[0].address ?  room.data.members[0].address: "........................................."   // ที่อยู่ ของผู้รับบิล
     let Address2 = "........................................."    // ที่อยู่ ของผู้รับบิล
     let No =  ( room && room.data  &&  room.data.id )  ? room.data.id : "---"
     let _Date =  formatDate(new Date())
-    let HoneNo = room.name ? room.name : "------"
-    let Month = "12/2021"
+    let HoneNo = room && room.data.name ? room.data.name : "------"
+    let Month = monthlybilling ? monthlybilling:"-----"
     let Grand = "144.00"
     let Backforward = "0.00"
    
@@ -626,13 +629,19 @@ export const export_Invoice_pdf =  ( room ,table_prices) =>{
                     price:`---`,
                     amount:`---`
                  }]
-    let _total_price = 0
 
-    _table_prices.map(item => _total_price += (item && item.price ) ? 
-    
-     (item.type_price === "ราคารวมvat" ? Number(item.price * 100.0/107.0 ):Number(item.price) )
-     : 0 )
+    let _total_price = 0
+    let _total_vat = 0
+    _table_prices.map(item =>{ 
+       let _price  = (item && item.price ) ? (item.type_price === "ราคารวมvat" ? Number(item.price * 100.0/107.0 ):Number(item.price) ) : 0
+        _total_price +=_price;
+        _total_vat  +=  (item.selectvat === "คิดvat" ? _price*(Vat/100) : 0)
+        return 1;
+    })
     let Grandtotal = `${_total_price.toFixed(2)}`
+    let Vat_Grandtotal  =`${_total_vat.toFixed(2)}`
+    let End_Grandtotal = `${(_total_price+_total_vat).toFixed(2)}`
+
     const names = _table_prices.map(_table_prices => _table_prices.name);
     const Units = _table_prices.map(_table_prices => (_table_prices.unit !== undefined   ) ?  `${_table_prices.unit}`:'1' );
     let Price = 0
@@ -774,10 +783,10 @@ export const export_Invoice_pdf =  ( room ,table_prices) =>{
     doc.text(Grandtotal ,250, 160, {align: 'center'})
 
     doc.text(`Vat  ${Vat} %` ,168 , 170, {align: 'left'})
-    doc.text( `${ Number(Grandtotal*(Vat/100)).toFixed(2) }` ,250 , 170, {align: 'center'})
+    doc.text( `${ Number(Vat_Grandtotal).toFixed(2) }` ,250 , 170, {align: 'center'})
 
     doc.text("รวมเงินทั้งสิ้น/Grand Total" ,168 , 181, {align: 'left'})
-    doc.text( `${ (Grandtotal *(1+ (Vat/100)) ).toFixed(2) }`  ,250 , 181, {align: 'center'})
+    doc.text( `${ Number(End_Grandtotal).toFixed(2) }`  ,250 , 181, {align: 'center'})
 
     doc.setFontSize(14)
     doc.text("เขียนโดย" ,200 , 198, {align: 'left'})
@@ -794,7 +803,9 @@ export const export_Invoice_pdf =  ( room ,table_prices) =>{
 
     let src_pdf = doc.output('datauristring');
 
-    const iframe = `<iframe width='100%' type="application/pdf"   height='100%' src="${src_pdf}"></iframe>`
+    const iframe = `
+    <title>${document_name}</title>
+    <iframe width='100%' type="application/pdf"   height='100%' src="${src_pdf}"></iframe>`
     const x = window.open();
     x.document.title = "preview booking"
     x.document.open();
@@ -805,7 +816,226 @@ export const export_Invoice_pdf =  ( room ,table_prices) =>{
 
 }
 
+export const export_Invoices_pdf = (Invoices) =>{
 
+
+   
+    if(Invoices && Array.isArray(Invoices) ) {
+        const document_name ='ใบแจ้งหนี้'
+        let business_Address_1 = "119 ซอยสีม่วงอนุสรณ์ ถนน สุทธิสาร"
+        let business_Address_2 = "แขวง ดินแดง เขต ดินแดง กรุงเทพ 10400"
+        let Taxid = "0105536011803"
+        let Phone = "026937005"
+        let Email = "sales@primusthai.com" 
+        const doc = new jsPDF('l', 'mm', [297, 210]);
+        Invoices.map( (Invoice,index) =>{
+            console.log(Invoice)
+            let Name =  Invoice && Invoice.Room && Invoice.Room.members && Invoice.Room.members.length > 0 
+                            ? `${Invoice.Room.members[0].name}  ${Invoice.Room.members[0].lastname} ` : '--------'
+            let Address1 =  Invoice && Invoice.Room && Invoice.Room.members && Invoice.Room.members.length > 0 &&  Invoice.Room.members[0].address ?  Invoice.Room.members[0].address: "........................................."   // ที่อยู่ ของผู้รับบิล
+        
+            let No =  ( Invoice && Invoice  &&  Invoice.id )  ? Invoice.id : "---"
+            let _Date =  formatDate(new Date())
+            let HoneNo = Invoice &&  Invoice.Room && Invoice.Room.name ? Invoice.Room.name : "------"
+            let Month = Invoice && Invoice.monthlybilling ? Invoice.monthlybilling:"-----"
+            let Grand = "144.00"
+            let Backforward = "0.00"
+            let Vat = 7;
+            let Money  = "0.00"
+            let credit = "  ...คนออกบิล... "
+            let Time = toHHMMSS(new Date())
+            let note = "เลขที่บัญชี 2878-xxxxxx-x"
+
+            let _table_prices = Invoice && Invoice.lists ?Invoice.lists :[{ 
+                            name:`----` ,
+                            number_item:"1",
+                            price:`---`,
+                            amount:`---`
+                        }]
+
+            let _total_price = 0
+            let _total_vat = 0
+            _table_prices.map(item =>{ 
+            let _price  = (item && item.price ) ? (item.type_price === "ราคารวมvat" ? Number(item.price * 100.0/107.0 ):Number(item.price) ) : 0
+                _total_price +=_price;
+                _total_vat  +=  (item.selectvat === "คิดvat" ? _price*(Vat/100) : 0)
+                return 1;
+            })
+            let Grandtotal = `${_total_price.toFixed(2)}`
+            let Vat_Grandtotal  =`${_total_vat.toFixed(2)}`
+            let End_Grandtotal = `${(_total_price+_total_vat).toFixed(2)}`
+
+            const names = _table_prices.map(_table_prices => _table_prices.name);
+            const Units = _table_prices.map(_table_prices => (_table_prices.number_item !== undefined   ) ?  `${_table_prices.number_item}`:'1' );
+            let Price = 0
+            let Amount = 0
+            
+        
+                Price = _table_prices.map(_table_prices => `${
+                    (_table_prices.type_price === "ราคารวมvat" ? Number(_table_prices.price * 100.0/107.0 ).toFixed(2):Number(_table_prices.price).toFixed(2) )
+                }`);
+                Amount = _table_prices.map(_table_prices =>  `${
+                    (_table_prices.type_price === "ราคารวมvat" ? Number(_table_prices.price * 100.0/107.0 ).toFixed(2):Number(_table_prices.price).toFixed(2) )
+                    *Number( (_table_prices.number_item !== undefined   ) ?  `${_table_prices.number_item}`:'1')}`  );
+        
+
+
+            AddTH_font(doc ,'yourCustomFont.ttf' )
+            doc.addFont('yourCustomFont.ttf', 'yourCustomFont', 'normal');
+            doc.setFont('yourCustomFont');
+
+            //bill box
+            doc.setDrawColor(52, 192, 54)
+            doc.setFillColor(52, 192, 54)
+            doc.roundedRect(200, 8, 78, 13, 6, 6, 'FD')
+
+            //main box
+            doc.setDrawColor(70, 250, 100)
+            doc.setFillColor(70, 250, 100)
+            doc.rect(15,25,265,160 , 'FD')
+
+            //address box
+            doc.setDrawColor(155, 255, 168)
+            doc.setFillColor(155, 255, 168)
+            doc.roundedRect(17,27,173,46,6,6, 'FD')
+
+            doc.roundedRect(193,27,38,10,6,6 , 'FD')
+            doc.roundedRect(232,27,47,10,6,6 , 'FD')
+            doc.roundedRect(193,39,38,10,6,6 , 'FD')
+            doc.roundedRect(232,39,47,10,6,6 , 'FD')
+            doc.roundedRect(193,51,38,10,6,6 , 'FD')
+            doc.roundedRect(232,51,47,10,6,6 , 'FD')
+            doc.roundedRect(193,63,38,10,6,6 , 'FD')
+            doc.roundedRect(232,63,47,10,6,6 , 'FD')
+
+            //topic box
+            doc.setDrawColor(40, 120, 50)
+            doc.setFillColor(40, 210, 60)
+            doc.rect(17,75,138,15, 'FD' )
+            doc.rect(155,75,38,15, 'FD' )
+            doc.rect(193,75,38,15, 'FD' )
+            doc.rect(231,75,46,15, 'FD' )
+
+            doc.setDrawColor(40, 120, 50)
+            doc.setFillColor(155, 255, 168)
+            
+            //result box
+            doc.rect(17,90,138,60, 'FD' )
+            doc.rect(155,90,38,60, 'FD' )
+            doc.rect(193,90,38,60, 'FD' )
+            doc.rect(231,90,46,60, 'FD' )
+
+            //last box
+            doc.setFillColor(255,255,255)
+            doc.rect(17,152,138,31, 'FD' )
+            doc.setFillColor(180,250,190)
+            doc.rect(155,152,76,10, 'FD' )
+            doc.rect(155,162,76,11, 'FD' )
+            doc.rect(155,173,76,10, 'FD' )
+            
+            doc.rect(231,152,46,10, 'FD' )
+            doc.rect(231,162,46,11, 'FD' )
+            doc.rect(231,173,46,10, 'FD' )
+
+            
+            doc.setFontSize(16)
+            doc.text(business_Address_1 ,15, 11, {align: 'left'})
+            doc.setFontSize(14)
+            doc.text(business_Address_2 ,15, 16, {align: 'left'})
+
+            doc.setFontSize(14)
+            doc.text("Tax ID : ",15, 21, {align: 'left'})
+            doc.text(Taxid,27, 21, {align: 'left'})
+            doc.text("โทร : ",52, 21, {align: 'left'})
+            doc.text(Phone,60, 21, {align: 'left'})
+            doc.text("Email :",82, 21, {align: 'left'})
+            doc.text(Email,93, 21, {align: 'left'})
+
+            doc.setFontSize(18)
+            doc.text("ใบแจ้งค่าใช้จ่าย/DEBIT NOTE" ,210, 16, {align: 'left'})
+
+            doc.setFontSize(14)
+            doc.text("ชื่อ/Name :" ,20, 40, {align: 'left'})
+            doc.setFontSize(16)
+            doc.text(Name ,50, 40, {align: 'left'})
+        
+        
+            doc.setFontSize(14)
+            doc.text("ที่อยู่/Address :" ,20, 55, {align: 'left'})
+            doc.setFontSize(16)
+            doc.text(Address1 ,50, 55, {align: 'left'})
+            // doc.text(Address2 ,50, 60, {align: 'left'})
+
+            doc.setFontSize(14)
+            doc.text("เลขที่/No. " ,205, 33, {align: 'left'})
+            doc.setFontSize(12)
+            doc.text(No ,240, 33, {align: 'left'})
+            doc.setFontSize(14)
+            doc.text("วันที่/Date " ,205, 45, {align: 'left'})
+            doc.setFontSize(16)
+            doc.text(_Date ,245, 45, {align: 'left'})
+            doc.setFontSize(14)
+            doc.text("ประจำเดือน/Month " ,198, 57, {align: 'left'})
+            doc.setFontSize(16)
+            doc.text(Month ,245, 57, {align: 'left'})
+            doc.setFontSize(14)
+            doc.text("บ้านเลขที่/Home No. " ,198, 69, {align: 'left'})
+            doc.setFontSize(16)
+            doc.text(HoneNo ,245, 69, {align: 'left'})
+
+            
+            doc.setFontSize(16)
+            doc.text("รายการ" ,73, 82, {align: 'left'})
+            doc.text("Description" ,70, 86, {align: 'left'})
+            
+            doc.text("จำนวนหน่วย" ,163, 82, {align: 'left'})
+            doc.text("Units" ,167, 86, {align: 'left'})
+            
+            doc.text("ราคาต่อหน่วย" ,202, 82, {align: 'left'})
+            doc.text("Unit /Price" ,203 , 86, {align: 'left'})
+
+            doc.text("จำนวนเงิน" ,246, 82, {align: 'left'})
+            doc.text("Amount" ,247 , 86, {align: 'left'})
+
+
+            doc.text("หมายเหตุ :" ,22, 160, {align: 'left'})
+            doc.text(note ,40, 160, {align: 'left'})
+            doc.text(`รวมทั้งหมด/Total` ,168, 160, {align: 'left'})
+            doc.text(Grandtotal ,250, 160, {align: 'center'})
+
+            doc.text(`Vat  ${Vat} %` ,168 , 170, {align: 'left'})
+            doc.text( `${ Number(Vat_Grandtotal).toFixed(2) }` ,250 , 170, {align: 'center'})
+
+            doc.text("รวมเงินทั้งสิ้น/Grand Total" ,168 , 181, {align: 'left'})
+            doc.text( `${ Number(End_Grandtotal).toFixed(2) }`  ,250 , 181, {align: 'center'})
+
+            doc.setFontSize(14)
+            doc.text("เขียนโดย" ,200 , 198, {align: 'left'})
+            doc.text(credit,215 , 198, {align: 'left'})
+            doc.text("วันที่" ,240 , 198, {align: 'left'})
+            doc.text(_Date ,248 , 198, {align: 'left'})
+            doc.text(Time ,268 , 198, {align: 'left'})
+
+            doc.setFontSize(16)
+            doc.text(names ,20, 95, {align: 'left'})
+            doc.text(Units ,170, 95, {align: 'left'})
+            doc.text(Price ,210, 95, {align: 'left'})
+            doc.text(Amount ,250, 95, {align: 'left'})
+            if(Invoices.length>0 && index !== (Invoices.length - 1 ) ){
+             doc.addPage()
+            }
+        })
+        let src_pdf = doc.output('datauristring');
+        const iframe = `
+        <title>${document_name}</title>
+        <iframe width='100%' type="application/pdf"   height='100%' src="${src_pdf}"></iframe>`
+        const x = window.open();
+        x.document.title = "preview booking"
+        x.document.open();
+        x.document.write(iframe);
+        x.document.close();
+    }
+}
  // ใบเสร็จ  //
  
 /**
@@ -813,6 +1043,7 @@ export const export_Invoice_pdf =  ( room ,table_prices) =>{
  * @param  {} type
  */
 export const export_Receipt_pdf =  ( booking :Booking, type , table_prices  ) =>{
+    const document_name = 'ใบเสร็จ'
     let Vat = 7;
     if(booking  === undefined){
         alert('ไม่มีข้อมูลในการสร้าง ใบเสร็จ')
@@ -856,10 +1087,17 @@ export const export_Receipt_pdf =  ( booking :Booking, type , table_prices  ) =>
     let Time = toHHMMSS(new Date())
   
     let _total_price = 0
-    _table_prices.map(item => _total_price += (item && item.price ) ? 
-     (item.type_price === "ราคารวมvat" ? Number(item.price * 100.0/107.0 ):Number(item.price) )
-     : 0 )
+    let _total_vat = 0
+    _table_prices.map(item =>{ 
+       let _price  = (item && item.price ) ? (item.type_price === "ราคารวมvat" ? Number(item.price * 100.0/107.0 ):Number(item.price) ) : 0
+        _total_price +=_price;
+        _total_vat  +=  (item.selectvat === "คิดvat" ? _price*(Vat/100) : 0)
+        return 1;
+    })
     let Grandtotal = `${_total_price.toFixed(2)}`
+    let Vat_Grandtotal  =`${_total_vat.toFixed(2)}`
+    let End_Grandtotal = `${(_total_price+_total_vat).toFixed(2)}`
+
     const names = _table_prices.map(_table_prices => _table_prices.name);
     const Units = _table_prices.map(_table_prices => (_table_prices.unit !== undefined   ) ?  `${_table_prices.unit}`:'1' );
     const Price = _table_prices.map(_table_prices => `${
@@ -998,12 +1236,12 @@ export const export_Receipt_pdf =  ( booking :Booking, type , table_prices  ) =>
     doc.setFontSize(16)
     doc.text("ชำระโดย" ,22, 170, {align: 'left'})
 
-    doc.text(`Vat ${Vat}%` ,168 , 181, {align: 'left'})
-    doc.text(`${ Number(Grandtotal*(Vat/100)).toFixed(2) }` ,250 , 181, {align: 'left'})
+    doc.text(`Vat ${Vat}%` ,168 , 171, {align: 'left'})
+    doc.text(`${ Number(Vat_Grandtotal).toFixed(2) }` ,250 , 171, {align: 'left'})
     
 
-    doc.text("รวมเงินทั้งสิ้น/Grand Total" ,168 , 191, {align: 'left'})
-    doc.text( `${ (Grandtotal *(1+ (Vat/100)) ).toFixed(2) }`  ,250 , 191, {align: 'left'})
+    doc.text("รวมเงินทั้งสิ้น/Grand Total" ,168 , 181, {align: 'left'})
+    doc.text( `${ Number(End_Grandtotal).toFixed(2) }`  ,250 , 181, {align: 'left'})
 
 
     doc.text(".................................................................................." ,50, 209, {align: 'left'})
@@ -1033,8 +1271,9 @@ export const export_Receipt_pdf =  ( booking :Booking, type , table_prices  ) =>
 
 }
 
-
-export const export_Reimbursement_pdf =  ( booking , type  ) =>{
+  // ใบคืนเงินประกัน
+export const export_Reimbursement_pdf =  ( booking , type ,table_price  ) =>{
+    const document_name = 'ใบคืนเงินประกัน'
     let Vat = 7;
     if(booking  === undefined){
         alert('ไม่มีข้อมูลในการสร้าง ใบเสร็จ')
@@ -1248,7 +1487,10 @@ export const export_Reimbursement_pdf =  ( booking , type  ) =>{
 
     let src_pdf = doc.output('datauristring');
 
-    const iframe = `<iframe width='100%' type="application/pdf"   height='100%' src="${src_pdf}"></iframe>`
+    const iframe = `
+    <title>${document_name}</title>
+    <iframe width='100%' type="application/pdf"   height='100%' src="${src_pdf}"></iframe>
+    `
     const x = window.open();
     x.document.title = "preview booking"
     x.document.open();
@@ -1260,9 +1502,9 @@ export const export_Reimbursement_pdf =  ( booking , type  ) =>{
 }
 
 
-
+    // ใบกำกับภาษี
 export const export_taxinvoice_pdf =  ( room ,table_price) =>{
-
+    const document_name = 'ใบกำกับภาษี'
     let business_Address_1 = "119 ซอยสีม่วงอนุสรณ์ ถนน สุทธิสาร"
     let business_Address_2 = "แขวง ดินแดง เขต ดินแดง กรุงเทพ 10400"
     let Taxid = "01055360118036666"
@@ -1480,7 +1722,10 @@ export const export_taxinvoice_pdf =  ( room ,table_price) =>{
 
     let src_pdf = doc.output('datauristring');
 
-    const iframe = `<iframe width='100%' type="application/pdf"   height='100%' src="${src_pdf}"></iframe>`
+    const iframe = `
+     <title>${document_name}</title>
+    <iframe width='100%' type="application/pdf"   height='100%' src="${src_pdf}"></iframe>
+    `
     const x = window.open();
     x.document.title = "preview booking"
     x.document.open();

@@ -13,9 +13,13 @@ query{
         number_day_rent
         branch
         Checkinoption{
-            id
-            name
-            price
+                    id
+                    name
+                    price
+                    number_item
+                    calculate_mode
+                    selectvat
+                    type_price
         }
     }
 }

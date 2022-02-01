@@ -33,7 +33,7 @@ export const API_GET_Reimbursement = gql`
                         lists {
                                 id
                                 name
-                                number
+                                number_item
                                 price
                                 selectvat
                                 type_price

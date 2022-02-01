@@ -9,7 +9,7 @@ const schemaDefinition = new mongoose.Schema({
   
     surname: {type:String},
     Check_in: {type:String},
-    status: {type:String},
+    status: {type:String ,default:"สัญญารอการยืนยัน"},
     Check_out: {type:String},
     checkinid:{type:String},
     roomid:{type:String}

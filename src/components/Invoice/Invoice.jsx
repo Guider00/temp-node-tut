@@ -6,6 +6,7 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -20,34 +21,38 @@ import CalendarPicker from '../../subcomponents/Calendar/Calendar.js';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 
 // invoice 
-import {  export_Invoice_pdf   } from '../../general_functions/pdf/export/export_pdf';
+import {  export_Invoices_pdf   } from '../../general_functions/pdf/export/export_pdf';
+import {  toYYMM , toYYMMDD   } from '../../general_functions/convert';
+
 //
 
 
-
-
-
-const filter_rooms = (rooms , options_search) =>{
+const filter_rooms = (datas , options_search) =>{
     let _filter_table = []
-    if(rooms && options_search){
-        _filter_table = rooms.filter(room =>{
-            if(room){
+    if(datas && options_search){
+        _filter_table = datas.filter(data =>{
+            if(data){
                 if(options_search.keyword === 'ทั้งหมด'){
-                    return (room.id && room.id.search(options_search) !== -1) ||
-                    (room.monthlybilling && room.monthlybilling.search(options_search.text) !== -1 ) ||
-                    (room.room.name && room.room.name.search(options_search.text) !== -1 ) ||
-                    (room.status && room.status.search(options_search.text) !== -1 ) ||
-                    (room.printstatus && room.printstatus.search(options_search.text) !== -1 ) ||
-                    (room.duedateinvoice && room.duedateinvoice.search(options_search.text) !== -1 ) ||
+                                    console.log('data.Room',data)
+
+                    return (data.id && data.id.search(options_search.text) !== -1) ||
+                    (data.monthlybilling && data.monthlybilling.search(options_search.text) !== -1 ) ||
+                    (data.Room && data.Room.name && data.Room.name.search(options_search.text) !== -1 ) ||
+                    (data.status && data.status.search(options_search.text) !== -1 ) ||
+                    (data.printstatus && data.printstatus.search(options_search.text) !== -1 ) ||
+                    (data.duedateinvoice && data.duedateinvoice.search(options_search.text) !== -1 ) ||
                     (options_search.text === '')	
-                }else if(options_search.keyword === 'ชื่อห้อง'){
-                    return (room.room.name.search(options_search.text) !== -1 )||
+                }else if( data.Room && data.Room.name && options_search.keyword === 'ชื่อห้อง'){
+                    return (data.Room.name.search(options_search.text) !== -1 )||
                     (options_search.text === '')
 
-                }else if(options_search.keyword === 'รอบบิล'){
-                    return (room.monthlybilling.search(options_search.text) !== -1 )||
+                }else if( data.monthlybilling && options_search.keyword === 'รอบบิล'){
+                    return (data.monthlybilling.search(options_search.text) !== -1 )||
                     (options_search.text === '')
 
+                }else if(data.Room && data.Room.members && options_search.keyword === 'ชื่อผู้พักอาศัย'){
+                    return (data.Room.members[0].name.search(options_search.text) !== -1 )||
+                    (options_search.text === '')
                 }else{
                     return false;
                 }
@@ -62,6 +67,7 @@ const filter_rooms = (rooms , options_search) =>{
 
 
 }
+
 
 
 
@@ -163,15 +169,45 @@ const CalendarDate = (choose) =>{
     const [rooms , setrooms] = useState([])
     const [ filterrooms , setfilterrooms] = useState([])
     const [ deleteInvoice , mutationdeleteInvoice] = useMutation(API_DELETE_Invoice);
+    const [ updateInvoice , mutationupdateInvoice] = useMutation(API_UPDATE_Invoice);
+    
     const [ selectroom , setselectroom ] = useState(null)
+    const [ editselectroom , seteditselectroom] = useState(false)
 
+    const sumlists_to_show  = (lists)=>{
+        if(lists && lists.length >0){
+            let _totalprice = 0
+            let _totalvat = 0
+            let _grandtotal  = 0
+            lists.map(list=>{
+                _totalprice += Number(list_to_show(list).price)
+                _totalvat += Number(list_to_show(list).vat)
+                _grandtotal += Number(list_to_show(list).total)
+            })
+
+            return ({totalprice : Number(_totalprice).toFixed(2) ,totalvat: Number(_totalvat).toFixed(2)  , grandtotal: Number(_grandtotal).toFixed(2) })
+        }else{
+            return ({totalprice : 0 ,totalvat:0, grandtotal:0 })
+        }
+    }
+    const list_to_show = (list) =>{
+        let data= list
+        let _price =  Number( (data && data.number_item ?  Number (data.number_item) : 1  ) * (data && data.price ?
+         Number( data.type_price === 'ราคารวมvat' ? Number( data.price )*100/107 : Number( data.price ) ) : 0)).toFixed(2)
+
+         let _vat =  Number(data.selectvat === 'คิดvat' ? _price* Number(data.vat)/100 : 0 ).toFixed(2)
+        
+         let total = Number( Number(_price) + Number(_vat) ).toFixed(2)
+
+        return ({price:_price ,vat:_vat , total: total})
+    }
 
     const selectAll = () =>{
         let myCheckboxMain = document.querySelector('#select-all');
         let myCheckboxName = document.getElementsByName('myCheckboxName');
         let myCheckboxNameLen = myCheckboxName.length
         
-        if(myCheckboxMain.checked == true  ){
+        if(myCheckboxMain.checked === true  ){
             for (var x=0; x<myCheckboxNameLen; x++){
                 myCheckboxName[x].checked=true;
                 
@@ -207,21 +243,51 @@ const CalendarDate = (choose) =>{
          let _tbsortingstyle_newtoold = tbsortingstyle_newmetoold
          settbsortingstyle_newmetoold(!_tbsortingstyle_newtoold)
     }
+    const handlerchangelist =(e ,index)=>{
+        let  _selectroom = JSON.parse( JSON.stringify(selectroom))
+        if(e.target.name === 'name'){
+          // console.log(e.target.value)
+        }else if(e.target.name === 'number_item'){
+            // validate data 
+        }else if(e.target.name === 'price'){
+            // validate data 
+        }
+        _selectroom.lists[index][e.target.name] = e.target.value
+        setselectroom(_selectroom)
+    }
 
 
     useEffect (()=>{
-
+        console.log('update')
         if(Invoice && Invoice.data && Invoice.data.Invoices){
             let _rooms = rooms
             _rooms = Invoice.data.Invoices
             setrooms(_rooms)
-            setfilterrooms(_rooms)
+             setfilterrooms(_rooms)
+         
+           if(selectroom){
+
+            let _selectroom  = _rooms.find(_room=> _room.id === selectroom.id)
+            console.log('_selectroom',_selectroom)
+                if(_selectroom){
+                         setselectroom({..._selectroom})
+                }
+           }
+           if(_rooms && IDrooms){
+             let _invoice_ids =  IDrooms.map(_invoice =>_invoice.id )
+               let _IDrooms  = _rooms.filter(_room=> _invoice_ids.findIndex(id => id === _room.id)  !== -1 )
+             //    setIDrooms(_IDrooms)
+               console.log('_IDrooms',_IDrooms)
+           }
+            
+           
+           
             console.log('Invoice.data',Invoice.data.Invoices)
             
         }
 
 
-    },[ Invoice ,rooms ,IDrooms])
+    },[ Invoice,Invoice.data ,rooms])
 
 
     let header_table = ["","เลขที่ใบแจ้งหนี้","ชื่อห้อง","วันที่ออก","สถานะ","สถานะการพิมพ์","รอบบิล"]
@@ -305,6 +371,7 @@ const CalendarDate = (choose) =>{
                                         <option>ทั้งหมด</option>
                                         <option>ชื่อห้อง</option>
                                         <option>รอบบิล</option>
+                                        <option>ชื่อผู้พักอาศัย</option>
             
                                         
                                     </select>
@@ -343,14 +410,15 @@ const CalendarDate = (choose) =>{
                                     </thead>
                             
                                     <tbody className ={styles.body}>{
-                                    ( tbsortingstyle_newmetoold? filterrooms :  [...filterrooms].reverse()).map( (data) =>
+                                    ( tbsortingstyle_newmetoold? [...filterrooms].reverse()  : [...filterrooms] ).map( (data) =>
                                         <tr
                                         onClick={()=>{
 
                                             let _selectroom = selectroom
                                             _selectroom = data
                                             setselectroom(_selectroom)
-                                
+                                            seteditselectroom(false)
+
                                         }}
                                         style={{
                                             background:  (selectroom && (selectroom.id === data.id)) ? 'lightgray' : 'none'
@@ -366,7 +434,7 @@ const CalendarDate = (choose) =>{
                                                     const checked = e.target.checked
                                                     const id = data.id
                                                     if(checked){
-                                                        let _IDrooms = IDrooms
+                                                        let _IDrooms =JSON.parse (JSON.stringify( IDrooms))
                                                         _IDrooms = [..._IDrooms,data]
                                                         setIDrooms(_IDrooms)
                                                         console.log("check",_IDrooms)
@@ -383,10 +451,11 @@ const CalendarDate = (choose) =>{
                                                 </td>
                                             <td>{data && data.id}</td>
                                             <td>{data && data.Room && data.Room.name ? data.Room.name : '---'}</td>
-                                            <td>{data && data.duedateinvoice ? data.duedateinvoice : '---'}</td>
+                                            <td>{data && data.duedateinvoice ? toYYMMDD(data.duedateinvoice) : '---'}</td>
                                             <td>{data && data.status ? data.status : '---'}</td>
                                             <td>{data && data.printstatus ? data.printstatus : '---'}</td>
-                                            <td>{data && data.monthlybilling ? data.monthlybilling : '---'}</td>
+                                            <td>{data && data.monthlybilling ? toYYMM(data.monthlybilling) : '---'}</td>
+                                            
                                             
                                         </tr>
                                             )
@@ -404,12 +473,37 @@ const CalendarDate = (choose) =>{
                         <div className = {styles.box3}> 
                             <button className = {styles.button1}
                             onClick={()=>{
-                                if(selectroom && selectroom.Room &&  selectroom.lists){
-                                    console.log('exportInvoice',selectroom)
-                                    let _room = {data: selectroom.Room } 
-                                    export_Invoice_pdf(_room ,selectroom.lists)
+                                if(IDrooms && IDrooms.length > 0 ){
+                                 
+                                   export_Invoices_pdf(IDrooms)
+
+                               
+                                    Promise.all(IDrooms).then((IDrooms)=>{
+                                       IDrooms.map(async (invoice)=>{
+                                           try{
+                                            let _res = await updateInvoice({
+                                                            variables: {
+                                                                id: invoice.id,
+                                                                input: {
+                                                                    printstatus:"พิมพ์สำเร็จ"
+                                                                }
+                                                            }
+                                            })
+                                            if(_res){
+                                                 console.log('เปลี่ยนสถานะการพิมพ์สำเร็จ')
+                                                 Invoice.refetch();
+                                            
+                                            }else{
+                                                 console.error('ไม่สามารถ update สถานะ Invoice ')
+                                            }
+                                           }catch(e){
+                                               console.error('ไม่สามารถ update สถานะ Invoice ')
+                                           }
+                                       })
+                                    })
+
                                 }else{
-                                    console.error('ไม่พบข้อมูลห้อง',selectroom)
+                                    console.error('ไม่ได้ทำการเลือกห้อง',IDrooms)
                                 }
                                 
                             }}
@@ -418,10 +512,37 @@ const CalendarDate = (choose) =>{
                                 <div>พิมพ์ทั้งหมดที่เลือก</div>
                             </button>
                             <button className = {styles.button2}
+                             onClick={ async ()=>{
+                                
+                                  Promise.all(IDrooms).then((IDrooms)=>{
+                                       IDrooms.map(async (invoice)=>{
+                                           try{
+                                            let _res = await updateInvoice({
+                                                            variables: {
+                                                                id: invoice.id,
+                                                                input: {
+                                                                    status:"สำเร็จ"
+                                                                }
+                                                            }
+                                            })
+                                            if(_res){
+                                                 console.log('เปลี่ยนสถานะสำเร็จ')
+                                                 Invoice.refetch();
+                                            
+                                            }else{
+                                                 console.error('ไม่สามารถ update สถานะ Invoice ')
+                                            }
+                                           }catch(e){
+                                               console.error('ไม่สามารถ update สถานะ Invoice ')
+                                           }
+                                       })
+                                  })
+
+                             }}
                             >
                                 <i><PaymentIcon/></i>
                                 <div>ชำระทั้งหมดที่เลือก</div>
-                                </button>
+                            </button>
                             <button className = {styles.button3} 
                             onClick={ async ()=>{
                                 let myCheckboxName = document.getElementsByName('myCheckboxName');
@@ -443,7 +564,6 @@ const CalendarDate = (choose) =>{
                                             for (var x=0; x<myCheckboxNameLen; x++){
                                                 myCheckboxName[x].checked=false;
                                                 }
-                                            
                                             let _IDrooms = IDrooms.filter(item => item !== item)
                                             setIDrooms(_IDrooms)
     
@@ -457,16 +577,6 @@ const CalendarDate = (choose) =>{
                                         else{
                                             console.log('error')
                                             }
-    
-                                            
-                                            
-                                            
-    
-    
-    
-                                            
-    
-                                       
                                     }
                                     
                                     )
@@ -539,62 +649,114 @@ const CalendarDate = (choose) =>{
                             <div className = {styles.topic}>
                                 รายการใช้จ่าย
                             </div>
-                           
-                            <table className ={styles.table}>
-                                    <thead className ={styles.header}>
-                                        <tr >
-                                            <td> {header_table2[0]} </td>
-                                            <td>{header_table2[1]}</td>
-                                            <td>{header_table2[2]}</td>
-                                            <td>{header_table2[3]}</td>
-                                            <td>{header_table2[4]}</td>
-                                            <td>{header_table2[5]}</td>
-                                            <td>{header_table2[6]}</td>
-                                            <td>{header_table2[7]}</td>
-                                        </tr>
-                                    </thead>
-                                    {console.log('selectroom',selectroom,rooms.fi)}
-                                    <tbody className ={styles.body}>{
-                                        (selectroom ? selectroom.lists : []  ).map( (data) =>
-                                        <tr>
-                                            <td>{ data && data.id ?  data.id : "" }</td>
-                                            <td>{ data && data.name ?  data.name : ""}</td>
-                                            <td>{ data && data.number ?  data.number : 1}</td>
-                                            <td>{ data && data.price ?  data.price : 0}</td>
-                                            <td>{ (data && data.number ?  data.number : 1  ) * (data && data.price ?  data.price : 0)     }</td>
-                                            <td>{ (data && data.number ?  data.number : 1  ) * (data && data.price ?  data.price : 0) *0.07     }</td>
-                                            <td>{ (data && data.number ?  data.number : 1  ) * (data && data.price ?  data.price : 0) *1.07  }</td>
-                                            <td>    
-                                                <input type="checkbox" 
-                                                    checked={data && data.selectvat  ? data.selectvat : true}
-                                                />
-                                            </td>
-                                        </tr>
-                                            )
-                                                }                
-                                    </tbody>
+                            <div className ={styles.table}>
+                                <table >
+                                        <thead className ={styles.header}>
+                                            <tr >
+                                                <td> # </td>
+                                                <td>{header_table2[1]}</td>
+                                                <td>{header_table2[2]}</td>
+                                                <td>{header_table2[3]}</td>
+                                                <td>{header_table2[4]}</td>
+                                                <td>{header_table2[5]}</td>
+                                                <td>{header_table2[6]}</td>
+                                                <td>{header_table2[7]}</td>
+                                                { editselectroom ? <td> </td> : null}
+                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody className ={styles.body}>{
+                                            (selectroom ? selectroom.lists : []  ).map( (data ,index) =>
+                                            <tr>
+                                                <td>{ index +1 }</td>
+                                                <td> <input type='text' name="name" onChange={(e)=>handlerchangelist(e,index)}  
+                                                    disabled={!editselectroom}       
+                                                    value={ data && data.name ?  data.name : ""}/></td>
+                                                <td> <input type='text' name="number_item" onChange={(e)=>handlerchangelist(e,index)}    
+                                                    disabled={!editselectroom}       
+                                                    value={ data && data.number_item ?  data.number_item : 1} /></td>
+                                                <td> <input type='text' name="price" onChange={(e)=>handlerchangelist(e,index)}       
+                                                    disabled={!editselectroom}  
+                                                    value={ data && data.price ?  data.price : 0} /></td>
+                                                <td>{  list_to_show( data ).price }</td>
+                                                <td>{  list_to_show( data ).vat }</td>
+                                                <td>{  list_to_show( data ).total }</td>
+                                            
+                                                <td>    
+                                                    <input type="checkbox" 
+                                                        onChange={(e)=>{
+                                                             let _invoice =  JSON.parse (JSON.stringify( selectroom))
+                                                             _invoice.lists[index].selectvat = _invoice.lists[index].selectvat === 'คิดvat' ? "ไม่คิดvat": 'คิดvat'
+                                                             setselectroom(_invoice)
+                                                        }}
+                                                        checked={data && data.selectvat && data.selectvat === 'คิดvat' ? true : false}
+                                                    />
+                                                </td>
+                                                { editselectroom ?  
+                                                    <td>    
+                                                        <button 
+                                                        onClick ={async ()=>{
+                                                            let _invoice =  JSON.parse (JSON.stringify( selectroom))
+                                                           
+                                                            _invoice.lists.splice(index,1)
+                                                           setselectroom(_invoice)
+                                                        }}
+                                                        ><DeleteIcon style={{
+                                                            'maxHeight': "1rem",
+                                                            'maxWidth': "1rem"
+                                                        }}/></button>
+                                                    </td>: null
+                                                }
+                                            </tr>
+                                                )
+                                                    }                
+                                        </tbody>
 
 
 
 
-                            </table>
+                                </table>
+                            </div>
                             <div button className = {styles.button}>
-                                <button className = {styles.button1}>เพิ่ม</button>
-                                <button className = {styles.button2}>ลบ</button>
+                                
+                                <button className = {styles.button1}
+                                 disabled={!editselectroom}
+                                 onClick = { async ()=>{
+                                     console.log('selectroom',selectroom)
+                                     let _invoice = {...selectroom}
+                                        if(_invoice &&  _invoice.lists ){
+                                            _invoice.lists = [..._invoice.lists , {
+                                                name :"" ,price:"",number_item:"", type_price:"" ,vat:"7",selectvat:"คิดvat"
+                                            }]
+                                
+                                        setselectroom(_invoice)
+                                        }
+                                      
+                                
+                                 }}
+                                >เพิ่มรายการ</button>
+          
                                 <div className = {styles.lastresult}>
                                     <div className = {styles.head} >
                                         <lable>รวม</lable>
-                                        <input className = {styles.onerem} placeholder='0.00'></input>
+                                        <input className = {styles.onerem} placeholder='0.00' value={sumlists_to_show(
+                                           selectroom && selectroom.lists ? selectroom.lists:  []
+                                            ).totalprice}>
+                                            </input>
                                         <lable className = {styles.onerem}>บาท</lable>
                                     </div>
                                     <div className = {styles.head}>
                                         <lable>ภาษีมูลค่าเพิ่ม 7%</lable>
-                                        <input className = {styles.onerem} placeholder='0.00'></input>
+                                        <input className = {styles.onerem} placeholder='0.00'value={sumlists_to_show(
+                                           selectroom && selectroom.lists ? selectroom.lists:  []
+                                            ).totalvat}></input>
                                         <lable className = {styles.onerem}>บาท</lable>
                                     </div>
                                     <div className = {styles.head}>
                                         <lable>รวมยอกเงินสุทธิ</lable>
-                                        <input className = {styles.onerem} placeholder='0.00'></input>
+                                        <input className = {styles.onerem} placeholder='0.00'value={sumlists_to_show(
+                                           selectroom && selectroom.lists ? selectroom.lists:  []
+                                            ).grandtotal}></input>
                                         <lable className = {styles.onerem}>บาท</lable>
                                     </div>
                                     
@@ -607,15 +769,45 @@ const CalendarDate = (choose) =>{
 
                         </div>
                         <div className = {styles.box4}>
-                            <button className = {styles.button1}>
+                            <button className = {styles.button1}
+                            onClick={()=>{
+                             
+                                seteditselectroom(!editselectroom)
+                            }}
+                            >
                                 <i><EditOutlinedIcon/></i>
-                                <div>แก้ไข</div>
+                                <div>{editselectroom? "ยกเลิกแก้ไข":"แก้ไข"}   </div>
                             </button>
-                            <button className = {styles.button2}>
+                            <button className = {styles.button2} onClick={ async ()=>{
+                                   let  _invoice = {...selectroom}
+                                  try{
+                                            let _res = await updateInvoice({
+                                                            variables: {
+                                                                id: _invoice.id,
+                                                                input: {
+                                                                    lists:_invoice.lists.map(option =>({name :option.name ,price:option.price,number_item:option.number_item, vat:option.vat ,type_price:option.type_price ,selectvat:option.selectvat }) )
+                                                                }
+                                                            }
+                                            })
+                                            if(_res){
+                                                 console.log('เปลี่ยนสถานะการพิมพ์สำเร็จ')
+                                                 Invoice.refetch();
+                                            
+                                            }else{
+                                                 console.error('ไม่สามารถ update สถานะ Invoice ')
+                                            }
+                                           }catch(e){
+                                               console.error('ไม่สามารถ update สถานะ Invoice ')
+                                           }
+                            }}>
                                 <i><SaveOutlinedIcon/></i>
                                 <div>บันทึก</div>
                                 </button>
-                            <button className = {styles.button3}>
+                            <button className = {styles.button3}
+                            onClick={()=>{
+                                setselectroom(null)
+                                seteditselectroom(false)
+                            } }>
                                 <i><CancelOutlinedIcon/></i>
                                 <div>ยกเลิก</div>
                             </button>

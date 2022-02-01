@@ -4,6 +4,8 @@ export const API_GET_Invoice = gql`
 	query {
 		Invoices {
 			id
+			docnumber
+			monthlybilling
             duedateinvoice
 			printstatus
 			status
@@ -12,14 +14,20 @@ export const API_GET_Invoice = gql`
 				name
                 members{
                     id
-                    name
-                    lastname
+					name
+					lastname
+					email
+					personalid
+					taxnumber
+					address
+					carid
+					note
                 }
 			}
 			lists {
 				id
 				name
-                number
+				number_item
 				price
                 selectvat
 				type_price

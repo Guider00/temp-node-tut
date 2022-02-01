@@ -25,6 +25,7 @@ import { API_CREATE_Receipt }  from '../../API/Schema/Receipt/Receipt'
 
 import {  export_Receipt_pdf  , export_Contract , export_Invoice_pdf   } from '../../general_functions/pdf/export/export_pdf';
 
+import { toYYMM  } from '../../general_functions/convert';
 import CalendarPicker from '../../subcomponents/Calendar/Calendar.js';
 import { Blocktext  } from '../../general_functions/regex/regex'
 
@@ -273,6 +274,12 @@ export const Checkin = () => {
 			}else if(e.target.name === 'type_price'){
 					if(e.target.type ==="checkbox"){
 						tableoption.body[index][e.target.name]  = (e.target.checked)?"ราคาไม่รวมvat":"ราคารวมvat"
+					}else{
+						tableoption.body[index][e.target.name] =  e.target.value 
+					}
+			}else if(e.target.name === 'selectvat'){
+					if(e.target.type ==="checkbox"){
+						tableoption.body[index][e.target.name]  = (e.target.checked)?"คิดvat":"ไม่คิดvat"
 					}else{
 						tableoption.body[index][e.target.name] =  e.target.value 
 					}
@@ -841,6 +848,7 @@ export const Checkin = () => {
 																	let _body = room.data.checkin.Checkinoption.map(obj =>{
 																		return {name:obj.name,price:obj.price ,
 																			calculate_mode :obj.calculate_mode,
+																			selectvat:obj.selectvat,
 																			type_price:obj.type_price};
 																		});
 																		
@@ -1353,6 +1361,7 @@ export const Checkin = () => {
 														)}
 														<th>รายการรายเดือน</th>
 														<th>รูปแบบราคาไม่รวมvat</th>
+														<th>ภาษี</th>
 														{ tableoption.disableedit ? <th></th>:null }
 														
 													</tr>
@@ -1368,8 +1377,10 @@ export const Checkin = () => {
 														 /> </td>
 														<td><input type='checkbox'  checked={ (data.type_price === "ราคาไม่รวมvat"? true:false)  }  name="type_price"
 															onClick={(e)=>handlerchangetableoption(e,index)}
-														 />
-														</td>
+														 /></td>
+														 <td><input type='checkbox'  checked={ (data.selectvat === "ไม่คิดvat"? false:true)  }  name="selectvat"
+															onClick={(e)=>handlerchangetableoption(e,index)}
+														 /></td> 
 														{ (tableoption && tableoption.disableedit) ? <td><button onClick={()=>{
 															let _tableoption  =tableoption
 															_tableoption.body.splice(index, 1)
@@ -1414,6 +1425,7 @@ export const Checkin = () => {
 														return ({name: item.name,
 																	price: item.price,
 																	calculate_mode:item.calculate_mode,
+																	selectvat:item.selectvat,
 																	type_price: item.type_price})
 																})]
 												}
@@ -1565,7 +1577,7 @@ export const Checkin = () => {
 										// create Invoice //
 										let _tableoption = tableoption
 										let _updatetableoption   = _tableoption.body.map(obj  =>{
-											return ({name:obj.name , price:obj.price, type_price:obj.type_price})
+											return ({name:obj.name , price:obj.price,  number_item:"1", selectvat:obj.selectvat, type_price:obj.type_price})
 										})
 										const now =	new Date()
 											try{
@@ -1573,7 +1585,7 @@ export const Checkin = () => {
 													variables:{
 														input:{
 															status:"รอการชำระเงิน",
-															monthlybilling : Date.now().toString(),
+															monthlybilling : now,
 															lists:[..._updatetableoption]
 														}
 													}
@@ -1597,7 +1609,7 @@ export const Checkin = () => {
 																	if(_res && _res.data){
 																	try{
 																			console.log('_updatetableoption',_updatetableoption)
-																			export_Invoice_pdf(selectedroom , [..._updatetableoption])
+																			export_Invoice_pdf(selectedroom , [..._updatetableoption],toYYMM(now) )
 																			refetch_roomMember()
 																		}catch(e){
 																			console.log(e)

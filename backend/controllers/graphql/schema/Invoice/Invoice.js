@@ -7,17 +7,17 @@ const  { db }  =  require( "../../../models/Invoice/Invoice");
  scalar Date
 input Invoice_listInput{
         name:String,
-        number:String,
         price:String,
         vat:String,
+        number_item:String,
         type_price:String,
         selectvat :String,
 }
 type Invoice_list {
         id:ID
         name:String,
-        number:String,
         price:String,
+        number_item:String,
         vat:String,
         type_price:String,
         selectvat :String,
@@ -25,7 +25,8 @@ type Invoice_list {
 
 type Invoice {
     id:ID!
-    duedateinvoice : String
+    docnumber:String
+    duedateinvoice : Date
     monthlybilling : Date,
     printstatus : String ,
     status : String,
@@ -36,7 +37,8 @@ type Invoice {
 
 input InvoicInput {
     id:ID
-    duedateinvoice:String 
+    docnumber:String,
+    duedateinvoice:Date, 
     monthlybilling : Date,
     printstatus : String ,
     status : String,
