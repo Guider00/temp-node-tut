@@ -179,20 +179,7 @@ export const CreateInvoic = () =>{
     [GET_Rooms ]    
     );
 
-    // useEffect(
-    //     () => {
-    //         async function fetchData() {
-    //             let Rooms = await getRooms();
-    //             console.log('Rooms',Rooms)
-    //             setrooms(Rooms);
-    //             setfilterrooms(Rooms);
-    //         }
-
-    //         fetchData();
-    //         setloadingpage(true);
-    //     },
-    //     [ loadingpage ]
-    // );
+   
 
 
     
@@ -471,11 +458,11 @@ export const CreateInvoic = () =>{
                 <div className={styles.lastbutton}>
                     <button className = {styles.button} onClick={ ()=>{
                         console.log('IDrooms',IDrooms)
-                        IDrooms.map((room) =>{
+                        IDrooms.map(async (room) =>{
 
                             try{
                                 
-                                let _res = addInvoice({
+                                let _res = await addInvoice({
                                     variables: {
                                         input:{
                                             lists: room.checkin.Checkinoption.map(option =>{
@@ -494,7 +481,15 @@ export const CreateInvoic = () =>{
                                         
                                     }
                                 });
-                                console.log("AddID",room.id)
+                                
+                                if(_res.data){
+                                        console.log("สร้างใบแจ้งหนี้สำเร็จ",room.id)
+                                        
+                                }else{
+                                    console.log(_res)
+                                     console.error("ไม่สามารถสร้างใบแจ้งหนี้ได้")
+                                }
+                           
                                 
     
                             }catch(error){
