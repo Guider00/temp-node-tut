@@ -35,6 +35,9 @@ const filter_rooms = (rooms , options_search) =>{
                     }else if( options_search.keyword === 'ประเภทห้อง'){
                         return (room.RoomType && room.RoomType.name.search(options_search.text) !== -1 )	||
                         (options_search.text === '')		
+                    }else if(options_search.keyword === 'ชื่อผู้อยู่อาศัย'){
+                         return (room && room.Member && room.Member.length > 0  && room.Member[0].name.search(options_search.text) !== -1 )	||
+                        (options_search.text === '')		
                     }else{
                         return false; 
                     }

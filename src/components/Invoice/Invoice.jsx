@@ -6,6 +6,7 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -16,33 +17,38 @@ import { useQuery , useMutation } from '@apollo/client';
 import { useEffect , useState } from 'react';
 
 // invoice 
-import {  export_Invoice_pdf   } from '../../general_functions/pdf/export/export_pdf';
+import {  export_Invoices_pdf   } from '../../general_functions/pdf/export/export_pdf';
 import {  toYYMM , toYYMMDD   } from '../../general_functions/convert';
 
 //
 
 
-const filter_rooms = (rooms , options_search) =>{
+const filter_rooms = (datas , options_search) =>{
     let _filter_table = []
-    if(rooms && options_search){
-        _filter_table = rooms.filter(room =>{
-            if(room){
+    if(datas && options_search){
+        _filter_table = datas.filter(data =>{
+            if(data){
                 if(options_search.keyword === 'ทั้งหมด'){
-                    return (room.id && room.id.search(options_search) !== -1) ||
-                    (room.monthlybilling && room.monthlybilling.search(options_search.text) !== -1 ) ||
-                    (room.room.name && room.room.name.search(options_search.text) !== -1 ) ||
-                    (room.status && room.status.search(options_search.text) !== -1 ) ||
-                    (room.printstatus && room.printstatus.search(options_search.text) !== -1 ) ||
-                    (room.duedateinvoice && room.duedateinvoice.search(options_search.text) !== -1 ) ||
+                                    console.log('data.Room',data)
+
+                    return (data.id && data.id.search(options_search.text) !== -1) ||
+                    (data.monthlybilling && data.monthlybilling.search(options_search.text) !== -1 ) ||
+                    (data.Room && data.Room.name && data.Room.name.search(options_search.text) !== -1 ) ||
+                    (data.status && data.status.search(options_search.text) !== -1 ) ||
+                    (data.printstatus && data.printstatus.search(options_search.text) !== -1 ) ||
+                    (data.duedateinvoice && data.duedateinvoice.search(options_search.text) !== -1 ) ||
                     (options_search.text === '')	
-                }else if(options_search.keyword === 'ชื่อห้อง'){
-                    return (room.room.name.search(options_search.text) !== -1 )||
+                }else if( data.Room && data.Room.name && options_search.keyword === 'ชื่อห้อง'){
+                    return (data.Room.name.search(options_search.text) !== -1 )||
                     (options_search.text === '')
 
-                }else if(options_search.keyword === 'รอบบิล'){
-                    return (room.monthlybilling.search(options_search.text) !== -1 )||
+                }else if( data.monthlybilling && options_search.keyword === 'รอบบิล'){
+                    return (data.monthlybilling.search(options_search.text) !== -1 )||
                     (options_search.text === '')
 
+                }else if(data.Room && data.Room.members && options_search.keyword === 'ชื่อผู้พักอาศัย'){
+                    return (data.Room.members[0].name.search(options_search.text) !== -1 )||
+                    (options_search.text === '')
                 }else{
                     return false;
                 }
@@ -78,6 +84,7 @@ export const Invoice = () => {
     const [ updateInvoice , mutationupdateInvoice] = useMutation(API_UPDATE_Invoice);
     
     const [ selectroom , setselectroom ] = useState(null)
+    const [ editselectroom , seteditselectroom] = useState(false)
 
     const sumlists_to_show  = (lists)=>{
         if(lists && lists.length >0){
@@ -148,21 +155,51 @@ export const Invoice = () => {
          let _tbsortingstyle_newtoold = tbsortingstyle_newmetoold
          settbsortingstyle_newmetoold(!_tbsortingstyle_newtoold)
     }
+    const handlerchangelist =(e ,index)=>{
+        let  _selectroom = JSON.parse( JSON.stringify(selectroom))
+        if(e.target.name === 'name'){
+          // console.log(e.target.value)
+        }else if(e.target.name === 'number_item'){
+            // validate data 
+        }else if(e.target.name === 'price'){
+            // validate data 
+        }
+        _selectroom.lists[index][e.target.name] = e.target.value
+        setselectroom(_selectroom)
+    }
 
 
     useEffect (()=>{
-
+        console.log('update')
         if(Invoice && Invoice.data && Invoice.data.Invoices){
             let _rooms = rooms
             _rooms = Invoice.data.Invoices
             setrooms(_rooms)
-            setfilterrooms(_rooms)
+             setfilterrooms(_rooms)
+         
+           if(selectroom){
+
+            let _selectroom  = _rooms.find(_room=> _room.id === selectroom.id)
+            console.log('_selectroom',_selectroom)
+                if(_selectroom){
+                         setselectroom({..._selectroom})
+                }
+           }
+           if(_rooms && IDrooms){
+             let _invoice_ids =  IDrooms.map(_invoice =>_invoice.id )
+               let _IDrooms  = _rooms.filter(_room=> _invoice_ids.findIndex(id => id === _room.id)  !== -1 )
+             //    setIDrooms(_IDrooms)
+               console.log('_IDrooms',_IDrooms)
+           }
+            
+           
+           
             console.log('Invoice.data',Invoice.data.Invoices)
             
         }
 
 
-    },[ Invoice,Invoice.data ,rooms ,IDrooms])
+    },[ Invoice,Invoice.data ,rooms])
 
 
     let header_table = ["","เลขที่ใบแจ้งหนี้","ชื่อห้อง","วันที่ออก","สถานะ","สถานะการพิมพ์","รอบบิล"]
@@ -236,6 +273,7 @@ export const Invoice = () => {
                                         <option>ทั้งหมด</option>
                                         <option>ชื่อห้อง</option>
                                         <option>รอบบิล</option>
+                                        <option>ชื่อผู้พักอาศัย</option>
             
                                         
                                     </select>
@@ -281,7 +319,8 @@ export const Invoice = () => {
                                             let _selectroom = selectroom
                                             _selectroom = data
                                             setselectroom(_selectroom)
-                                
+                                            seteditselectroom(false)
+
                                         }}
                                         style={{
                                             background:  (selectroom && (selectroom.id === data.id)) ? 'lightgray' : 'none'
@@ -297,7 +336,7 @@ export const Invoice = () => {
                                                     const checked = e.target.checked
                                                     const id = data.id
                                                     if(checked){
-                                                        let _IDrooms = IDrooms
+                                                        let _IDrooms =JSON.parse (JSON.stringify( IDrooms))
                                                         _IDrooms = [..._IDrooms,data]
                                                         setIDrooms(_IDrooms)
                                                         console.log("check",_IDrooms)
@@ -319,6 +358,7 @@ export const Invoice = () => {
                                             <td>{data && data.printstatus ? data.printstatus : '---'}</td>
                                             <td>{data && data.monthlybilling ? toYYMM(data.monthlybilling) : '---'}</td>
                                             
+                                            
                                         </tr>
                                             )
                                                 }                
@@ -336,10 +376,10 @@ export const Invoice = () => {
                             <button className = {styles.button1}
                             onClick={()=>{
                                 if(IDrooms && IDrooms.length > 0 ){
-                                    console.log('IDrooms',IDrooms)
-                                   
-                                   export_Invoice_pdf({data:IDrooms[0].Room} ,IDrooms[0].lists,toYYMM(IDrooms[0].monthlybilling) )
+                                 
+                                   export_Invoices_pdf(IDrooms)
 
+                               
                                     Promise.all(IDrooms).then((IDrooms)=>{
                                        IDrooms.map(async (invoice)=>{
                                            try{
@@ -511,49 +551,93 @@ export const Invoice = () => {
                             <div className = {styles.topic}>
                                 รายการใช้จ่าย
                             </div>
-                           
-                            <table className ={styles.table}>
-                                    <thead className ={styles.header}>
-                                        <tr >
-                                            <td> {header_table2[0]} </td>
-                                            <td>{header_table2[1]}</td>
-                                            <td>{header_table2[2]}</td>
-                                            <td>{header_table2[3]}</td>
-                                            <td>{header_table2[4]}</td>
-                                            <td>{header_table2[5]}</td>
-                                            <td>{header_table2[6]}</td>
-                                            <td>{header_table2[7]}</td>
-                                        </tr>
-                                    </thead>
-                                    {console.log('selectroom',selectroom,rooms.fi)}
-                                    <tbody className ={styles.body}>{
-                                        (selectroom ? selectroom.lists : []  ).map( (data) =>
-                                        <tr>
-                                            <td>{ data && data.id ?  data.id : "" }</td>
-                                            <td>{ data && data.name ?  data.name : ""}</td>
-                                            <td>{ data && data.number ?  data.number : 1}</td>
-                                            <td>{ data && data.price ?  data.price : 0}</td>
-                                            <td>{  list_to_show( data ).price }</td>
-                                            <td>{  list_to_show( data ).vat }</td>
-                                            <td>{  list_to_show( data ).total }</td>
-                                          
-                                            <td>    
-                                                <input type="checkbox" 
-                                                    checked={data && data.selectvat && data.selectvat === 'คิดvat' ? true : false}
-                                                />
-                                            </td>
-                                        </tr>
-                                            )
-                                                }                
-                                    </tbody>
+                            <div className ={styles.table}>
+                                <table >
+                                        <thead className ={styles.header}>
+                                            <tr >
+                                                <td> # </td>
+                                                <td>{header_table2[1]}</td>
+                                                <td>{header_table2[2]}</td>
+                                                <td>{header_table2[3]}</td>
+                                                <td>{header_table2[4]}</td>
+                                                <td>{header_table2[5]}</td>
+                                                <td>{header_table2[6]}</td>
+                                                <td>{header_table2[7]}</td>
+                                                { editselectroom ? <td> </td> : null}
+                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody className ={styles.body}>{
+                                            (selectroom ? selectroom.lists : []  ).map( (data ,index) =>
+                                            <tr>
+                                                <td>{ index +1 }</td>
+                                                <td> <input type='text' name="name" onChange={(e)=>handlerchangelist(e,index)}  
+                                                    disabled={!editselectroom}       
+                                                    value={ data && data.name ?  data.name : ""}/></td>
+                                                <td> <input type='text' name="number_item" onChange={(e)=>handlerchangelist(e,index)}    
+                                                    disabled={!editselectroom}       
+                                                    value={ data && data.number_item ?  data.number_item : 1} /></td>
+                                                <td> <input type='text' name="price" onChange={(e)=>handlerchangelist(e,index)}       
+                                                    disabled={!editselectroom}  
+                                                    value={ data && data.price ?  data.price : 0} /></td>
+                                                <td>{  list_to_show( data ).price }</td>
+                                                <td>{  list_to_show( data ).vat }</td>
+                                                <td>{  list_to_show( data ).total }</td>
+                                            
+                                                <td>    
+                                                    <input type="checkbox" 
+                                                        onChange={(e)=>{
+                                                             let _invoice =  JSON.parse (JSON.stringify( selectroom))
+                                                             _invoice.lists[index].selectvat = _invoice.lists[index].selectvat === 'คิดvat' ? "ไม่คิดvat": 'คิดvat'
+                                                             setselectroom(_invoice)
+                                                        }}
+                                                        checked={data && data.selectvat && data.selectvat === 'คิดvat' ? true : false}
+                                                    />
+                                                </td>
+                                                { editselectroom ?  
+                                                    <td>    
+                                                        <button 
+                                                        onClick ={async ()=>{
+                                                            let _invoice =  JSON.parse (JSON.stringify( selectroom))
+                                                           
+                                                            _invoice.lists.splice(index,1)
+                                                           setselectroom(_invoice)
+                                                        }}
+                                                        ><DeleteIcon style={{
+                                                            'maxHeight': "1rem",
+                                                            'maxWidth': "1rem"
+                                                        }}/></button>
+                                                    </td>: null
+                                                }
+                                            </tr>
+                                                )
+                                                    }                
+                                        </tbody>
 
 
 
 
-                            </table>
+                                </table>
+                            </div>
                             <div button className = {styles.button}>
-                                <button className = {styles.button1}>เพิ่ม</button>
-                                <button className = {styles.button2}>ลบ</button>
+                                
+                                <button className = {styles.button1}
+                                 disabled={!editselectroom}
+                                 onClick = { async ()=>{
+                                     console.log('selectroom',selectroom)
+                                     let _invoice = {...selectroom}
+                                        if(_invoice &&  _invoice.lists ){
+                                            _invoice.lists = [..._invoice.lists , {
+                                                name :"" ,price:"",number_item:"", type_price:"" ,vat:"7",selectvat:"คิดvat"
+                                            }]
+                                
+                                        setselectroom(_invoice)
+                                        }
+                                      
+                                
+                                 }}
+                                >เพิ่มรายการ</button>
+          
                                 <div className = {styles.lastresult}>
                                     <div className = {styles.head} >
                                         <lable>รวม</lable>
@@ -587,15 +671,45 @@ export const Invoice = () => {
 
                         </div>
                         <div className = {styles.box4}>
-                            <button className = {styles.button1}>
+                            <button className = {styles.button1}
+                            onClick={()=>{
+                             
+                                seteditselectroom(!editselectroom)
+                            }}
+                            >
                                 <i><EditOutlinedIcon/></i>
-                                <div>แก้ไข</div>
+                                <div>{editselectroom? "ยกเลิกแก้ไข":"แก้ไข"}   </div>
                             </button>
-                            <button className = {styles.button2}>
+                            <button className = {styles.button2} onClick={ async ()=>{
+                                   let  _invoice = {...selectroom}
+                                  try{
+                                            let _res = await updateInvoice({
+                                                            variables: {
+                                                                id: _invoice.id,
+                                                                input: {
+                                                                    lists:_invoice.lists.map(option =>({name :option.name ,price:option.price,number_item:option.number_item, vat:option.vat ,type_price:option.type_price ,selectvat:option.selectvat }) )
+                                                                }
+                                                            }
+                                            })
+                                            if(_res){
+                                                 console.log('เปลี่ยนสถานะการพิมพ์สำเร็จ')
+                                                 Invoice.refetch();
+                                            
+                                            }else{
+                                                 console.error('ไม่สามารถ update สถานะ Invoice ')
+                                            }
+                                           }catch(e){
+                                               console.error('ไม่สามารถ update สถานะ Invoice ')
+                                           }
+                            }}>
                                 <i><SaveOutlinedIcon/></i>
                                 <div>บันทึก</div>
                                 </button>
-                            <button className = {styles.button3}>
+                            <button className = {styles.button3}
+                            onClick={()=>{
+                                setselectroom(null)
+                                seteditselectroom(false)
+                            } }>
                                 <i><CancelOutlinedIcon/></i>
                                 <div>ยกเลิก</div>
                             </button>

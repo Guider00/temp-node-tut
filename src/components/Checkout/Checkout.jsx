@@ -268,7 +268,6 @@ export const Checkout = () => {
 											<option> ชั้น</option>
 											<option> ประเภทห้อง</option>
 											<option> ชื่อ</option>
-											<option> นามสกุล</option>
 											<option> สถานะ</option>
 										</select>
 										<button onClick={ async() => {
