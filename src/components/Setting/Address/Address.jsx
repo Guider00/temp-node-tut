@@ -20,7 +20,9 @@ import {
 
 import { useQuery, useMutation } from '@apollo/client';
 
-import { HandleForm} from "./function";
+import { HandleForm } from "./function";
+
+import { export_address_pdf } from "../../../general_functions/pdf/export/export_pdf";
 
 
 
@@ -204,8 +206,16 @@ import { HandleForm} from "./function";
                 setdefaultData(_defaultData)
 
             }
+            export_address_pdf(defaultAddress,defaultData)
+
+           
+            
+        } else{
+            Receiptnumber.refetch()
         }
        
+        
+        
         
         
     },[Receiptnumber,disableReceipt])
@@ -225,6 +235,7 @@ import { HandleForm} from "./function";
     }
 
     useEffect( () =>{
+        
         
 
         if(Address && Address.data && Address.data.Addresss){
@@ -253,12 +264,15 @@ import { HandleForm} from "./function";
                 setdefaultAddress(_defaultData)
                 
             }
-            console.log('defaultAddressdefaultAddress',defaultAddress)           
+            export_address_pdf(defaultAddress,defaultData)
+            
+            
             
         }
         else{
             Address.refetch()
         }
+        
     },[Address]
 
   
@@ -693,6 +707,14 @@ import { HandleForm} from "./function";
                 name = 'clearPage-receipt'
                 className={styles.savestyle} 
                 onClick={handleClick}>CLEAR-ALL</button>
+
+                {/* <button
+                className={styles.savestyle} 
+                onClick={()=>export_address_pdf(defaultAddress,defaultData)}
+                >
+                    1234
+                    
+                </button> */}
                 
                 </div>
                 

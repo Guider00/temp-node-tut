@@ -4,13 +4,92 @@
 const { jsPDF }  = require('jspdf')
 const { AddTH_font }  =require('../AddFont/AddFont.js')
 const { formatDate , toHHMMSS }  = require('../../convert.js')
+var ranNum1a;
+export const export_address_pdf = (defaultAddress , defaultData) =>{
+
+    let Noanswer = "-"
+    let idAddress = defaultAddress.id ? defaultAddress.id : Noanswer ;
+    let name = defaultAddress.name ? defaultAddress.name : Noanswer ;
+    let code = defaultAddress.code ? defaultAddress.code : Noanswer ;
+    let tel = defaultAddress.tel ? defaultAddress.tel : Noanswer ;
+    let no = defaultAddress.no ? defaultAddress.no : Noanswer ;
+    let province = defaultAddress.province ? defaultAddress.province : Noanswer ;
+    let road = defaultAddress.road ? defaultAddress.road : Noanswer ;
+    let village = defaultAddress.village ? defaultAddress.village : Noanswer ;
+    let boundary = defaultAddress.boundary ? defaultAddress.boundary : Noanswer ;
+    let district = defaultAddress.district ? defaultAddress.district : Noanswer ;
+    let alley = defaultAddress.alley ? defaultAddress.alley : Noanswer ;
+    console.log("Address",idAddress,name,code,tel,no,province,road,village,boundary,district,alley)
+
+    let idReceipt = defaultData.id ? defaultData.id : Noanswer ;
+    let receipt = defaultData.receipt ? defaultData.receipt : Noanswer ;
+    let invoice = defaultData.invoice ? defaultData.invoice : Noanswer ;
+    let reimbursement = defaultData.reimbursement ? defaultData.reimbursement : Noanswer ;
+    let booking = defaultData.booking ? defaultData.booking : Noanswer ;
+    let bill = defaultData.bill ? defaultData.bill : Noanswer ;
+    let accNo = defaultData.accNo ? defaultData.accNo : Noanswer ;
+    let billDate = defaultData.billDate ? defaultData.billDate : Noanswer ;
+    console.log("Receipt",idReceipt,receipt,invoice,reimbursement,booking,bill,accNo,billDate)
+
+}
+
+
+export const export_address_pdf2 = (defaultAddress , defaultData) =>{
+    let Noanswer = "-"
+    if(defaultData , defaultData){
+        console.log("1111111111")
+        
+        ranNum1a =  {
+                idAddress : defaultAddress.id ? defaultAddress.id : Noanswer ,
+                name : defaultAddress.name ? defaultAddress.name : Noanswer,
+                code : defaultAddress.code ? defaultAddress.code : Noanswer ,
+                tel : defaultAddress.tel ? defaultAddress.tel : Noanswer ,
+                no : defaultAddress.no ? defaultAddress.no : Noanswer ,
+                province : defaultAddress.province ? defaultAddress.province : Noanswer,
+                road : defaultAddress.village ? defaultAddress.village : Noanswer ,
+                village : defaultAddress.village ? defaultAddress.village : Noanswer ,
+                boundary : defaultAddress.boundary ? defaultAddress.boundary : Noanswer ,
+                district : defaultAddress.district ? defaultAddress.district : Noanswer ,
+                alley : defaultAddress.alley ? defaultAddress.alley : Noanswer ,
+    
+    
+                idReceipt : defaultData.id ? defaultData.id : Noanswer ,
+                receipt : defaultData.receipt ? defaultData.receipt : Noanswer ,
+                invoice : defaultData.invoice ? defaultData.invoice : Noanswer ,
+                reimbursement : defaultData.reimbursement ? defaultData.reimbursement : Noanswer ,
+                booking : defaultData.booking ? defaultData.booking : Noanswer ,
+                bill : defaultData.bill ? defaultData.bill : Noanswer ,
+                accNo : defaultData.accNo ? defaultData.accNo : Noanswer ,
+                billDate : defaultData.billDate ? defaultData.billDate : Noanswer ,
+                        
+            };
+
+    }
+    
+    return ranNum1a;
+    
+            
+       
+        
+
+    
+
+   
+
+    
+    
+
+
+
+}
+
 
 export const export_booking_pdf = ( booking , owner , customer_details   ) =>{
     const document_name ='ใบจอง'
     if(booking){
         console.log("Export booking ",booking)
 
-     let Noanswer = "-"
+    let Noanswer = "-"
     let bookingID = booking.id ? booking.id : Noanswer ;
     let bookingReference = booking.booking_number ?  booking.booking_number : Noanswer ;
     let Client =   booking.customer_name  ?  `${booking.customer_name} ${booking.customer_lastname}`  : Noanswer 
@@ -599,11 +678,12 @@ function openInNewTab(href) {
 }
  // ใบแจ้งหนี้  // 
 export const export_Invoice_pdf =  ( room ,table_prices , monthlybilling) =>{
+    
     const document_name ='ใบแจ้งหนี้'
     let business_Address_1 = "119 ซอยสีม่วงอนุสรณ์ ถนน สุทธิสาร"
     let business_Address_2 = "แขวง ดินแดง เขต ดินแดง กรุงเทพ 10400"
     let Taxid = "0105536011803"
-    let Phone = "026937005"
+    let Phone = "026938887005"
     let Email = "sales@primusthai.com" 
 
     let Vat = 7;
@@ -825,7 +905,7 @@ export const export_Invoices_pdf = (Invoices) =>{
         let business_Address_1 = "119 ซอยสีม่วงอนุสรณ์ ถนน สุทธิสาร"
         let business_Address_2 = "แขวง ดินแดง เขต ดินแดง กรุงเทพ 10400"
         let Taxid = "0105536011803"
-        let Phone = "026937005"
+        let Phone = "02693700005"
         let Email = "sales@primusthai.com" 
         const doc = new jsPDF('l', 'mm', [297, 210]);
         Invoices.map( (Invoice,index) =>{
