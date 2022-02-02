@@ -26,34 +26,11 @@ import { API_CREATE_Checkin ,API_DELETE_Checkin , API_UPDATE_Checkin } from '../
 import { API_CREATE_Contract , API_DELETE_Contract , API_UPDATE_Contract } from '../../API/Schema/Contract/Contract'
 import { API_CREATE_Receipt }  from '../../API/Schema/Receipt/Receipt'
 
-
+import { Rooms_to_table } from './function';
 
 import { filter_rooms } from '../../general_functions/filter'
 
-const Rooms_to_table =(Rooms) =>{
-	let table = [];
-		table =	Rooms.map((data) => {
-					let _data = data;
-					return {
-						id: data.id,
-						data: _data,
-						building:
-							data.floor && data.floor.building && data.floor.building.name
-								? data.floor.building.name
-								: '---',
-						floor: data.floor ? data.floor.name : '---',
-						name: data.name,
-						status: data.status ? data.status : '---',
-						member: data.member ? data.member.name : '---',
-						members: data.members ? data.members :[],
-						metername: data.meterroom ? data.meterroom.name : '---',
-						meterroom: data.meterroom ? data.meterroom : '---',
-						RoomType: data.RoomType ? data.RoomType.name: "---"
-						
-					};
-				});
-	 return table
-}
+
 const getRooms = async () => {
 	return new Promise(async (resolve, reject) => {
 		let res = await API_queryRooms();
