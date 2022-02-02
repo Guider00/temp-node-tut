@@ -13,6 +13,8 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 import {  export_Receipt_pdf , export_taxinvoice_pdf  } from '../../general_functions/pdf/export/export_pdf';
 
+import {handlerCreateRecipt , handlerCancelRecipt } from './function'
+
 export const Receipt = () => {
 
     const Receipt = useQuery(API_GET_Receipt)
@@ -350,8 +352,8 @@ export const Receipt = () => {
                 <div>
                     <div className={styles.zone1}>
                         <div className={styles.buttonstyles} >
-                            <button className = {styles.createbutton}>สร้างใบเสร็จ</button>
-                            <button className = {styles.cancelbutton}>ยกเลิกใบเสร็จ</button>
+                            <button className = {styles.createbutton} onClick={handlerCreateRecipt} >สร้างใบเสร็จ</button>
+                            <button className = {styles.cancelbutton} onClick={handlerCancelRecipt} >ยกเลิกใบเสร็จ</button>
                             <button className = {styles.editbutton}> แก้ไข</button>
                             <button className = {styles.savebutton}>บันทึก</button>
                             <button className = {styles.cancelbutton2}>ยกเลิก</button>
