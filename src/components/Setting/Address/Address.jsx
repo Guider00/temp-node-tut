@@ -20,7 +20,7 @@ import {
 
 import { useQuery, useMutation } from '@apollo/client';
 
-import { HandleForm , Disabled} from "./function";
+import { HandleForm} from "./function";
 
 
 
@@ -170,8 +170,8 @@ import { HandleForm , Disabled} from "./function";
     //handleForm
     //validate
 
-    const { handleOnchangeReceipt,handleOnchangeAddress,formErrorsAddress,formErrors,defaultData,setdefaultData ,defaultAddress,setdefaultAddress  } = HandleForm();
-    const {handleClick , disableReceipt , setDisableReceipt , disabledAddress ,disabledReceipt,setDisabledReceipt,setDisabledAddress} = Disabled();
+    const { handleOnchangeReceipt,handleOnchangeAddress,formErrorsAddress,formErrors,defaultData,setdefaultData ,defaultAddress,setdefaultAddress,handleClick , disableReceipt , setDisableReceipt , disabledAddress ,disabledReceipt,setDisabledReceipt,setDisabledAddress} = HandleForm();
+
     
 
    
