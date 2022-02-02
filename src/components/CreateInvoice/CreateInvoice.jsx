@@ -72,7 +72,19 @@ export const CreateInvoic = () =>{
 
 
 
+    const [disabled , setDisabled] = useState({
+        disabled : true ,
+        D1 : true , 
+        D2 : false
+    })
 
+    const [defination_invoice ,setdefination_invoice] = useState({
+        monthlybilling:"",
+        duedateinvoice:"",
+        typerestinvoice:false,
+        ratemonthlyprice:"",
+
+    })
 
 
 
@@ -115,7 +127,8 @@ export const CreateInvoic = () =>{
 
    
     const handleChange = (e) =>{
-        const {name , checked } = e.target
+          let _defination_invoice = {...defination_invoice}
+        const {name , checked ,value} = e.target
         if(name === 'selectAll'){
             let tempRoom = filterrooms.filter((room) => (room && room.status === 'จอง') || room.status === 'มีคนอยู่').map((room)=>{
                 return{...room , isChecked:checked}
@@ -123,13 +136,30 @@ export const CreateInvoic = () =>{
             setfilterrooms(tempRoom)
             let data = tempRoom.filter(item => item.isChecked === true)
             setIDrooms(data)
+        }else if(name === 'monthlybilling'){
+          _defination_invoice[name] = value;
+             setdefination_invoice(_defination_invoice)
 
+        }else if(name === 'duedateinvoice'){
+          _defination_invoice[name] = value;
+              setdefination_invoice(_defination_invoice)
+
+        }else if(name === 'typerestinvoice'){
+             _defination_invoice[name] = value;
+               setdefination_invoice(_defination_invoice)
+        }else if(name === 'ratemonthlyprice'){
+             _defination_invoice[name] = value;
+               setdefination_invoice(_defination_invoice)
+            
         }else{
             let tempRoom = filterrooms.map((room)=> room.id === name ?{...room , isChecked: checked} : room)
             setfilterrooms(tempRoom)
             let data = tempRoom.filter(item => item.isChecked === true)
             setIDrooms(data)
         }
+
+     
+      
         console.log("IDrooms",IDrooms)
 
 
@@ -138,11 +168,7 @@ export const CreateInvoic = () =>{
 
 
 
-    const [disabled , setDisabled] = useState({
-        disabled : true ,
-        D1 : true , 
-        D2 : false
-    })
+
     
     const handleChangeRadio = (e) =>{
         const { name } = e.target
@@ -277,7 +303,7 @@ export const CreateInvoic = () =>{
             <div className = {styles.bigbox}>
             
                 <div className = {styles.flex}>
-                    <lable className = {styles.head}>ออกใบแจ้งหนี้</lable>
+                    <lable className = {styles.head}>สร้างใบแจ้งหนี้</lable>
                     <div className = {styles.topic}> รอบบิล 
                         <input type = "date" onChange={
                             (e)=>{
@@ -320,13 +346,13 @@ export const CreateInvoic = () =>{
                                 <p>คิดค่าเช่า</p>
                             </div>
                             <div className = {styles.inputbox} >
-                                <input type = "date" name = 'D3' disabled = {disabled.disabled}></input>
+                                <input type = "date" name = 'monthlybilling' disabled = {!disabled.D2}  onChange={handleChange}  value={defination_invoice.monthlybilling}></input>
                                 <p></p>
-                                <input type = "date" name = 'D3' disabled = {disabled.disabled}></input>
+                                <input type = "date" name = 'dudateinvoice' disabled = {!disabled.D2}  onChange={handleChange}  value={defination_invoice.dudateinvoice} ></input>
                                 <p></p>
-                                <input type = "checkbox" name = 'D3' disabled = {disabled.disabled}></input>
+                                <input type = "checkbox" name = 'typerestinvoice' disabled = {!disabled.D2}  onChange={handleChange}  value={defination_invoice.typerestinvoice}  ></input>
                                 <p></p>
-                                <input type = "text" name = 'D3' disabled = {disabled.disabled}></input>
+                                <input type = "text" name = 'ratemonthlyprice' disabled = {!disabled.D2}  onChange={handleChange}  value={defination_invoice.ratemonthlyprice} ></input>
                             </div>
                         </div>
                             
@@ -458,30 +484,63 @@ export const CreateInvoic = () =>{
                 <div className={styles.lastbutton}>
                     <button className = {styles.button} onClick={ ()=>{
                         console.log('IDrooms',IDrooms)
+                        // เลือกรูปแบบการ สร้าง  Invoice 
+                        let _bymonthly = disabled.D1
+                        let _bydefinition = disabled.D2
+                            if(disabled.D1 === true  ){
+                                console.log("ออกตามรอบบิล")
+                            }else if(disabled.D2 === true){
+                                  console.log("กำหนดเอง")
+                            }
                         IDrooms.map(async (room) =>{
 
-                            try{
-                                
-                                let _res = await addInvoice({
-                                    variables: {
-                                        input:{
-                                            lists: room.checkin.Checkinoption.map(option =>{
-                                                if(option.calculate_mode === 'ครั้งเดียว' ){
-                                                    return null
-                                                }else{
-                                                    return {name :option.name ,price:option.price,number_item:option.number_item, type_price:option.type_price ,selectvat:option.selectvat }
-                                                }
 
-                                            }).filter(item=>item),
-                                          
-                                            roomid: `${room.id}`,
-                                            monthlybilling: `${ date === '' ? Date.now() : date}`,
+                            try{
+                                console.log('สร้าง defination invoice',_bymonthly,_bydefinition)
+                                 let _res = {}
+                                if(_bymonthly ===  true ){
+                                   _res = await addInvoice({
+                                        variables: {
+                                            input:{
+                                                lists: room.checkin.Checkinoption.map(option =>{
+                                                    if(option.calculate_mode === 'ครั้งเดียว' ){
+                                                        return null
+                                                    }else{
+                                                        return {name :option.name ,price:option.price,number_item:option.number_item, type_price:option.type_price ,selectvat:option.selectvat }
+                                                    }
+
+                                                }).filter(item=>item),
+                                            
+                                                roomid: `${room.id}`,
+                                                monthlybilling: `${ date === '' ? Date.now() : date}`,
+                                                
+                                            }
                                             
                                         }
-                                        
-                                    }
-                                });
-                                
+                                    });
+                                }else if(_bydefinition === true ){
+                                    
+                                      _res = await addInvoice({
+                                        variables: {
+                                            input:{
+                                                lists: [{name:"ค่าเช่ารายเดือน",price:defination_invoice.ratemonthlyprice,number_item:"1" }],
+                                                // lists: room.checkin.Checkinoption.map(option =>{
+                                                //     if(option.calculate_mode === 'ครั้งเดียว' ){
+                                                //         return null
+                                                //     }else{
+                                                //         return {name :option.name ,price:option.price,number_item:option.number_item, type_price:option.type_price ,selectvat:option.selectvat }
+                                                //     }
+
+                                                // }).filter(item=>item),
+                                            
+                                                roomid: `${room.id}`,
+                                                monthlybilling: `${ defination_invoice.monthlybilling === '' ? Date.now() : date}`,
+                                                
+                                            }
+                                            
+                                        }
+                                    });
+                                }
                                 if(_res.data){
                                         console.log("สร้างใบแจ้งหนี้สำเร็จ",room.id)
                                         
