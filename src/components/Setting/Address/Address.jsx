@@ -25,7 +25,7 @@ import { HandleForm , Disabled} from "./function";
 
 
 
-export const Address = () => {
+    export const Address = () => {
 
     const [images, setImages] = useState([]);
     const [imageURLs, setimageURLs] = useState([]);
@@ -49,7 +49,22 @@ export const Address = () => {
     }
 
    
-
+    const savePage = () =>{
+        let receipt = document.getElementById('receipt')
+        let invoice = document.getElementById('invoice')
+        let reimbursement = document.getElementById('reimbursement')
+        let booking = document.getElementById('booking')
+        let bill = document.getElementById('bill')
+        let accNo = document.getElementById('accNo')
+        let billDate = document.getElementById('billDate')
+        receipt.disabled = true
+        invoice.disabled = true
+        reimbursement.disabled = true
+        booking.disabled = true
+        bill.disabled = true
+        accNo.disabled = true
+        billDate.disabled = true
+    }
 
 
     
@@ -63,7 +78,7 @@ export const Address = () => {
     const checkData = async (choose) =>{
         
         if(choose && defaultDialog.type === '1' ){
-            if(Receiptnumber && Receiptnumber.data && Receiptnumber.data.Receiptnumbers.length > 0 ){
+            if(Receiptnumber && Receiptnumber.data ){
                 
                 
                 try{
@@ -85,8 +100,7 @@ export const Address = () => {
                         }
                     });
                     console.log(_res)
-                    let tempDisabled = {...disableReceipt , disabled : true}
-                    setDisableReceipt(tempDisabled)
+                    
     
                 } catch(error){
                     console.log(error.message)
@@ -94,12 +108,13 @@ export const Address = () => {
                 
     
             }
+            savePage()
             handleDialog('',false)
             setDisabledReceipt(true)
 
         }else if(choose && defaultDialog.type === '2' ){
 
-            if(Address && Address.data &&  Address.data.Addresss.length > 0 ){
+            if(Address && Address.data){
                 try{
 
                     
@@ -122,7 +137,7 @@ export const Address = () => {
                         }
                     });
                     console.log(_res)
-                    let tempDisabled = {...disableReceipt , disabled2 : true}
+                    let tempDisabled = {...disableReceipt , disabled2 : true }
                     setDisableReceipt(tempDisabled)
     
                 } catch(error){
@@ -193,7 +208,7 @@ export const Address = () => {
        
         
         
-    },[Receiptnumber])
+    },[Receiptnumber,disableReceipt])
     
 
 
