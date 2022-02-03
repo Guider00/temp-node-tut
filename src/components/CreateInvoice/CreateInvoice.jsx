@@ -8,7 +8,6 @@ import { API_GET_Invoice,API_ADD_Invoice,API_DELETE_Invoice,API_UPDATE_Invoice} 
 import { API_GET_Rooms , API_UPDATE_Room } from '../../API/Schema/Room/Room'
 import { filter_rooms ,Change } from './function';
 
- // new fileter room 
 
 
 
@@ -183,53 +182,57 @@ export const CreateInvoic = () =>{
 
 
                         </div>
-                        <table className ={styles.table}>
-                            <thead className ={styles.header}>
-                                <tr >
-                                    <td>{header_table[0]}</td>
-                                    <td>{header_table[1]}</td>
-                                    <td>{header_table[2]}</td>
-                                    <td>{header_table[3]}</td>
-                                    <td>{header_table[4]}</td>
-                                    <td>{header_table[5]}</td>
-                                </tr>
-                            </thead>
-                            <tbody className ={styles.body}>
+                        <div className ={styles.maintable}>
+                            <table className ={styles.table}>
+                                <thead className ={styles.header}>
+                                    <tr >
+                                        <td>{header_table[0]}</td>
+                                        <td>{header_table[1]}</td>
+                                        <td>{header_table[2]}</td>
+                                        <td>{header_table[3]}</td>
+                                        <td>{header_table[4]}</td>
+                                        <td>{header_table[5]}</td>
+                                    </tr>
+                                </thead>
+                                <tbody className ={styles.body}>
 
-                            {filterrooms.filter((room) => (room && room.status === 'จอง') || room.status === 'มีคนอยู่').map(
-                                        (room) =>
-                                            room ? (
-                                                <tr>
-                                                    <td width={'20px'} ><input 
-                                                    type='checkbox' 
-                                                    name = {room.id}
-                                                    id="myCheckboxId"
-                                                    checked = {room.isChecked}
-                                                    onChange={handleChange}
-                                                    /></td>
-                                                    <td width={'60px'} >{room.floor && room.floor.building ? room.floor.building.name : '---'}</td>
-                                                    <td width={'60px'} >{room.floor ? room.floor.name : '---'}</td>
-                                                    <td width={'80px'} >{room.RoomType ? room.RoomType.name : '---'}</td>
-                                                    <td width={'60px'}> {room.name ? room.name : '---'}</td>
-                                                    <td width={'80px'} >{room.status ? room.status : '---'}</td>
-                                                    
-                                                </tr>
-                                            ) : null
-                                    )}
-
-
-
+                                {filterrooms.filter((room) => (room && room.status === 'จอง') || room.status === 'มีคนอยู่').map(
+                                            (room) =>
+                                                room ? (
+                                                    <tr>
+                                                        <td width={'20px'} ><input 
+                                                        type='checkbox' 
+                                                        name = {room.id}
+                                                        id="myCheckboxId"
+                                                        checked = {room.isChecked}
+                                                        onChange={handleChange}
+                                                        /></td>
+                                                        <td width={'60px'} >{room.floor && room.floor.building ? room.floor.building.name : '---'}</td>
+                                                        <td width={'60px'} >{room.floor ? room.floor.name : '---'}</td>
+                                                        <td width={'80px'} >{room.RoomType ? room.RoomType.name : '---'}</td>
+                                                        <td width={'60px'}> {room.name ? room.name : '---'}</td>
+                                                        <td width={'80px'} >{room.status ? room.status : '---'}</td>
+                                                        
+                                                    </tr>
+                                                ) : null
+                                        )}
 
 
-                            </tbody>
+
+
+
+                                </tbody>
+                                
                             
-                         
-                            
+                                
 
 
 
 
-                        </table>
+                            </table>
+
+                        </div>
+                        
                         <div className = {styles.detail}>
                             ออกใบแจ้งหนี้ : คือการออกใบแจ้งหนี้ให้ผู้เช่าทราบก่อนถึงวันชำระ 
                             สามารถออกได้ตามรอบบิลและกำหนดเอง(กรีณีมีการพักไม่เต็มเดือน)

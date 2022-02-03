@@ -360,7 +360,7 @@ const CalendarDate = (choose) =>{
 
                             </div>
                             <div className ={styles.tablecontent} >
-                                <table >
+                                <table className ={styles.table}>
                                     <thead className ={styles.header}>
                                         <tr >
                                             <td  onClick={handlerchangesortingstyle}> {tbsortingstyle_newmetoold?<ArrowDropDownIcon/>:<ArrowDropUpIcon/>} </td>

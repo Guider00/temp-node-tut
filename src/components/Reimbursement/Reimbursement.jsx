@@ -137,12 +137,15 @@ export const  Reimbursement = () => {
                                     </tr>
 
                                 </thead>
-                                
                                 <tbody className={styles.tbody}> {FilterRooms.map( 
                                     (room) => room ? (
-                                        <tr>
+                                        <tr  >
                                             <td>    
-                                                <input type="checkbox" name = "myCheckboxName" id="myCheckboxId"
+                                                <input 
+                                                
+                                                type="checkbox" 
+                                                name = "myCheckboxName" 
+                                                id="myCheckboxId"
                                                 onChange={(e)=>{
                                                     const check = e.target.checked
                                                     let id = room.id

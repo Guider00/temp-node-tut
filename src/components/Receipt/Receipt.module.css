@@ -3,59 +3,70 @@
 .red{
     color: red;
 }
-.zone1{
+.main{
     width: 100vw;
-
     display: flex;
     flex-wrap: wrap;
+    ;
     
 }
-.zone1>.bigbox{
-    flex: 1 1 40%;
+
+.main>.zone1{
+    flex-basis:45%;
+    min-width: 700px;
+    height:50%;
     margin: 2rem;
     overflow :hidden;
+
+
+    
+}
+.main>.zone2{
+    flex-basis:45%;
+    min-width: 700px;
+    height:50%;
+    margin: 2rem;
+    
 }
 
-.zone1>.bigbox>.formtableInvoice{
+.main>.zone1>.formtableInvoice{
     display: flex;
     justify-content: center;
     flex: 1 1 100vW;
 }
 
-.zone1>.bigbox>.formtableInvoice>.card{
-    flex-basis: 80%;    
+.main>.zone1>.formtableInvoice>.card{   
+    width: 100%; 
     border: 1px solid black;
     border-radius: 10px;
-    padding: 2rem;
-    margin: auto;
+    margin: 1rem;
     justify-content: center;
-}
-.zone1>.bigbox>.formtableInvoice>.card>{
-    flex-basis: 100%;
-    background-color: darkgray;
-    align-items: center;
-    padding-left: 2rem;
-    padding-right: 2rem;
-    font-size: x-large;
+    padding: 0.5rem;
+    min-width: 50%;
+    
 }
 
 
 
 
-.zone1>.bigbox>.formdetailsInvoice{
+
+.main>.zone2>.formdetailsInvoice{
     display: flex;
     justify-content: center;
     flex: 1 1 100vW;
 }
 
-.zone1>.bigbox>.formdetailsInvoice>.card{
-    flex-basis: 80%;    
+.main>.zone2>.formdetailsInvoice>.card{
+    width: 100%;   
     border: 1px solid black;
     border-radius: 10px;
-    padding: 2rem;
-    margin: auto;
+    margin: 1rem;
     justify-content: center;
+    padding: 0.5rem;
+    min-width: 500px;
 }
+
+
 #statusbill{
     margin-left: 1rem;
 
@@ -86,7 +97,28 @@
     margin-bottom: 1rem;
 }
 
-.card>.cardbody>.table{
+.box{
+    width: 100%;
+    height: 305px;
+    overflow: auto;
+    
+}
+.box2{
+    margin-top: 1rem;
+    width: 100%;
+    height: 150px;
+    overflow: auto;
+    
+}
+.card>.cardbody>.box2>.table{
+    width: 100%;
+    font-size: medium;
+    border-collapse: collapse;
+    overflow: auto;
+}
+
+.card>.cardbody>.box>.table{
+    width: 100%;
     font-size: medium;
     border-collapse: collapse;
     overflow: auto;
@@ -104,23 +136,32 @@
 }
 
 
-.card>.cardbody>.table>.header{
-    margin-top:5rem;
+.card>.cardbody>.box>.table>.header{
+    width: 100%;
     position: sticky;
     top: 0;
-    font-size: 1rem;
-    width: 100% ;
-    height: 40px;
-    text-align: center;
-    background-color:rgb(185, 183, 183);
+    background-color: darkgray;
 }
-.card>.cardbody>.table>.body{
+.card>.cardbody>.box>.table>.body{
 
-    font-size: 0.8rem;
+    font-size: 1rem;
     width: 100%;
     height: 40px;
     text-align: center;
-    overflow:hiden;
+    
+}
+.card>.cardbody>.box2>.table>.header{
+    width: 100%;
+    position: sticky;
+    top: 0;
+    background-color: darkgray;
+}
+.card>.cardbody>.box2>.table>.body{
+
+    font-size: 1rem;
+    width: 100%;
+    height: 40px;
+    text-align: center;
     
 }
 .button{
@@ -189,7 +230,7 @@
 
 
 }
-.zone1>.buttonstyles{
+.main>.buttonstyles{
     
     width: 100%;
     height: 50px;
@@ -200,26 +241,39 @@
     margin-left: 5rem;
     min-width: 400px;
 }
+@media only screen and (max-width:1500px) {
+    .main>.buttonstyles{
+    
+        width: 100%;
+        height: 50px;
+        display: flex;
+        justify-content: left;
+        padding: 20px 20px;
+        margin-right: 5rem;
+        margin-left: 1rem;
+        min-width: 400px;
+    }
+    }
 
-.zone1>.buttonstyles>.createbutton{
+.main>.buttonstyles>.createbutton{
     margin-right: 1rem;
 }
-.zone1>.buttonstyles>.cancelbutton{
-    margin-right: 23rem;
+.main>.buttonstyles>.cancelbutton{
+    margin-right:25%;
 }
-.zone1>.buttonstyles>.editbutton{
+.main>.buttonstyles>.editbutton{
     margin-right: 1rem;
 }
-.zone1>.buttonstyles>.savebutton{
+.main>.buttonstyles>.savebutton{
     margin-right: 1rem;
 }
 
-.zone1>.buttonstyles>.cancelbutton2{
+.main>.buttonstyles>.cancelbutton2{
     margin-right: 1rem;
 }
 
 @media only screen and (max-width:900px) {
-    .zone1>.buttonstyles>.cancelbutton{
+    .main>.buttonstyles>.cancelbutton{
         margin-right: 5rem;
     }
         
@@ -232,4 +286,6 @@
     
 
 
-
+.calendar{
+    margin-left: 1rem ;
+}

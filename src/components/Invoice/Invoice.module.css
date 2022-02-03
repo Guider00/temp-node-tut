@@ -307,9 +307,10 @@
 }
 
 
-.container>.display>.zone1>.box1>.tablecontent>.table>table>.header{
+.container>.display>.zone1>.box1>.tablecontent>.table>.header{
    width: 100%;
-    
+   background-color: darkgray;
+  
        
 }
 .container>.display>.zone1>.box1>.tablecontent>.table>table>.header{
