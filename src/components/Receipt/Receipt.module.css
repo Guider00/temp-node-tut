@@ -12,7 +12,7 @@
 }
 .zone1>.bigbox{
     flex: 1 1 40%;
-    margin: 2rem;
+    margin: 1.5rem;
     overflow :hidden;
 }
 
@@ -26,7 +26,7 @@
     flex-basis: 80%;    
     border: 1px solid black;
     border-radius: 10px;
-    padding: 2rem;
+    padding: 1rem;
     margin: auto;
     justify-content: center;
 }
@@ -52,10 +52,12 @@
     flex-basis: 80%;    
     border: 1px solid black;
     border-radius: 10px;
-    padding: 2rem;
+    padding: 1rem;
     margin: auto;
     justify-content: center;
 }
+
+
 #statusbill{
     margin-left: 1rem;
 
@@ -83,13 +85,18 @@
 .card>.cardbody>.row{
     flex-basis: 100%;
     margin-top:1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
-.card>.cardbody>.table{
+.card>.cardbody>.zonetable{
+    max-height: 14rem;
+    overflow-y: auto;
+}
+.card>.cardbody>.zonetable>.table{
     font-size: medium;
     border-collapse: collapse;
     overflow: auto;
+    width: 100%;
 }
 
 .Building{
@@ -104,7 +111,7 @@
 }
 
 
-.card>.cardbody>.table>.header{
+.card>.cardbody>.zonetable>.table>.header{
     margin-top:5rem;
     position: sticky;
     top: 0;
@@ -114,22 +121,37 @@
     text-align: center;
     background-color:rgb(185, 183, 183);
 }
-.card>.cardbody>.table>.body{
+.card>.cardbody>.zonetable>.table>.body{
 
     font-size: 0.8rem;
     width: 100%;
     height: 40px;
     text-align: center;
-    overflow:hiden;
+    overflow-y: auto;
     
 }
+.card>.cardbody>.zonetable>.table>.body>tr>td>input[name="price"],
+.card>.cardbody>.zonetable>.table>.body>tr>td>input[name="name"]
+{
+    text-align: center;
+    justify-content: center;
+    width: 5rem;
+}
+.card>.cardbody>.zonetable>.table>.body>tr>td>input[name="number_item"]{
+    text-align: center;
+    justify-content: center;
+    width: 3rem;
+}
+
+
+
 .button{
     margin-top: 1rem;
     margin-left: 1rem;
     padding: 10px 10px;
     font-size: 1;
     position: relative;
-
+    display: flex;
 
 }
 
@@ -164,7 +186,11 @@
 .press{
     margin-left: 1rem;
     padding: 10px 10px;
-    display: flexbox;
+    display: flex;
+    font-size: 0.75rem;
+    justify-content: space-evenly;
+    align-items: center;
+    text-align: center;
 
 }
 
@@ -177,7 +203,7 @@
 
 
 }
-.card>.cardbody>.menu{
+.card>.cardbody>.header{
     font-size: 1.5rem;
     font-weight: 900;
     
@@ -186,9 +212,21 @@
     font-size: 1;
     margin-left:    1rem;
     text-align: right;
-
-
 }
+.menu{
+    display: flex;
+    justify-content: right;
+}
+.menu>button[name="editmode"],
+.menu>button[name="savereceiptinformation"]
+{
+    display: flex;
+    align-items: center;
+    margin: 0.25rem;
+     padding: 0.5rem;
+    justify-content: right; 
+}
+
 .zone1>.buttonstyles{
     
     width: 100%;

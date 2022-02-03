@@ -646,8 +646,6 @@ export const export_Invoice_pdf =  ( room ,table_prices , monthlybilling) =>{
     const Units = _table_prices.map(_table_prices => (_table_prices.unit !== undefined   ) ?  `${_table_prices.unit}`:'1' );
     let Price = 0
     let Amount = 0
-    console.log('_table_prices.type_price',_table_prices[1].type_price)
-  
         Price = _table_prices.map(_table_prices => `${
             (_table_prices.type_price === "ราคารวมvat" ? Number(_table_prices.price * 100.0/107.0 ).toFixed(2):Number(_table_prices.price).toFixed(2) )
          }`);

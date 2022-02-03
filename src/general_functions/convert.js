@@ -54,3 +54,13 @@ export const toHHMMSS = (date) =>{
     let datetext = d.toTimeString();
     return( datetext.split(' ')[0] ) 
 }
+
+export const getlaststring = (str:String,number:Number) =>{
+    console.log('str',str.length)
+    if( (str.length-1) >= number){
+         return str.substring( (str.length) -number , str.length )
+    }else{
+        return str
+    }
+   
+}

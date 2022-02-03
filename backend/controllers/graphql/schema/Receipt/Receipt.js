@@ -24,6 +24,7 @@ type Receipt {
     id:ID!
     docnumber:String,
     monthlybilling:Date,  
+    duedate:Date,
     status:String,
     printstatus : String,
     note:String,
@@ -34,6 +35,7 @@ type Receipt {
 input ReceiptInput {
     docnumber:String,
     monthlybilling:Date, 
+    duedate:Date,
     status:String,
     printstatus : String,
     note:String,

@@ -1,3 +1,14 @@
+ export const list_to_show = (list) =>{
+        let data= list
+        let _price =  Number( (data && data.number_item ?  Number (data.number_item) : 1  ) * (data && data.price ?
+         Number( data.type_price === 'ราคารวมvat' ? Number( data.price )*100/107 : Number( data.price ) ) : 0)).toFixed(2)
+
+         let _vat =  Number(data.selectvat === 'คิดvat' ? _price* Number(data.vat)/100 : 0 ).toFixed(2)
+        
+         let total = Number( Number(_price) + Number(_vat) ).toFixed(2)
+
+        return ({price:_price ,vat:_vat , total: total})
+    }
 
 export const handlerCreateRecipt = async () => {
 	try {

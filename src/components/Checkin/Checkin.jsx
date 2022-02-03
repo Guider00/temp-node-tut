@@ -1579,48 +1579,53 @@ export const Checkin = () => {
 										let _updatetableoption   = _tableoption.body.map(obj  =>{
 											return ({name:obj.name , price:obj.price,  number_item:"1", selectvat:obj.selectvat, type_price:obj.type_price})
 										})
+										let _room = selectedroom
 										const now =	new Date()
 											try{
-												let _res = await crateInvoice({
-													variables:{
-														input:{
-															status:"รอการชำระเงิน",
-															monthlybilling : now,
-															lists:[..._updatetableoption]
-														}
-													}
-												})
-												
-												if(_res && _res.data && _res.data.addInvoice && _res.data.addInvoice.id){ 
-															// สร้างใบแจ้งหนี้สำเร็จ //
-														
-															let _idreceipt = _res.data.addInvoice.id
-															let _room = selectedroom
-															if(_room && _room.id){
-																let _res = await updateRoom({
-																		variables: {
-																			id: _room.id,
-																			input: {
-																		
-																				checkinInvoiceid:_idreceipt
-																			}
-																		}
-																	});
-																	if(_res && _res.data){
-																	try{
-																			console.log('_updatetableoption',_updatetableoption)
-																			export_Invoice_pdf(selectedroom , [..._updatetableoption],toYYMM(now) )
-																			refetch_roomMember()
-																		}catch(e){
-																			console.log(e)
-																		}
-
-																	}else{
-																		console.log('communication Error ')
-																	}
+												if(_room && _room.id){
+													let _res = await crateInvoice({
+														variables:{
+															input:{
+																roomid:_room.id,
+																status:"รอการชำระเงิน",
+																monthlybilling : now,
+																lists:[..._updatetableoption]
 															}
-													}
+														}
+													})
+													
+													if(_res && _res.data && _res.data.addInvoice && _res.data.addInvoice.id){ 
+																// สร้างใบแจ้งหนี้สำเร็จ //
+															
+																let _idreceipt = _res.data.addInvoice.id
+															
+																
+																	 _res = await updateRoom({
+																			variables: {
+																				id: _room.id,
+																				input: {
+																			
+																					checkinInvoiceid:_idreceipt
+																				}
+																			}
+																		});
+																		if(_res && _res.data){
+																		try{
+																				console.log('_updatetableoption',_updatetableoption)
+																				export_Invoice_pdf(selectedroom , [..._updatetableoption],toYYMM(now) )
+																				refetch_roomMember()
+																			}catch(e){
+																				console.log(e)
+																			}
 
+																		}else{
+																			console.log('communication Error ')
+																		}
+																
+													}
+												}else{
+													console.error('ไม่ได้เลือกห้อง')
+												} // check select Room 
 
 												
 											}catch(e){
