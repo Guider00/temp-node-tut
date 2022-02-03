@@ -37,6 +37,9 @@ import { export_address_pdf } from "../../../general_functions/pdf/export/export
     const Address = useQuery(API_GET_Address);
     const [ addReceiptnumber, mutationaddReceiptnumber] = useMutation(API_ADD_Receiptnumber)
     const Receiptnumber = useQuery(API_GET_Receiptnumber)
+
+    const { handleOnchangeReceipt,handleOnchangeAddress,formErrorsAddress,formErrors,defaultData,setdefaultData ,defaultAddress,setdefaultAddress,handleClick , disableReceipt , setDisableReceipt , disabledAddress ,disabledReceipt,setDisabledReceipt,setDisabledAddress} = HandleForm();
+
     const [defaultDialog, setdefaultDialog] = useState({
         message:"Save it?",
         isLoading: false,
@@ -172,7 +175,7 @@ import { export_address_pdf } from "../../../general_functions/pdf/export/export
     //handleForm
     //validate
 
-    const { handleOnchangeReceipt,handleOnchangeAddress,formErrorsAddress,formErrors,defaultData,setdefaultData ,defaultAddress,setdefaultAddress,handleClick , disableReceipt , setDisableReceipt , disabledAddress ,disabledReceipt,setDisabledReceipt,setDisabledAddress} = HandleForm();
+   
 
     
 
@@ -193,7 +196,6 @@ import { export_address_pdf } from "../../../general_functions/pdf/export/export
             setReceiptNumber(_ReceiptNumber);
             if(Receiptnumber && Receiptnumber.data && Receiptnumber.data.Receiptnumbers.length > 0){
 
-
                 let _defaultData = defaultData
                 _defaultData['receipt'] = Receiptnumber.data.Receiptnumbers[0].receipt_number
                 _defaultData['bill'] = Receiptnumber.data.Receiptnumbers[0].bill_number
@@ -206,9 +208,6 @@ import { export_address_pdf } from "../../../general_functions/pdf/export/export
                 setdefaultData(_defaultData)
 
             }
-            export_address_pdf(defaultAddress,defaultData)
-
-           
             
         } else{
             Receiptnumber.refetch()
@@ -264,7 +263,6 @@ import { export_address_pdf } from "../../../general_functions/pdf/export/export
                 setdefaultAddress(_defaultData)
                 
             }
-            export_address_pdf(defaultAddress,defaultData)
             
             
             
@@ -708,13 +706,6 @@ import { export_address_pdf } from "../../../general_functions/pdf/export/export
                 className={styles.savestyle} 
                 onClick={handleClick}>CLEAR-ALL</button>
 
-                {/* <button
-                className={styles.savestyle} 
-                onClick={()=>export_address_pdf(defaultAddress,defaultData)}
-                >
-                    1234
-                    
-                </button> */}
                 
                 </div>
                 

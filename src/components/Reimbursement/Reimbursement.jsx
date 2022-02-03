@@ -6,6 +6,8 @@ import { API_GET_Reimbursement,API_ADD_Reimbursement,API_DELETE_Reimbursement,AP
 import {  export_Reimbursement_pdf } from '../../general_functions/pdf/export/export_pdf';
 import { Rooms_to_table , filter_rooms} from "./function";
 
+//address
+import { AddressData } from "../../subcomponents/AddressData/AddressData";
 
 
 
@@ -20,7 +22,8 @@ import { Rooms_to_table , filter_rooms} from "./function";
 
 export const  Reimbursement = () => {
 
-   
+    //address
+    const { defaultData } = AddressData();
 
     const getReimbursement = useQuery(API_GET_Reimbursement)
     console.log("getReimbursement",getReimbursement)
@@ -66,6 +69,7 @@ export const  Reimbursement = () => {
             console.log('_formFilter',_formFilter)
         }
     }
+    
     
 
    
@@ -180,8 +184,14 @@ export const  Reimbursement = () => {
 
                 </div>
                 <button className={styles.button}
-                onClick={(IDrooms)=>{
-                    export_Reimbursement_pdf(IDrooms , 'IDrooms')
+                onClick={()=>{
+                    if(IDrooms.length > 0){
+                        export_Reimbursement_pdf(IDrooms,'IDrooms','',defaultData)
+
+                    }else{
+                        console.log("empty select")
+                    }
+                   
                     
                 }}
                 >คืนเงินประกันภัย</button>  

@@ -1,87 +1,11 @@
 
-
-
 const { jsPDF }  = require('jspdf')
 const { AddTH_font }  =require('../AddFont/AddFont.js')
 const { formatDate , toHHMMSS }  = require('../../convert.js')
-var ranNum1a;
-export const export_address_pdf = (defaultAddress , defaultData) =>{
-
-    let Noanswer = "-"
-    let idAddress = defaultAddress.id ? defaultAddress.id : Noanswer ;
-    let name = defaultAddress.name ? defaultAddress.name : Noanswer ;
-    let code = defaultAddress.code ? defaultAddress.code : Noanswer ;
-    let tel = defaultAddress.tel ? defaultAddress.tel : Noanswer ;
-    let no = defaultAddress.no ? defaultAddress.no : Noanswer ;
-    let province = defaultAddress.province ? defaultAddress.province : Noanswer ;
-    let road = defaultAddress.road ? defaultAddress.road : Noanswer ;
-    let village = defaultAddress.village ? defaultAddress.village : Noanswer ;
-    let boundary = defaultAddress.boundary ? defaultAddress.boundary : Noanswer ;
-    let district = defaultAddress.district ? defaultAddress.district : Noanswer ;
-    let alley = defaultAddress.alley ? defaultAddress.alley : Noanswer ;
-    console.log("Address",idAddress,name,code,tel,no,province,road,village,boundary,district,alley)
-
-    let idReceipt = defaultData.id ? defaultData.id : Noanswer ;
-    let receipt = defaultData.receipt ? defaultData.receipt : Noanswer ;
-    let invoice = defaultData.invoice ? defaultData.invoice : Noanswer ;
-    let reimbursement = defaultData.reimbursement ? defaultData.reimbursement : Noanswer ;
-    let booking = defaultData.booking ? defaultData.booking : Noanswer ;
-    let bill = defaultData.bill ? defaultData.bill : Noanswer ;
-    let accNo = defaultData.accNo ? defaultData.accNo : Noanswer ;
-    let billDate = defaultData.billDate ? defaultData.billDate : Noanswer ;
-    console.log("Receipt",idReceipt,receipt,invoice,reimbursement,booking,bill,accNo,billDate)
-
-}
-
-
-export const export_address_pdf2 = (defaultAddress , defaultData) =>{
-    let Noanswer = "-"
-    if(defaultData , defaultData){
-        console.log("1111111111")
-        
-        ranNum1a =  {
-                idAddress : defaultAddress.id ? defaultAddress.id : Noanswer ,
-                name : defaultAddress.name ? defaultAddress.name : Noanswer,
-                code : defaultAddress.code ? defaultAddress.code : Noanswer ,
-                tel : defaultAddress.tel ? defaultAddress.tel : Noanswer ,
-                no : defaultAddress.no ? defaultAddress.no : Noanswer ,
-                province : defaultAddress.province ? defaultAddress.province : Noanswer,
-                road : defaultAddress.village ? defaultAddress.village : Noanswer ,
-                village : defaultAddress.village ? defaultAddress.village : Noanswer ,
-                boundary : defaultAddress.boundary ? defaultAddress.boundary : Noanswer ,
-                district : defaultAddress.district ? defaultAddress.district : Noanswer ,
-                alley : defaultAddress.alley ? defaultAddress.alley : Noanswer ,
-    
-    
-                idReceipt : defaultData.id ? defaultData.id : Noanswer ,
-                receipt : defaultData.receipt ? defaultData.receipt : Noanswer ,
-                invoice : defaultData.invoice ? defaultData.invoice : Noanswer ,
-                reimbursement : defaultData.reimbursement ? defaultData.reimbursement : Noanswer ,
-                booking : defaultData.booking ? defaultData.booking : Noanswer ,
-                bill : defaultData.bill ? defaultData.bill : Noanswer ,
-                accNo : defaultData.accNo ? defaultData.accNo : Noanswer ,
-                billDate : defaultData.billDate ? defaultData.billDate : Noanswer ,
-                        
-            };
-
-    }
-    
-    return ranNum1a;
-    
-            
-       
-        
-
-    
-
-   
-
-    
-    
 
 
 
-}
+
 
 
 export const export_booking_pdf = ( booking , owner , customer_details   ) =>{
@@ -443,7 +367,9 @@ const  numbertothailanguage = (number) =>{
         return null
 }
 
-export const export_Contract = (contracts ) =>{
+export const export_Contract = (contracts,defaultData) =>{
+    
+    let AddressForm = defaultData
     const document_name ='เอกสารสัญญา'
 
     
@@ -455,11 +381,11 @@ export const export_Contract = (contracts ) =>{
         let date = "12/12/2564"
         let between = "10/11/2564 - 10/12/2564"
 
-        let No = "444/96"
-        let district = "ดินแดง"
-        let boundary = "ดินแดง"
-        let province = "กรุงเทพมหานคร"
-        let name = "xxxxxxxxxxx   xxxxxxxxxxxxxxx"
+        let No = AddressForm.no ? AddressForm.no : '---'
+        let district = AddressForm.district ? AddressForm.district : '---'
+        let boundary = AddressForm.boundary ? AddressForm.boundary : '---'
+        let province = AddressForm.province ? AddressForm.province : '---'
+        let name = "xxxxxxxxxxxxx xxxxxxxxxxxxxxxxxx"
 
         let No2 = "444/96"
         let district2 = "ดินแดง"
@@ -677,8 +603,7 @@ function openInNewTab(href) {
   }).click();
 }
  // ใบแจ้งหนี้  // 
-export const export_Invoice_pdf =  ( room ,table_prices , monthlybilling) =>{
-    
+export const export_Invoice_pdf =  ( room ,table_prices , monthlybilling ) =>{
     const document_name ='ใบแจ้งหนี้'
     let business_Address_1 = "119 ซอยสีม่วงอนุสรณ์ ถนน สุทธิสาร"
     let business_Address_2 = "แขวง ดินแดง เขต ดินแดง กรุงเทพ 10400"
@@ -736,7 +661,7 @@ export const export_Invoice_pdf =  ( room ,table_prices , monthlybilling) =>{
              *Number( (_table_prices.unit !== undefined   ) ?  `${_table_prices.unit}`:'1')}`  );
  
       
-    const doc = new jsPDF('l', 'mm', [297, 210]);
+    const doc = new jsPDF('l', 'mm', [297, 230]);
    
 
     AddTH_font(doc ,'yourCustomFont.ttf' )
@@ -744,142 +669,139 @@ export const export_Invoice_pdf =  ( room ,table_prices , monthlybilling) =>{
     doc.setFont('yourCustomFont');
 
     //bill box
-    doc.setDrawColor(52, 192, 54)
-    doc.setFillColor(52, 192, 54)
-    doc.roundedRect(200, 8, 78, 13, 6, 6, 'FD')
 
     //main box
     doc.setDrawColor(70, 250, 100)
     doc.setFillColor(70, 250, 100)
-    doc.rect(15,25,265,160 , 'FD')
+    doc.rect(15,35,265,160 , 'FD')
 
     //address box
     doc.setDrawColor(155, 255, 168)
     doc.setFillColor(155, 255, 168)
-    doc.roundedRect(17,27,173,46,6,6, 'FD')
+    doc.roundedRect(17,37,173,46,6,6, 'FD')
 
-    doc.roundedRect(193,27,38,10,6,6 , 'FD')
-    doc.roundedRect(232,27,47,10,6,6 , 'FD')
-    doc.roundedRect(193,39,38,10,6,6 , 'FD')
-    doc.roundedRect(232,39,47,10,6,6 , 'FD')
-    doc.roundedRect(193,51,38,10,6,6 , 'FD')
-    doc.roundedRect(232,51,47,10,6,6 , 'FD')
-    doc.roundedRect(193,63,38,10,6,6 , 'FD')
-    doc.roundedRect(232,63,47,10,6,6 , 'FD')
+    doc.roundedRect(193,37,38,10,6,6 , 'FD')
+    doc.roundedRect(232,37,47,10,6,6 , 'FD')
+    doc.roundedRect(193,49,38,10,6,6 , 'FD')
+    doc.roundedRect(232,49,47,10,6,6 , 'FD')
+    doc.roundedRect(193,61,38,10,6,6 , 'FD')
+    doc.roundedRect(232,61,47,10,6,6 , 'FD')
+    doc.roundedRect(193,73,38,10,6,6 , 'FD')
+    doc.roundedRect(232,73,47,10,6,6 , 'FD')
 
     //topic box
     doc.setDrawColor(40, 120, 50)
     doc.setFillColor(40, 210, 60)
-    doc.rect(17,75,138,15, 'FD' )
-    doc.rect(155,75,38,15, 'FD' )
-    doc.rect(193,75,38,15, 'FD' )
-    doc.rect(231,75,46,15, 'FD' )
+    doc.rect(17,85,138,15, 'FD' )
+    doc.rect(155,85,38,15, 'FD' )
+    doc.rect(193,85,38,15, 'FD' )
+    doc.rect(231,85,46,15, 'FD' )
 
     doc.setDrawColor(40, 120, 50)
     doc.setFillColor(155, 255, 168)
     
     //result box
-    doc.rect(17,90,138,60, 'FD' )
-    doc.rect(155,90,38,60, 'FD' )
-    doc.rect(193,90,38,60, 'FD' )
-    doc.rect(231,90,46,60, 'FD' )
+    doc.rect(17,100,138,60, 'FD' )
+    doc.rect(155,100,38,60, 'FD' )
+    doc.rect(193,100,38,60, 'FD' )
+    doc.rect(231,100,46,60, 'FD' )
 
     //last box
     doc.setFillColor(255,255,255)
-    doc.rect(17,152,138,31, 'FD' )
+    doc.rect(17,162,138,31, 'FD' )
     doc.setFillColor(180,250,190)
-    doc.rect(155,152,76,10, 'FD' )
-    doc.rect(155,162,76,11, 'FD' )
-    doc.rect(155,173,76,10, 'FD' )
+    doc.rect(155,162,76,10, 'FD' )
+    doc.rect(155,172,76,11, 'FD' )
+    doc.rect(155,183,76,10, 'FD' )
     
-    doc.rect(231,152,46,10, 'FD' )
-    doc.rect(231,162,46,11, 'FD' )
-    doc.rect(231,173,46,10, 'FD' )
+    doc.rect(231,162,46,10, 'FD' )
+    doc.rect(231,172,46,11, 'FD' )
+    doc.rect(231,183,46,10, 'FD' )
 
     
     doc.setFontSize(16)
-    doc.text(business_Address_1 ,15, 11, {align: 'left'})
+    doc.text(business_Address_1 ,15, 21, {align: 'left'})
     doc.setFontSize(14)
-    doc.text(business_Address_2 ,15, 16, {align: 'left'})
+    doc.text(business_Address_2 ,15, 26, {align: 'left'})
 
     doc.setFontSize(14)
-    doc.text("Tax ID : ",15, 21, {align: 'left'})
-    doc.text(Taxid,27, 21, {align: 'left'})
-    doc.text("โทร : ",52, 21, {align: 'left'})
-    doc.text(Phone,60, 21, {align: 'left'})
-    doc.text("Email :",82, 21, {align: 'left'})
-    doc.text(Email,93, 21, {align: 'left'})
+    doc.text("Tax ID : ",15, 31, {align: 'left'})
+    doc.text(Taxid,27, 31, {align: 'left'})
+    doc.text("โทร : ",52, 31, {align: 'left'})
+    doc.text(Phone,60, 31, {align: 'left'})
+    doc.text("Email :",82, 31, {align: 'left'})
+    doc.text(Email,93, 31, {align: 'left'})
 
-    doc.setFontSize(18)
-    doc.text("ใบแจ้งค่าใช้จ่าย/DEBIT NOTE" ,210, 16, {align: 'left'})
+    doc.setFontSize(23)
+    doc.text("ใบแจ้งค่าใช้จ่าย/DEBIT NOTE" ,110, 10, {align: 'left'})
 
     doc.setFontSize(14)
-    doc.text("ชื่อ/Name :" ,20, 40, {align: 'left'})
+    doc.text("ชื่อ/Name :" ,20, 50, {align: 'left'})
     doc.setFontSize(16)
-    doc.text(Name ,50, 40, {align: 'left'})
+    doc.text(Name ,50, 50, {align: 'left'})
    
    
     doc.setFontSize(14)
-    doc.text("ที่อยู่/Address :" ,20, 55, {align: 'left'})
+    doc.text("ที่อยู่/Address :" ,20, 65, {align: 'left'})
     doc.setFontSize(16)
-    doc.text(Address1 ,50, 55, {align: 'left'})
+    doc.text(Address1 ,50, 65, {align: 'left'})
     // doc.text(Address2 ,50, 60, {align: 'left'})
 
     doc.setFontSize(14)
-    doc.text("เลขที่/No. " ,205, 33, {align: 'left'})
+    doc.text("เลขที่/No. " ,205, 43, {align: 'left'})
     doc.setFontSize(12)
-    doc.text(No ,240, 33, {align: 'left'})
+    doc.text(No ,240, 43, {align: 'left'})
     doc.setFontSize(14)
-    doc.text("วันที่/Date " ,205, 45, {align: 'left'})
+    doc.text("วันที่/Date " ,205, 55, {align: 'left'})
     doc.setFontSize(16)
-    doc.text(_Date ,245, 45, {align: 'left'})
+    doc.text(_Date ,245, 55, {align: 'left'})
     doc.setFontSize(14)
-    doc.text("ประจำเดือน/Month " ,198, 57, {align: 'left'})
+    doc.text("ประจำเดือน/Month " ,198, 67, {align: 'left'})
     doc.setFontSize(16)
-    doc.text(Month ,245, 57, {align: 'left'})
+    doc.text(Month ,245, 67, {align: 'left'})
     doc.setFontSize(14)
-    doc.text("บ้านเลขที่/Home No. " ,198, 69, {align: 'left'})
+    doc.text("บ้านเลขที่/Home No. " ,198, 79, {align: 'left'})
     doc.setFontSize(16)
-    doc.text(HoneNo ,245, 69, {align: 'left'})
+    doc.text(HoneNo ,245, 79, {align: 'left'})
 
     
     doc.setFontSize(16)
-    doc.text("รายการ" ,73, 82, {align: 'left'})
-    doc.text("Description" ,70, 86, {align: 'left'})
+    doc.text("รายการ" ,73, 92, {align: 'left'})
+    doc.text("Description" ,70, 96, {align: 'left'})
     
-    doc.text("จำนวนหน่วย" ,163, 82, {align: 'left'})
-    doc.text("Units" ,167, 86, {align: 'left'})
+    doc.text("จำนวนหน่วย" ,163, 92, {align: 'left'})
+    doc.text("Units" ,167, 96, {align: 'left'})
     
-    doc.text("ราคาต่อหน่วย" ,202, 82, {align: 'left'})
-    doc.text("Unit /Price" ,203 , 86, {align: 'left'})
+    doc.text("ราคาต่อหน่วย" ,202, 92, {align: 'left'})
+    doc.text("Unit /Price" ,203 , 96, {align: 'left'})
 
-    doc.text("จำนวนเงิน" ,246, 82, {align: 'left'})
-    doc.text("Amount" ,247 , 86, {align: 'left'})
+    doc.text("จำนวนเงิน" ,246, 92, {align: 'left'})
+    doc.text("Amount" ,247 , 96, {align: 'left'})
 
 
-    doc.text("หมายเหตุ :" ,22, 160, {align: 'left'})
-    doc.text(note ,40, 160, {align: 'left'})
-    doc.text(`รวมทั้งหมด/Total` ,168, 160, {align: 'left'})
-    doc.text(Grandtotal ,250, 160, {align: 'center'})
+    doc.text("หมายเหตุ :" ,22, 170, {align: 'left'})
+    doc.text(note ,40, 170, {align: 'left'})
+    doc.text(`รวมทั้งหมด/Total` ,168, 170, {align: 'left'})
+    doc.text(Grandtotal ,250, 170, {align: 'center'})
 
-    doc.text(`Vat  ${Vat} %` ,168 , 170, {align: 'left'})
-    doc.text( `${ Number(Vat_Grandtotal).toFixed(2) }` ,250 , 170, {align: 'center'})
+    doc.text(`Vat  ${Vat} %` ,168 , 180, {align: 'left'})
+    doc.text( `${ Number(Vat_Grandtotal).toFixed(2) }` ,250 , 180, {align: 'center'})
 
-    doc.text("รวมเงินทั้งสิ้น/Grand Total" ,168 , 181, {align: 'left'})
-    doc.text( `${ Number(End_Grandtotal).toFixed(2) }`  ,250 , 181, {align: 'center'})
+    doc.text("รวมเงินทั้งสิ้น/Grand Total" ,168 , 191, {align: 'left'})
+    doc.text( `${ Number(End_Grandtotal).toFixed(2) }`  ,250 , 191, {align: 'center'})
 
     doc.setFontSize(14)
-    doc.text("เขียนโดย" ,200 , 198, {align: 'left'})
-    doc.text(credit,215 , 198, {align: 'left'})
-    doc.text("วันที่" ,240 , 198, {align: 'left'})
-    doc.text(_Date ,248 , 198, {align: 'left'})
-    doc.text(Time ,268 , 198, {align: 'left'})
+    doc.text("เขียนโดย" ,200 , 208, {align: 'left'})
+    doc.text(credit,215 , 208, {align: 'left'})
+    doc.text("วันที่" ,240 , 208, {align: 'left'})
+    doc.text(_Date ,248 , 208, {align: 'left'})
+    doc.text(Time ,268 , 208, {align: 'left'})
 
     doc.setFontSize(16)
-    doc.text(names ,20, 95, {align: 'left'})
-    doc.text(Units ,170, 95, {align: 'left'})
-    doc.text(Price ,210, 95, {align: 'left'})
-    doc.text(Amount ,250, 95, {align: 'left'})
+    doc.text(names ,20, 105, {align: 'left'})
+    doc.text(Units ,170, 105, {align: 'left'})
+    doc.text(Price ,210, 105, {align: 'left'})
+    doc.text(Amount ,250, 105, {align: 'left'})
 
     let src_pdf = doc.output('datauristring');
 
@@ -896,16 +818,16 @@ export const export_Invoice_pdf =  ( room ,table_prices , monthlybilling) =>{
 
 }
 
-export const export_Invoices_pdf = (Invoices) =>{
 
+export const export_Invoices_pdf = (Invoices,defaultData) =>{   
 
-   
+    let AddressForm = defaultData
     if(Invoices && Array.isArray(Invoices) ) {
         const document_name ='ใบแจ้งหนี้'
-        let business_Address_1 = "119 ซอยสีม่วงอนุสรณ์ ถนน สุทธิสาร"
-        let business_Address_2 = "แขวง ดินแดง เขต ดินแดง กรุงเทพ 10400"
-        let Taxid = "0105536011803"
-        let Phone = "02693700005"
+        let business_Address_1 = AddressForm.no + " ซอย " + AddressForm.alley + " ถนน " + AddressForm.road ? AddressForm.no + " ซอย " + AddressForm.alley + " ถนน " + AddressForm.road : '---'
+        let business_Address_2 = " แขวง " + AddressForm.boundary + " เขต " + AddressForm.district + " จังหวัด " + AddressForm.province + " " + AddressForm.code ? " แขวง " + AddressForm.boundary + " เขต " + AddressForm.district + " จังหวัด " + AddressForm.province + " " + AddressForm.code : '---'
+        let Taxid = "0122222222"
+        let Phone = AddressForm.tel
         let Email = "sales@primusthai.com" 
         const doc = new jsPDF('l', 'mm', [297, 210]);
         Invoices.map( (Invoice,index) =>{
@@ -965,142 +887,140 @@ export const export_Invoices_pdf = (Invoices) =>{
             doc.setFont('yourCustomFont');
 
             //bill box
-            doc.setDrawColor(52, 192, 54)
-            doc.setFillColor(52, 192, 54)
-            doc.roundedRect(200, 8, 78, 13, 6, 6, 'FD')
+            
 
             //main box
             doc.setDrawColor(70, 250, 100)
             doc.setFillColor(70, 250, 100)
-            doc.rect(15,25,265,160 , 'FD')
+            doc.rect(15,35,265,160 , 'FD')
 
             //address box
             doc.setDrawColor(155, 255, 168)
             doc.setFillColor(155, 255, 168)
-            doc.roundedRect(17,27,173,46,6,6, 'FD')
+            doc.roundedRect(17,37,173,46,6,6, 'FD')
 
-            doc.roundedRect(193,27,38,10,6,6 , 'FD')
-            doc.roundedRect(232,27,47,10,6,6 , 'FD')
-            doc.roundedRect(193,39,38,10,6,6 , 'FD')
-            doc.roundedRect(232,39,47,10,6,6 , 'FD')
-            doc.roundedRect(193,51,38,10,6,6 , 'FD')
-            doc.roundedRect(232,51,47,10,6,6 , 'FD')
-            doc.roundedRect(193,63,38,10,6,6 , 'FD')
-            doc.roundedRect(232,63,47,10,6,6 , 'FD')
+            doc.roundedRect(193,37,38,10,6,6 , 'FD')
+            doc.roundedRect(232,37,47,10,6,6 , 'FD')
+            doc.roundedRect(193,49,38,10,6,6 , 'FD')
+            doc.roundedRect(232,49,47,10,6,6 , 'FD')
+            doc.roundedRect(193,61,38,10,6,6 , 'FD')
+            doc.roundedRect(232,61,47,10,6,6 , 'FD')
+            doc.roundedRect(193,73,38,10,6,6 , 'FD')
+            doc.roundedRect(232,73,47,10,6,6 , 'FD')
 
             //topic box
             doc.setDrawColor(40, 120, 50)
             doc.setFillColor(40, 210, 60)
-            doc.rect(17,75,138,15, 'FD' )
-            doc.rect(155,75,38,15, 'FD' )
-            doc.rect(193,75,38,15, 'FD' )
-            doc.rect(231,75,46,15, 'FD' )
+            doc.rect(17,85,138,15, 'FD' )
+            doc.rect(155,85,38,15, 'FD' )
+            doc.rect(193,85,38,15, 'FD' )
+            doc.rect(231,85,46,15, 'FD' )
 
             doc.setDrawColor(40, 120, 50)
             doc.setFillColor(155, 255, 168)
             
             //result box
-            doc.rect(17,90,138,60, 'FD' )
-            doc.rect(155,90,38,60, 'FD' )
-            doc.rect(193,90,38,60, 'FD' )
-            doc.rect(231,90,46,60, 'FD' )
+            doc.rect(17,100,138,60, 'FD' )
+            doc.rect(155,100,38,60, 'FD' )
+            doc.rect(193,100,38,60, 'FD' )
+            doc.rect(231,100,46,60, 'FD' )
 
             //last box
             doc.setFillColor(255,255,255)
-            doc.rect(17,152,138,31, 'FD' )
+            doc.rect(17,162,138,31, 'FD' )
             doc.setFillColor(180,250,190)
-            doc.rect(155,152,76,10, 'FD' )
-            doc.rect(155,162,76,11, 'FD' )
-            doc.rect(155,173,76,10, 'FD' )
+            doc.rect(155,162,76,10, 'FD' )
+            doc.rect(155,172,76,11, 'FD' )
+            doc.rect(155,183,76,10, 'FD' )
             
-            doc.rect(231,152,46,10, 'FD' )
-            doc.rect(231,162,46,11, 'FD' )
-            doc.rect(231,173,46,10, 'FD' )
+            doc.rect(231,162,46,10, 'FD' )
+            doc.rect(231,172,46,11, 'FD' )
+            doc.rect(231,183,46,10, 'FD' )
 
             
             doc.setFontSize(16)
-            doc.text(business_Address_1 ,15, 11, {align: 'left'})
+            doc.text(business_Address_1 ,15, 21, {align: 'left'})
             doc.setFontSize(14)
-            doc.text(business_Address_2 ,15, 16, {align: 'left'})
+            doc.text(business_Address_2 ,15, 26, {align: 'left'})
 
             doc.setFontSize(14)
-            doc.text("Tax ID : ",15, 21, {align: 'left'})
-            doc.text(Taxid,27, 21, {align: 'left'})
-            doc.text("โทร : ",52, 21, {align: 'left'})
-            doc.text(Phone,60, 21, {align: 'left'})
-            doc.text("Email :",82, 21, {align: 'left'})
-            doc.text(Email,93, 21, {align: 'left'})
+            doc.text("Tax ID : ",15, 31, {align: 'left'})
+            doc.text(Taxid,27, 31, {align: 'left'})
+            doc.text("โทร : ",52, 31, {align: 'left'})
+            doc.text(Phone,60, 31, {align: 'left'})
+            doc.text("Email :",82, 31, {align: 'left'})
+            doc.text(Email,93, 31, {align: 'left'})
 
-            doc.setFontSize(18)
-            doc.text("ใบแจ้งค่าใช้จ่าย/DEBIT NOTE" ,210, 16, {align: 'left'})
+            doc.setFontSize(23)
+            doc.text("ใบแจ้งค่าใช้จ่าย/DEBIT NOTE" ,110, 10, {align: 'left'})
 
             doc.setFontSize(14)
-            doc.text("ชื่อ/Name :" ,20, 40, {align: 'left'})
+            doc.text("ชื่อ/Name :" ,20, 50, {align: 'left'})
             doc.setFontSize(16)
-            doc.text(Name ,50, 40, {align: 'left'})
+            doc.text(Name ,50, 50, {align: 'left'})
         
         
             doc.setFontSize(14)
-            doc.text("ที่อยู่/Address :" ,20, 55, {align: 'left'})
+            doc.text("ที่อยู่/Address :" ,20, 65, {align: 'left'})
             doc.setFontSize(16)
-            doc.text(Address1 ,50, 55, {align: 'left'})
+            doc.text(Address1 ,50, 65, {align: 'left'})
             // doc.text(Address2 ,50, 60, {align: 'left'})
 
             doc.setFontSize(14)
-            doc.text("เลขที่/No. " ,205, 33, {align: 'left'})
+            doc.text("เลขที่/No. " ,205, 43, {align: 'left'})
             doc.setFontSize(12)
-            doc.text(No ,240, 33, {align: 'left'})
+            doc.text(No ,240, 43, {align: 'left'})
             doc.setFontSize(14)
-            doc.text("วันที่/Date " ,205, 45, {align: 'left'})
+            doc.text("วันที่/Date " ,205, 55, {align: 'left'})
             doc.setFontSize(16)
-            doc.text(_Date ,245, 45, {align: 'left'})
+            doc.text(_Date ,245, 55, {align: 'left'})
             doc.setFontSize(14)
-            doc.text("ประจำเดือน/Month " ,198, 57, {align: 'left'})
+            doc.text("ประจำเดือน/Month " ,198, 67, {align: 'left'})
             doc.setFontSize(16)
-            doc.text(Month ,245, 57, {align: 'left'})
+            doc.text(Month ,245, 67, {align: 'left'})
             doc.setFontSize(14)
-            doc.text("บ้านเลขที่/Home No. " ,198, 69, {align: 'left'})
+            doc.text("บ้านเลขที่/Home No. " ,198, 79, {align: 'left'})
             doc.setFontSize(16)
-            doc.text(HoneNo ,245, 69, {align: 'left'})
+            doc.text(HoneNo ,245, 79, {align: 'left'})
 
             
             doc.setFontSize(16)
-            doc.text("รายการ" ,73, 82, {align: 'left'})
-            doc.text("Description" ,70, 86, {align: 'left'})
+            doc.text("รายการ" ,73, 92, {align: 'left'})
+            doc.text("Description" ,70, 96, {align: 'left'})
             
-            doc.text("จำนวนหน่วย" ,163, 82, {align: 'left'})
-            doc.text("Units" ,167, 86, {align: 'left'})
+            doc.text("จำนวนหน่วย" ,163, 92, {align: 'left'})
+            doc.text("Units" ,167, 96, {align: 'left'})
             
-            doc.text("ราคาต่อหน่วย" ,202, 82, {align: 'left'})
-            doc.text("Unit /Price" ,203 , 86, {align: 'left'})
+            doc.text("ราคาต่อหน่วย" ,202, 92, {align: 'left'})
+            doc.text("Unit /Price" ,203 , 96, {align: 'left'})
 
-            doc.text("จำนวนเงิน" ,246, 82, {align: 'left'})
-            doc.text("Amount" ,247 , 86, {align: 'left'})
+            doc.text("จำนวนเงิน" ,246, 92, {align: 'left'})
+            doc.text("Amount" ,247 , 96, {align: 'left'})
 
 
-            doc.text("หมายเหตุ :" ,22, 160, {align: 'left'})
-            doc.text(note ,40, 160, {align: 'left'})
-            doc.text(`รวมทั้งหมด/Total` ,168, 160, {align: 'left'})
-            doc.text(Grandtotal ,250, 160, {align: 'center'})
+            doc.text("หมายเหตุ :" ,22, 170, {align: 'left'})
+            doc.text(note ,40, 170, {align: 'left'})
+            doc.text(`รวมทั้งหมด/Total` ,168, 170, {align: 'left'})
+            doc.text(Grandtotal ,250, 170, {align: 'center'})
 
-            doc.text(`Vat  ${Vat} %` ,168 , 170, {align: 'left'})
-            doc.text( `${ Number(Vat_Grandtotal).toFixed(2) }` ,250 , 170, {align: 'center'})
+            doc.text(`Vat  ${Vat} %` ,168 , 180, {align: 'left'})
+            doc.text( `${ Number(Vat_Grandtotal).toFixed(2) }` ,250 , 180, {align: 'center'})
 
-            doc.text("รวมเงินทั้งสิ้น/Grand Total" ,168 , 181, {align: 'left'})
-            doc.text( `${ Number(End_Grandtotal).toFixed(2) }`  ,250 , 181, {align: 'center'})
+            doc.text("รวมเงินทั้งสิ้น/Grand Total" ,168 , 191, {align: 'left'})
+            doc.text( `${ Number(End_Grandtotal).toFixed(2) }`  ,250 , 191, {align: 'center'})
 
             doc.setFontSize(14)
-            doc.text("เขียนโดย" ,200 , 198, {align: 'left'})
-            doc.text(credit,215 , 198, {align: 'left'})
-            doc.text("วันที่" ,240 , 198, {align: 'left'})
-            doc.text(_Date ,248 , 198, {align: 'left'})
-            doc.text(Time ,268 , 198, {align: 'left'})
+            doc.text("เขียนโดย" ,200 , 208, {align: 'left'})
+            doc.text(credit,215 , 208, {align: 'left'})
+            doc.text("วันที่" ,240 , 208, {align: 'left'})
+            doc.text(_Date ,248 , 208, {align: 'left'})
+            doc.text(Time ,268 , 208, {align: 'left'})
 
             doc.setFontSize(16)
-            doc.text(names ,20, 95, {align: 'left'})
-            doc.text(Units ,170, 95, {align: 'left'})
-            doc.text(Price ,210, 95, {align: 'left'})
-            doc.text(Amount ,250, 95, {align: 'left'})
+            doc.text(names ,20, 105, {align: 'left'})
+            doc.text(Units ,170, 105, {align: 'left'})
+            doc.text(Price ,210, 105, {align: 'left'})
+            doc.text(Amount ,250, 105, {align: 'left'})
             if(Invoices.length>0 && index !== (Invoices.length - 1 ) ){
              doc.addPage()
             }
@@ -1352,14 +1272,17 @@ export const export_Receipt_pdf =  ( booking :Booking, type , table_prices  ) =>
 }
 
   // ใบคืนเงินประกัน
-export const export_Reimbursement_pdf =  ( booking , type ,table_price  ) =>{
+export const export_Reimbursement_pdf =  ( booking , type ,table_price,defaultData ) =>{
+
+    let AddressForm = defaultData
+
     const document_name = 'ใบคืนเงินประกัน'
     let Vat = 7;
     if(booking  === undefined){
         alert('ไม่มีข้อมูลในการสร้าง ใบเสร็จ')
         return
     }
-      let _table_prices = []
+    let _table_prices = []
     if(type === 'booking')
     {
         _table_prices = [{ 
@@ -1378,10 +1301,10 @@ export const export_Reimbursement_pdf =  ( booking , type ,table_price  ) =>{
 
     }
     let Noanswer = "-"
-    let business_Address_1 = "119 ซอยสีม่วงอนุสรณ์ ถนน สุทธิสาร"
-    let business_Address_2 = "แขวง ดินแดง เขต ดินแดง กรุงเทพ 10400"
+    let business_Address_1 = AddressForm.no + " ซอย " + AddressForm.alley + " ถนน " + AddressForm.road ? AddressForm.no + " ซอย " + AddressForm.alley + " ถนน " + AddressForm.road : '---'
+    let business_Address_2 = " แขวง " + AddressForm.boundary + " เขต " + AddressForm.district + " จังหวัด " + AddressForm.province + " " + AddressForm.code ? " แขวง " + AddressForm.boundary + " เขต " + AddressForm.district + " จังหวัด " + AddressForm.province + " " + AddressForm.code : '---'
     let Taxid = "0105536011803"
-    let Phone = "026937005"
+    let Phone = AddressForm.tel ? AddressForm.tel : '---'
     let Email = "sales@primusthai.com" 
     console.log('export_Receipt_pdf',booking)
     let Name = booking.customer_name  ?  `${booking.customer_name} ${booking.customer_lastname}`  : Noanswer 
@@ -1583,12 +1506,15 @@ export const export_Reimbursement_pdf =  ( booking , type ,table_price  ) =>{
 
 
     // ใบกำกับภาษี
-export const export_taxinvoice_pdf =  ( room ,table_price) =>{
+export const export_taxinvoice_pdf =  ( room ,table_price , defaultData) =>{
+
+    let AddressForm = defaultData
+
     const document_name = 'ใบกำกับภาษี'
-    let business_Address_1 = "119 ซอยสีม่วงอนุสรณ์ ถนน สุทธิสาร"
-    let business_Address_2 = "แขวง ดินแดง เขต ดินแดง กรุงเทพ 10400"
+    let business_Address_1 = AddressForm.no + " ซอย " + AddressForm.alley + " ถนน " + AddressForm.road ? AddressForm.no + " ซอย " + AddressForm.alley + " ถนน " + AddressForm.road : '---'
+    let business_Address_2 = " แขวง " + AddressForm.boundary + " เขต " + AddressForm.district + " จังหวัด " + AddressForm.province + " " + AddressForm.code ? " แขวง " + AddressForm.boundary + " เขต " + AddressForm.district + " จังหวัด " + AddressForm.province + " " + AddressForm.code : '---'
     let Taxid = "01055360118036666"
-    let Phone = "026937005"
+    let Phone = AddressForm.tel ? AddressForm.tel : "---"
     let Email = "sales@primusthai.com" 
     let Cash = "-------"
     let Cheque = "-------"
