@@ -134,7 +134,8 @@
 .zone>.bigbox>.normalbox>.mainbox>.maintable>.table{
     min-width: 95%;
     border-collapse: collapse;
-    margin: 00.5rem auto;
+    margin: 0.5rem auto;
+    margin-top: 0;
     overflow: auto;
     height: 200px;
     
