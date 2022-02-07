@@ -215,7 +215,7 @@ export const Receipt = () => {
 
 
 
-    let header_table = ["","เลขที่ใบเสร็จ","เลขที่ใบแจ้งหนี้","วันที่ออกบิล","ชื่อห้อง","ชื่อผู้..","สถานะ","สถานะการพิมพ์","รอบบิล"]
+    let header_table = ["","เลขที่ใบเสร็จ","เลขที่ใบแจ้งหนี้","วันที่ออกบิล","ชื่อห้อง","ชื่อผู้จอง","สถานะ","สถานะการพิมพ์","รอบบิล"]
     let sim_table = [{"เลือก":"","เลขที่ใบเสร็จ":"PEM12345678910","เลขที่ใบแจ้งหนี้":"DEV12345678910","วันที่ออกบิล":"1/2/2021","ชื่อห้อง":"205","ชื่อผู้จ..":"","สถานะ":"ปกติ","สถานะการพิมพ์":"พิมพ์แล้ว","รอบบิล":"02/2022"}]
 
     let header_table2 = ["รายการ","ชื่อรายการใช้จ่าย","จำนวน","จำนวนเงิน","ราคา","ภาษีมูลค่าเพิ่ม","จำนวนเงิน","ภาษี"]
@@ -225,8 +225,11 @@ export const Receipt = () => {
     return (
         <>
         
-            <div className={styles.zone1}>
-                <div className={styles.bigbox}>
+            <div className={styles.main}>
+                
+
+                
+                <div className={styles.zone1}>
                     <div className={styles.formtableInvoice} >
                         <div className={styles.card}>
                             <div className={styles.cardheader}>
@@ -252,6 +255,7 @@ export const Receipt = () => {
                                     <lable >อาคาร</lable>
                                     <input className ={styles.Building} id="building" value ={formsearch.building} onChange={handleChangeformsearch} ></input>
                                 </p>
+
                                 <table className ={styles.table}>
 
                                     <thead className ={styles.header}>
@@ -322,23 +326,15 @@ export const Receipt = () => {
                                             <td width={'50px'}>{ data.printstatus ? data.printstatus : "---"}</td>
                                             
                                             <td width={'60px'}>{ data.monthlybilling ? toYYMM(data.monthlybilling) : "---"}</td>
+                                                
+                                            </tr>
+                                            )
+                                            }                
+                                        </tbody>
+                                    </table>
 
-
-                                            
-                                            
-                                        </tr>
-                                        )
-                                        }                
-                                    </tbody>
-                                    
-
-
-
-
-
-
-
-                                </table>
+                                </div>
+                                
                                 <div className={styles.button}>
                                     <button className={styles.press} 
                                         onClick={()=>{
@@ -389,7 +385,7 @@ export const Receipt = () => {
                         </div>
                     </div>
                 </div>
-                <div className={styles.bigbox} >
+                <div className={styles.zone2} >
                     <div className={styles.formdetailsInvoice}>
                         <div className={styles.card}>
                             <div className={styles.cardheader}>
@@ -504,6 +500,7 @@ export const Receipt = () => {
                                         </tbody>
                                     </table>
                                 </div>
+
                                 <div className={styles.button}>
                                         <button className={styles.press}
                                          name="addlist"
@@ -556,10 +553,10 @@ export const Receipt = () => {
                             </div>
                         </div>
                     </div>
-                    
-                            
+            
                 </div>
              
+                
                 
             </div>
 

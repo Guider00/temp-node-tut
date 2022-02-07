@@ -20,7 +20,9 @@ import {
 
 import { useQuery, useMutation } from '@apollo/client';
 
-import { HandleForm , Disabled} from "./function";
+import { HandleForm } from "./function";
+
+import { export_address_pdf } from "../../../general_functions/pdf/export/export_pdf";
 
 
 
@@ -35,6 +37,9 @@ import { HandleForm , Disabled} from "./function";
     const Address = useQuery(API_GET_Address);
     const [ addReceiptnumber, mutationaddReceiptnumber] = useMutation(API_ADD_Receiptnumber)
     const Receiptnumber = useQuery(API_GET_Receiptnumber)
+
+    const { handleOnchangeReceipt,handleOnchangeAddress,formErrorsAddress,formErrors,defaultData,setdefaultData ,defaultAddress,setdefaultAddress,handleClick , disableReceipt , setDisableReceipt , disabledAddress ,disabledReceipt,setDisabledReceipt,setDisabledAddress} = HandleForm();
+
     const [defaultDialog, setdefaultDialog] = useState({
         message:"Save it?",
         isLoading: false,
@@ -170,8 +175,8 @@ import { HandleForm , Disabled} from "./function";
     //handleForm
     //validate
 
-    const { handleOnchangeReceipt,handleOnchangeAddress,formErrorsAddress,formErrors,defaultData,setdefaultData ,defaultAddress,setdefaultAddress  } = HandleForm();
-    const {handleClick , disableReceipt , setDisableReceipt , disabledAddress ,disabledReceipt,setDisabledReceipt,setDisabledAddress} = Disabled();
+   
+
     
 
    
@@ -191,7 +196,6 @@ import { HandleForm , Disabled} from "./function";
             setReceiptNumber(_ReceiptNumber);
             if(Receiptnumber && Receiptnumber.data && Receiptnumber.data.Receiptnumbers.length > 0){
 
-
                 let _defaultData = defaultData
                 _defaultData['receipt'] = Receiptnumber.data.Receiptnumbers[0].receipt_number
                 _defaultData['bill'] = Receiptnumber.data.Receiptnumbers[0].bill_number
@@ -204,8 +208,13 @@ import { HandleForm , Disabled} from "./function";
                 setdefaultData(_defaultData)
 
             }
+            
+        } else{
+            Receiptnumber.refetch()
         }
        
+        
+        
         
         
     },[Receiptnumber,disableReceipt])
@@ -225,6 +234,7 @@ import { HandleForm , Disabled} from "./function";
     }
 
     useEffect( () =>{
+        
         
 
         if(Address && Address.data && Address.data.Addresss){
@@ -253,12 +263,14 @@ import { HandleForm , Disabled} from "./function";
                 setdefaultAddress(_defaultData)
                 
             }
-            console.log('defaultAddressdefaultAddress',defaultAddress)           
+            
+            
             
         }
         else{
             Address.refetch()
         }
+        
     },[Address]
 
   
@@ -693,6 +705,7 @@ import { HandleForm , Disabled} from "./function";
                 name = 'clearPage-receipt'
                 className={styles.savestyle} 
                 onClick={handleClick}>CLEAR-ALL</button>
+
                 
                 </div>
                 
