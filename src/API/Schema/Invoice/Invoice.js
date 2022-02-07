@@ -12,6 +12,27 @@ export const API_GET_Invoice = gql`
 			Room {
 				id
 				name
+				RoomType{
+					unit_electrical
+					unit_water
+					rate_water
+					rate_electrical
+				}
+				meterroom{
+					id
+					name
+					inmemory_kwh
+					inmemory_kwh_date
+					inmemory_finished_kwh
+					inmemory_finished_kwh_date
+					realtime_kwh
+					
+					inmemory_water
+					inmemory_water_date
+					inmemory_finished_water
+					inmemory_finished_kwh_date
+					realtime_water
+				}
                 members{
                     id
 					name

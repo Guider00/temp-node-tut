@@ -22,7 +22,7 @@ import EventNoteIcon from '@mui/icons-material/EventNote';
 
 // invoice 
 import {  export_Invoices_pdf   } from '../../general_functions/pdf/export/export_pdf';
-import {  toYYMM , toYYMMDD   } from '../../general_functions/convert';
+import { toDDMM,  toYYMM , toYYMMDD   } from '../../general_functions/convert';
 import { filter_rooms } from './function';
 
 
@@ -137,6 +137,28 @@ const CalendarDate = (choose) =>{
     
     const [ selectroom , setselectroom ] = useState(null)
     const [ editselectroom , seteditselectroom] = useState(false)
+
+    const defaultformter = ({inmemory_kwh:"",
+        inmemory_kwh_date:"",
+        inmemory_finished_kwh:"",
+        inmemory_finished_kwh_date :"",
+        inmemory_water:"",
+        inmemory_water_date:"",
+        inmemory_finished_water:"",
+        inmemory_finished_water_date:"",
+
+        inmemory_phone_date:"",
+        inmemory_finished_phone_date:"",
+        phone_price:""})
+    const [ formmeter , setformmeter ] = useState(defaultformter)
+    const handlerChangeformmeter = (e) =>{
+        let {name, value} = e.target 
+        let _formmeter = JSON.parse( JSON.stringify(formmeter) )
+        if(_formmeter.hasOwnProperty(name)){
+            _formmeter[name] = value
+        }
+        setformmeter(_formmeter)
+    }
 
     const sumlists_to_show  = (lists)=>{
         if(lists && lists.length >0){
@@ -381,6 +403,7 @@ const CalendarDate = (choose) =>{
                                             let _selectroom = selectroom
                                             _selectroom = data
                                             setselectroom(_selectroom)
+                                            setformmeter({...defaultformter})
                                             seteditselectroom(false)
 
                                         }}
@@ -565,7 +588,28 @@ const CalendarDate = (choose) =>{
                         <div className = {styles.box2}>
                             <div className = {styles.topic1}>
                                 
-                                <lable >บันทึกมิเตอร์</lable>        
+                                <lable >บันทึกมิเตอร์</lable>  
+                                <button name="readmeter" className={styles.btnreadmeter}
+                                 disabled={!editselectroom}
+                                 onClick={()=>{ 
+                                      let _invoice = {...selectroom}
+                                    let _formmeter = JSON.parse (JSON.stringify( formmeter))
+                                    if(_invoice && _invoice.Room && _invoice.Room.meterroom){
+                                        let { inmemory_kwh , inmemory_kwh_date , inmemory_water , inmemory_water_date,
+                                            inmemory_finished_kwh , inmemory_finished_kwh_date , inmemory_finished_water , inmemory_finished_water_date
+                                          }  = _invoice.Room.meterroom
+                                         _formmeter['inmemory_kwh'] = inmemory_kwh
+                                         _formmeter['inmemory_kwh_date'] = inmemory_kwh_date
+                                         _formmeter['inmemory_water'] = inmemory_water
+                                         _formmeter['inmemory_water_date'] = inmemory_water_date
+                                         _formmeter['inmemory_finished_kwh'] = inmemory_finished_kwh
+                                         _formmeter['inmemory_finished_kwh_date'] = inmemory_finished_kwh_date
+                                         _formmeter['inmemory_finished_water'] = inmemory_finished_water
+                                         _formmeter['inmemory_finished_water_date'] = inmemory_finished_water_date
+                                    }
+                                   
+                                    setformmeter(_formmeter)
+                                }}>อ่านจาก Meter</button>      
                             </div>
                                 <div className = {styles.display}>
                                 
@@ -573,14 +617,15 @@ const CalendarDate = (choose) =>{
                                     <label className = {styles.text1}>ครั้งก่อน</label>
                                     <label className = {styles.text2}>วันที่บันทึก</label>
                                     <div className = {styles.input}>
-                                        <label className = {styles.rightrem}>ไฟฟ้า</label>
-                                        <input className = {styles.input1} placeholder='0.00'></input>
-                                        <input className = {styles.input2} type = 'date' />
+                                        <label  className = {styles.rightrem}>ไฟฟ้า</label>
+                                        <input name="inmemory_kwh" value={formmeter.inmemory_kwh} onChange={handlerChangeformmeter}  className = {styles.input1} placeholder='0.00'></input>
+                                        <input name="inmemory_kwh_date" value={formmeter.inmemory_kwh_date}   onChange={handlerChangeformmeter} className = {styles.input2} type = 'date' />
+                                        
                                     </div>
                                     <div className = {styles.input}>
                                         <label className = {styles.rightrem}>น้ำ</label>
-                                        <input className = {styles.input3} placeholder='0.00'></input>
-                                        <input className = {styles.input2} type = 'date' />
+                                        <input name="inmemory_water"  value={formmeter.inmemory_water} onChange={handlerChangeformmeter} className = {styles.input3} placeholder='0.00'></input>
+                                        <input name="inmemory_water_date"  value={formmeter.inmemory_water_date}   onChange={handlerChangeformmeter}  className = {styles.input2} type = 'date' />
                                     </div>
 
                                 </div>
@@ -588,12 +633,12 @@ const CalendarDate = (choose) =>{
                                     <label className = {styles.text1} >ล่าสุด</label>
                                     <label className = {styles.text2}>วันที่บันทึก</label>
                                     <div className = {styles.input}>
-                                        <input className = {styles.input1} placeholder='0.00'></input>
-                                        <input className = {styles.input2} type = 'date' />
+                                        <input name="inmemory_finished_kwh"    value={formmeter.inmemory_finished_kwh}    onChange={handlerChangeformmeter}    className = {styles.input1} placeholder='0.00'></input>
+                                        <input name="inmemory_finished_kwh_date"  value={formmeter.inmemory_finished_kwh_date} onChange={handlerChangeformmeter} className = {styles.input2} type = 'date' />
                                     </div>
                                     <div className = {styles.input}>
-                                        <input className = {styles.input1} placeholder='0.00'></input>
-                                        <input className = {styles.input2} type = 'date' />
+                                        <input  name="inmemory_finished_water"   value={formmeter.inmemory_finished_water}  onChange={handlerChangeformmeter}  className = {styles.input1} placeholder='0.00'></input>
+                                        <input name="inmemory_finished_water_date" value={formmeter.inmemory_finished_water_date}  onChange={handlerChangeformmeter} className = {styles.input2} type = 'date' />
                                     </div>
 
                                 </div>                              
@@ -605,9 +650,9 @@ const CalendarDate = (choose) =>{
                                 <lable className = {styles.text3} >ค่าโทรศัพท์</lable>
                                 <div className = {styles.input}>
                                     <lable className = {styles.text4} >โทรศัพท์</lable>
-                                    <input name="start_date"  className = {styles.input1} type = 'date'/>
-                                    <input name="end_date"    className = {styles.input2} type = 'date'/>
-                                    <input name="phone_price" className = {styles.input3} placeholder='0.00'/>
+                                    <input name="inmemory_phone_date"        value={formmeter.inmemory_phone_date}        onChange={handlerChangeformmeter}  className = {styles.input1} type = 'date'/>
+                                    <input name="inmemory_finished_phone_date"   value={formmeter.inmemory_finished_phone_date}   onChange={handlerChangeformmeter}   className = {styles.input2} type = 'date'/>
+                                    <input name="phone_price"      value={formmeter.phone_price}                onChange={handlerChangeformmeter} className = {styles.input3} placeholder='0.00'/>
                                 </div>
                                
                                 
@@ -617,8 +662,49 @@ const CalendarDate = (choose) =>{
                                     <button
                                      disabled={!editselectroom}
                                      onClick={()=>{ 
+                                          let _invoice = {...selectroom}
+                                          console.log('debug invoice' , _invoice.Room.RoomType.rate_electrical)
                                         // เพิ่มค่า น้ำ ค่า ไฟ ไปยังรายการ 
-                                    }}>คำนวณ</button>
+                                        if(formmeter.inmemory_kwh !== ""  &&  formmeter.inmemory_finished_kwh  !== ""){
+
+                                            // สร้างรายการค่าไฟ
+                                           
+                                            if(_invoice &&  _invoice.lists ){
+                                                _invoice.lists = [..._invoice.lists , {
+                                                    name :`ค่าไฟฟ้า ${Number(formmeter.inmemory_kwh)} [${toDDMM(formmeter.inmemory_kwh_date)} ] -->  ${Number(formmeter.inmemory_finished_kwh)} [${toDDMM(formmeter.inmemory_finished_kwh_date)} ]` ,
+                                                    price: _invoice && _invoice.Room &&  _invoice.Room.RoomType &&
+                                                     _invoice.Room.RoomType.rate_electrical ? _invoice.Room.RoomType.rate_electrical : 0 ,
+                                                    number_item: Number(formmeter.inmemory_finished_kwh) -Number(formmeter.inmemory_kwh) , 
+                                                    type_price:"" ,vat:"7",selectvat:"คิดvat"
+                                                }]
+                                            }
+                                        }
+                                        if(formmeter.inmemory_water !== "" &&  formmeter.inmemory_finished_water !== "" ){
+                                            // สร้างรายการค่าน้ำ
+                                            if(_invoice &&  _invoice.lists ){
+                                                _invoice.lists = [..._invoice.lists , {
+                                                    name :`ค่าน้ำ ${Number(formmeter.inmemory_water)} [${toDDMM(formmeter.inmemory_water_date)} ] -->  ${Number(formmeter.inmemory_finished_water)} [${toDDMM(formmeter.inmemory_finished_water_date)} ]` ,
+                                                    price:_invoice && _invoice.Room &&  _invoice.Room.RoomType 
+                                                    && _invoice.Room.RoomType.rate_water ? _invoice.Room.RoomType.rate_water : 0 ,
+                                                    number_item:Number(formmeter.inmemory_finished_water) -Number(formmeter.inmemory_water), 
+                                                    type_price:"" ,vat:"7",selectvat:"คิดvat"
+                                                }]
+                                            }
+                                        }
+
+                                        if(formmeter.phone_price !== "" ){
+                                             if(_invoice &&  _invoice.lists ){
+                                                _invoice.lists = [..._invoice.lists , {
+                                                    name :`ค่าโทรศัพท์ [${toDDMM(formmeter.inmemory_phone_date)}] -->  [${toDDMM(formmeter.inmemory_finished_phone_date)}]` ,
+                                                    price: formmeter.phone_price ?  formmeter.phone_price : 0 ,
+                                                    number_item:1, 
+                                                    type_price:"" ,vat:"7",selectvat:"คิดvat"
+                                                }]
+                                            }
+                                        }
+                                        setselectroom(_invoice)
+                                        console.log(formmeter)
+                                    }}> เพิ่มรายการ มิเตอร์</button>
                             </div>
                             <div className = {styles.topic}>
                                 รายการใช้จ่าย
@@ -695,9 +781,9 @@ const CalendarDate = (choose) =>{
                                 
                                 <button className = {styles.button1}
                                  disabled={!editselectroom}
-                                 onClick = { async ()=>{
-                                     console.log('selectroom',selectroom)
-                                     let _invoice = {...selectroom}
+                                 onClick = {  ()=>{
+                                        console.log('selectroom',selectroom)
+                                        let _invoice = {...selectroom}
                                         if(_invoice &&  _invoice.lists ){
                                             _invoice.lists = [..._invoice.lists , {
                                                 name :"" ,price:"",number_item:"", type_price:"" ,vat:"7",selectvat:"คิดvat"
@@ -755,11 +841,19 @@ const CalendarDate = (choose) =>{
                             <button className = {styles.button2} onClick={ async ()=>{
                                    let  _invoice = {...selectroom}
                                   try{
+                                            console.log('debug',_invoice.lists)
                                             let _res = await updateInvoice({
                                                             variables: {
                                                                 id: _invoice.id,
                                                                 input: {
-                                                                    lists:_invoice.lists.map(option =>({name :option.name ,price:option.price,number_item:option.number_item, vat:option.vat ,type_price:option.type_price ,selectvat:option.selectvat }) )
+                                                                    lists:_invoice.lists.map(option =>({
+                                                                                            name :option.name ,
+                                                                                            price:option.price,
+                                                                                            number_item:option.number_item.toString(),
+                                                                                            vat:option.vat ,
+                                                                                            type_price:option.type_price ,
+                                                                                            selectvat:option.selectvat
+                                                                                         }) )
                                                                 }
                                                             }
                                             })
