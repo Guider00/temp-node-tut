@@ -11,8 +11,8 @@ const schemaDefinition = new mongoose.Schema({
   payment_method :{type:String}, // วิธีการชำระเงิน 
   deposit :{type:String},  // จำนวนเงินจอง
   checkin_type : {type:String}, 
-  checkin_date : {type:Date},  // YYYY-MM-DDTHH:MM:SS
-  checkin_date_exp : {type:Date},  // YYYY-MM-DDTHH:MM:SS
+  checkin_date : {type:Date   },  // YYYY-MM-DDTHH:MM:SS
+  checkin_date_exp : {type:Date },  // YYYY-MM-DDTHH:MM:SS
   note: {type:String},
   status: {type:String , default :"รอการชำระเงิน"},
   confirm_booking : {type:String , default:"รอการยืนยัน"}, // << ยืนยันการเข้าพัก

@@ -37,9 +37,16 @@ query{
                     Room{
                         id
                         name
+                        floor{
+                                name
+                                building{
+                                    name
+                                }
+                            }
                         members{
                             name
                             lastname
+                            address
                         }
                     }
                 }

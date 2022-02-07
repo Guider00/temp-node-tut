@@ -17,7 +17,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
 
-import {  export_Receipt_pdf , export_taxinvoice_pdf  } from '../../general_functions/pdf/export/export_pdf';
+import {  export_Receipt_pdf  , export_Receipts_pdf , export_taxinvoice_pdf ,export_taxinvoices_pdf   } from '../../general_functions/pdf/export/export_pdf';
 
 import {handlerCreateRecipt , handlerCancelRecipt ,list_to_show} from './function'
 import {  toYYMM , toYYMMDD  ,getlaststring  } from '../../general_functions/convert';
@@ -227,14 +227,14 @@ export const Receipt = () => {
         
             <div className={styles.main}>
                 
-
-                
+          
                 <div className={styles.zone1}>
                     <div className={styles.formtableInvoice} >
                         <div className={styles.card}>
                             <div className={styles.cardheader}>
                                 <label> ตารางใบเสร็จ</label>
                             </div>
+
                             <div className={styles.cardbody}>
                                 <div className={styles.row} >
                                     <label> วันที่ </label>
@@ -333,17 +333,25 @@ export const Receipt = () => {
                                         </tbody>
                                     </table>
 
-                                </div>
+                        
                                 
                                 <div className={styles.button}>
                                     <button className={styles.press} 
                                         onClick={()=>{
-                                            export_Receipt_pdf({})
+                                            try{
+                                            export_Receipts_pdf(IDrooms)
+                                            }catch(e){
+                                                console.error("cath erro ไม่สามารถสร้าง Receipts")
+                                            }
                                         }}
                                     > พิมพ์ใบเสร็จที่เลือก   <LocalPrintshopIcon/> </button>
                                     <button className={styles.press}
                                         onClick={()=>{
-                                            export_taxinvoice_pdf()
+                                            try{
+                                            export_taxinvoices_pdf(IDrooms)
+                                            }catch(e){
+                                                console.error("cath erro ไม่สามารถสร้าง taxinvoices")
+                                            }
                                         }}
                                     > พิมพ์ใบกำกับภาษีที่เลือก <LocalPrintshopIcon/> </button>
                                     <button className={styles.press} onClick={ async ()=>{
@@ -374,9 +382,11 @@ export const Receipt = () => {
                                 </div>
                                 
                             </div>
+                            
                         </div>
                     </div>
                 </div>
+                
                 <div className={styles.zone2} >
                     <div className={styles.formdetailsInvoice}>
                         <div className={styles.card}>
@@ -454,7 +464,7 @@ export const Receipt = () => {
                                                     <input className={styles.inputtext}
                                                     type='text' name="price" onChange={(e)=>handlerchangelist(e,index)}    
                                                         disabled={!selectrooms.editmode}       
-                                                        value={ list && list.number_item ?  list.number_item : 1} />
+                                                        value={ list && list.price ?  list.price : 1} />
                                                 </td>
                                                 <td>{list_to_show(list).price}</td>
                                                 <td>{list_to_show(list).vat}</td>
@@ -533,7 +543,9 @@ export const Receipt = () => {
                                 </div>
                                 <div className={styles.menu}>
                                         <button className = {styles.editbutton} name="editmode" onClick={handlerChangereceiptinformation}>
-                                         { selectrooms.editmode ?<>ยกเลิก<CancelIcon/></>:<>แก้ไข<EditIcon/></> }
+                                         { selectrooms.editmode ?<>
+                                         ยกเลิก<CancelIcon /></>
+                                         :<>แก้ไข<EditIcon /></> }
                                         </button>
                                         <button className = {styles.savebutton} name="savereceiptinformation"
                                         onClick={()=>{handlerSavereceipt(selectrooms)} }
@@ -545,11 +557,8 @@ export const Receipt = () => {
                     </div>
             
                 </div>
-             
-                
-                
+            
             </div>
-
         </>
     )
 }

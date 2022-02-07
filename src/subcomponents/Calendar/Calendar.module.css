@@ -76,3 +76,12 @@
     background-color: crimson;
     border-radius: 10px;
 }
+.container>.mainCalendar>.footer>.clear{
+    width: 80px;
+    height: 40px;
+    margin: 10px;
+    border: none;
+    cursor: pointer;
+    background-color: gray;
+    border-radius: 10px;
+}
