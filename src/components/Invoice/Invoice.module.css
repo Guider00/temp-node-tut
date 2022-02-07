@@ -515,6 +515,20 @@
     
     
  }
+
+ .topic5{
+     display: flex;
+     width: 100%;
+     align-items: center;
+     justify-content: right;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+ }
+ .topic5>button{
+   margin-right: 2rem;
+}
+
+
  .container>.display>.zone2>.box2>.button>.button1{
     
   
