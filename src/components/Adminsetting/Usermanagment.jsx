@@ -6,8 +6,15 @@ import Table from '../../subcomponents/Table/Table'
 import { Floormodal } from '../Setting/Floor/Floormodal'
 
 import { useEffect, useState } from "react"
-
+import { API_GET_UserManagement , API_DELETE_UserManagement ,API_UPDATE_UserManagement } from '../../API/Schema/UserManagement/UserManagement'
 import { useMutation,useQuery, gql, } from '@apollo/client';
+
+import SaveIcon from '@mui/icons-material/Save';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import LockIcon from '@mui/icons-material/Lock';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import Dialog from '../Adminsetting/Dialog.js'
+
 const API_GET_USERS = gql`
   query{
     users{
@@ -224,11 +231,154 @@ export const Usermanagement = () => {
     }, [data])
 
 
+    //UpdateCode
+
+    const GetUser = useQuery(API_GET_UserManagement)
+    const [ DeleteUser, mutationDeleteUser] = useMutation(API_DELETE_UserManagement)
+    const [ UpdateUser, mutationUpdateUser] = useMutation(API_UPDATE_UserManagement)
+    const [User , setUser] = useState([])
+
+
+    const [SelectID , setSelectID] = useState({
+        id:null,
+        name:"",
+    })
+    const handleID = (id , name) =>{
+        setSelectID({
+            id:id,
+            name:name
+        })
+    }
+
+    //Dialog
+
+    const [defaultDialog, setdefaultDialog] = useState({
+        message:"Save it?",
+        isLoading: false,
+        type:"",
+    });
+    const handleDialog = (message , isLoading ,type) =>{
+        setdefaultDialog({
+            message:message,
+            isLoading:isLoading,
+            type:type,
+        })
+    }
+
+    const [nameChange ,setNameChange] = useState({
+        id:null,
+        name:null
+    })
+    const [formErrors , setFormErrors] = useState({})
+
+    //delete
+
+    const DeleteUserFunction = () =>{
+        DeleteUser({
+            variables: {
+                id:`${SelectID.id}`
+            }
+        })
+
+    }
+
+    
+    //update
+
+    const UpdateUserFunction = () =>{
+        UpdateUser({
+            variables: {
+                id:`${SelectID.id}`,
+                input:{
+                    name:`${nameChange.name}`
+                }
+            }
+        })
+    }
+
+    
+    const handleChangeInput = (e) =>{
+        let value = e.target.value
+        const errors = {}
+        const text = /^[A-Za-z0-9ก-๙/]+$/;
+        if(!value){
+            let _nameChange = nameChange
+            _nameChange['name'] = value
+            _nameChange['id'] = e.target.id;
+            errors.error = "Name is required!"
+            setNameChange({..._nameChange})
+            setFormErrors(errors)
+
+        }if(!text.test(value)){
+            let _nameChange = nameChange
+            _nameChange['name'] = value
+            _nameChange['id'] = e.target.id;
+            errors.error = "Name is Format!"
+            setNameChange({..._nameChange})
+            setFormErrors(errors)
+        }if(value.length > 15){
+            let _nameChange = nameChange
+            _nameChange['name'] = value
+            _nameChange['id'] = e.target.id;
+            errors.error = "Name is Overflow!"
+            setNameChange({..._nameChange})
+            setFormErrors(errors)
+        }else{
+            let _nameChange = nameChange
+        _nameChange['name'] = value
+        _nameChange['id'] = e.target.id;
+        errors.error = ""
+        setNameChange({..._nameChange})
+        setFormErrors(errors)
+
+        }
+        
+    }
+
+    //checkFunction
+
+    const checkFunction = async (choose) =>{
+        if(choose && defaultDialog.type === '1'){
+            DeleteUserFunction()
+            GetUser.refetch()
+            console.log('Delete')
+
+            handleDialog('',false)
+        }if(choose && defaultDialog.type === '4'){
+            UpdateUserFunction()
+            GetUser.refetch()
+            console.log('Save')
+
+            handleDialog('',false)
+        }else{
+            console.log('NO-type')
+
+            handleDialog('',false)
+        }
+        
+    }
+
+ 
+
+
+    useEffect(()=>{
+        if(GetUser && GetUser.data && GetUser.data.UserManagements ){
+            let _User = User
+            _User = GetUser.data.UserManagements
+            setUser(_User)
+
+        }
+    },[GetUser])
+
+
+
+
     return (
         <>
             
               
                         <>
+                            {defaultDialog.isLoading && <Dialog onDialog={checkFunction} message = {defaultDialog.message}/>}
                             {_showmodal ? <Floormodal Data={_modaldata} onSave={onSave} onClose={onClose} onchange={handleronchange} Action={_modalaction} Inputs={_users.inputs}></Floormodal> : null}
 
 
@@ -236,8 +386,94 @@ export const Usermanagement = () => {
                                 <div className={styles.header}>
                                     <lable> Member </lable>
                                 </div>
-                                <div>
-                                    <button>Add User </button>
+                                <div className={styles.table}>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <td>ลำดับ</td>
+                                                <td>ID USER</td>
+                                                <td>NAME</td>
+                                                <td>LEVEL</td>
+                                                <td>MENU</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>{User.map((user,index)=>
+
+                                            <tr>
+                                                <td>{index+1}</td>
+                                                <td width={'800px'}>{user.id ? user.id : '---'}</td>
+                                                <td width={'200px'}>
+                                                    <input 
+                                                    id={user.id}
+                                                    className={styles.input}
+                                                    value={ nameChange.id === user.id  ?  nameChange.name : user.name }
+                                                    onChange={handleChangeInput}
+                                                    />
+                                                    <lable>{nameChange.id === user.id ? formErrors.error : null}</lable>
+                                            
+                                                </td>
+                                                <td width={'200px'}>{user.level ? user.level : '---'}</td>
+                                                <td width={'500px'}>
+                                                    <button 
+                                                    className={styles.button}
+                                                    onClick={()=>{
+                                                        let id = user.id
+                                                        let name = user.name
+                                                        handleDialog(`Are you sure you want to delete This  ID : ${user.id}`,true , '1')
+                                                        handleID(id )
+                                                    }}
+                                                    >
+                                                        <DeleteOutlineIcon/>
+                                                        <br/>
+                                                        <lable className={styles.text}>Delete user</lable>
+                                                        
+                                                    </button>
+                                                    <button 
+                                                    className={styles.button}
+                                                    onClick={()=>{
+                                                        let id = user.id
+                                                        let name = user.name
+                                                        handleDialog(`Are you sure you want to Lock This  ID : ${user.id}`,true , '2')
+                                                        handleID(id )
+                                                    }}
+                                                    >
+                                                        <LockIcon/>
+                                                        <br/>
+                                                        <lable className={styles.text}>Lock user</lable>
+                                                        
+                                                    </button>
+                                                    <button className={styles.button}
+                                                    onClick={()=>{
+                                                        let id = user.id
+                                                        let name = user.name
+                                                        handleDialog(`Are you sure you want to Restart Password This  ID : ${user.id}`,true , '3')
+                                                        handleID(id , name)
+                                                    }}
+                                                    >
+                                                        <RestartAltIcon/>
+                                                        <br/>
+                                                        <lable className={styles.text}>Reset Password</lable>
+                                                    
+                                                    </button>
+                                                    <button className={styles.button}
+                                                    onClick={()=>{
+                                                        let id = user.id
+                                                        let name = nameChange.name
+                                                        handleDialog(`Are you sure you want to Save This  ID : ${user.id}`,true , '4')
+                                                        handleID(id , name)
+                                                    }}
+                                                    >
+                                                        <SaveIcon/>
+                                                        <br/>
+                                                        <lable className={styles.text}>Save</lable>
+                                                        
+                                                    </button>
+                                                </td>
+                                            </tr>
+
+                                        )}
+                                        </tbody>
+                                    </table>
                                 </div>
                                 {
                                     _load ? 

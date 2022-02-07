@@ -6,10 +6,8 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useEffect, useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-
 import CalendarPicker from '../../subcomponents/Calendar/Calendar.js';
 import EventNoteIcon from '@mui/icons-material/EventNote';
-
 import {
     API_GET_Contract,
     API_CREATE_Contract,
@@ -19,17 +17,14 @@ import {
 import {
      API_GET_RoomType 
 } from '../../API/Schema/RoomType/RoomType'
-
-
 import { API_UPDATE_Room ,API_GET_Rooms} from '../../API/Schema/Room/Room'
 import {  export_Contract   } from '../../general_functions/pdf/export/export_pdf';
-
-
 import  { FileUploader  }  from './FileUploader/FileUploader'
-
 import { filter_rooms , Rooms_to_table , ChangeRadio ,FormFilter } from './function';
 
 
+//address
+import { AddressData } from "../../subcomponents/AddressData/AddressData";
 
 
 
@@ -40,6 +35,8 @@ import { filter_rooms , Rooms_to_table , ChangeRadio ,FormFilter } from './funct
 
 
 export const Contract = () => {
+    //address
+    const { defaultData } = AddressData();
     
     const getRooms = useQuery(API_GET_Rooms)
     const Contract = useQuery(API_GET_Contract);
@@ -425,7 +422,7 @@ export const Contract = () => {
                                 try{
                                   
                                     if( IDrooms && IDrooms.length > 0 ){
-                                        export_Contract( IDrooms )
+                                        export_Contract(IDrooms,defaultData)
                                         // let res_s =  await Promise.all( await IDrooms.map(async  idroom=>{ 
                                         //     console.log(idroom)
                                          
