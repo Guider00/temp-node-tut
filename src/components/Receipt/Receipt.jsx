@@ -227,14 +227,14 @@ export const Receipt = () => {
         
             <div className={styles.main}>
                 
-
-                
+          
                 <div className={styles.zone1}>
                     <div className={styles.formtableInvoice} >
                         <div className={styles.card}>
                             <div className={styles.cardheader}>
                                 <label> ตารางใบเสร็จ</label>
                             </div>
+
                             <div className={styles.cardbody}>
                                 <div className={styles.row} >
                                     <label> วันที่ </label>
@@ -333,7 +333,7 @@ export const Receipt = () => {
                                         </tbody>
                                     </table>
 
-                                </div>
+                        
                                 
                                 <div className={styles.button}>
                                     <button className={styles.press} 
@@ -382,9 +382,11 @@ export const Receipt = () => {
                                 </div>
                                 
                             </div>
+                            
                         </div>
                     </div>
                 </div>
+                
                 <div className={styles.zone2} >
                     <div className={styles.formdetailsInvoice}>
                         <div className={styles.card}>
@@ -555,11 +557,8 @@ export const Receipt = () => {
                     </div>
             
                 </div>
-             
-                
-                
+            
             </div>
-
         </>
     )
 }
