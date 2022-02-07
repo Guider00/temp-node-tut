@@ -239,17 +239,6 @@ export const Usermanagement = () => {
     const [User , setUser] = useState([])
 
 
-    const [SelectID , setSelectID] = useState({
-        id:null,
-        name:"",
-    })
-    const handleID = (id , name) =>{
-        setSelectID({
-            id:id,
-            name:name
-        })
-    }
-
     //Dialog
 
     const [defaultDialog, setdefaultDialog] = useState({
@@ -264,19 +253,67 @@ export const Usermanagement = () => {
             type:type,
         })
     }
+    const [selectID , setSelectID] = useState({
+        id:null,
+        status:null
+    })
+    const handleChangeID = (id , status) =>{
+        setSelectID({
+            id:id,
+            status:status
+        })
 
+    }
     const [nameChange ,setNameChange] = useState({
         id:null,
-        name:null
+        name:null,
     })
+    const handleNameChange = (id,name) =>{
+        setNameChange({
+            id:id,
+            name:name,
+        })
+
+    }
     const [formErrors , setFormErrors] = useState({})
 
-    //delete
 
-    const DeleteUserFunction = () =>{
+    const handleChangeInput = (e) =>{
+        let value = e.target.value
+        let _nameChange = nameChange
+            _nameChange['name'] = value
+            _nameChange['id'] = e.target.id;
+            setNameChange({..._nameChange})
+            validate(_nameChange.name)
+
+    }
+
+    
+    const validate = (e) =>{
+        const errors = {}
+        const text = /^[A-Za-z0-9ก-๙]+$/;
+        if(!e){
+            errors.error = "Name is required!"
+            setFormErrors(errors)
+        }else if(!text.test(e)){
+            errors.error = "Name is Format!"
+            setFormErrors(errors)
+        }else if(e.length > 15){
+            errors.error = "Name is Overflow!"
+            setFormErrors(errors)
+        }else{
+            errors.error = ""
+            setFormErrors(errors)
+        }
+        
+    }
+
+     //delete
+
+     const DeleteUserFunction = () =>{
         DeleteUser({
             variables: {
-                id:`${SelectID.id}`
+                id:`${nameChange.id}`
             }
         })
 
@@ -286,9 +323,10 @@ export const Usermanagement = () => {
     //update
 
     const UpdateUserFunction = () =>{
+        console.log("update",nameChange)
         UpdateUser({
             variables: {
-                id:`${SelectID.id}`,
+                id:`${nameChange.id}`,
                 input:{
                     name:`${nameChange.name}`
                 }
@@ -296,43 +334,18 @@ export const Usermanagement = () => {
         })
     }
 
-    
-    const handleChangeInput = (e) =>{
-        let value = e.target.value
-        const errors = {}
-        const text = /^[A-Za-z0-9ก-๙/]+$/;
-        if(!value){
-            let _nameChange = nameChange
-            _nameChange['name'] = value
-            _nameChange['id'] = e.target.id;
-            errors.error = "Name is required!"
-            setNameChange({..._nameChange})
-            setFormErrors(errors)
+     //lock
 
-        }if(!text.test(value)){
-            let _nameChange = nameChange
-            _nameChange['name'] = value
-            _nameChange['id'] = e.target.id;
-            errors.error = "Name is Format!"
-            setNameChange({..._nameChange})
-            setFormErrors(errors)
-        }if(value.length > 15){
-            let _nameChange = nameChange
-            _nameChange['name'] = value
-            _nameChange['id'] = e.target.id;
-            errors.error = "Name is Overflow!"
-            setNameChange({..._nameChange})
-            setFormErrors(errors)
-        }else{
-            let _nameChange = nameChange
-        _nameChange['name'] = value
-        _nameChange['id'] = e.target.id;
-        errors.error = ""
-        setNameChange({..._nameChange})
-        setFormErrors(errors)
-
-        }
-        
+     const LockUserFunction = () =>{
+        console.log("Lock",selectID)
+        UpdateUser({
+            variables: {
+                id:`${selectID.id}`,
+                input:{
+                    status:`${selectID.status === 'Normal' ? 'Lock' : 'Normal'}`
+                }
+            }
+        })
     }
 
     //checkFunction
@@ -342,6 +355,16 @@ export const Usermanagement = () => {
             DeleteUserFunction()
             GetUser.refetch()
             console.log('Delete')
+
+            handleDialog('',false)
+        }if(choose && defaultDialog.type === '2'){
+            LockUserFunction()
+            GetUser.refetch()
+            console.log('Lock')
+
+            handleDialog('',false)
+        }if(choose && defaultDialog.type === '3'){
+            console.log('Reset')
 
             handleDialog('',false)
         }if(choose && defaultDialog.type === '4'){
@@ -399,17 +422,36 @@ export const Usermanagement = () => {
                                         </thead>
                                         <tbody>{User.map((user,index)=>
 
-                                            <tr>
+                                            <tr
+                                            onClick={()=>{
+                                                let _id = user.id
+                                                let _status = user.status
+                                                handleChangeID(_id , _status)
+
+                                                console.log(selectID)
+                                            }
+                                            }
+                                            style={ {'background' : (selectID.id === user.id ) ? 'lightgray' : (user.status === 'Lock' ) ? '#FFF4F3' : 'none'  }}>
                                                 <td>{index+1}</td>
-                                                <td width={'800px'}>{user.id ? user.id : '---'}</td>
+                                                <td width={'800px'} >{user.id ? user.id : '---'}
+                                                <br/>
+                                                <lebel 
+                                                style={{'color':'red'}}>
+                                                    {user.status === 'Lock' ? 'User is Locked' : null}
+                                                </lebel>
+                                                </td>
                                                 <td width={'200px'}>
-                                                    <input 
+                                                    <input
+                                                    disabled = {user.status === 'Normal'? false : true} 
                                                     id={user.id}
                                                     className={styles.input}
                                                     value={ nameChange.id === user.id  ?  nameChange.name : user.name }
                                                     onChange={handleChangeInput}
                                                     />
-                                                    <lable>{nameChange.id === user.id ? formErrors.error : null}</lable>
+                                                    <lable 
+                                                    style={{color:'red'}}>
+                                                        {nameChange.id === user.id ? formErrors.error : null}
+                                                        </lable>
                                             
                                                 </td>
                                                 <td width={'200px'}>{user.level ? user.level : '---'}</td>
@@ -417,10 +459,10 @@ export const Usermanagement = () => {
                                                     <button 
                                                     className={styles.button}
                                                     onClick={()=>{
-                                                        let id = user.id
-                                                        let name = user.name
+                                                        let _id = user.id
+                                                        handleNameChange(_id)
+                                                        console.log('nameChange' , nameChange)
                                                         handleDialog(`Are you sure you want to delete This  ID : ${user.id}`,true , '1')
-                                                        handleID(id )
                                                     }}
                                                     >
                                                         <DeleteOutlineIcon/>
@@ -431,10 +473,14 @@ export const Usermanagement = () => {
                                                     <button 
                                                     className={styles.button}
                                                     onClick={()=>{
-                                                        let id = user.id
-                                                        let name = user.name
-                                                        handleDialog(`Are you sure you want to Lock This  ID : ${user.id}`,true , '2')
-                                                        handleID(id )
+                                                        if(user.status === 'Normal'){
+                                                            handleDialog(`Are you sure you want to Lock This  ID : ${user.id}`,true , '2')
+                                                        }if(user.status === 'Lock'){
+                                                            handleDialog(`Are you sure you want to UnLock This  ID : ${user.id}`,true , '2')
+                                                        }
+                                                        
+                                                       
+                                                        
                                                     }}
                                                     >
                                                         <LockIcon/>
@@ -444,10 +490,8 @@ export const Usermanagement = () => {
                                                     </button>
                                                     <button className={styles.button}
                                                     onClick={()=>{
-                                                        let id = user.id
-                                                        let name = user.name
                                                         handleDialog(`Are you sure you want to Restart Password This  ID : ${user.id}`,true , '3')
-                                                        handleID(id , name)
+                                                        
                                                     }}
                                                     >
                                                         <RestartAltIcon/>
@@ -457,13 +501,27 @@ export const Usermanagement = () => {
                                                     </button>
                                                     <button className={styles.button}
                                                     onClick={()=>{
-                                                        let id = user.id
-                                                        let name = nameChange.name
-                                                        handleDialog(`Are you sure you want to Save This  ID : ${user.id}`,true , '4')
-                                                        handleID(id , name)
+                                                        console.log(formErrors)
+                                                        if(formErrors.error === '' || Object.keys(formErrors).length === 0 ){
+                                                            handleDialog(`Are you sure you want to Save This  ID : ${user.id}`,true , '4')
+                                                            console.log('success',nameChange.name)
+
+                                                        }if(Object.keys(formErrors).length > 0 && formErrors.error != '' ){
+                                                            handleDialog(`Your name is not validate !!!`,true,'')
+                                                            console.log('error validate')
+
+                                                        }if(nameChange.name === null){
+                                                            handleDialog(`Nothing Change !!!`,true,'')
+                                                            console.log('error Nothing')
+                                                            
+                                                        }else{
+                                                            console.log('error')
+                                                        }
+                                            
+                                        
                                                     }}
                                                     >
-                                                        <SaveIcon/>
+                                                        < SaveIcon />
                                                         <br/>
                                                         <lable className={styles.text}>Save</lable>
                                                         
