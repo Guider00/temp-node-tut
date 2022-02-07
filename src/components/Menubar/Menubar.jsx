@@ -283,7 +283,7 @@ export const Menubar = () => {
                         <div className={styles.cornflowerblue} > {   api_subrooms.data.subRooms.filter(room=> room.status === 'จอง').length} </div>
                         <div>จอง </div>
                         <div className={styles.red} > {   api_subrooms.data.subRooms.filter(room=> room.status === 'ย้ายออก').length} </div>
-                        <div>ย้ายออก </div>
+                        <div>แจ้งย้ายออก </div>
                         <div className={styles.green} > { api_subrooms.data.subRooms.filter(room=> room.status === 'มีคนอยู่').length } </div>
                         <div>มีคนอยู่</div>
                         <div className={styles.gray} > { api_subrooms.data.subRooms.filter(room=> room.status === 'ห้องว่าง').length } </div>
