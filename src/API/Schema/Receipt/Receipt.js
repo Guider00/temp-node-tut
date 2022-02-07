@@ -6,6 +6,8 @@ query{
     Receipts {
                 id
                 monthlybilling
+                duedate
+                printstatus
                 status
                 note
                 lists
@@ -35,9 +37,16 @@ query{
                     Room{
                         id
                         name
-                        member{
+                        floor{
+                                name
+                                building{
+                                    name
+                                }
+                            }
+                        members{
                             name
                             lastname
+                            address
                         }
                     }
                 }

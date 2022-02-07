@@ -70,8 +70,8 @@ export const Tablebooking =(props)=>{
                             <td>{ booking && booking.customer_lastname ? booking.customer_lastname :'---'}</td>
                             <td>{ booking && booking.deposit  ?  booking.deposit :"---"}</td>
                             
-                            <td>{ formatDate( new Date(Number(booking.checkin_date) ) ) }</td>
-                            <td>{ formatDate( new Date(Number(booking.checkin_date_exp)  ) )}</td>
+                            <td>{ booking &&  booking.checkin_date ? formatDate( new Date(Number(booking.checkin_date) ) ) : '---' }</td>
+                            <td>{ booking &&  booking.checkin_date_exp ? formatDate( new Date(Number(booking.checkin_date_exp)  ) ) : '---'  }</td>
                             <td>{booking.booking_number ? booking.booking_number:'---'}</td>
                             <td> 
                                 <label style={{color: (booking.status === 'สำเร็จ') ? 'green' :'black' }} >{booking.status ? booking.status  :'---'} </label>

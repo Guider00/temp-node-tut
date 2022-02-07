@@ -28,7 +28,9 @@ import {
 	API_UPDATE_Booking,
 	API_DELETE_Booking_and_BookinginRoom
 } from '../../API/Schema/Booking/Booking';
-
+import {
+	API_GET_Rooms
+} from '../../API/Schema/Room/Room';
 import {
 	UploadFile,
 	SingleUpload,
@@ -37,10 +39,12 @@ import {
 	API_UPDATE_Room
 } from '../../API/Schema/Room/Room'
 
-const filter_rooms = (rooms , options_search) =>{
+const filter_rooms = (rooms , options_search ,DateStart,DateEnd) =>{
 		let _filter_table = []
 		if(rooms  &&  options_search){
+			console.log('rooms', rooms , DateStart,DateEnd)
 			_filter_table = rooms.filter(room =>{
+				
 					if(room){
 						if(options_search.keyword === 'ทั้งหมด'){
 							return (room.name && room.name.search(options_search.text) !== -1 ) ||
@@ -118,7 +122,8 @@ export const Booking = () => {
 	//  const { loading, error, data } = useQuery(API_GET_Booking);
 
 	const booking = useQuery(API_GET_Booking);
-	console.log('booking',booking)
+	const api_rooms = useQuery(API_GET_Rooms);
+
 	
 	const [ updateRoom, mutationupdateRoom ] = useMutation(API_UPDATE_Room)
 
@@ -212,9 +217,24 @@ export const Booking = () => {
 	const handleChangedALLformroom = (room) => {
 		if (room) {
 			let _formroom = formroom;
-			for (const property in room) {
-				console.log(property, _formroom[property], room);
-				if (property && _formroom.hasOwnProperty(property)) {
+
+			for (const property in _formroom) {
+				if(property === 'building')
+				{
+					_formroom[property] = room['floor']['building']['name'];
+				}else if( property === 'floor'){
+					_formroom[property] = room['floor']['name'];
+				}else if(  property === 'nameroomtype'  ){
+					_formroom[property] = room['RoomType']['name'];
+				}else if( property === 'dailyprice'){
+					_formroom[property] = room['RoomType']['dailyprice'];
+				}else if(  property === 'monthlyprice' ){
+					_formroom[property] = room['RoomType']['monthlyprice'];
+				}else if( property === 'insurance' ){
+					_formroom[property] = room['RoomType']['insurance'];
+				}else if( property === 'deposit_rent' ){
+					_formroom[property] = room['RoomType']['deposit_rent'];
+				}else{
 					_formroom[property] = room[property];
 				}
 			}
@@ -291,8 +311,8 @@ export const Booking = () => {
 	const [defaultCalendar, setdefaultCalendar] = useState({
         isLoading: false
     });
-	const [DateStart , setDateStart] = useState([''])
-	const [DateEnd , setDateEnd] = useState([''])
+	const [DateStart , setDateStart] = useState(null)
+	const [DateEnd , setDateEnd] = useState(null)
 	const[DateRange, setDateRange] = useState([])
 
 
@@ -304,67 +324,75 @@ export const Booking = () => {
 
 	const handleStart = (data) =>{
 		setDateRange(data)
-		console.log("DateRange",DateRange)
+		console.log(" debug DateRange",DateRange)
 	}
 
-	const CalendarDate = (choose) =>{
-
-		if(choose){
-			if(DateRange.from){
-				let iDay = parseInt(DateRange.from.day, 10);
-				let iMonth = parseInt(DateRange.from.month, 10);
-					
-				if(iDay < 10 && iMonth < 10){
-				let _DateStart = DateStart
-				_DateStart = DateRange.from.year + "-0" + DateRange.from.month + "-0" + DateRange.from.day
-				setDateStart(_DateStart)
-					
-				}if(iDay < 10 && iMonth >= 10){
-				let _DateStart = DateStart
-				_DateStart = DateRange.from.year + "-" + DateRange.from.month + "-0" + DateRange.from.day
-				setDateStart(_DateStart)
-	
-				}if(iDay >= 10 && iMonth < 10){
-				let _DateStart = DateStart
-				_DateStart = DateRange.from.year + "-0" + DateRange.from.month + "-" + DateRange.from.day
-				setDateStart(_DateStart)
-	
-				}
-					
-			}
-			if(DateRange.to){
-				
-	
-				let iDay = parseInt(DateRange.to.day, 10);
-				let iMonth = parseInt(DateRange.to.month, 10);
-	
-				if(iDay < 10 && iMonth < 10){
-				let _DateEnd = DateEnd
-				_DateEnd = DateRange.to.year + "-0" + DateRange.to.month + "-0" + DateRange.to.day
-				setDateEnd(_DateEnd)
+	const CalendarDate = (selecteddate) =>{
+		console.log('debug',selecteddate)
+		
+			if(selecteddate ){
+				if(selecteddate.from === null  ){
+					setDateStart('')
+				}else{
+					let iDay = parseInt(selecteddate.from.day, 10);
+					let iMonth = parseInt(selecteddate.from.month, 10);
 						
-				}if(iDay < 10 && iMonth >= 10){
-				let _DateEnd = DateEnd
-				_DateEnd = DateRange.to.year + "-" + DateRange.to.month + "-0" + DateRange.to.day
-				setDateEnd(_DateEnd)
+					if(iDay < 10 && iMonth < 10){
+					let _DateStart = DateStart
+					_DateStart = selecteddate.from.year + "-0" + selecteddate.from.month + "-0" + selecteddate.from.day
+					setDateStart(_DateStart)
+						
+					}if(iDay < 10 && iMonth >= 10){
+					let _DateStart = DateStart
+					_DateStart = selecteddate.from.year + "-" + selecteddate.from.month + "-0" + selecteddate.from.day
+					setDateStart(_DateStart)
 		
-				}if(iDay >= 10 && iMonth < 10){
-				let _DateEnd = DateEnd
-				_DateEnd = DateRange.to.year + "-0" + DateRange.to.month + "-" + DateRange.to.day
-				setDateEnd(_DateEnd)
+					}if(iDay >= 10 && iMonth < 10){
+					let _DateStart = DateStart
+					_DateStart = selecteddate.from.year + "-0" + selecteddate.from.month + "-" + selecteddate.from.day
+					setDateStart(_DateStart)
+
+					}
+				}
+					
+			}
+			if(selecteddate ){
+				if(selecteddate.to === null  ){
+					setDateEnd('')
+				}else{
+							
+					let iDay = parseInt(selecteddate.to.day, 10);
+					let iMonth = parseInt(selecteddate.to.month, 10);
 		
+					if(iDay < 10 && iMonth < 10){
+					let _DateEnd = DateEnd
+					_DateEnd = selecteddate.to.year + "-0" + selecteddate.to.month + "-0" + selecteddate.to.day
+					setDateEnd(_DateEnd)
+							
+					}if(iDay < 10 && iMonth >= 10){
+					let _DateEnd = DateEnd
+					_DateEnd = selecteddate.to.year + "-" + selecteddate.to.month + "-0" + DateRange.to.day
+					setDateEnd(_DateEnd)
+			
+					}if(iDay >= 10 && iMonth < 10){
+					let _DateEnd = DateEnd
+					_DateEnd = selecteddate.to.year + "-0" + selecteddate.to.month + "-" + selecteddate.to.day
+					setDateEnd(_DateEnd)
+			
+					}
 				}
 				
 			}
+			if(selecteddate && selecteddate.from === null && selecteddate.to === null)
+			{
 
-			console.log("11111")
-			handleCalendar(false);
-		}else{
-			handleCalendar(false);
-			console.log("2222")
-		}
+			}else{
+					handleCalendar(false);
+			}
+		
 
 	}
+	 
 
 	//Calendar
 
@@ -373,7 +401,7 @@ export const Booking = () => {
 			async function fetchData() {
 				let Rooms = await getRooms();
 				console.log('Rooms', Rooms);
-				setrooms(Rooms);
+			//	setrooms(Rooms);
 			}
 			
 			
@@ -384,6 +412,101 @@ export const Booking = () => {
 		},
 		[loadingpage,DateRange ]
 	);
+	useEffect(()=>{
+		if(api_rooms.data){
+			console.log('api_rooms',api_rooms.data)
+		
+			if(api_rooms.data.Rooms &&   api_rooms.data.Rooms.length ){
+			
+				 let start_date = DateStart  ? new Date(DateStart)  :new Date()  
+				 let end_date = DateEnd  ? new Date(DateStart)  :new Date()  
+				 start_date = start_date.getTime()
+				 end_date = end_date.getTime()
+				console.log("debug",start_date, end_date)
+				  let  roomschedules =api_rooms.data.Rooms.map((room) =>{
+					  let {bookings ,checkin} = room
+					  let _schbooking  = bookings.map ( ( booking ) => {
+						  let {checkin_date , checkin_date_exp , checkin_type } = booking;
+						 
+						  		return ({
+									  	"checkin_date": checkin_date ?  new Date(Number(checkin_date)).getTime() : checkin_date , 
+								  		"checkin_date_exp": checkin_date_exp ? new Date(Number(checkin_date_exp)).getTime() : checkin_date_exp , 
+										"checkin_type":checkin_type , 
+										booking:booking 
+									})
+						  
+					  }).filter(item =>item )
+
+					  let _schcheckin = {
+						  				 "checkin_date" :  (checkin && checkin.checkin_date)?new Date(checkin.checkin_date).getTime():null  ,
+					  					 "checkin_date_exp": (checkin && checkin.checkin_date_exp)? new Date(checkin.checkin_date_exp).getTime():null , 
+										 "checkin_type":   (checkin && checkin.checkin_type)? checkin.checkin_type : null  ,
+										 "checkin":checkin,
+										 }
+					 
+					  let sch = null 
+					  sch = [..._schbooking , _schcheckin ]
+					return {room:room ,sch:sch}
+				 })
+
+					console.log( 'roomschedules', roomschedules )
+				 let room_support  = roomschedules.map( (roomschedule) =>{
+					 let {room} = roomschedule
+				
+					// console.log(`debug roomschedule`,roomschedule)
+					 let condition =  roomschedule.sch.map ( ({checkin_date_exp , checkin_date , checkin_type })=>{
+					//	 console.log(`debug roomschedule`,checkin_date_exp , end_date , ( checkin_date_exp === null  || (end_date <  checkin_date &&    end_date < checkin_date_exp ) ))
+							if( 
+								//       [จอง] ____________
+								//       ________ [วันที่เลือก ]
+							(start_date >  checkin_date &&    start_date > checkin_date_exp )  && 
+							(end_date >  checkin_date &&    end_date > checkin_date_exp )  
+							&&  checkin_type === 'รายวัน'){
+								return true   
+							}else if( 
+								//        ____________[จอง]
+								//       [วันที่เลือก ]________
+							(start_date <  checkin_date &&    start_date < checkin_date_exp )  && 
+							(end_date <  checkin_date &&    end_date < checkin_date_exp )   &&  
+							checkin_type === 'รายวัน'
+							){
+								return true 
+							}else if(
+								//       _____________[จอง รายเดือน]_
+								//       _[วันที่เลือก ]______________
+								(start_date <  checkin_date &&   ( start_date < checkin_date_exp ||  checkin_date_exp === null )   )  && 
+								( checkin_date_exp === null  || (end_date <  checkin_date &&    end_date < checkin_date_exp ) )  &&  
+								checkin_type === 'รายเดือน'
+							){
+								return true 
+							}else if( 
+								 // new room 
+								checkin_date_exp === null &&  checkin_date  === null &&  checkin_type === null
+							 ){
+								return true
+							}
+							else {
+								return false 
+							}
+					  })
+					
+					 	//console.log(`debug ${roomschedule.room.name}`,condition)
+					
+						  roomschedule.condition = Boolean( condition.reduce( (previousValue, currentValue) => previousValue & currentValue) )
+						  
+						  return roomschedule 
+				 }).filter(item => item.condition === true)
+				let _rooms = room_support.map(({ room }) =>{
+						return room
+				})
+				  console.log('room_support',_rooms)
+				setrooms([..._rooms]);
+			
+			}
+			
+
+		}
+	},[api_rooms,api_rooms.data ,DateStart , DateEnd])
 
 	
 	// console.log('rooms', rooms);
@@ -396,7 +519,10 @@ export const Booking = () => {
 
 	return (
 		<div>
-			{defaultCalendar.isLoading && <CalendarPicker onCalendar={CalendarDate} start={handleStart} />}
+			{defaultCalendar.isLoading && <CalendarPicker onCalendar={CalendarDate} start={handleStart}  
+	          	selectedStartDate={ DateStart ? new Date( DateStart) : DateStart  }
+          		selectedEndDate={ DateEnd ? new Date( DateEnd  ):  DateEnd  }
+			/>}
 			{alert && alert.show ?
 			<ModalAlert
 			 handleaccept ={ async () =>{
@@ -445,9 +571,15 @@ export const Booking = () => {
 							<div  className={styles.input} >
 								<div className={styles.zoneselect_checkincheckout}>
 									<label> วันเที่เข้าพัก </label>
-									<input type='date' name="input_searchdatecheckin" value={DateStart}/>
+									<input type='date' name="input_searchdatecheckin" value={DateStart} onChange={(e)=>{
+										let {value } = e.target
+										setDateStart( value )  
+									}}   />
 									<label> วันที่เข้าย้ายออก </label>
-									<input type='date' name="input_searchdatecheckout" value={DateEnd}/>
+									<input type='date' name="input_searchdatecheckout" value={DateEnd}  onChange={(e)=>{
+										let {value } = e.target
+										setDateEnd( value )  
+									}}  />
 									<button
 									onClick={()=>{
 										setdefaultCalendar({
@@ -490,7 +622,8 @@ export const Booking = () => {
 										let Rooms = await getRooms();
 
 										let _filter_rooms  =[]
-										_filter_rooms = filter_rooms(Rooms , options_search)
+										console.log('DateStart,DateEnd' , DateStart,DateEnd)
+										_filter_rooms = filter_rooms(Rooms , options_search,DateStart,DateEnd)
 
 										setrooms(_filter_rooms);
 									}}>
@@ -513,14 +646,15 @@ export const Booking = () => {
 									</tr>
 									{rooms
 										.filter(
-											(room) => (room && room.status === 'ย้ายออก') || room.status === 'ห้องว่าง'
+											(room) => (room && room && room.status === 'ย้ายออก') || room.status === 'ห้องว่าง'
 										)
 										.map(
 											(room, index) =>
 												room ? (
+													
 													<tr
 														onClick={() => {
-															setselectedroom(room.id);
+															setselectedroom(room);
 															handleChangedALLformroom(room);
 
 															console.log('bookingnumber',formbooking,)
@@ -534,14 +668,14 @@ export const Booking = () => {
 														
 														}}
 														style={{
-															background: selectedroom === room.id ? 'lightgray' : 'none'
+															background: selectedroom && selectedroom.id === room.id ? 'lightgray' : 'none'
 														}}
 													>
-														<td>{room.name ? room.name : '---'}</td>
-														<td>{room.building ? room.building : '---'}</td>
-														<td>{room.floor ? room.floor : '---'}</td>
-														<td>{room.RoomType ? room.RoomType.name : '---'}</td>
-														<td>{room.status ? room.status : '---'}</td>
+														<td>{ room && room.name ? room.name : '---'}</td>
+														<td>{ room && room.floor && room.floor.building ? room.floor.building.name : '---'}</td>
+														<td>{ room && room.floor ? room.floor.name : '---'}</td>
+														<td>{ room && room.RoomType ? room.RoomType.name : '---'}</td>
+														<td>{ room && room.status ? room.status : '---'}</td>
 													</tr>
 												) : null
 										)}
@@ -696,7 +830,7 @@ export const Booking = () => {
 										<input
 											id="checkin_date"
 											type="date"
-											value={formbooking.checkin_date}
+											value={formbooking && formbooking.checkin_date ? formbooking.checkin_date :  ""}
 											onChange={handleChangedformbooking}
 										/>
 									</div>
@@ -709,7 +843,7 @@ export const Booking = () => {
 										<input
 											id="checkin_date_exp"
 											type="date"
-											value={formbooking.checkin_date_exp}
+											value={formbooking && formbooking.checkin_date_exp ? formbooking.checkin_date_exp: ""}
 											onChange={handleChangedformbooking}
 										/>
 									</div>
@@ -832,60 +966,66 @@ export const Booking = () => {
 										onClick={async () => {
 											console.log('send update', formbooking);
 											let  _res = null
-											if (formbooking.id) {
+											try{
+												if (formbooking.id) {
+													
+													_res = await updateBooking({
+														variables: {
+															id: formbooking.id,
+															input: {
+																booking_number: formbooking.booking_number,
+																customer_name: formbooking.customer_name,
+																customer_lastname: formbooking.customer_lastname,
+																customer_tel: formbooking.customer_tel,
+																customer_address : formbooking.customer_address,
+																payment_method: formbooking.payment_method,
+																deposit: formbooking.deposit,
+																checkin_type: formbooking.checkin_type,
+																checkin_date: formbooking.checkin_date,
+																checkin_date_exp: formbooking.checkin_date_exp,
+																note: formbooking.note,
+																status: formbooking.status ? formbooking.status : 'รอการชำระเงิน' ,
+																confirm_booking :formbooking.confirm_booking ? formbooking.confirm_booking : '---' ,
+																receipt_number: formbooking.receipt_number,
+																Room:selectedroom.id // << id room 
+															}
+														}
+													});
+												} else {
+													_res =  await createBooking({
+														variables: {
+															input: {
+																booking_number: formbooking.booking_number,
+																customer_name: formbooking.customer_name,
+																customer_lastname: formbooking.customer_lastname,
+																customer_tel: formbooking.customer_tel,
+																customer_address : formbooking.customer_address,
+																payment_method:formbooking.payment_method,
+																deposit: formbooking.deposit,
+																checkin_type: formbooking.checkin_type,
+																checkin_date: formbooking.checkin_date,
+																checkin_date_exp: formbooking.checkin_date_exp,
+																note: formbooking.note,
+																status: 'รอการชำระเงิน',
+																confirm_booking : formbooking.confirm_booking,
+																receipt_number: '',
+																Room:selectedroom.id  //<< id room 
+															}
+														}
+													});
+												}
 											
-												_res = await updateBooking({
-													variables: {
-														id: formbooking.id,
-														input: {
-															booking_number: formbooking.booking_number,
-															customer_name: formbooking.customer_name,
-															customer_lastname: formbooking.customer_lastname,
-															customer_tel: formbooking.customer_tel,
-															customer_address : formbooking.customer_address,
-															payment_method: formbooking.payment_method,
-															deposit: formbooking.deposit,
-															checkin_type: formbooking.checkin_type,
-															checkin_date: formbooking.checkin_date,
-															checkin_date_exp: formbooking.checkin_date_exp,
-															note: formbooking.note,
-															status: formbooking.status ? formbooking.status : 'รอการชำระเงิน' ,
-															confirm_booking :formbooking.confirm_booking ? formbooking.confirm_booking : '---' ,
-															receipt_number: formbooking.receipt_number,
-															Room:selectedroom
-														}
-													}
-												});
-											} else {
-												_res =  await createBooking({
-													variables: {
-														input: {
-															booking_number: formbooking.booking_number,
-															customer_name: formbooking.customer_name,
-															customer_lastname: formbooking.customer_lastname,
-															customer_tel: formbooking.customer_tel,
-															customer_address : formbooking.customer_address,
-															payment_method:formbooking.payment_method,
-															deposit: formbooking.deposit,
-															checkin_type: formbooking.checkin_type,
-															checkin_date: formbooking.checkin_date,
-															checkin_date_exp: formbooking.checkin_date_exp,
-															note: formbooking.note,
-															status: 'รอการชำระเงิน',
-															confirm_booking : formbooking.confirm_booking,
-															receipt_number: '',
-															Room:selectedroom
-														}
-													}
-												});
-											}
-										 //>>   communication note <<//
-											if(_res && _res.data){
-												console.log('record sucess ')
-												setdefault_forminput();
-												booking.refetch();
-											}else{
-												console.log('record Error ')
+												//>>   communication note <<//
+												if(_res && _res.data){
+													console.log('record sucess ')
+													setdefault_forminput();
+													api_rooms.refetch();
+													booking.refetch();
+												}else{
+													console.log('record Error ')
+												}
+											}catch(e){
+												console.error("can't save booking data ",e)
 											}
 										}}
 									>
@@ -1056,12 +1196,8 @@ export const Booking = () => {
 								payment_method:_booking.payment_method,
 								deposit: _booking.deposit,
 								checkin_type: _booking.checkin_type,
-								checkin_date: formatDate(
-									new Date(_booking.checkin_date ? Number(_booking.checkin_date) : Number(0))
-								),
-								checkin_date_exp: formatDate(
-									new Date(_booking.checkin_date ? Number(_booking.checkin_date_exp) : Number(0))
-								),
+								checkin_date: _booking.checkin_date ?  formatDate( new Date(  Number(_booking.checkin_date)  )) : "",
+								checkin_date_exp:  _booking.checkin_date_exp ? formatDate(new Date( Number(_booking.checkin_date_exp)  )):"",
 								note: _booking.note,
 								status: _booking.status,
 								confirm_booking: _booking.confirm_booking,
@@ -1069,19 +1205,8 @@ export const Booking = () => {
 							});
 							if(_booking && _booking.Room)
 							{
-								setselectedroom(_booking.Room.id);
-								handleChangedALLformroom(
-									{
-										name: _booking.Room && _booking.Room.name ? _booking.Room.name:"",
-										floor: _booking.Room && _booking.Room.floor.name  ? _booking.Room.floor.name  :"",
-										building: _booking.Room  && _booking.Room.floor.building.name ? _booking.Room.floor.building.name : "",
-										nameroomtype: _booking.Room.RoomType && _booking.Room.RoomType.name ?_booking.Room.RoomType.name : "" ,
-										monthlyprice : _booking.Room.RoomType && _booking.Room.RoomType.monthlyprice?_booking.Room.RoomType.monthlyprice : "",
-										dailyprice : _booking.Room.RoomType && _booking.Room.RoomType.dailyprice?_booking.Room.RoomType.monthlyprice : "",
-										insurance: _booking.Room.RoomType &&  _booking.Room.RoomType.insurance?_booking.Room.RoomType.insurance : "",
-										deposit_rent:  _booking.Room.RoomType && _booking.Room.RoomType.deposit_rent?_booking.Room.RoomType.deposit_rent : ""
-									}
-								);
+								setselectedroom(_booking.Room);
+								handleChangedALLformroom(_booking.Room);
 							}
 						}}
 
