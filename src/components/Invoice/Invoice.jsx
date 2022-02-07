@@ -605,12 +605,20 @@ const CalendarDate = (choose) =>{
                                 <lable className = {styles.text3} >ค่าโทรศัพท์</lable>
                                 <div className = {styles.input}>
                                     <lable className = {styles.text4} >โทรศัพท์</lable>
-                                    <input className = {styles.input1} type = 'date'/>
-                                    <input className = {styles.input2} type = 'date'/>
-                                    <input className = {styles.input3} placeholder='0.00'/>
+                                    <input name="start_date"  className = {styles.input1} type = 'date'/>
+                                    <input name="end_date"    className = {styles.input2} type = 'date'/>
+                                    <input name="phone_price" className = {styles.input3} placeholder='0.00'/>
                                 </div>
+                               
                                 
                                        
+                            </div>
+                             <div className = {styles.topic5} >
+                                    <button
+                                     disabled={!editselectroom}
+                                     onClick={()=>{ 
+                                        // เพิ่มค่า น้ำ ค่า ไฟ ไปยังรายการ 
+                                    }}>คำนวณ</button>
                             </div>
                             <div className = {styles.topic}>
                                 รายการใช้จ่าย
