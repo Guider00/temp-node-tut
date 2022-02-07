@@ -8,6 +8,7 @@ query{
         passWord
         name
         level
+        status
     }
 }
 

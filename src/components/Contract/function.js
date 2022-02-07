@@ -127,19 +127,6 @@ export const FormFilter = () =>{
                 setformfilter({..._formfilter})
                 console.log('_formfilter',_formfilter)
 
-            }if(e.target.id === "checkin_date_exp"){
-                _formfilter[e.target.id] = e.target.value;
-                setformfilter({..._formfilter})
-                
-                console.log('_formfilter',_formfilter)
-
-                
-            }if(e.target.id === "checkin_date"){
-                _formfilter[e.target.id] = e.target.value;
-                setformfilter({..._formfilter})
-    
-                console.log('_formfilter',_formfilter)
-
             }else if(e.target.id === "text"){
                 let text = /[^0-9a-zA-Zก-๙]/ig;
                 e.target.value = e.target.value.replace(text,'')

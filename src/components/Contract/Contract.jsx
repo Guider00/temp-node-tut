@@ -125,8 +125,8 @@ export const Contract = () => {
 	const [defaultCalendar, setdefaultCalendar] = useState({
         isLoading: false
     });
-	const [DateStart , setDateStart] = useState([''])
-	const [DateEnd , setDateEnd] = useState([''])
+	const [DateStart , setDateStart] = useState(null)
+	const [DateEnd , setDateEnd] = useState(null)
 	const[DateRange, setDateRange] = useState([])
 
 
@@ -141,75 +141,98 @@ export const Contract = () => {
 		console.log("DateRange",DateRange)
 	}
 
-	const CalendarDate = (choose) =>{
-
-		if(choose){
-			if(DateRange.from){
-				let iDay = parseInt(DateRange.from.day, 10);
-				let iMonth = parseInt(DateRange.from.month, 10);
-                let _formfilter = formfilter ;
-					
-				if(iDay < 10 && iMonth < 10){
-				let _DateStart = DateStart
-				_DateStart = DateRange.from.year + "-0" + DateRange.from.month + "-0" + DateRange.from.day
-                _formfilter['checkin_date'] = _DateStart
-                setformfilter({..._formfilter})
-                setDateStart(_DateStart)
-					
-				}if(iDay < 10 && iMonth >= 10){
-				let _DateStart = DateStart
-				_DateStart = DateRange.from.year + "-" + DateRange.from.month + "-0" + DateRange.from.day
-                _formfilter['checkin_date'] = _DateStart
-                setformfilter({..._formfilter})
-				setDateStart(_DateStart)
-	
-				}if(iDay >= 10 && iMonth < 10){
-				let _DateStart = DateStart
-				_DateStart = DateRange.from.year + "-0" + DateRange.from.month + "-" + DateRange.from.day
-                _formfilter['checkin_date'] = _DateStart
-                setformfilter({..._formfilter})
-				setDateStart(_DateStart)
-	
-				}
-					
-			}
-			if(DateRange.to){
-				
-	
-				let iDay = parseInt(DateRange.to.day, 10);
-				let iMonth = parseInt(DateRange.to.month, 10);
-                let _formfilter = formfilter ;
-	
-				if(iDay < 10 && iMonth < 10){
-				let _DateEnd = DateEnd
-				_DateEnd = DateRange.to.year + "-0" + DateRange.to.month + "-0" + DateRange.to.day
-                _formfilter['checkin_date_exp'] = _DateEnd
-                setformfilter({..._formfilter})
-				setDateEnd(_DateEnd)
+    const CalendarDate = (selecteddate) =>{
+		console.log('debug',selecteddate)
+		
+			if(selecteddate ){
+				if(selecteddate.from === null  ){
+					setDateStart('')
+				}else{
+					let iDay = parseInt(selecteddate.from.day, 10);
+					let iMonth = parseInt(selecteddate.from.month, 10);
 						
-				}if(iDay < 10 && iMonth >= 10){
-				let _DateEnd = DateEnd
-				_DateEnd = DateRange.to.year + "-" + DateRange.to.month + "-0" + DateRange.to.day
-                _formfilter['checkin_date_exp'] = _DateEnd
-                setformfilter({..._formfilter})
-				setDateEnd(_DateEnd)
+					if(iDay < 10 && iMonth < 10){
+					let _DateStart = DateStart
+					_DateStart = selecteddate.from.year + "-0" + selecteddate.from.month + "-0" + selecteddate.from.day
+					setDateStart(_DateStart)
+
+                    let _formfilter = formfilter ;
+                    _formfilter['checkin_date'] = _DateStart
+                    setformfilter({..._formfilter})
+                    
+						
+					}if(iDay < 10 && iMonth >= 10){
+					let _DateStart = DateStart
+					_DateStart = selecteddate.from.year + "-" + selecteddate.from.month + "-0" + selecteddate.from.day
+					setDateStart(_DateStart)
+
+                    let _formfilter = formfilter ;
+                    _formfilter['checkin_date'] = _DateStart
+                    setformfilter({..._formfilter})
 		
-				}if(iDay >= 10 && iMonth < 10){
-				let _DateEnd = DateEnd
-				_DateEnd = DateRange.to.year + "-0" + DateRange.to.month + "-" + DateRange.to.day
-                _formfilter['checkin_date_exp'] = _DateEnd
-                setformfilter({..._formfilter})
-				setDateEnd(_DateEnd)
-		
+					}if(iDay >= 10 && iMonth < 10){
+					let _DateStart = DateStart
+					_DateStart = selecteddate.from.year + "-0" + selecteddate.from.month + "-" + selecteddate.from.day
+					setDateStart(_DateStart)
+
+                    let _formfilter = formfilter ;
+                    _formfilter['checkin_date'] = _DateStart
+                    setformfilter({..._formfilter})
+
+					}
 				}
+					
+			}
+			if(selecteddate ){
+				if(selecteddate.to === null  ){
+					setDateEnd('')
+				}else{
+							
+					let iDay = parseInt(selecteddate.to.day, 10);
+					let iMonth = parseInt(selecteddate.to.month, 10);
+		
+					if(iDay < 10 && iMonth < 10){
+					let _DateEnd = DateEnd
+					_DateEnd = selecteddate.to.year + "-0" + selecteddate.to.month + "-0" + selecteddate.to.day
+					setDateEnd(_DateEnd)
+
+                    let _formfilter = formfilter ;
+                    _formfilter['checkin_date_exp'] = _DateEnd
+                    setformfilter({..._formfilter})
+                    
+							
+					}if(iDay < 10 && iMonth >= 10){
+					let _DateEnd = DateEnd
+					_DateEnd = selecteddate.to.year + "-" + selecteddate.to.month + "-0" + DateRange.to.day
+					setDateEnd(_DateEnd)
+
+                    let _formfilter = formfilter ;
+                    _formfilter['checkin_date_exp'] = _DateEnd
+                    setformfilter({..._formfilter})
+			
+					}if(iDay >= 10 && iMonth < 10){
+					let _DateEnd = DateEnd
+					_DateEnd = selecteddate.to.year + "-0" + selecteddate.to.month + "-" + selecteddate.to.day
+					setDateEnd(_DateEnd)
+
+                    let _formfilter = formfilter ;
+                    _formfilter['checkin_date_exp'] = _DateEnd
+                    setformfilter({..._formfilter})
+			
+					}
+
+                    
+				}
+
 				
 			}
-            console.log('Confirm')
-			handleCalendar(false);
-		}else{
-            console.log('cancel')
-			handleCalendar(false);
-		}
+			if(selecteddate && selecteddate.from === null && selecteddate.to === null)
+			{
+
+			}else{
+					handleCalendar(false);
+			}
+		
 
 	}
 
@@ -280,7 +303,10 @@ export const Contract = () => {
 
     return (
         <>
-            {defaultCalendar.isLoading && <CalendarPicker onCalendar={CalendarDate} start={handleStart} />}
+            {defaultCalendar.isLoading && <CalendarPicker onCalendar={CalendarDate} start={handleStart} 
+            selectedStartDate={ DateStart ? new Date( DateStart) : DateStart  }
+            selectedEndDate={ DateEnd ? new Date( DateEnd  ):  DateEnd  }
+            />}
             <div className={styles.container}>
                 <div className={styles.zone1}>
                     <div className={styles.header}>
@@ -289,9 +315,40 @@ export const Contract = () => {
                         </div>
                         <div className={styles.dateinput}>
                             <label className={styles.date}>วันที่ :</label>
-                            <input  id = 'checkin_date'type='date' value={DateStart} className={styles.inputdate} onChange={handleChangedformfilter}></input>
+                            <input  
+                            id = 'checkin_date'
+                            type='date' 
+                            max={DateEnd}
+                            value={DateStart} 
+                            className={styles.inputdate} 
+                            onChange={(e)=>{
+                                let {value } = e.target
+                                setDateStart( value )  
+
+                                let _formfilter = formfilter ;
+                                _formfilter['checkin_date'] = value
+                                setformfilter({..._formfilter})
+
+                                
+                            }} 
+                            ></input>
                             <label className={styles.to}>ถึง :</label>
-                            <input id = 'checkin_date_exp' type='date' value={DateEnd} className={styles.inputdate} onChange={handleChangedformfilter}></input>
+                            <input 
+                            id = 'checkin_date_exp' 
+                            min={DateStart}
+                            type='date' value={DateEnd} 
+                            className={styles.inputdate} 
+                            onChange={(e)=>{
+                                let {value } = e.target
+                                setDateEnd( value )  
+
+                                let _formfilter = formfilter ;
+                                _formfilter['checkin_date_exp'] = value
+                                setformfilter({..._formfilter})
+
+                             
+                            }}  
+                            ></input>
                             <button className={styles.to}
                             onClick={()=>{
                                 setdefaultCalendar({

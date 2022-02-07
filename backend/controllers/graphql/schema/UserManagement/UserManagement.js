@@ -7,6 +7,7 @@ type UserManagement {
     passWord:String
     name:String
     level:String
+    status:String
 
     
 
@@ -16,6 +17,7 @@ input UserManagementInput{
     passWord:String
     name:String
     level:String
+    status:String
 
 }
 `
