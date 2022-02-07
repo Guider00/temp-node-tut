@@ -1269,6 +1269,228 @@ export const export_Receipt_pdf =  ( booking :Booking, type , table_prices  ) =>
 
 }
 
+export const export_Receipts_pdf = (Receipts) =>{
+    if(Receipts && Array.isArray(Receipts) && Receipts.length )
+    {
+        const document_name = 'ใบเสร็จ'
+        let Vat = 7;
+        let Noanswer = "-"
+        let business_Address_1 = "119 ซอยสีม่วงอนุสรณ์ ถนน สุทธิสาร"
+        let business_Address_2 = "แขวง ดินแดง เขต ดินแดง กรุงเทพ 10400"
+        let Taxid = "0105536011803"
+        let Phone = "026937005"
+        let Email = "sales@primusthai.com" 
+        const doc = new jsPDF('l', 'mm', [297, 230]);
+        Receipts.map( (receipt,index) =>{
+          
+            let Name =  (receipt && receipt.Invoice  && receipt.Invoice.Room &&  receipt.Invoice.Room.members  && receipt.Invoice.Room.members.length
+            && receipt.Invoice.Room.members[0] &&  receipt.Invoice.Room.members[0].name  )?  `${receipt.Invoice.Room.members[0].name} ${receipt.Invoice.Room.members[0].lastname}`  : Noanswer 
+            let Address1 = (receipt &&   receipt.Invoice && receipt.Invoice.Room && receipt.Invoice.Room.members && receipt.Invoice.Room.members.length
+            &&  receipt.Invoice.Room.members[0] && receipt.Invoice.Room.members[0].address )?  receipt.Invoice.Room.members[0].address  : "-----------------" /// ที่อยู่ ผู้รับใบเสร็จ 
+         
+            let No = receipt && receipt.id ? receipt.id : Noanswer
+            let _Date =  receipt && receipt.monthlybilling ?  formatDate(receipt.monthlybilling) : '----'
+            let HoneNo = receipt && receipt.Invoice && receipt.Invoice.Room && receipt.Invoice.Room.floor && receipt.Invoice.Room.floor.building 
+             && receipt.Invoice.Room.floor.building.name ?  receipt.Invoice.Room.floor.building.name : Noanswer
+            
+            let Room = receipt && receipt.Invoice && receipt.Invoice.Room && receipt.Invoice.Room.name ? receipt.Invoice.Room.name :Noanswer
+   
+
+            let _table_prices = receipt && receipt.lists ?receipt.lists :[{ 
+                            name:`----` ,
+                            number_item:"1",
+                            price:`---`,
+                            amount:`---`
+                        }]
+        
+            let _total_price = 0
+            let _total_vat = 0
+            _table_prices.map(item =>{ 
+            let _price  = (item && item.price ) ? (item.type_price === "ราคารวมvat" ? Number(item.price * 100.0/107.0 ):Number(item.price) ) : 0
+                _total_price +=_price;
+                _total_vat  +=  (item.selectvat === "คิดvat" ? _price*(Vat/100) : 0)
+                return 1;
+            })
+
+            let Grandtotal = `${_total_price.toFixed(2)}`
+            let Vat_Grandtotal  =`${_total_vat.toFixed(2)}`
+            let End_Grandtotal = `${(_total_price+_total_vat).toFixed(2)}`
+
+            const names = _table_prices.map(_table_prices => _table_prices.name);
+            const Units = _table_prices.map(_table_prices => (_table_prices.unit !== undefined   ) ?  `${_table_prices.unit}`:'1' );
+            const Price = _table_prices.map(_table_prices => `${
+                    (_table_prices.type_price === "ราคารวมvat" ? Number(_table_prices.price * 100.0/107.0 ).toFixed(2):Number(_table_prices.price).toFixed(2) )
+                }`);
+            const Amount = _table_prices.map(_table_prices =>  `${
+                    (_table_prices.type_price === "ราคารวมvat" ? Number(_table_prices.price * 100.0/107.0 ).toFixed(2):Number(_table_prices.price).toFixed(2) )
+                    *Number( (_table_prices.unit !== undefined   ) ?  `${_table_prices.unit}`:'1')}`  );
+
+        
+        
+
+            AddTH_font(doc ,'yourCustomFont.ttf' )
+            doc.addFont('yourCustomFont.ttf', 'yourCustomFont', 'normal');
+            doc.setFont('yourCustomFont');
+
+            //bill box
+            
+            doc.setDrawColor(0, 102, 205)
+            doc.setFillColor(255, 255, 255)
+            doc.roundedRect(195, 37, 78, 10, 2, 2, 'FD')
+            doc.roundedRect(195, 49, 78, 10, 2, 2, 'FD')
+            doc.roundedRect(195, 61, 78, 10, 2, 2, 'FD')
+            doc.roundedRect(195, 73, 78, 10, 2, 2, 'FD')
+            
+
+
+            //address box
+            doc.setDrawColor(0, 102, 205)
+            doc.setFillColor(255, 255, 255)
+            doc.roundedRect(17,37,176,46,6,6, 'FD')
+
+            
+
+            //topic box
+            doc.setDrawColor(60, 50, 170)
+            doc.setFillColor(0, 102, 205)
+            doc.rect(17,85,138,15, 'FD' )
+            doc.rect(155,85,38,15, 'FD' )
+            doc.rect(193,85,38,15, 'FD' )
+            doc.rect(231,85,46,15, 'FD' )
+
+            
+            //result box
+            doc.setDrawColor(60, 50, 170)
+            doc.setFillColor(255, 255, 255)
+            doc.rect(17,100,138,60, 'FD' )
+            doc.rect(155,100,38,60, 'FD' )
+            doc.rect(193,100,38,60, 'FD' )
+            doc.rect(231,100,46,60, 'FD' )
+
+            //last box
+            doc.setFillColor(200,230,255)
+            doc.rect(17,162,214,31, 'FD' )
+            doc.rect(231,162,46,31, 'FD' )
+
+            doc.setDrawColor(60, 50, 170)
+            doc.rect(40,166,5,5, 'FD' )
+            doc.rect(72,166,5,5, 'FD' )
+            doc.rect(40,166,5,5, 'FD' )
+            
+            doc.setFontSize(14)
+            doc.text("เงินสด" ,47, 167, {align: 'left'})
+            doc.text("Cash" ,47, 171, {align: 'left'})
+            doc.text("อื่นๆ .........................................................................." ,79, 167, {align: 'left'})
+            doc.text("Other" ,79, 171, {align: 'left'})
+            doc.text("เช็คธนาคาร/สาขา ............................................................................................" ,47, 179, {align: 'left'})
+            doc.text("Cheque Bank/Branch" ,47, 183, {align: 'left'})
+            doc.text("เลขที่เช็ค ............................................ลงวันที่..................................................." ,47, 187, {align: 'left'})
+            
+            doc.text("Cash No. ",47, 191, {align: 'left'})
+        
+            doc.text("Date ",95, 191, {align: 'left'})
+
+            doc.setFontSize(16)
+            doc.text( business_Address_1 ,17, 21, {align: 'left'})
+            doc.setFontSize(14)
+            doc.text( business_Address_2 ,17, 26, {align: 'left'})
+
+            doc.setFontSize(14)
+            doc.text("Tax ID : ",17, 31, {align: 'left'})
+            doc.text(Taxid,29, 31, {align: 'left'})
+            doc.text("โทร : ",54, 31, {align: 'left'})
+            doc.text(Phone,62, 31, {align: 'left'})
+            doc.text("Email :",84, 31, {align: 'left'})
+            doc.text(Email,95, 31, {align: 'left'})
+
+            doc.setFontSize(23)
+            doc.text("ต้นฉบับใบเสร็จรับเงิน/ORIGINAL RECEIPT" ,90, 10, {align: 'left'})
+
+            doc.setFontSize(16)
+            doc.text("ชื่อ/Name :" ,20, 50, {align: 'left'})
+            doc.setFontSize(16)
+            doc.text(Name ,50, 50, {align: 'left'})
+        
+        
+            doc.setFontSize(14)
+            doc.text("ที่อยู่/Address :" ,20, 65, {align: 'left'})
+            doc.setFontSize(16)
+            doc.text(Address1 ,50, 65, {align: 'left'})
+            // doc.text(Address2 ,50, 60, {align: 'left'})
+
+            doc.setFontSize(14)
+            doc.text("เลขที่/No. " ,202, 43, {align: 'left'})
+            doc.setFontSize(13)
+            doc.text(No ,230, 43, {align: 'left'})
+            doc.setFontSize(14)
+            doc.text("วันที่/Date " ,202, 55, {align: 'left'})
+            doc.setFontSize(16)
+            doc.text(_Date ,238, 55, {align: 'left'})
+            doc.setFontSize(14)
+            doc.text("เลขที่ชุดห้อง/Room" ,202, 67, {align: 'left'})
+            doc.setFontSize(16)
+            doc.text(Room ,238, 67, {align: 'left'})
+            doc.setFontSize(14)
+            doc.text("บ้านเลขที่/Home No. " ,202, 79, {align: 'left'})
+            doc.setFontSize(16)
+            doc.text(HoneNo ,238 , 79, {align: 'left'})
+
+            
+            doc.setFontSize(16)
+            doc.text("รายการ" ,73, 92, {align: 'left'})
+            doc.text("Description" ,70, 96, {align: 'left'})
+            
+            doc.text("จำนวนหน่วย" ,163, 92, {align: 'left'})
+            doc.text("Units" ,167, 96, {align: 'left'})
+            
+            doc.text("ราคาต่อหน่วย" ,202, 92, {align: 'left'})
+            doc.text("Unit /Price" ,203 , 96, {align: 'left'})
+
+            doc.text("จำนวนเงิน" ,246, 92, {align: 'left'})
+            doc.text("Amount" ,247 , 96, {align: 'left'})
+
+            doc.setFontSize(14)
+            doc.text("หมายเหตุ กรณีชำระโดยเช็ค ใบเสร็จรับเงินนี้ จะสมบูรณ์เมื่อได้เรียกเก็บเงินตามเช็คแล้ว" ,17, 198, {align: 'left'})
+            doc.setFontSize(16)
+            doc.text("ชำระโดย" ,22, 170, {align: 'left'})
+
+            doc.text(`Vat ${Vat}%` ,168 , 171, {align: 'left'})
+            doc.text(`${ Number(Vat_Grandtotal).toFixed(2) }` ,250 , 171, {align: 'left'})
+            
+
+            doc.text("รวมเงินทั้งสิ้น/Grand Total" ,168 , 181, {align: 'left'})
+            doc.text( `${ Number(End_Grandtotal).toFixed(2) }`  ,250 , 181, {align: 'left'})
+
+
+            doc.text(".................................................................................." ,50, 209, {align: 'left'})
+            doc.text("ผู้รับเงิน/Collector" ,70 , 215, {align: 'left'})
+
+
+            doc.text(".................................................................................." ,156 , 209, {align: 'left'})
+            doc.text("ผู้มีอำนาจลงนาม/Authorized" ,168 , 215, {align: 'left'})
+
+
+            doc.setFontSize(16)
+            doc.text(names ,20, 105, {align: 'left'})
+            doc.text(Units ,170, 105, {align: 'left'})
+            doc.text(Price ,210, 105, {align: 'left'})
+            doc.text(Amount ,250, 105, {align: 'left'})
+
+            if(Receipts.length>0 && index !== (Receipts.length - 1 ) ){
+             doc.addPage()
+            }
+            
+        })
+        let src_pdf = doc.output('datauristring');
+        const iframe = `<title>${document_name}</title><iframe width='100%' type="application/pdf"   height='100%' src="${src_pdf}"></iframe>`
+        const x = window.open();
+        x.document.title = "preview booking"
+        x.document.open();
+        x.document.write(iframe);
+        x.document.close();
+    }
+}
+
   // ใบคืนเงินประกัน
 export const export_Reimbursement_pdf =  ( booking , type ,table_price  ) =>{
     const document_name = 'ใบคืนเงินประกัน'
@@ -1499,6 +1721,10 @@ export const export_Reimbursement_pdf =  ( booking , type ,table_price  ) =>{
 
 }
 
+export const export_Reimbursements_pdf = ( Reimbursement ) =>{
+
+} 
+
 
     // ใบกำกับภาษี
 export const export_taxinvoice_pdf =  ( room ,table_price) =>{
@@ -1531,6 +1757,7 @@ export const export_taxinvoice_pdf =  ( room ,table_price) =>{
     let credit = "  ...คนออกบิล... "
     let Time = toHHMMSS(new Date())
     let note = "เลขที่บัญชี 2878-xxxxxx-x"
+    
 
     let table_prices = table_price ? table_price :[{ 
                     name:`----` ,
@@ -1732,4 +1959,251 @@ export const export_taxinvoice_pdf =  ( room ,table_price) =>{
 
 
 
+}
+
+export const export_taxinvoices_pdf = ( Receipts ) =>{
+     
+    if(Receipts && Array.isArray(Receipts) && Receipts.length)
+    {
+        const document_name = 'ใบกำกับภาษี'
+        let Vat = 7;
+        let Noanswer = "-"
+        let business_Address_1 = "119 ซอยสีม่วงอนุสรณ์ ถนน สุทธิสาร"
+        let business_Address_2 = "แขวง ดินแดง เขต ดินแดง กรุงเทพ 10400"
+        let Taxid = "0105536011803"
+        let Phone = "026937005"
+        let Email = "sales@primusthai.com" 
+
+        let Cash = "-------"
+        let Cheque = "-------"
+        let ChequeNo = "-------"
+        let ChequeDate = "-------"
+        let Transfer = "-------"
+        let TransferDate = "-------"
+
+        const doc = new jsPDF('l', 'mm', [297, 230]);
+
+        Receipts.map( (receipt,index) =>{
+          
+            let Name =  (receipt && receipt.Invoice  && receipt.Invoice.Room &&  receipt.Invoice.Room.members  && receipt.Invoice.Room.members.length
+            && receipt.Invoice.Room.members[0] &&  receipt.Invoice.Room.members[0].name  )?  `${receipt.Invoice.Room.members[0].name} ${receipt.Invoice.Room.members[0].lastname}`  : Noanswer 
+            let Address1 = (receipt &&   receipt.Invoice && receipt.Invoice.Room && receipt.Invoice.Room.members && receipt.Invoice.Room.members.length
+            &&  receipt.Invoice.Room.members[0] && receipt.Invoice.Room.members[0].address )?  receipt.Invoice.Room.members[0].address  : "-----------------" /// ที่อยู่ ผู้รับใบเสร็จ 
+         
+            let No = receipt && receipt.id ? receipt.id : Noanswer
+            let _Date =  receipt && receipt.duedate ?  formatDate(receipt.duedate) : '----'
+            let Month = receipt.monthlybilling ? formatDate(receipt.monthlybilling) :"-----"
+            let HoneNo = receipt && receipt.Invoice && receipt.Invoice.Room && receipt.Invoice.Room.floor && receipt.Invoice.Room.floor.building 
+             && receipt.Invoice.Room.floor.building.name ?  receipt.Invoice.Room.floor.building.name : Noanswer
+            
+            let Room = receipt && receipt.Invoice && receipt.Invoice.Room && receipt.Invoice.Room.name ? receipt.Invoice.Room.name :Noanswer
+   
+
+            let _table_prices = receipt && receipt.lists ?receipt.lists :[{ 
+                            name:`----` ,
+                            number_item:"1",
+                            price:`---`,
+                            amount:`---`
+                        }]
+        
+            let _total_price = 0
+            let _total_vat = 0
+            _table_prices.map(item =>{ 
+            let _price  = (item && item.price ) ? (item.type_price === "ราคารวมvat" ? Number(item.price * 100.0/107.0 ):Number(item.price) ) : 0
+                _total_price +=_price;
+                _total_vat  +=  (item.selectvat === "คิดvat" ? _price*(Vat/100) : 0)
+                return 1;
+            })
+
+            let Grandtotal = `${_total_price.toFixed(2)}`
+            let Vat_Grandtotal  =`${_total_vat.toFixed(2)}`
+            let End_Grandtotal = `${(_total_price+_total_vat).toFixed(2)}`
+
+            const names = _table_prices.map(_table_prices => _table_prices.name);
+            const Units = _table_prices.map(_table_prices => (_table_prices.unit !== undefined   ) ?  `${_table_prices.unit}`:'1' );
+            const Price = _table_prices.map(_table_prices => `${
+                    (_table_prices.type_price === "ราคารวมvat" ? Number(_table_prices.price * 100.0/107.0 ).toFixed(2):Number(_table_prices.price).toFixed(2) )
+                }`);
+            const Amount = _table_prices.map(_table_prices =>  `${
+                    (_table_prices.type_price === "ราคารวมvat" ? Number(_table_prices.price * 100.0/107.0 ).toFixed(2):Number(_table_prices.price).toFixed(2) )
+                    *Number( (_table_prices.unit !== undefined   ) ?  `${_table_prices.unit}`:'1')}`  );
+
+        
+        
+
+            AddTH_font(doc ,'yourCustomFont.ttf' )
+            doc.addFont('yourCustomFont.ttf', 'yourCustomFont', 'normal');
+            doc.setFont('yourCustomFont');
+
+                    //main box
+            doc.setDrawColor(156, 260, 235)
+            doc.setFillColor(156, 260, 235)
+            doc.rect(15,35,265,160 , 'FD')
+
+            //address box
+            doc.setDrawColor(204,263,245)
+            doc.setFillColor(204,263,245)
+            doc.roundedRect(17,37,173,46,6,6, 'FD')
+
+            doc.roundedRect(193,37,38,10,6,6 , 'FD')
+            doc.roundedRect(232,37,47,10,6,6 , 'FD')
+            doc.roundedRect(193,49,38,10,6,6 , 'FD')
+            doc.roundedRect(232,49,47,10,6,6 , 'FD')
+            doc.roundedRect(193,61,38,10,6,6 , 'FD')
+            doc.roundedRect(232,61,47,10,6,6 , 'FD')
+            doc.roundedRect(193,73,38,10,6,6 , 'FD')
+            doc.roundedRect(232,73,47,10,6,6 , 'FD')
+
+            //topic box
+            doc.setDrawColor(40, 120, 50)
+            doc.setFillColor(110, 250, 230)
+            doc.rect(17,85,138,15, 'FD' )
+            doc.rect(155,85,38,15, 'FD' )
+            doc.rect(193,85,38,15, 'FD' )
+            doc.rect(231,85,46,15, 'FD' )
+
+            doc.setDrawColor(40, 120, 50)
+            doc.setFillColor(204,253,245)
+            
+            //result box
+            doc.rect(17,100,138,60, 'FD' )
+            doc.rect(155,100,38,60, 'FD' )
+            doc.rect(193,100,38,60, 'FD' )
+            doc.rect(231,100,46,60, 'FD' )
+
+            //last box
+            doc.setFillColor(255,255,255)
+            doc.rect(17,162,138,31, 'FD' )
+            doc.setFillColor(240,253,245)
+            doc.rect(155,162,76,10, 'FD' )
+            doc.rect(155,172,76,11, 'FD' )
+            doc.rect(155,183,76,10, 'FD' )
+            
+            doc.rect(231,162,46,10, 'FD' )
+            doc.rect(231,172,46,11, 'FD' )
+            doc.rect(231,183,46,10, 'FD' )
+
+            
+            doc.setFontSize(16)
+            doc.text(business_Address_1 ,15, 21, {align: 'left'})
+            doc.setFontSize(14)
+            doc.text(business_Address_2 ,15, 26, {align: 'left'})
+
+            doc.setFontSize(14)
+            doc.text("Tax ID : ",15, 31, {align: 'left'})
+            doc.text(Taxid,27, 31, {align: 'left'})
+            doc.text("โทร : ",60, 31, {align: 'left'})
+            doc.text(Phone,68, 31, {align: 'left'})
+            doc.text("Email :",90, 31, {align: 'left'})
+            doc.text(Email,101, 31, {align: 'left'})
+
+            doc.setFontSize(23)
+            doc.text("ใบกำกับภาษี / TAX INVOICE" ,110, 10, {align: 'left'})
+
+            doc.setFontSize(14)
+            doc.text("ชื่อ/Name :" ,20, 50, {align: 'left'})
+            doc.setFontSize(16)
+            doc.text(Name ,50, 50, {align: 'left'})
+        
+        
+            doc.setFontSize(14)
+            doc.text("ที่อยู่/Address :" ,20, 65, {align: 'left'})
+            doc.setFontSize(16)
+            doc.text(Address1 ,50, 65, {align: 'left'})
+            // doc.text(Address2 ,50, 60, {align: 'left'})
+
+            doc.setFontSize(14)
+            doc.text("เลขที่/No. " ,205, 43, {align: 'left'})
+            doc.setFontSize(12)
+            doc.text(No ,240, 43, {align: 'left'})
+            doc.setFontSize(14)
+            doc.text("วันที่/Date " ,205, 55, {align: 'left'})
+            doc.setFontSize(16)
+            doc.text(_Date ,245, 55, {align: 'left'})
+            doc.setFontSize(14)
+            doc.text("ประจำเดือน/Month " ,198, 67, {align: 'left'})
+            doc.setFontSize(16)
+            doc.text(Month ,245, 67, {align: 'left'})
+            doc.setFontSize(14)
+            doc.text("บ้านเลขที่/Home No. " ,198, 79, {align: 'left'})
+            doc.setFontSize(16)
+            doc.text(HoneNo ,245, 79, {align: 'left'})
+
+            
+            doc.setFontSize(16)
+            doc.text("รายการ" ,73, 92, {align: 'left'})
+            doc.text("Description" ,70, 96, {align: 'left'})
+            
+            doc.text("จำนวนหน่วย" ,163, 92, {align: 'left'})
+            doc.text("Units" ,167, 96, {align: 'left'})
+            
+            doc.text("ราคาต่อหน่วย" ,202, 92, {align: 'left'})
+            doc.text("Unit /Price" ,203 , 96, {align: 'left'})
+
+            doc.text("จำนวนเงิน" ,246, 92, {align: 'left'})
+            doc.text("Amount" ,247 , 96, {align: 'left'})
+
+            doc.text("การชำระเงิน/Condition of Payments " ,55, 168, {align: 'left'})
+            doc.setFontSize(15)
+            doc.text("เงินสด :",20, 175, {align: 'left'})
+            doc.text(Cash,42, 175, {align: 'left'})
+            doc.text("บาท",60, 175, {align: 'left'})
+
+            doc.text("เช็คธนาคาร :",20, 182, {align: 'left'})
+            doc.text(Cheque,42, 182, {align: 'left'})
+            doc.text("บาท",60, 182, {align: 'left'})
+            doc.text("วันที่",68, 182, {align: 'left'})
+            doc.text(ChequeDate,80, 182, {align: 'left'})
+            doc.text("เลขที่",98, 182, {align: 'left'})
+            doc.text(ChequeNo,108, 182, {align: 'left'})
+
+
+            doc.text("เงินโอน :",20, 189, {align: 'left'})
+            doc.text(Transfer,42, 189, {align: 'left'})
+            doc.text("บาท",60, 189, {align: 'left'})
+            doc.text("วันที่",68, 189, {align: 'left'})
+            doc.text(TransferDate,80, 189, {align: 'left'})
+
+
+
+
+
+
+            doc.setFontSize(16)
+
+            doc.text(`รวมทั้งหมด/Total` ,168, 170, {align: 'left'})
+            doc.text(Grandtotal ,250, 170, {align: 'center'})
+
+            doc.text(`Vat  ${Vat} %` ,168 , 180, {align: 'left'})
+            doc.text( `${ Number(Grandtotal*(Vat/100)).toFixed(2) }` ,250 , 180, {align: 'center'})
+
+            doc.text("รวมเงินทั้งสิ้น/Grand Total" ,168 , 191, {align: 'left'})
+            doc.text( `${ (Grandtotal *(1+ (Vat/100)) ).toFixed(2) }`  ,250 , 191, {align: 'center'})
+
+
+            doc.setFontSize(16)
+            doc.text(names ,20, 105, {align: 'left'})
+            doc.text(Units ,170, 105, {align: 'left'})
+            doc.text(Price ,210, 105, {align: 'left'})
+            doc.text(Amount ,250, 105, {align: 'left'})
+
+            if(Receipts.length>0 && index !== (Receipts.length - 1 ) ){
+             doc.addPage()
+            }
+            
+        })
+    
+        let src_pdf = doc.output('datauristring');
+        const iframe = `
+        <title> ${document_name} </title>
+        <iframe  width='100%' type="application/pdf"   height='100%' src="${src_pdf}"></iframe>`
+        const x = window.open();
+        x.document.title = "preview booking"
+
+    
+
+        x.document.open();
+        x.document.write(iframe);
+        x.document.close();
+    }
 }
