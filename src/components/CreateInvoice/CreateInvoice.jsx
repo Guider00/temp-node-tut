@@ -34,11 +34,7 @@ export const CreateInvoic = () =>{
 
 
 
-    // const [disabled , setDisabled] = useState({
-    //     disabled : true ,
-    //     D1 : true , 
-    //     D2 : false
-    // })
+ 
 
     const [defination_invoice ,setdefination_invoice] = useState({
         monthlybilling:"",

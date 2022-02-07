@@ -3,6 +3,7 @@ const mongoose = require("mongoose")
 const schemaDefinition = new mongoose.Schema({
     docnumber:{type:String,default:"000001"},
     monthlybilling:{type:Date,default:Date.now()},  // YYYY-MM-DDTHH:MM:SS
+    duedate:{type:Date,default:Date.now()},
     printstatus:{type:String,default:"รอการพิมพ์"},
     status:{type:String,default:"รอดำเนินการ"},
     note:{type:String},
