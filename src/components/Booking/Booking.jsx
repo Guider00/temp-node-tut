@@ -571,12 +571,22 @@ export const Booking = () => {
 							<div  className={styles.input} >
 								<div className={styles.zoneselect_checkincheckout}>
 									<label> วันเที่เข้าพัก </label>
-									<input type='date' name="input_searchdatecheckin" value={DateStart} onChange={(e)=>{
+									<input 
+									type='date' 
+									name="input_searchdatecheckin" 
+									max={DateEnd}
+									value={DateStart} 
+									onChange={(e)=>{
 										let {value } = e.target
 										setDateStart( value )  
 									}}   />
 									<label> วันที่เข้าย้ายออก </label>
-									<input type='date' name="input_searchdatecheckout" value={DateEnd}  onChange={(e)=>{
+									<input 
+									type='date' 
+									name="input_searchdatecheckout" 
+									min={DateStart}
+									value={DateEnd}  
+									onChange={(e)=>{
 										let {value } = e.target
 										setDateEnd( value )  
 									}}  />

@@ -45,8 +45,8 @@ const { defaultData } = AddressData();
 const [defaultCalendar, setdefaultCalendar] = useState({
     isLoading: false
 });
-const [DateStart , setDateStart] = useState([''])
-const [DateEnd , setDateEnd] = useState([''])
+const [DateStart , setDateStart] = useState(null)
+const [DateEnd , setDateEnd] = useState(null)
 const[DateRange, setDateRange] = useState([])
 
 
@@ -61,62 +61,69 @@ const handleStart = (data) =>{
     console.log("DateRange",DateRange)
 }
 
-const CalendarDate = (choose) =>{
-
-    if(choose){
-        if(DateRange.from){
-            let iDay = parseInt(DateRange.from.day, 10);
-            let iMonth = parseInt(DateRange.from.month, 10);
-                
-            if(iDay < 10 && iMonth < 10){
-            let _DateStart = DateStart
-            _DateStart = DateRange.from.year + "-0" + DateRange.from.month + "-0" + DateRange.from.day
-            setDateStart(_DateStart)
-                
-            }if(iDay < 10 && iMonth >= 10){
-            let _DateStart = DateStart
-            _DateStart = DateRange.from.year + "-" + DateRange.from.month + "-0" + DateRange.from.day
-            setDateStart(_DateStart)
-
-            }if(iDay >= 10 && iMonth < 10){
-            let _DateStart = DateStart
-            _DateStart = DateRange.from.year + "-0" + DateRange.from.month + "-" + DateRange.from.day
-            setDateStart(_DateStart)
-
-            }
-                
-        }
-        if(DateRange.to){
-            
-
-            let iDay = parseInt(DateRange.to.day, 10);
-            let iMonth = parseInt(DateRange.to.month, 10);
-
-            if(iDay < 10 && iMonth < 10){
-            let _DateEnd = DateEnd
-            _DateEnd = DateRange.to.year + "-0" + DateRange.to.month + "-0" + DateRange.to.day
-            setDateEnd(_DateEnd)
+const CalendarDate = (selecteddate) =>{
+    console.log('debug',selecteddate)
+    
+        if(selecteddate ){
+            if(selecteddate.from === null  ){
+                setDateStart('')
+            }else{
+                let iDay = parseInt(selecteddate.from.day, 10);
+                let iMonth = parseInt(selecteddate.from.month, 10);
                     
-            }if(iDay < 10 && iMonth >= 10){
-            let _DateEnd = DateEnd
-            _DateEnd = DateRange.to.year + "-" + DateRange.to.month + "-0" + DateRange.to.day
-            setDateEnd(_DateEnd)
+                if(iDay < 10 && iMonth < 10){
+                let _DateStart = DateStart
+                _DateStart = selecteddate.from.year + "-0" + selecteddate.from.month + "-0" + selecteddate.from.day
+                setDateStart(_DateStart)
+                    
+                }if(iDay < 10 && iMonth >= 10){
+                let _DateStart = DateStart
+                _DateStart = selecteddate.from.year + "-" + selecteddate.from.month + "-0" + selecteddate.from.day
+                setDateStart(_DateStart)
     
-            }if(iDay >= 10 && iMonth < 10){
-            let _DateEnd = DateEnd
-            _DateEnd = DateRange.to.year + "-0" + DateRange.to.month + "-" + DateRange.to.day
-            setDateEnd(_DateEnd)
+                }if(iDay >= 10 && iMonth < 10){
+                let _DateStart = DateStart
+                _DateStart = selecteddate.from.year + "-0" + selecteddate.from.month + "-" + selecteddate.from.day
+                setDateStart(_DateStart)
+
+                }
+            }
+                
+        }
+        if(selecteddate ){
+            if(selecteddate.to === null  ){
+                setDateEnd('')
+            }else{
+                        
+                let iDay = parseInt(selecteddate.to.day, 10);
+                let iMonth = parseInt(selecteddate.to.month, 10);
     
+                if(iDay < 10 && iMonth < 10){
+                let _DateEnd = DateEnd
+                _DateEnd = selecteddate.to.year + "-0" + selecteddate.to.month + "-0" + selecteddate.to.day
+                setDateEnd(_DateEnd)
+                        
+                }if(iDay < 10 && iMonth >= 10){
+                let _DateEnd = DateEnd
+                _DateEnd = selecteddate.to.year + "-" + selecteddate.to.month + "-0" + DateRange.to.day
+                setDateEnd(_DateEnd)
+        
+                }if(iDay >= 10 && iMonth < 10){
+                let _DateEnd = DateEnd
+                _DateEnd = selecteddate.to.year + "-0" + selecteddate.to.month + "-" + selecteddate.to.day
+                setDateEnd(_DateEnd)
+        
+                }
             }
             
         }
+        if(selecteddate && selecteddate.from === null && selecteddate.to === null)
+        {
 
-        console.log("11111")
-        handleCalendar(false);
-    }else{
-        handleCalendar(false);
-        console.log("2222")
-    }
+        }else{
+                handleCalendar(false);
+        }
+    
 
 }
 
@@ -265,7 +272,9 @@ const CalendarDate = (choose) =>{
 
     return (
         <>
-        {defaultCalendar.isLoading && <CalendarPicker onCalendar={CalendarDate} start={handleStart} />}
+        {defaultCalendar.isLoading && <CalendarPicker onCalendar={CalendarDate} start={handleStart} 
+        selectedStartDate={ DateStart ? new Date( DateStart) : DateStart  }
+        selectedEndDate={ DateEnd ? new Date( DateEnd  ):  DateEnd  }/>}
             <div className = {styles.container}>
                 <div className = {styles.display}>
                     <div className = {styles.zone1}>
@@ -277,10 +286,26 @@ const CalendarDate = (choose) =>{
                                 <div className = {styles.part1}>
                                     <input  type = "radio"></input>
                                     <lable className = {styles.onerem}>วันที่</lable>
-                                    <input className = {styles.side1} type = 'date' value={DateStart}/>
+                                    <input className = {styles.side1} 
+                                    type = 'date' 
+                                    max={DateEnd}
+                                    value={DateStart}
+                                    onChange={(e)=>{
+										let {value } = e.target
+										setDateStart( value )  
+									}} 
+                                    />
 
                                     <lable>ถึง</lable>
-                                    <input className = {styles.side2} type = 'date' value={DateEnd}/>
+                                    <input className = {styles.side2} 
+                                    type = 'date' 
+                                    min={DateStart}
+                                    value={DateEnd}
+                                    onChange={(e)=>{
+										let {value } = e.target
+										setDateEnd( value )  
+									}} 
+                                    />
 
                                     <button 
                                     className={styles.calendar}

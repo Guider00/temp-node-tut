@@ -18,7 +18,7 @@ function CalendarPicker({onCalendar,start, selectedStartDate , selectedEndDate }
         }
       ];
       useEffect(()=>{
-           console.log( 'debug ',selectedStartDate , selectedEndDate)
+           console.log( 'debug-calendar ',selectedStartDate , selectedEndDate)
         let _selectedDayRange =  JSON.parse( JSON.stringify(selectedDayRange ) ) 
         if( selectedStartDate === null ||  selectedEndDate === null  || selectedStartDate === ''  || selectedEndDate === ''){
            
@@ -38,6 +38,7 @@ function CalendarPicker({onCalendar,start, selectedStartDate , selectedEndDate }
         }
 
         setSelectedDayRange(_selectedDayRange)
+        console.log("setSelectedDayRange",_selectedDayRange)
       },[selectedStartDate , selectedEndDate ])
     //   useEffect(
 	// 	() => {

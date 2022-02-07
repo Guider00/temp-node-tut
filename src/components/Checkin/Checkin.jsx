@@ -505,8 +505,8 @@ export const Checkin = () => {
 	const [defaultCalendar, setdefaultCalendar] = useState({
         isLoading: false
     });
-	const [DateStart , setDateStart] = useState([''])
-	const [DateEnd , setDateEnd] = useState([''])
+	const [DateStart , setDateStart] = useState(null)
+	const [DateEnd , setDateEnd] = useState(null)
 	const[DateRange, setDateRange] = useState([])
 
 
@@ -521,76 +521,88 @@ export const Checkin = () => {
 		console.log("DateRange",DateRange)
 	}
 
-	const CalendarDate = (choose) =>{
-
-		if(choose){
-			if(DateRange.from){
-				let iDay = parseInt(DateRange.from.day, 10);
-				let iMonth = parseInt(DateRange.from.month, 10);
-					
-				if(iDay < 10 && iMonth < 10){
-				let _DateStart = DateStart
-				_DateStart = DateRange.from.year + "-0" + DateRange.from.month + "-0" + DateRange.from.day
-				setDateStart(_DateStart)
-					
-				}if(iDay < 10 && iMonth >= 10){
-				let _DateStart = DateStart
-				_DateStart = DateRange.from.year + "-" + DateRange.from.month + "-0" + DateRange.from.day
-				setDateStart(_DateStart)
-	
-				}if(iDay >= 10 && iMonth < 10){
-				let _DateStart = DateStart
-				_DateStart = DateRange.from.year + "-0" + DateRange.from.month + "-" + DateRange.from.day
-				setDateStart(_DateStart)
-	
-				}
-					
-			}
-			if(DateRange.to){
-				
-	
-				let iDay = parseInt(DateRange.to.day, 10);
-				let iMonth = parseInt(DateRange.to.month, 10);
-	
-				if(iDay < 10 && iMonth < 10){
-				let _DateEnd = DateEnd
-				_DateEnd = DateRange.to.year + "-0" + DateRange.to.month + "-0" + DateRange.to.day
-				setDateEnd(_DateEnd)
+	const CalendarDate = (selecteddate) =>{
+		console.log('debug',selecteddate)
+		
+			if(selecteddate ){
+				if(selecteddate.from === null  ){
+					setDateStart('')
+				}else{
+					let iDay = parseInt(selecteddate.from.day, 10);
+					let iMonth = parseInt(selecteddate.from.month, 10);
 						
-				}if(iDay < 10 && iMonth >= 10){
-				let _DateEnd = DateEnd
-				_DateEnd = DateRange.to.year + "-" + DateRange.to.month + "-0" + DateRange.to.day
-				setDateEnd(_DateEnd)
+					if(iDay < 10 && iMonth < 10){
+					let _DateStart = DateStart
+					_DateStart = selecteddate.from.year + "-0" + selecteddate.from.month + "-0" + selecteddate.from.day
+					setDateStart(_DateStart)
+						
+					}if(iDay < 10 && iMonth >= 10){
+					let _DateStart = DateStart
+					_DateStart = selecteddate.from.year + "-" + selecteddate.from.month + "-0" + selecteddate.from.day
+					setDateStart(_DateStart)
 		
-				}if(iDay >= 10 && iMonth < 10){
-				let _DateEnd = DateEnd
-				_DateEnd = DateRange.to.year + "-0" + DateRange.to.month + "-" + DateRange.to.day
-				setDateEnd(_DateEnd)
+					}if(iDay >= 10 && iMonth < 10){
+					let _DateStart = DateStart
+					_DateStart = selecteddate.from.year + "-0" + selecteddate.from.month + "-" + selecteddate.from.day
+					setDateStart(_DateStart)
+
+					}
+				}
+					
+			}
+			if(selecteddate ){
+				if(selecteddate.to === null  ){
+					setDateEnd('')
+				}else{
+							
+					let iDay = parseInt(selecteddate.to.day, 10);
+					let iMonth = parseInt(selecteddate.to.month, 10);
 		
+					if(iDay < 10 && iMonth < 10){
+					let _DateEnd = DateEnd
+					_DateEnd = selecteddate.to.year + "-0" + selecteddate.to.month + "-0" + selecteddate.to.day
+					setDateEnd(_DateEnd)
+							
+					}if(iDay < 10 && iMonth >= 10){
+					let _DateEnd = DateEnd
+					_DateEnd = selecteddate.to.year + "-" + selecteddate.to.month + "-0" + DateRange.to.day
+					setDateEnd(_DateEnd)
+			
+					}if(iDay >= 10 && iMonth < 10){
+					let _DateEnd = DateEnd
+					_DateEnd = selecteddate.to.year + "-0" + selecteddate.to.month + "-" + selecteddate.to.day
+					setDateEnd(_DateEnd)
+			
+					}
 				}
 				
 			}
+			if(selecteddate && selecteddate.from === null && selecteddate.to === null)
+			{
 
-			console.log("11111")
-			handleCalendar(false);
-		}else{
-			handleCalendar(false);
-			console.log("2222")
-		}
+			}else{
+					handleCalendar(false);
+			}
+		
 
 	}
 
 	//Calendar
 
-	useEffect(( )=>{
-
-		
-	},[formroomtype])
+	
 
 	useEffect( ()=>{
 		
 		console.log('update Rooms',reselectedroom)
+		console.log('api_roomsssssss',DateStart , DateEnd)
 		if( GET_Rooms.data ){
+			let start_date = DateStart  ? new Date(DateStart)  :new Date()  
+			let end_date = DateEnd  ? new Date(DateStart)  :new Date()  
+			start_date = start_date.getTime()
+			end_date = end_date.getTime()
+			console.log("debug",start_date, end_date)
+
+			
 		let Rooms = Rooms_to_table(GET_Rooms.data.Rooms)
 
 		console.log('Rooms', Rooms);
@@ -622,10 +634,13 @@ export const Checkin = () => {
 			}
 		}
 	
-	},[GET_Rooms,loading])
+	},[GET_Rooms,loading ,DateStart , DateEnd])
 	console.log('GET_Rooms',GET_Rooms)
 	return (
-		<div>	{defaultCalendar.isLoading && <CalendarPicker onCalendar={CalendarDate} start={handleStart} />}
+		<div>	{defaultCalendar.isLoading && <CalendarPicker onCalendar={CalendarDate} start={handleStart} 
+			selectedStartDate={ DateStart ? new Date( DateStart) : DateStart  }
+          	selectedEndDate={ DateEnd ? new Date( DateEnd  ):  DateEnd  }
+		/>}
 				{modalselectmember? 
 				<ModalSelectMember handlerclose={()=>{
 					setmodalselectmember(false)
@@ -665,9 +680,27 @@ export const Checkin = () => {
 							<div  className={styles.input} >
 								<div className={styles.zoneselect_checkincheckout}>
 									<label> วันเที่ข้าพัก </label>
-									<input type='date' name="input_searchdatecheckin" value={DateStart}/>
+									<input 
+									type='date' 
+									name="input_searchdatecheckin" 
+									value={DateStart}
+									max={DateEnd}
+									onChange={(e)=>{
+										let { value } = e.target
+										setDateStart( value )
+
+									}}/>
 									<label> วันที่เข้าย้ายออก </label>
-									<input type='date' name="input_searchdatecheckout" value={DateEnd}/>
+									<input 
+									type='date' 
+									name="input_searchdatecheckout" 
+									value={DateEnd}
+									min={DateStart}
+									onChange={(e)=>{
+										let {value } = e.target
+										setDateEnd( value )  
+									}}
+									/>
 									<button onClick={()=>{
 										setdefaultCalendar({
 											isLoading:true
