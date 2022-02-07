@@ -247,15 +247,6 @@ export const HandleForm = () =>{
 
     //validate
 
-    
-
-    return { handleOnchangeReceipt,handleOnchangeAddress,formErrorsAddress,formErrors ,defaultData,setdefaultData ,defaultAddress,setdefaultAddress }
-
-}
-
-
-export const Disabled= () => {
-    
 
     const [blankAddress , setblankblankAddress] = useState({
         id:"",
@@ -288,29 +279,7 @@ export const Disabled= () => {
         disabled2 : true
     })
 
-    const [defaultData , setdefaultData] = useState({
-        id:"",
-        receipt:"",
-        invoice:"",
-        reimbursement:"",
-        booking:"",
-        bill:"",
-        accNo:"",
-        billDate:"",
-    })
-    const [defaultAddress , setdefaultAddress] = useState({
-        id:"",
-        name:"",
-        code:"",
-        tel:"",
-        no:"",
-        province:"",
-        road:"",
-        village:"",
-        boundary:"",
-        district:"",
-        alley:"",
-    })
+    
 
     const [disabledAddress, setDisabledAddress] = useState(true)
     const [disabledReceipt, setDisabledReceipt] = useState(true)
@@ -344,7 +313,12 @@ export const Disabled= () => {
 
         }
     }
-    return { handleClick , disableReceipt ,setDisableReceipt , disabledAddress ,disabledReceipt ,setDisabledReceipt,setDisabledAddress}
+
+    
+
+    return { handleOnchangeReceipt,handleOnchangeAddress,formErrorsAddress,formErrors ,defaultData,setdefaultData ,defaultAddress,setdefaultAddress ,
+        handleClick , disableReceipt , setDisableReceipt , disabledAddress ,disabledReceipt,setDisabledReceipt,setDisabledAddress}
+
 }
 
 

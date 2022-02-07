@@ -110,7 +110,7 @@ export const Receipt = () => {
 
 
 
-    let header_table = ["","เลขที่ใบเสร็จ","เลขที่ใบแจ้งหนี้","วันที่ออกบิล","ชื่อห้อง","ชื่อผู้..","สถานะ","สถานะการพิมพ์","รอบบิล"]
+    let header_table = ["","เลขที่ใบเสร็จ","เลขที่ใบแจ้งหนี้","วันที่ออกบิล","ชื่อห้อง","ชื่อผู้จอง","สถานะ","สถานะการพิมพ์","รอบบิล"]
     let sim_table = [{"เลือก":"","เลขที่ใบเสร็จ":"PEM12345678910","เลขที่ใบแจ้งหนี้":"DEV12345678910","วันที่ออกบิล":"1/2/2021","ชื่อห้อง":"205","ชื่อผู้จ..":"","สถานะ":"ปกติ","สถานะการพิมพ์":"พิมพ์แล้ว","รอบบิล":"02/2022"}]
 
     let header_table2 = ["รายการ","ชื่อรายการใช้จ่าย","จำนวน","จำนวนเงิน","ราคา","ภาษีมูลค่าเพิ่ม","จำนวนเงิน","ภาษี"]
@@ -120,8 +120,11 @@ export const Receipt = () => {
     return (
         <>
         
-            <div className={styles.zone1}>
-                <div className={styles.bigbox}>
+            <div className={styles.main}>
+                
+
+                
+                <div className={styles.zone1}>
                     <div className={styles.formtableInvoice} >
                         <div className={styles.card}>
                             <div className={styles.cardheader}>
@@ -147,90 +150,95 @@ export const Receipt = () => {
                                     <lable >อาคาร</lable>
                                     <input className ={styles.Building} id="building" value ={formsearch.building} onChange={handleChangeformsearch} ></input>
                                 </p>
-                                <table className ={styles.table}>
+                                <div className ={styles.box}>
+                                        <table className ={styles.table}>
 
-                                    <thead className ={styles.header}>
-                                        <tr >
-                                            <td onClick={handlerchangesortingstyle}> {tbsortingstyle_newmetoold?<ArrowDropDownIcon/>:<ArrowDropUpIcon/>}  </td>
-                                            <td>{header_table[1]}</td>
-                                            <td>{header_table[2]}</td>
-                                            <td>{header_table[3]}</td>
-                                            <td>{header_table[4]}</td>
-                                            <td>{header_table[5]}</td>
-                                            <td>{header_table[6]}</td>
-                                            <td>{header_table[7]}</td>
-                                            <td>{header_table[8]}</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody className ={styles.body}>
-                                        { ( tbsortingstyle_newmetoold? receipt :  [...receipt].reverse() ).map( (data) =>
-                                        <tr onClick={()=>{
+                                        <thead className ={styles.header}>
+                                            <tr >
+                                                <td onClick={handlerchangesortingstyle}> {tbsortingstyle_newmetoold?<ArrowDropDownIcon/>:<ArrowDropUpIcon/>}  </td>
+                                                <td>{header_table[1]}</td>
+                                                <td>{header_table[2]}</td>
+                                                <td>{header_table[3]}</td>
+                                                <td>{header_table[4]}</td>
+                                                <td>{header_table[5]}</td>
+                                                <td>{header_table[6]}</td>
+                                                <td>{header_table[7]}</td>
+                                                <td>{header_table[8]}</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody className ={styles.body}>
+                                            { ( tbsortingstyle_newmetoold? receipt :  [...receipt].reverse() ).map( (data) =>
+                                            <tr onClick={()=>{
 
-                                            let _selectrooms = selectrooms
-                                            _selectrooms = data.id
-                                            setselectrooms(_selectrooms)
-                                            console.log(_selectrooms)
+                                                let _selectrooms = selectrooms
+                                                _selectrooms = data.id
+                                                setselectrooms(_selectrooms)
+                                                console.log(_selectrooms)
 
-                                            
-                                            
-                                        }} style={{
-                                            background: selectrooms === data.id ? 'lightgray' : 'none'
-
-
-                                        }}>
-                                            <td>    
-                                                <input type="checkbox" 
-                                                name = "myCheckboxName" 
-                                                id="myCheckboxId" 
-                                                 checked={ (IDrooms.findIndex(x=>x.id === data.id) !== -1 )  ?true:false}
-
-                                                onChange={(e)=>{
-                                                  const checked = e.target.checked
-                                                    const id = data.id
-                                                    if(checked){
-                                                        let _IDrooms = IDrooms
-                                                        _IDrooms = [..._IDrooms,data]
-                                                        setIDrooms(_IDrooms)
-                                                        console.log("check",_IDrooms)
-
-                                                        
-                                                    }
-                                                    else{
-                                                        let _IDrooms = IDrooms.filter(item => item.id !== id)
-                                                        setIDrooms(_IDrooms)
-                                                        console.log('uncheck',_IDrooms)
-                                                    }
-
-                                                }}
-                                                ></input>
-                                            </td>
-                                            <td width={'100px'}>{data.id ? data.id : "---"}</td>
-                                            <td width={'120px'}  onClick={()=>{
-                                               
-                                            }} >{ data.Invoice && data.Invoice.id ?  data.Invoice.id: "---"}</td>
-                                            <td width={'80px'}>{ data.note ? data.note : "---"}</td>
-                                            <td width={'50px'}>{  data.lists[0] && data.lists[0].number ? data.lists[0].number : "---"}</td>
-                                            <td width={'100px'}>{ data.lists[0] && data.lists[0].name ? data.lists[0].name : "---"}</td>
-                                            <td width={'50px'}>{ data.lists[0] && data.status ? data.status : "---"}</td>
-                                            <td width={'50px'}>{ data.lists[0] && data.status ? data.status : "---"}</td>
-                                            <td width={'50px'}>{ data.lists[0] && data.lists[0].selectvat ? data.lists[0].selectvat : "---"}</td>
+                                                
+                                                
+                                            }} style={{
+                                                background: selectrooms === data.id ? 'lightgray' : 'none'
 
 
-                                            
-                                            
-                                        </tr>
-                                        )
-                                        }                
-                                    </tbody>
-                                    
+                                            }}>
+                                                <td width={'50px'}>    
+                                                    <input type="checkbox" 
+                                                    name = "myCheckboxName" 
+                                                    id="myCheckboxId" 
+                                                    
+                                                    checked={ (IDrooms.findIndex(x=>x.id === data.id) !== -1 )  ?true:false}
+
+                                                    onChange={(e)=>{
+                                                    const checked = e.target.checked
+                                                        const id = data.id
+                                                        if(checked){
+                                                            let _IDrooms = IDrooms
+                                                            _IDrooms = [..._IDrooms,data]
+                                                            setIDrooms(_IDrooms)
+                                                            console.log("check",_IDrooms)
+
+                                                            
+                                                        }
+                                                        else{
+                                                            let _IDrooms = IDrooms.filter(item => item.id !== id)
+                                                            setIDrooms(_IDrooms)
+                                                            console.log('uncheck',_IDrooms)
+                                                        }
+
+                                                    }}
+                                                    ></input>
+                                                </td>
+                                                <td width={'100px'}>{data.id ? data.id : "---"}</td>
+                                                <td width={'120px'}  onClick={()=>{
+                                                
+                                                }} >{ data.Invoice && data.Invoice.id ?  data.Invoice.id: "---"}</td>
+                                                <td width={'80px'}>{ data.note ? data.note : "---"}</td>
+                                                <td width={'50px'}>{  data.lists[0] && data.lists[0].number ? data.lists[0].number : "---"}</td>
+                                                <td width={'100px'}>{ data.lists[0] && data.lists[0].name ? data.lists[0].name : "---"}</td>
+                                                <td width={'50px'}>{ data.lists[0] && data.status ? data.status : "---"}</td>
+                                                <td width={'50px'}>{ data.lists[0] && data.status ? data.status : "---"}</td>
+                                                <td width={'50px'}>{ data.lists[0] && data.lists[0].selectvat ? data.lists[0].selectvat : "---"}</td>
 
 
-
-
+                                                
+                                                
+                                            </tr>
+                                            )
+                                            }                
+                                        </tbody>
+                                        
 
 
 
-                                </table>
+
+
+
+
+                                    </table>
+
+                                </div>
+                                
                                 <div className={styles.button}>
                                     <button className={styles.press} 
                                         onClick={()=>{
@@ -249,7 +257,7 @@ export const Receipt = () => {
                         </div>
                     </div>
                 </div>
-                <div className={styles.bigbox} >
+                <div className={styles.zone2} >
                     <div className={styles.formdetailsInvoice}>
                         <div className={styles.card}>
                             <div className={styles.cardheader}>
@@ -277,7 +285,8 @@ export const Receipt = () => {
                                 </p>
 
                                 <div className={styles.menu}>รายการใบแจ้งหนี้</div>
-                                <table className ={styles.table}>
+                                <div className={styles.box2}>
+                                    <table className ={styles.table}>
 
                                     <thead className ={styles.header}>
                                         <tr >
@@ -308,7 +317,10 @@ export const Receipt = () => {
                                             <td>    
                                                 <input type="checkbox" name = "myCheckboxName" id="myCheckboxId"></input>
                                             </td>
+                                            
                                         </tr>
+                                        
+                                        
                                         )
                                         }                
                                     </tbody>
@@ -316,6 +328,9 @@ export const Receipt = () => {
                 
 
                                 </table>
+                                    
+                                </div>
+                                
                                 <div className={styles.button}>
                                         <button className={styles.press}>เพิ่ม</button>
                                         <button className={styles.press}>ลบ</button>
@@ -350,7 +365,7 @@ export const Receipt = () => {
                     </div>
                 </div>
                 <div>
-                    <div className={styles.zone1}>
+                    <div className={styles.main}>
                         <div className={styles.buttonstyles} >
                             <button className = {styles.createbutton} onClick={handlerCreateRecipt} >สร้างใบเสร็จ</button>
                             <button className = {styles.cancelbutton} onClick={handlerCancelRecipt} >ยกเลิกใบเสร็จ</button>
@@ -362,6 +377,7 @@ export const Receipt = () => {
                         </div> 
                     </div>
                 </div>
+                
                 
             </div>
 

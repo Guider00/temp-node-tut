@@ -49,6 +49,14 @@ const { subAlerts , Alertschema_subscription , Alertschema } = require('./Alert/
   updateCreateInvoice:updateCreateInvoice,
   }
 
+const{UserManagementchema , UserManagement_mutation , UserManagementschema_query , UserManagementquery ,addUserManagement,deleteUserManagement,updateUserManagement}=require('./UserManagement/UserManagement')
+const UserManagemention = {
+  deleteUserManagement:deleteUserManagement,
+  addUserManagement:addUserManagement,
+  updateUserManagement:updateUserManagement,
+  }
+
+
 const{Checkoutinformschema,Checkoutinform_query,Checkoutinform_mutation,Checkoutinformquery,createCheckoutinform,updateCheckoutinform,deleteCheckoutinform} = require('./Checkoutinform/Checkoutinform')
 const Checkoutinformation = {
   createCheckoutinform:createCheckoutinform,
@@ -206,6 +214,7 @@ ${Buildingschema}
 ${Memberschema}
 ${Bookingschema}
 ${CreateInvoiceschema}
+${UserManagementchema}
 ${Checkoutinformschema}
 ${Contractschema}
 ${Addressschema}
@@ -286,6 +295,7 @@ type Message {
     ${Memberschema_query}
     ${Bookingschema_query}
     ${CreateInvoicesschema_query}
+    ${UserManagementschema_query}
     ${Contract_query}
     ${Checkoutinform_query}
     ${Address_query}
@@ -312,6 +322,7 @@ type Message {
      ${Memberschema_mutation}
      ${Bookingschema_mutation}
      ${CreateInvoice_mutation}
+     ${UserManagement_mutation}
      ${Checkoutinform_mutation}
      ${Contract_mutation}
      ${Address_mutation}
@@ -398,6 +409,7 @@ const resolvers = {
     BookingByid : queryBookingByid,
 
     CreateInvoices :CreateInvoicequery,
+    UserManagements : UserManagementquery,
 
     Checkoutinforms : Checkoutinformquery,
 
@@ -459,6 +471,7 @@ const resolvers = {
     
     ...Invoicemutation,
     ...CreateInvoicetion,
+    ...UserManagemention,
     ...Checkoutinformation,
     ...Addressmutation,
     ...Receiptnumbermutation,
