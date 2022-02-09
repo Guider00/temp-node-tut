@@ -847,7 +847,7 @@ export const Booking = () => {
 								</div>
 								<div>
 									<div>
-										<label> วันครบกำหนดการจอง </label>
+										<label> วันย้ายออก </label>
 									</div>
 									<div>
 										<input

@@ -419,10 +419,6 @@ export const Receipt = () => {
                                 onChange={handlerChangereceiptinformation}
                                 className={styles.text}/>
 
-                                <button className = {styles.button2} >
-                                    <i className = {styles.icon}><EditOutlinedIcon/></i>
-                                    <div>แก้ไข</div>
-                                </button>
                                 </p>
 
                                 <div className={styles.header}>รายการใบแจ้งหนี้</div>

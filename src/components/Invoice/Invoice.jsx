@@ -13,6 +13,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 
 import { API_GET_Invoice,API_DELETE_Invoice,API_UPDATE_Invoice} from '../../API/Schema/Invoice/Invoice'
+import { API_CREATE_Receipt} from '../../API/Schema/Receipt/Receipt'
 import { useQuery , useMutation } from '@apollo/client';
 import { useEffect , useState } from 'react';
 
@@ -141,7 +142,7 @@ const CalendarDate = (selecteddate) =>{
     const [ filterrooms , setfilterrooms] = useState([])
     const [ deleteInvoice , mutationdeleteInvoice] = useMutation(API_DELETE_Invoice);
     const [ updateInvoice , mutationupdateInvoice] = useMutation(API_UPDATE_Invoice);
-    
+    const [ createReceipt , mutationcreateReceipt] = useMutation(API_CREATE_Receipt);
     const [ selectroom , setselectroom ] = useState(null)
     const [ editselectroom , seteditselectroom] = useState(false)
 
@@ -529,21 +530,50 @@ const CalendarDate = (selecteddate) =>{
                                   Promise.all(IDrooms).then((IDrooms)=>{
                                        IDrooms.map(async (invoice)=>{
                                            try{
+                                               console.log('debug invoice',invoice)
+                                             /// create Receipt 
+                                             let _res_Receipt = await createReceipt({
+                                                    variables:{
+                                                    input:{
+                                                        status:"รอการพิมพ์",
+                                                        invoiceid:invoice.id,
+                                                        lists:invoice.lists.map(option =>({
+                                                                                            name :option.name ,
+                                                                                            price:option.price,
+                                                                                            number_item:option.number_item.toString(),
+                                                                                            vat:option.vat ,
+                                                                                            type_price:option.type_price ,
+                                                                                            selectvat:option.selectvat
+                                                                                         }) )
+                                                    }
+                                                }
+                                            })
+                                            if(_res_Receipt && _res_Receipt.data){
+                                                console.log('สร้าง ใบเสร็จ สำเร็จ')
+                                            }else{
+                                                 console.error('ไม่สามารถ create  Receipt ')
+                                            }
+
+                                             /// create  update สถานะ Invoice 
                                             let _res = await updateInvoice({
                                                             variables: {
                                                                 id: invoice.id,
                                                                 input: {
                                                                     status:"สำเร็จ"
+                                                                    
                                                                 }
                                                             }
                                             })
-                                            if(_res){
+                                            if(_res && _res.data){
                                                  console.log('เปลี่ยนสถานะสำเร็จ')
                                                  Invoice.refetch();
                                             
                                             }else{
                                                  console.error('ไม่สามารถ update สถานะ Invoice ')
                                             }
+
+
+
                                            }catch(e){
                                                console.error('ไม่สามารถ update สถานะ Invoice ')
                                            }

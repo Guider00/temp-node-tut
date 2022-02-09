@@ -91,7 +91,15 @@
 .zone>.bigbox>.flex>.topic{
    text-align: center;
    flex-basis: 80%;
+   align-items: center;
 }
+.zone>.bigbox>.flex>.topic>input{
+    margin-left: 1rem;
+    margin-right: 1rem;
+ }
+
+
+
 .zone>.bigbox>.flex>.head{
     font-size:x-large;
     margin-left: 1rem;
@@ -120,7 +128,7 @@
 .maintable{
     margin: 0.5rem auto;
     width: 95%;
-    height: 300px;
+    height: 10rem;
     overflow-y: auto;
 }
 
@@ -137,7 +145,7 @@
     margin: 0.5rem auto;
     margin-top: 0;
     overflow: auto;
-    height: 200px;
+
     
 }
 .detail{
