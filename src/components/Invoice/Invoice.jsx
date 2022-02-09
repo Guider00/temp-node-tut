@@ -302,7 +302,7 @@ const CalendarDate = (selecteddate) =>{
                     <div className = {styles.zone1}>
                         <div className = {styles.box1}>
                             <div className = {styles.topic}>
-                                <lable>รายการใบแจ้งหนี้</lable>
+                                <h3>รายการใบแจ้งหนี้</h3>
                             </div>
                             <div className = {styles.date}>
                                 <div className = {styles.part1}>
@@ -611,8 +611,44 @@ const CalendarDate = (selecteddate) =>{
                     </div>
                     <div className = {styles.zone2}>
                         <div className = {styles.box2}>
+                            
                             <div className = {styles.topic1}>
                                 
+                                <h3 >บันทึกมิเตอร์</h3>        
+                            </div>
+                            <div className = {styles.topzone}>
+                                <div className = {styles.top}>
+                                    <div className = {styles.textX} >ชื่อ</div>
+                                    <div className = {styles.inputX}>
+                                        <input></input>
+                                    </div>
+                                </div>
+                                <div className = {styles.top}>
+                                    <div className = {styles.textX} >นามสกุล</div>
+                                    <div className = {styles.inputX}>
+                                        <input></input>
+                                    </div>
+                                </div>
+                                <div className = {styles.top}>
+                                    <div className = {styles.textX} >บัตรประชาชน</div>
+                                    <div className = {styles.inputX}>
+                                        <input></input>
+                                    </div>
+                                </div>
+                                <div className = {styles.top}>
+                                    <div className = {styles.textX} >เลขประจำตัวผู้เสียภาษี</div>
+                                    <div className = {styles.inputX}>
+                                        <input></input>
+                                    </div>
+                                </div>
+                                <div className = {styles.top}>
+                                    <div className = {styles.textX} >ที่อยู่ตามบัตรประชาชน</div>
+                                    <div className = {styles.inputX}>
+                                        <input></input>
+                                    </div>
+                                </div>
+                                
+                            
                                 <lable >บันทึกมิเตอร์</lable>  
                                 <button name="readmeter" className={styles.btnreadmeter}
                                  disabled={!editselectroom}

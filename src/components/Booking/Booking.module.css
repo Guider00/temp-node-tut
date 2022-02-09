@@ -164,7 +164,10 @@
    margin: 0.5rem;
 }
 
-
+.roomType{
+    width: 15%;
+    height: 25px;
+}
 
 .form_input>.body_inputroom>div{
     display: flex;

@@ -41,28 +41,29 @@ import EventNoteIcon from '@mui/icons-material/EventNote';
 import { formatDate } from '../../general_functions/convert'
 import { DiffDate } from '../../general_functions/time'
 
-const filter_rooms = (rooms , options_search) =>{
+const filter_rooms = (rooms , options_search ) =>{
 		let _filter_table = []
 		if(rooms  &&  options_search){
 			_filter_table = rooms.filter(room =>{
+				
 					
 					if(room && room.data){
 						if(options_search.keyword === 'ทั้งหมด'){
 						
-							return ( room.data.name.search(options_search.text) !== -1 ) ||
-							(room.building.search(options_search.text) !== -1 ) || 
-							(room.floor.search(options_search.text) !== -1 ) ||
-							(room.data.RoomType.name.search(options_search.text) !== -1 ) ||
+							return (room.name && room.name.search(options_search.text) !== -1 ) ||
+							(room.building && room.building.search(options_search.text) !== -1 ) || 
+							(room.floor && room.floor.search(options_search.text) !== -1 ) ||
+							(room.RoomType && room.RoomType.search(options_search.text) !== -1 ) ||
 							(room.data  && (room.data.status.search(options_search.text) !== -1 ) )	||
-							( room.data.bookings.length > 0  && (room.data.bookings[0].customer_name.search(options_search.text) !== -1 ) )	||
-							( room.data.bookings.length > 0  && (room.data.bookings[0].customer_tel.search(options_search.text) !== -1 ) ) || 
+							// ( room.data.bookings.length > 0  && (room.data.bookings[0].customer_name.search(options_search.text) !== -1 ) )	||
+							// ( room.data.bookings.length > 0  && (room.data.bookings[0].customer_tel.search(options_search.text) !== -1 ) ) || 
 							(options_search.text === '')	
 							;
 						}else if (options_search.keyword === 'ห้อง'){
-							return (room.name.search(options_search.text) !== -1  || 
-							(options_search.text === '')	
-							)
-						}else if (options_search.keyword === 'อาคาร'){
+							return  ( room.name && room.floor && room.name.search(options_search.text) )  !== -1  || 
+							(options_search.text === '') 
+						}else if (options_search.keyword === 'อาคาร' ){
+							console.log('124')
 							return (room.building.search(options_search.text) !== -1 )||
 							(options_search.text === '')	
 						}else if( options_search.keyword === 'ชั้น' ){
@@ -82,9 +83,11 @@ const filter_rooms = (rooms , options_search) =>{
 							(options_search.text === '')	
 						
 						}else{
-							return false; 
+							return false
 						}
-					}else{ return false;  }
+					}else{ 
+						console.log('1248')
+						return false;  }
 				})
 		}
 		return _filter_table
@@ -154,7 +157,8 @@ export const Checkin = () => {
 
 	const [ options_search  ,setoptions_search] = useState({
 		text:"",
-		keyword:"ทั้งหมด"
+		keyword:"ทั้งหมด",
+		roomtype:"ทั้งหมด"
 	})
 
 	const GET_Rooms = useQuery(API_GET_Rooms);
@@ -596,19 +600,96 @@ export const Checkin = () => {
 		console.log('update Rooms',reselectedroom)
 		console.log('api_roomsssssss',DateStart , DateEnd)
 		if( GET_Rooms.data ){
-			let start_date = DateStart  ? new Date(DateStart)  :new Date()  
-			let end_date = DateEnd  ? new Date(DateStart)  :new Date()  
-			start_date = start_date.getTime()
-			end_date = end_date.getTime()
-			console.log("debug",start_date, end_date)
 
 			
 		let Rooms = Rooms_to_table(GET_Rooms.data.Rooms)
 
-		console.log('Rooms', Rooms);
-		let _filter_rooms  =[]
-		_filter_rooms = filter_rooms([...Rooms] , options_search)
-		setrooms(_filter_rooms);
+		console.log('Roomssss', Rooms);
+		// let _filter_rooms  =[]
+		// _filter_rooms = filter_rooms([...Rooms] , options_search)
+		// setrooms(_filter_rooms);
+
+		if(Rooms){
+			let start_date = DateStart  ? new Date(DateStart)  :new Date()  
+			let end_date = DateEnd  ? new Date(DateEnd)  :new Date()  
+			start_date = start_date.getTime()
+			end_date = end_date.getTime()
+			console.log("debug11",start_date, end_date)
+			let roomschedule = Rooms.map((room) =>{
+				let {bookings ,checkin} = room.data
+				let _schbooking = bookings.map(( booking ) =>{
+					let {checkin_date , checkin_date_exp , checkin_type} = booking;
+
+					return({
+						"checkin_date": checkin_date ?  new Date(Number(checkin_date)).getTime() : checkin_date , 
+						"checkin_date_exp": checkin_date_exp ? new Date(Number(checkin_date_exp)).getTime() : checkin_date_exp , 
+						"checkin_type":checkin_type , 
+						booking:booking 
+					})
+					
+				}).filter(item => item)
+
+
+				let _schcheckin = {
+					"checkin_date" : (checkin && checkin.checkin_date)? new Date(checkin.checkin_date).getTime():null  ,
+					"checkin_date_exp": (checkin && checkin.checkin_date_exp)? new Date(checkin.checkin_date_exp).getTime():null , 
+										 "checkin_type":   (checkin && checkin.checkin_type)? checkin.checkin_type : null  ,
+										 "checkin":checkin,
+				}
+
+				let sch = null 
+				sch = [..._schbooking , _schcheckin]
+
+				return {room:room , sch:sch}
+				
+			})
+
+
+			console.log('roomschedules' , roomschedule)
+
+			let room_support = roomschedule.map((roomschedule)=>{
+				let { room } = roomschedule
+
+				let condition = roomschedule.sch.map(({ checkin_date_exp , checkin_date , checkin_type})=>{
+
+					if(
+						(start_date > checkin_date && start_date > checkin_date_exp) &&
+						(end_date > checkin_date && end_date > checkin_date_exp)
+						&& checkin_type === 'รายวัน'
+
+					){
+						return true
+
+					}else if(
+						(start_date < checkin_date && start_date < checkin_date_exp) &&
+						(end_date < checkin_date && end_date < checkin_date_exp)
+						&& checkin_type === 'รายวัน'
+					){
+
+						return true
+					}else if(
+
+						(start_date <  checkin_date && (start_date < checkin_date_exp || checkin_date_exp === null)) &&
+						(checkin_date_exp === null || (end_date < checkin_date && end_date < checkin_date_exp)) &&
+						checkin_type === 'รายเดือน'
+					){
+						return true
+					}else{
+						return false
+					}
+				})
+
+				roomschedule.condition = Boolean( condition.reduce((previousValue ,currentValue ) => previousValue & currentValue))	
+				return roomschedule		
+			}).filter(item => item.condition === false)
+			let _rooms = room_support.map(({room}) =>{
+				return room
+			})
+			console.log('room_support',_rooms)
+
+			setrooms([..._rooms])
+
+		}
 		setloading(true);
 
 		}
@@ -634,7 +715,7 @@ export const Checkin = () => {
 			}
 		}
 	
-	},[GET_Rooms,loading ,DateStart , DateEnd])
+	},[GET_Rooms,loading ,DateStart , DateEnd ])
 	console.log('GET_Rooms',GET_Rooms)
 	return (
 		<div>	{defaultCalendar.isLoading && <CalendarPicker onCalendar={CalendarDate} start={handleStart} 
@@ -679,6 +760,34 @@ export const Checkin = () => {
 							<div className={styles.text}> รายการห้องว่างและถูกจอง </div>
 							<div  className={styles.input} >
 								<div className={styles.zoneselect_checkincheckout}>
+									<label> ประเภทห้อง </label>
+									<select 
+									className={styles.roomType}
+									name="input_roomtype" 
+									onChange={(e) => {
+										let _options_search = options_search
+										_options_search.roomtype = e.target.value 
+										setoptions_search({..._options_search})
+										console.log('setoptions_search',_options_search)
+									}}
+									>
+										<option>ทั้งหมด</option>
+										<option>Standard</option>
+										<option>Studio</option>
+										<option>Deluxe</option>
+										<option>Suite</option>
+									</select>
+									{/* <input 
+									className={styles.roomType}
+									value={options_search.roomtype}
+									type='text' 
+									name="input_roomtype" 
+									onChange={(e) => {
+										let _options_search = options_search
+										_options_search.roomtype = e.target.value 
+										setoptions_search({..._options_search})
+									}}
+									/> */}
 									<label> วันเที่ข้าพัก </label>
 									<input 
 									type='date' 
@@ -741,15 +850,16 @@ export const Checkin = () => {
 									</select>
 
 									<button onClick={async () => { 
-										
-										try{
-											await GET_Rooms.refetch()
-											setloading(false)
-											setselectedroom(null);
-											clerformroomtype();
-										}catch(error){
+										let start_date = DateStart  ? new Date(DateStart)  :new Date()  
+										let end_date = DateEnd  ? new Date(DateEnd)  :new Date()  
+										start_date = start_date.getTime()
+										end_date = end_date.getTime()
 
-										}
+										let _filter_rooms  =[]
+										console.log('DateStart,DateEnd' , start_date,end_date)
+										_filter_rooms = filter_rooms(rooms , options_search,start_date,end_date)
+
+										setrooms(_filter_rooms);
 
 									}}>
 										{' '}

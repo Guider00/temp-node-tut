@@ -248,8 +248,7 @@ export const Receipt = () => {
                                 <div>
                                     <label> รอบบิล </label>
                                     <input className ={styles.spaceonerem} id="duedate" type="date"  value={formsearch.duedate} onChange={handleChangeformsearch} ></input>
-                                    <label className ={styles.spaceonerem}> ถึง </label>
-                                    <input className ={styles.spaceonerem} id="enddate" type="date"  value={formsearch.enddate} onChange={handleChangeformsearch} ></input>
+                                   
                                 </div>
                                 <p>
                                     <lable >อาคาร</lable>
@@ -392,6 +391,40 @@ export const Receipt = () => {
                         <div className={styles.card}>
                             <div className={styles.cardheader}>
                                 <label> ข้อมูลใบเสร็จ</label>
+                            </div>
+                            <div className = {styles.topzone}>
+                                <div className = {styles.top}>
+                                    <div className = {styles.text1} >ชื่อ</div>
+                                    <div className = {styles.input1}>
+                                        <input></input>
+                                    </div>
+                                </div>
+                                <div className = {styles.top}>
+                                    <div className = {styles.text1} >นามสกุล</div>
+                                    <div className = {styles.input1}>
+                                        <input></input>
+                                    </div>
+                                </div>
+                                <div className = {styles.top}>
+                                    <div className = {styles.text1} >บัตรประชาชน</div>
+                                    <div className = {styles.input1}>
+                                        <input></input>
+                                    </div>
+                                </div>
+                                <div className = {styles.top}>
+                                    <div className = {styles.text1} >เลขประจำตัวผู้เสียภาษี</div>
+                                    <div className = {styles.input1}>
+                                        <input></input>
+                                    </div>
+                                </div>
+                                <div className = {styles.top}>
+                                    <div className = {styles.text1} >ที่อยู่ตามบัตรประชาชน</div>
+                                    <div className = {styles.input1}>
+                                        <input></input>
+                                    </div>
+                                </div>
+                                
+                            
                             </div>
                             
                             <div className={styles.cardbody}>
