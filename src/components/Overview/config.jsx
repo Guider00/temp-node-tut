@@ -1,7 +1,7 @@
 
 export const option_status_room = [
   {value:"ห้องว่าง",label:"ห้องว่าง"},{value:"จอง",label:"จอง"}
-  ,{value:"ย้ายเข้า",label:"ย้ายเข้า"},{value:"ย้ายออก",label:"ย้ายออก"}
+  ,{value:"ย้ายเข้า",label:"ย้ายเข้า"},{value:"ย้ายออก",label:"แจ้งย้ายออก"}
   ,{value:"มีคนอยู่",label:"มีคนอยู่"},{value:"ปรับปรุง",label:"ปรับปรุง"}
    ] 
 export  const  Inputconfig = () => {

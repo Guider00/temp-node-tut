@@ -158,7 +158,8 @@ export const CreateInvoic = () =>{
             
                 <div className = {styles.flex}>
                     <lable className = {styles.head}>สร้างใบแจ้งหนี้</lable>
-                    <div className = {styles.topic}> รอบบิล 
+                    <div className = {styles.topic}> 
+                        <label> รอบบิล  </label>
                         <input type = "date" onChange={
                             (e)=>{
                                 let _date = date
@@ -281,7 +282,7 @@ export const CreateInvoic = () =>{
                                 </thead>
                                 <tbody className ={styles.body}>
 
-                                {filterrooms.filter((room) => (room && room.status === 'จอง') || room.status === 'มีคนอยู่').map(
+                                {filterrooms.filter((room) => (room &&  room.status === 'มีคนอยู่') ).map(
                                             (room) =>
                                                 room ? (
                                                     <tr>
