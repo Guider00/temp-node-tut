@@ -11,6 +11,7 @@ export const API_GET_Receiptnumber = gql`
             bill_number
 			account_number
 			bill_date
+			bill_end
 		}
 	}
 `;

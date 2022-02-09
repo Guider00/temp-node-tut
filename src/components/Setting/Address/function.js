@@ -15,6 +15,7 @@ export const HandleForm = () =>{
         bill:"",
         accNo:"",
         billDate:"",
+        billEnd:"",
     })
 
     const [defaultAddress , setdefaultAddress] = useState({
@@ -39,7 +40,7 @@ export const HandleForm = () =>{
         let _defaultData = defaultData
 
         if(e.target.id === "receipt" || e.target.id === "invoice" || e.target.id === "reimbursement" || e.target.id === "booking" 
-        || e.target.id === "bill" || e.target.id === "accNo" ||  e.target.id === "billDate" ){
+        || e.target.id === "bill" || e.target.id === "accNo" ||  e.target.id === "billDate" || e.target.id === "billEnd" ){
             _defaultData[e.target.id] = e.target.value;
             setdefaultData({..._defaultData})
             setFormErrors(validate(_defaultData))
@@ -132,6 +133,14 @@ export const HandleForm = () =>{
             errors.billDate = "billDate is not Format!"
         }else if(values.billDate.length > 10){
             errors.billDate = "billDate is not Format!"
+        }
+
+        if(!values.billEnd){
+            errors.billEnd = "billend is required!"
+        }else if(!(/^[A-Za-z0-9-]+$/).test(values.billEnd)){
+            errors.billEnd = "billend is not Format!"
+        }else if(values.billEnd.length > 10){
+            errors.billEnd = "billend is not Format!"
         }
 
 
@@ -271,6 +280,7 @@ export const HandleForm = () =>{
         bill:"",
         accNo:"",
         billDate:"",
+        billEnd:"",
     })
     
     

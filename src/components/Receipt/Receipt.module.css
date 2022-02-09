@@ -348,3 +348,25 @@
 .calendar{
     margin-left: 1rem ;
 }
+.topzone{
+    
+    width: 95%;
+    height: 10%;
+    margin: 1rem auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.topzone>.top{
+    display: flex;
+    
+}
+.topzone>.top>.text1{
+    margin: 0.2rem;
+    margin-left: 1rem;
+    width: 100%;
+    
+}
+.topzone>.top>.input1{
+    margin: 0.2rem;
+}

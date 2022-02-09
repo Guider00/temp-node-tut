@@ -41,7 +41,7 @@
     
     margin: 1rem ;
     width: 95%;
-    height: 680px;
+    height: 700px;
     border: 1px solid black;
     border-radius: 15px;
     min-width: 725px;
@@ -63,7 +63,7 @@
     width: 95%;
     
     
-    height: 680px;
+    height: 700px;
     border: 1px solid black;
     border-radius: 15px;
     
@@ -566,4 +566,32 @@
     
     
     
-       
+.topzone{
+    width: 90%;
+    height: 15%;
+    margin: 1rem auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.topzone>.top{
+    display: flex;
+    
+}
+.topzone>.top>.textX{
+    margin: 0.2rem;
+    margin-left: 1rem;
+    width: 100%;
+    
+}
+.topzone>.top>.inputX{
+    margin: 0.2rem;
+}
+
+
+
+
+
+
+
+

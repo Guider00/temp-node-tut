@@ -42,7 +42,7 @@ import {
 const filter_rooms = (rooms , options_search ,DateStart,DateEnd) =>{
 		let _filter_table = []
 		if(rooms  &&  options_search){
-			console.log('rooms', rooms , DateStart,DateEnd)
+			console.log('roomsfilter', rooms , DateStart,DateEnd)
 			_filter_table = rooms.filter(room =>{
 				
 					if(room){
@@ -150,7 +150,8 @@ export const Booking = () => {
 
 	const [ options_search  ,setoptions_search] = useState({
 		text:"",
-		keyword:"ทั้งหมด"
+		keyword:"ทั้งหมด",
+		roomtype: "ทั้งหมด" ,
 	})
 
 	const [ action, setaction ] = useState('create');
@@ -570,7 +571,36 @@ export const Booking = () => {
 							<div className={styles.text}> รายการห้องว่างและย้ายออก </div>
 							<div  className={styles.input} >
 								<div className={styles.zoneselect_checkincheckout}>
-									<label> วันเที่เข้าพัก </label>
+									<label> ประเภทห้อง </label>
+									<select 
+									className={styles.roomType}
+									name="input_roomtype" 
+									onChange={(e) => {
+										let _options_search = options_search
+										_options_search.roomtype = e.target.value 
+										setoptions_search({..._options_search})
+									}}
+									>
+										<option>ทั้งหมด</option>
+										<option>Standard</option>
+										<option>Studio</option>
+										<option>Deluxe</option>
+										<option>Suite</option>
+									</select>
+
+									{/* <input 
+									className={styles.roomType}
+									value={options_search.roomtype}
+									type='text' 
+									name="input_roomtype" 
+									onChange={(e) => {
+										let _options_search = options_search
+										_options_search.roomtype = e.target.value 
+										setoptions_search({..._options_search})
+									}}
+									/> */}
+
+									<label> วันที่เข้าพัก </label>
 									<input 
 									type='date' 
 									name="input_searchdatecheckin" 

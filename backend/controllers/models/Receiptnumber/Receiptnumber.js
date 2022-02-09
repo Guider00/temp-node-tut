@@ -8,6 +8,7 @@ const schemaDefinition = new mongoose.Schema({
     bill_number: {type:String},
     account_number: {type:String},
     bill_date: {type:String},
+    bill_end: {type:String},
     
 
 

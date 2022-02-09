@@ -84,14 +84,12 @@ import { export_address_pdf } from "../../../general_functions/pdf/export/export
         
         if(choose && defaultDialog.type === '1' ){
             if(Receiptnumber && Receiptnumber.data ){
-                
+                console.log("DateEnd",defaultData.billEnd)
                 
                 try{
                     
                     
                     let _res = await addReceiptnumber({
-                        
-    
                         variables: {
                         input:{
                             receipt_number:`${defaultData.receipt}`,
@@ -101,6 +99,7 @@ import { export_address_pdf } from "../../../general_functions/pdf/export/export
                             bill_number:`${defaultData.bill}`,
                             account_number:`${defaultData.accNo}`,
                             bill_date:`${defaultData.billDate}`,
+                            bill_end:`${defaultData.billEnd}`
                             }
                         }
                     });
@@ -205,6 +204,7 @@ import { export_address_pdf } from "../../../general_functions/pdf/export/export
                 _defaultData['id'] = Receiptnumber.data.Receiptnumbers[0].id
                 _defaultData['accNo'] = Receiptnumber.data.Receiptnumbers[0].account_number
                 _defaultData['billDate'] = Receiptnumber.data.Receiptnumbers[0].bill_date
+                _defaultData['billEnd'] = Receiptnumber.data.Receiptnumbers[0].bill_end
                 setdefaultData(_defaultData)
 
             }
@@ -645,6 +645,7 @@ import { export_address_pdf } from "../../../general_functions/pdf/export/export
                         name = 'billDate'
                         id = 'billDate'
                         type='date'
+                        dateformat="d M y"
                         disabled = {disableReceipt.disabled}
                         value={defaultData.billDate}
                         style={formErrors.billDate === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
@@ -659,6 +660,36 @@ import { export_address_pdf } from "../../../general_functions/pdf/export/export
                             inputBox[0].disabled=false;
                             setDisabledReceipt(false)
                             _defaultData['billDate'] = e
+                            setdefaultData({..._defaultData})
+                            
+
+                        }}
+                        ><DeleteOutlineIcon/></button>
+                        
+
+
+                    </div>
+                    <div className={styles.inputstyle}>
+                        
+                        <lable className={styles.text}>วันที่ตัดรอบบิล</lable>
+                        <input  className={styles.billEnd} 
+                        name = 'billEnd'
+                        id = 'billEnd'
+                        type='date'
+                        disabled = {disableReceipt.disabled}
+                        value={defaultData.billEnd}
+                        style={formErrors.billEnd === undefined ?{borderColor : 'black'} : {borderColor : 'red'}}
+                        onChange={handleOnchangeReceipt}
+                        />
+                        <lable className={styles.error}>{formErrors.billEnd}</lable>
+                        <button className={styles.deleteOne} 
+                        onClick={()=>{
+                            let _defaultData = defaultData
+                            let inputBox = document.getElementsByName('billEnd')
+                            let e = ''
+                            inputBox[0].disabled=false;
+                            setDisabledReceipt(false)
+                            _defaultData['billEnd'] = e
                             setdefaultData({..._defaultData})
                             
 

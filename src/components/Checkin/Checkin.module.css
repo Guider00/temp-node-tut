@@ -110,7 +110,10 @@
     align-items: center;
 }
 
-
+.roomType{
+    width: 15%;
+    height: 25px;
+}
 
 
 
