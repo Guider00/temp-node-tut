@@ -295,7 +295,7 @@
     margin: 1rem;
     justify-content: center;
     align-items: center;
-    max-height: 15rem;
+    max-height: 12rem;
     overflow-y: auto;
   
 }
@@ -348,6 +348,12 @@
 .container>.display>.zone2>.box2>.topic1{
     margin: 1rem;
     font-size: medium;
+    
+        
+}
+.container>.display>.zone2>.box2>.topic1>button[name="readmeter"]{
+    margin-left: 1rem;
+    margin-right: 1rem;
     
         
 }
@@ -411,6 +417,7 @@
     
     
  }
+
 
  .container>.display>.zone2>.box2>.display>.topic2>.input>.input3{
     

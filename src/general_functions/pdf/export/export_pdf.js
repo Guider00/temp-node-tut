@@ -1,7 +1,7 @@
 
 const { jsPDF }  = require('jspdf')
 const { AddTH_font }  =require('../AddFont/AddFont.js')
-const { formatDate , toHHMMSS }  = require('../../convert.js')
+const { formatDate , toHHMMSS ,  }  = require('../../convert.js')
 
 
 
@@ -837,7 +837,7 @@ export const export_Invoices_pdf = (Invoices,defaultData) =>{
             let No =  ( Invoice && Invoice  &&  Invoice.id )  ? Invoice.id : "---"
             let _Date =  formatDate(new Date())
             let HoneNo = Invoice &&  Invoice.Room && Invoice.Room.name ? Invoice.Room.name : "------"
-            let Month = Invoice && Invoice.monthlybilling ? Invoice.monthlybilling:"-----"
+            let Month = Invoice && Invoice.monthlybilling ? formatDate(Invoice.monthlybilling):"-----"
             let Grand = "144.00"
             let Backforward = "0.00"
             let Vat = 7;
