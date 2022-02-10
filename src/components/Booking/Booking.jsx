@@ -153,6 +153,9 @@ export const Booking = () => {
 		keyword:"ทั้งหมด",
 		roomtype: "ทั้งหมด" ,
 	})
+	const [ roomType_search  ,setRoomType_search] = useState({
+		roomtype: "ทั้งหมด" ,
+	})
 
 	const [ action, setaction ] = useState('create');
 
@@ -450,45 +453,97 @@ export const Booking = () => {
 					return {room:room ,sch:sch}
 				 })
 
-					console.log( 'roomschedules', roomschedules )
+					console.log( 'roomschedules6', roomschedules )
 				 let room_support  = roomschedules.map( (roomschedule) =>{
 					 let {room} = roomschedule
 				
 					// console.log(`debug roomschedule`,roomschedule)
 					 let condition =  roomschedule.sch.map ( ({checkin_date_exp , checkin_date , checkin_type })=>{
 					//	 console.log(`debug roomschedule`,checkin_date_exp , end_date , ( checkin_date_exp === null  || (end_date <  checkin_date &&    end_date < checkin_date_exp ) ))
-							if( 
-								//       [จอง] ____________
-								//       ________ [วันที่เลือก ]
-							(start_date >  checkin_date &&    start_date > checkin_date_exp )  && 
-							(end_date >  checkin_date &&    end_date > checkin_date_exp )  
-							&&  checkin_type === 'รายวัน'){
-								return true   
-							}else if( 
-								//        ____________[จอง]
-								//       [วันที่เลือก ]________
-							(start_date <  checkin_date &&    start_date < checkin_date_exp )  && 
-							(end_date <  checkin_date &&    end_date < checkin_date_exp )   &&  
-							checkin_type === 'รายวัน'
-							){
-								return true 
-							}else if(
-								//       _____________[จอง รายเดือน]_
-								//       _[วันที่เลือก ]______________
-								(start_date <  checkin_date &&   ( start_date < checkin_date_exp ||  checkin_date_exp === null )   )  && 
-								( checkin_date_exp === null  || (end_date <  checkin_date &&    end_date < checkin_date_exp ) )  &&  
-								checkin_type === 'รายเดือน'
-							){
-								return true 
-							}else if( 
-								 // new room 
-								checkin_date_exp === null &&  checkin_date  === null &&  checkin_type === null
-							 ){
-								return true
-							}
-							else {
-								return false 
-							}
+
+					if(roomType_search.roomtype === 'ทั้งหมด'){
+						if( 
+							//       [จอง] ____________
+							//       ________ [วันที่เลือก ]
+						(start_date >  checkin_date &&    start_date > checkin_date_exp )  && 
+						(end_date >  checkin_date &&    end_date > checkin_date_exp )  
+						&&  checkin_type === 'รายวัน'){
+							return true   
+						}else if( 
+							//        ____________[จอง]
+							//       [วันที่เลือก ]________
+						(start_date <  checkin_date &&    start_date < checkin_date_exp )  && 
+						(end_date <  checkin_date &&    end_date < checkin_date_exp )   &&  
+						checkin_type === 'รายวัน'
+						){
+							return true 
+						}else if(
+							//       _____________[จอง รายเดือน]_
+							//       _[วันที่เลือก ]______________
+							(start_date <  checkin_date &&   ( start_date < checkin_date_exp ||  checkin_date_exp === null )   )  && 
+							( checkin_date_exp === null  || (end_date <  checkin_date &&    end_date < checkin_date_exp ) )  &&  
+							checkin_type === 'รายเดือน'
+						){
+							return true 
+						}else if( 
+							 // new room 
+							checkin_date_exp === null &&  checkin_date  === null &&  checkin_type === null
+						 ){
+							return true
+						}
+						else {
+							return false 
+						}
+
+					}else if(roomType_search.roomtype === 'รายวัน'){
+						if( 
+							//       [จอง] ____________
+							//       ________ [วันที่เลือก ]
+						(start_date >  checkin_date &&    start_date > checkin_date_exp )  && 
+						(end_date >  checkin_date &&    end_date > checkin_date_exp )  
+						&&  checkin_type === 'รายวัน'){
+							return true   
+						}else if( 
+							//        ____________[จอง]
+							//       [วันที่เลือก ]________
+						(start_date <  checkin_date &&    start_date < checkin_date_exp )  && 
+						(end_date <  checkin_date &&    end_date < checkin_date_exp )   &&  
+						checkin_type === 'รายวัน'
+						){
+							return true 
+						}else if( 
+							 // new room 
+							checkin_date_exp === null &&  checkin_date  === null &&  checkin_type === null
+						 ){
+							return true
+						}
+						else {
+							return false 
+						}
+
+					}else if(roomType_search.roomtype === 'รายเดือน'){
+						if(
+							//       _____________[จอง รายเดือน]_
+							//       _[วันที่เลือก ]______________
+							(start_date <  checkin_date &&   ( start_date < checkin_date_exp ||  checkin_date_exp === null )   )  && 
+							( checkin_date_exp === null  || (end_date <  checkin_date &&    end_date < checkin_date_exp ) )  &&  
+							checkin_type === 'รายเดือน'
+						){
+							return true 
+						}else if( 
+							 // new room 
+							checkin_date_exp === null &&  checkin_date  === null &&  checkin_type === null
+						 ){
+							return true
+						}
+						else {
+							return false 
+						}
+
+					}else{
+						return false 
+					}
+							
 					  })
 					
 					 	//console.log(`debug ${roomschedule.room.name}`,condition)
@@ -507,7 +562,7 @@ export const Booking = () => {
 			
 
 		}
-	},[api_rooms,api_rooms.data ,DateStart , DateEnd])
+	},[api_rooms,api_rooms.data ,DateStart , DateEnd , roomType_search])
 
 	
 	// console.log('rooms', rooms);
@@ -576,16 +631,14 @@ export const Booking = () => {
 									className={styles.roomType}
 									name="input_roomtype" 
 									onChange={(e) => {
-										let _options_search = options_search
-										_options_search.roomtype = e.target.value 
-										setoptions_search({..._options_search})
+										let _roomType_search = roomType_search
+										_roomType_search.roomtype = e.target.value 
+										setRoomType_search({..._roomType_search})
 									}}
 									>
 										<option>ทั้งหมด</option>
-										<option>Standard</option>
-										<option>Studio</option>
-										<option>Deluxe</option>
-										<option>Suite</option>
+										<option>รายวัน</option>
+										<option>รายเดือน</option>
 									</select>
 
 									{/* <input 

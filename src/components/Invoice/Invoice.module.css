@@ -534,7 +534,9 @@
  .topic5>button{
    margin-right: 2rem;
 }
-
+.btnreadmeter{
+    margin: 0.5rem;
+}
 
  .container>.display>.zone2>.box2>.button>.button1{
     
@@ -571,7 +573,7 @@
    margin-right: 2rem;
 }
     
-    
+
     
 .topzone{
     width: 90%;

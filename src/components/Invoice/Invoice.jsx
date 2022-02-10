@@ -648,8 +648,7 @@ const CalendarDate = (selecteddate) =>{
                                     </div>
                                 </div>
                                 
-                            
-                                <lable >บันทึกมิเตอร์</lable>  
+                                <br/>
                                 <button name="readmeter" className={styles.btnreadmeter}
                                  disabled={!editselectroom}
                                  onClick={()=>{ 
