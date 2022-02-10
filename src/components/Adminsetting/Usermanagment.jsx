@@ -442,7 +442,7 @@ export const Usermanagement = () => {
                                                 </td>
                                                 <td width={'200px'}>
                                                     <input
-                                                    disabled = {user.status === 'Normal'? false : true} 
+                                                    disabled = {user.status === 'Lock'? true : false} 
                                                     id={user.id}
                                                     className={styles.input}
                                                     value={ nameChange.id === user.id  ?  nameChange.name : user.name }
