@@ -7,8 +7,8 @@ import { API_queryRooms} from '../../API/index';
 import { API_GET_Invoice,API_ADD_Invoice,API_DELETE_Invoice,API_UPDATE_Invoice} from '../../API/Schema/Invoice/Invoice'
 import { API_GET_Rooms , API_UPDATE_Room } from '../../API/Schema/Room/Room'
 import { filter_rooms ,Change } from './function';
-
-
+import Dialog  from '../../subcomponents/Dialog/Dialog';
+import { DialogFunction } from '../../subcomponents/Dialog/Dialog';
 
 
 
@@ -143,7 +143,10 @@ export const CreateInvoic = () =>{
     
 
 
-   
+     //Dialog
+
+     const { defaultDialog , handleDialog ,checkData} = DialogFunction();
+
 
     
     
@@ -152,8 +155,9 @@ export const CreateInvoic = () =>{
 
     let header_table = ["","อาคาร","ชั้น","ประเภทห้อง","ห้อง","ประเภทการเช่า"]
     return (
+        
         <div className = {styles.zone}>
-           
+           {defaultDialog.isLoading && <Dialog onDialog={checkData} nextPage={'/invoice'} message={defaultDialog.message}/>}
             <div className = {styles.bigbox}>
             
                 <div className = {styles.flex}>
@@ -342,6 +346,7 @@ export const CreateInvoic = () =>{
                 
                 <div className={styles.lastbutton}>
                     <button className = {styles.button} onClick={ ()=>{
+                        handleDialog(defaultDialog.message,true)
                         console.log('IDrooms',IDrooms)
                         // เลือกรูปแบบการ สร้าง  Invoice 
                         let _bymonthly = disabled.D1

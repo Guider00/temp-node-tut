@@ -74,8 +74,8 @@
     
 }
 .container>.mainbox>.headerstyles>.subheader>.filterstyles:hover{
-    transform: translate(0,-6px);
-    box-shadow: 10px -10px 25px 0 rgba(50, 192, 69, 0.5),-10px 10px 25px 0 rgba(10, 143, 81, 0.5);
+    transform: scale(1.1);
+    box-shadow: 2px -2px 10px 0 rgba(50, 192, 69, 0.5),-2px 2px 10px 0 rgba(10, 143, 81, 0.5);
     cursor: pointer;
     
     
