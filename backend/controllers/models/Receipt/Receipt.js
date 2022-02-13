@@ -17,7 +17,19 @@ const schemaDefinition = new mongoose.Schema({
         selectvat :{type:String,default:'คิดvat'},
         }
     ],
-    invoiceid:{type:String}
+    invoiceid:{type:String},
+
+    customer:{
+        name: { type: String , default: ""},
+        lastname:{type: String ,  default: ""},
+        personalid :{type: String ,  default: ""},
+        taxnumber:{type: String ,  default: ""},
+        address :{type: String ,  default: ""},
+        tel: {type:String ,  default: ""},
+        email: {type:String ,  default: ""}, 
+    }
+  
+
 })
 module.exports = {
     db: mongoose.model("receipt", schemaDefinition)

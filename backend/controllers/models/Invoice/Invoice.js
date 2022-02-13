@@ -16,7 +16,16 @@ const schemaDefinition = new mongoose.Schema({
         type_price:{type:String , default:'ราคาไม่รวมvat'}, // <<  2 type    1.) ราคารวมvat 2.) ราคาไม่รวมvat
         selectvat :{type:String,default:'คิดvat'},   
         }
-    ]
+    ],
+    customer:{
+        name: { type: String , default: ""},
+        lastname:{type: String ,  default: ""},
+        personalid :{type: String ,  default: ""},
+        taxnumber:{type: String ,  default: ""},
+        address :{type: String ,  default: ""},
+        tel: {type:String ,  default: ""},
+        email: {type:String ,  default: ""}, 
+    }
 })
 module.exports = {
     db : mongoose.model("invoice", schemaDefinition)

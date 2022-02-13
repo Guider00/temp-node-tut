@@ -7,8 +7,8 @@ const schemaDefinition = new mongoose.Schema({
     taxnumber:{type: String ,  default: ""},
     address :{type: String ,  default: ""},
     tel: {type:String ,  default: ""},
-    email: {type:String ,  default: ""},
-    carid: {type:String, default: ""},
+    email: {type:String ,  default: ""}, 
+    carid: {type:String, default: ""}, //  ทะเบียน รถ 
     note: {type:String, default: ""}
 })
 module.exports = {
