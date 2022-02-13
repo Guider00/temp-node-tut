@@ -32,8 +32,27 @@ type Invoice {
     status : String,
     lists:[Invoice_list]
     Room:Room
+    customer:Customer
   
   }
+type Customer{
+        name:  String
+        lastname: String 
+        personalid: String
+        taxnumber : String 
+        address : String
+        tel:  String
+        email: String
+}
+input CustomerInput{
+        name:  String
+        lastname: String 
+        personalid: String
+        taxnumber : String 
+        address : String
+        tel:  String
+        email: String
+}
 
 input InvoicInput {
     id:ID
@@ -43,7 +62,9 @@ input InvoicInput {
     printstatus : String ,
     status : String,
     roomid: String,
-    lists:[Invoice_listInput]
+    lists:[Invoice_listInput],
+    customer:CustomerInput
+
   } 
 `
 

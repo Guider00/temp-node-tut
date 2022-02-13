@@ -30,6 +30,7 @@ type Receipt {
     note:String,
     lists:[Receipt_list]
     Invoice:Invoice
+    customer:Customer
   }
 
 input ReceiptInput {
@@ -41,6 +42,7 @@ input ReceiptInput {
     note:String,
     lists:[Receipt_listInput]
     invoiceid:String
+    customer:CustomerInput
   } 
 `
 
