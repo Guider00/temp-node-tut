@@ -246,18 +246,12 @@ export const Menubar = () => {
                 </div>
 
                 <div>
-                    <a href="/report">
-                        <button>
-                            <div>
-                                <ListAlt />
-
-                            </div>
-                            <div>
-                                Report
-                            </div>
-
-                        </button>
-                    </a>
+                    <div>
+                        <Submenudropdown id="submenusetting" label="Report" icon="list" links={[
+                            { label: "Financial", href: "/report_financial", icon: "book" },
+                            { label: "utility", href: "/report_untility", icon: "book" },
+                        ]} />
+                    </div>
                 </div>
                 <div>
                     <div>

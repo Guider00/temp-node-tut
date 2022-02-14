@@ -46,6 +46,8 @@ import { Contract } from './components/Contract/Contract';
 import { Receipt } from './components/Receipt/Receipt';
 import { Invoice } from './components/Invoice/Invoice';
 
+import { Report_financial } from './components/Reports/Report_financial';
+import { Report_untility } from './components/Reports/Report_untility';
 import { CreateInvoic } from './components/CreateInvoice/CreateInvoice'
 
 import { Note } from './components/Note/Note';
@@ -177,6 +179,18 @@ const _Address =() =>(
   <Address/>x
   </>
 )
+const _Report_financial = () =>(
+  <>
+    <Report_financial/>
+  </>
+)
+const _Report_untility = () =>(
+  <>
+    <Report_untility/>
+  </>
+)
+
+
 
 
 const _Note =()=>(
@@ -237,8 +251,8 @@ function App() {
             <Route exact path="/receipt" component={_Receipt} />
             <Route exact path="/invoice" component={_Invoice} />
             <Route exact path="/createinvoice" component={_CreateInvoic} />
-            
-           
+            <Route exact path="/report_financial" component={_Report_financial} />
+            <Route exact path="/report_untility" component={_Report_untility}/>
 
             <Route exact path="/note" component={_Note} />
 
