@@ -67,7 +67,8 @@ export const Report_financial = () => {
     const [DataReceipt, setDataReceipt] = useState([])
     const [DataInvoice, setDataInvoice] = useState([])
 
-    
+    const [TotalValue, setTotalValue] = useState([])
+
 
     const getMonthName = (month) => {
         let d = new Date
@@ -84,10 +85,10 @@ export const Report_financial = () => {
         let _amountInvoice = (list.data.Invoice === null || list.data.Invoice) ? 1 : 0
         let _unpaid = list.status === 'รอการชำระเงิน' ? Number(priceInNumber ? (priceInNumber) : 0).toFixed(2) : 0
         let _unpaidAmount = list.status === 'รอการชำระเงิน' ? 1 : 0
-       
 
 
-        return ({ price: _price, profit: _profit, amountInvoice: _amountInvoice, unpaid: _unpaid, unpaidAmount: _unpaidAmount})
+
+        return ({ price: _price, profit: _profit, amountInvoice: _amountInvoice, unpaid: _unpaid, unpaidAmount: _unpaidAmount })
 
 
     }
@@ -96,42 +97,49 @@ export const Report_financial = () => {
     // labels = ["March-2022","February-2022","April-2022","February-2012"]
 
 
-    const validateTotal = (lists , DataChart) => {
-        
+    const validateTotal = (lists, DataChart) => {
 
-        console.log('DataChart',DataChart)
 
-        if((lists && lists.length > 0) && (DataChart && DataChart.labels.length > 0)){
+        if ((lists && lists.length > 0) && (DataChart && DataChart.labels.length > 0)) {
             let _totalprice = 0
             let _profit = 0
             let _amountInvoice = 0
             let _unpaid = 0
             let _unpaidAmount = 0
-            lists.map(list =>{
-            let date = (new Date(list.duedate));
-            let dateM = `${date.getMonth() + 1}`;
-            let trueDay = getMonthName(dateM) + -`${date.getFullYear()}`
-            
-            let i = DataChart.labels.length - 1
-            console.log(i)
-            for(let e = 0 ; e <= i ; e++){
-                if(trueDay === DataChart.labels[e]){
-                    _totalprice += (Number(ConvertData(list).price) ? Number(ConvertData(list).price) : 0)
-                    _profit += (Number(ConvertData(list).profit) ? Number(ConvertData(list).profit) : 0)
-                    _amountInvoice += (Number(ConvertData(list).amountInvoice) ? Number(ConvertData(list).amountInvoice) : 0)
-                    _unpaid += (Number(ConvertData(list).unpaid) ? Number(ConvertData(list).unpaid) : 0)
-                    _unpaidAmount += (Number(ConvertData(list).unpaidAmount) ? Number(ConvertData(list).unpaidAmount) : 0)
+            let data = []
+            let data2 = []
+            let y = []
+
+
+            lists.map(list => {
+                let date = (new Date(list.duedate));
+                let dateM = `${date.getMonth() + 1}`;
+                let trueDay = getMonthName(dateM) + -`${date.getFullYear()}`
+                let i = DataChart.labels.length
+
+                for(let e = 0 ; e < i ; e++){
+                    if (trueDay === DataChart.labels[e]) {
+                        _totalprice += (Number(ConvertData(list).price) ? Number(ConvertData(list).price) : 0)
+                        _profit += (Number(ConvertData(list).profit) ? Number(ConvertData(list).profit) : 0)
+                        _amountInvoice += (Number(ConvertData(list).amountInvoice) ? Number(ConvertData(list).amountInvoice) : 0)
+                        _unpaid += (Number(ConvertData(list).unpaid) ? Number(ConvertData(list).unpaid) : 0)
+                        _unpaidAmount += (Number(ConvertData(list).unpaidAmount) ? Number(ConvertData(list).unpaidAmount) : 0)
+                        data = [...data,Number(ConvertData(list).price),DataChart.labels[e] ]
+                        
+                    }
+
                 }
                 
-            }
+                
             })
-            return ({totalprice: Number(_totalprice).toFixed(0), profit: Number(_profit).toFixed(0), 
-                amountInvoice: Number(_amountInvoice).toFixed(0), unpaid: Number(_unpaid).toFixed(0), 
+            return ({
+                data2:data2,data:data,totalprice: Number(_totalprice).toFixed(0), profit: Number(_profit).toFixed(0),
+                amountInvoice: Number(_amountInvoice).toFixed(0), unpaid: Number(_unpaid).toFixed(0),
                 unpaidAmount: Number(_unpaidAmount).toFixed(0)
-                    })
+            })
 
         }
-         else {
+        else {
             return ({ totalprice: 0, profit: 0, amountInvoice: 0, invoice: 0, unpaid: 0, unpaidAmount: 0 })
         }
     }
@@ -143,19 +151,17 @@ export const Report_financial = () => {
             let _Invoice = Data
             _Invoice = Data_to_table(invoice.data.Invoices)
             setDataInvoice([..._Invoice])
-            console.log("2_setData", _Invoice)
 
         }
-        
+
         if (receipt.data) {
             let _Receipt = Data
             _Receipt = Data_to_table(receipt.data.Receipts)
             setDataReceipt([..._Receipt])
-            console.log("1_setData", _Receipt)
 
         }
 
-    }, [invoice , receipt])
+    }, [invoice, receipt])
 
 
     useEffect(() => {
@@ -180,6 +186,14 @@ export const Report_financial = () => {
             let _DataChart = JSON.parse(JSON.stringify(DataChart))
             _DataChart.labels = _allMonth
             setDataChart(_DataChart)
+
+            if (_DataChart.labels.length > 0) {
+                let _TotalValue = TotalValue
+                _TotalValue = validateTotal(Data, _DataChart)
+                setTotalValue(_TotalValue)
+                console.log('_DataChart', _TotalValue.data)
+                
+            }
         }
     }, [Data])
 
@@ -200,10 +214,10 @@ export const Report_financial = () => {
                         <div className={styles.profit}>
                             <h3 className={styles.headtext}>ยอดรวม</h3>
                             <div className={styles.result}>
-                                <h1>{validateTotal(Data , DataChart).totalprice}</h1>
+                                <h1>{TotalValue.totalprice}</h1>
                             </div>
                             <div className={styles.detail}>
-                                <lable>{console.log('DataChart', DataChart)}</lable>
+                                <lable></lable>
                                 <br />
                                 <lable>vs. previous period</lable>
                             </div>
@@ -212,7 +226,7 @@ export const Report_financial = () => {
                         <div className={styles.incomes}>
                             <h3 className={styles.headtext}>รายรับ</h3>
                             <div className={styles.result}>
-                                <h1>{validateTotal(Data  , DataChart).profit}</h1>
+                                <h1>{TotalValue.profit}</h1>
                             </div>
                             <div className={styles.detail}>
                                 <lable>90%</lable>
@@ -224,7 +238,7 @@ export const Report_financial = () => {
                         <div className={styles.expenses}>
                             <h3 className={styles.headtext}>จำนวนใบแจ้งหนี้</h3>
                             <div className={styles.result}>
-                                <h1>{validateTotal(Data  , DataChart).amountInvoice}</h1>
+                                <h1>{TotalValue.amountInvoice}</h1>
                             </div>
                             <div className={styles.detail}>
                                 <lable>90%</lable>
@@ -236,10 +250,10 @@ export const Report_financial = () => {
                         <div className={styles.wageExpenses}>
                             <h3 className={styles.headtext}>ยอดค้างชำระ</h3>
                             <div className={styles.result}>
-                                <h1>{validateTotal(Data  , DataChart).unpaid}</h1>
+                                <h1>{TotalValue.unpaid}</h1>
                             </div>
                             <div className={styles.detail}>
-                                <lable>{validateTotal(Data  , DataChart).unpaidAmount}</lable>
+                                <lable></lable>
                                 <br />
                                 <lable>vs. previous period</lable>
                             </div>
