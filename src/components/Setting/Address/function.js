@@ -2,9 +2,13 @@ import { useState } from "react";
 
 
 export const HandleForm = () => {
-
+    //DatePicker
     const [isBillDate, setIsBillDate] = useState(true);
     const [isBillEnd, setIsBillEnd] = useState(true);
+    //DatePicker
+
+    //ฟังก์ชั่น Disable or enable ของช่อง DateBill - DateEnd
+    //ทำแยกจากช่องอื่นเพราะพอเปลี่ยนสถานะแล้วขึ้น popup ให้เลือกวัน
 
     const UnlockBillDate = () => {
         setIsBillDate(false)
@@ -16,6 +20,7 @@ export const HandleForm = () => {
         console.log('unlock')
 
     }
+
 
     const [formErrors, setFormErrors] = useState({})
     const [formErrorsAddress, setFormErrorsAddress] = useState({})
@@ -46,6 +51,9 @@ export const HandleForm = () => {
         alley: "",
     })
 
+
+    //DatePicker
+    //ฟังก์ชั่น setData ที่ได้รับจาก DatePicker
     const handleChangebill = (e) => {
 
         let _defaultData = defaultData
@@ -80,6 +88,8 @@ export const HandleForm = () => {
 
 
     }
+
+       //DatePicker
 
 
     const handleOnchangeReceipt = (e) => {
@@ -342,6 +352,8 @@ export const HandleForm = () => {
             setDisableReceipt(tempDisabled)
             setdefaultData(blankReceipt)
             setDisabledReceipt(false)
+
+            //ฟังก์ชั่น Disable or enable ของช่อง DateBill - DateEnd
             UnlockBillDate()
             UnlockBillEnd()
 
@@ -350,6 +362,8 @@ export const HandleForm = () => {
             let tempDisabled = { ...disableReceipt, disabled: false }
             setDisableReceipt(tempDisabled)
             setDisabledReceipt(false)
+
+            //ฟังก์ชั่น Disable or enable ของช่อง DateBill - DateEnd
             UnlockBillDate()
             UnlockBillEnd()
 

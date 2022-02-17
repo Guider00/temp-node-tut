@@ -66,6 +66,8 @@ export const Address = () => {
         booking.disabled = true
         bill.disabled = true
         accNo.disabled = true
+
+        //ฟังก์ชั่น Disable or enable ของช่อง DateBill - DateEnd
         setIsBillDate(true)
         setIsBillEnd(true)
     }

@@ -145,6 +145,9 @@ export const CreateInvoic = () => {
     //Dialog
 
     const { defaultDialog, handleDialog, checkData } = DialogFunction();
+
+    //DatePicker
+    
     const [startDate, setStartDate] = useState();
 
 
@@ -164,6 +167,9 @@ export const CreateInvoic = () => {
                     <div className={styles.DatePick}>
                         <div className={styles.lable}> รอบบิล  </div>
                         <div className={styles.date}>
+
+                            {/* Date picker */}
+
                             <DatePicker
                                 className={styles.Picker}
                                 showMonthYearPicker
@@ -172,6 +178,8 @@ export const CreateInvoic = () => {
                                 onChange={(date) => setStartDate(date)}
 
                             />
+
+                            {/* Date picker */}
                         </div>
 
                     </div>
