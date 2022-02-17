@@ -285,6 +285,13 @@
     
 
 }
+.billDate{
+    margin: 1rem;
+    margin-top: 0.5rem;
+    min-width: 160px;
+    height: 25px;
+    
+}
 .containernumber>.save{
     display: flex;
     justify-content: center;
@@ -451,20 +458,3 @@ input:invalid[focused = "true"]{
 }
 
 
-input[name="billDate"]::-webkit-datetime-edit-month-field{
-    border-right:1px solid #000000;
-    padding: 10px;
-    color:#000;
-    margin-left: 10px;
-  }
-  
-  input[name="billDate"]::-webkit-datetime-edit-day-field{
-    color:#000;
-    padding: 2px;
-    left: 4px;
-    
-  }
-
-  input[name="billDate"]::-webkit-datetime-edit{
-    color: #fff;
-  }
