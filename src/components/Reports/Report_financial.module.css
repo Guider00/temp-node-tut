@@ -1,0 +1,99 @@
+.container{
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 88vh;
+
+    
+}
+
+.container>.card{
+    margin: 0.5rem ;
+    height: 100%;
+    
+}
+.container>.card>.header{
+    margin: 1rem;
+    
+   
+}
+.container>.card>.header>h2{
+    font-size: xx-large;
+    margin: 0.5rem;
+
+   
+}
+.container>.card>.body{
+    margin: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 1rem;
+    grid-row-gap: 1rem;
+}
+
+@media only screen and (max-width:900px) {
+    .container>.card>.body{
+        margin: 1rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 1rem;
+        grid-row-gap: 1rem;
+    }
+
+    
+}
+
+.profit{
+    background-color: #63e5ac;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+    
+}
+.incomes{
+    background-color: #62d2ce;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+}
+.expenses{
+    background-color: #cf57c1;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+
+}
+.wageExpenses{
+    background-color: red;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+
+}
+.headtext{
+    color: #fff;
+    margin-left: 10%;
+}
+.result{
+    margin: 0.5rem;
+    margin-left: 10%;
+    color: #fff;
+}
+.detail{
+    margin:0.5rem;
+    margin-left: 10%;
+    padding: 5px;
+    color: #fff;
+    font-weight: 400;
+}
+.container>.card>.footer{
+    margin-top: 5rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    background-color: #f2f8f7;
+    height: 450px;
+    
+   
+}
+.container>.card>.footer>.Bar{
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+}
