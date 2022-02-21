@@ -51,12 +51,14 @@ export const queryRooms = () =>{
                 checkin_type
                 checkin_date
                 checkin_date_exp
+                
                 payment_method
                 deposit
                 status
                 customer_tel
                 customer_name
                 customer_address
+                taxnumber
             }
 
             floor{
@@ -198,6 +200,7 @@ export const API_GET_Rooms = gql`
                 checkin_type 
                 checkin_date
                 checkin_date_exp
+                taxnumber
                 payment_method
                 deposit
                 note

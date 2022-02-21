@@ -297,7 +297,7 @@ export const CreateInvoic = () => {
                                 </thead>
                                 <tbody className={styles.body}>
 
-                                    {filterrooms.filter((room) => (room && room.status === 'มีคนอยู่' || room.status === 'จอง')).map(
+                                    {filterrooms.filter((room) => (room && room.status === 'มีคนอยู่' )).map(
                                         (room) =>
                                             room ? (
                                                 <tr>

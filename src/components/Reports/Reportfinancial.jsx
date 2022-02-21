@@ -28,7 +28,7 @@ export const Data_to_table = (e) => {
 }
 
 
-export const Report_financial = () => {
+export const Reportfinancial = () => {
 
 
     const [DataChart, setDataChart] = useState({

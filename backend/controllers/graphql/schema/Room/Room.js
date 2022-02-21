@@ -78,6 +78,7 @@ type BookinginRoom{
     customer_lastname :String
     customer_tel :String
     customer_address :String
+    taxnumber:String
     payment_method :String
     deposit :String
     checkin_type : String
