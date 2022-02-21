@@ -13,6 +13,7 @@ type Booking {
   customer_lastname :String
   customer_tel :String
   customer_address :String
+  taxnumber:String
   payment_method :String
   deposit :String
   checkin_type : String
@@ -31,6 +32,7 @@ input BookingInput {
   customer_lastname :String
   customer_tel :String
   customer_address :String
+  taxnumber:String
   payment_method :String
   deposit :String
   checkin_type : String
@@ -131,6 +133,7 @@ const _createBooking = async (payload , payload2) =>{
                             customer_lastname :data.customer_lastname,
                             customer_tel :data.customer_tel,
                             customer_address :data.customer_address,
+                            taxnumber:data.taxnumber,
                             payment_method :data.payment_method,
                             deposit :data.deposit,
                             checkin_date : data.checkin_date,

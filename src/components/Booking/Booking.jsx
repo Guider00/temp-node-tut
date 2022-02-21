@@ -167,6 +167,7 @@ export const Booking = () => {
 			customer_lastname: '',
 			customer_tel: '',
 			customer_address:'',
+			taxnumber:'',
 			payment_method:"",
 			deposit: '',
 			checkin_date: '',
@@ -197,6 +198,7 @@ export const Booking = () => {
 		customer_lastname: '',
 		customer_tel: '',
 		customer_address:'',
+		taxnumber:'',
 		payment_method:"",
 		deposit: '',
 		checkin_type:'รายวัน',
@@ -292,6 +294,11 @@ export const Booking = () => {
 				setformbooking({ ..._formbooking });
 
 			}else if(e.target.id === 'booking_number'){
+				let text = /[^0-9a-zA-Z]/ig;
+                e.target.value = e.target.value.replace(text,'')
+				_formbooking[e.target.id] = e.target.value;
+				setformbooking({ ..._formbooking });
+			}else if( e.target.id === 'taxnumber' ){
 				let text = /[^0-9a-zA-Z]/ig;
                 e.target.value = e.target.value.replace(text,'')
 				_formbooking[e.target.id] = e.target.value;
@@ -882,6 +889,20 @@ export const Booking = () => {
 									</div>
 								</div>
 
+								<div>
+									<div>
+										<label> เลขประจำตัวผู้เสียภาษี </label>
+									</div>
+									<div>
+										<input
+											id="taxnumber"
+											type="text"
+											value={formbooking.taxnumber}
+											onChange={handleChangedformbooking}
+										/>
+									</div>
+								</div>
+
 
 								
 
@@ -1071,6 +1092,7 @@ export const Booking = () => {
 																customer_lastname: formbooking.customer_lastname,
 																customer_tel: formbooking.customer_tel,
 																customer_address : formbooking.customer_address,
+																taxnumber:formbooking.taxnumber,
 																payment_method: formbooking.payment_method,
 																deposit: formbooking.deposit,
 																checkin_type: formbooking.checkin_type,
@@ -1093,6 +1115,7 @@ export const Booking = () => {
 																customer_lastname: formbooking.customer_lastname,
 																customer_tel: formbooking.customer_tel,
 																customer_address : formbooking.customer_address,
+																taxnumber: formbooking.taxnumber,
 																payment_method:formbooking.payment_method,
 																deposit: formbooking.deposit,
 																checkin_type: formbooking.checkin_type,
@@ -1187,6 +1210,7 @@ export const Booking = () => {
 															customer_lastname: _booking.customer_lastname,
 															customer_tel: _booking.customer_tel,
 															customer_address : _booking.customer_address,
+															taxnumber:_booking.taxnumber,
 															payment_method : _booking.payment_method,
 															deposit: _booking.deposit,
 															checkin_type: _booking.checkin_type,
@@ -1247,6 +1271,7 @@ export const Booking = () => {
 															customer_lastname: _booking.customer_lastname,
 															customer_tel: _booking.customer_tel,
 															customer_address: _booking.customer_address,
+															taxnumber:_booking.taxnumber,
 															payment_method:_booking.payment_method,
 															deposit: _booking.deposit,
 															checkin_type: _booking.checkin_type,
@@ -1286,6 +1311,7 @@ export const Booking = () => {
 								customer_lastname: _booking.customer_lastname,
 								customer_tel: _booking.customer_tel,
 								customer_address : _booking.customer_address,
+								taxnumber:_booking.taxnumber,
 								payment_method:_booking.payment_method,
 								deposit: _booking.deposit,
 								checkin_type: _booking.checkin_type,

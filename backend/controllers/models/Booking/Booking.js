@@ -7,7 +7,8 @@ const schemaDefinition = new mongoose.Schema({
   customer_name :{type:String},
   customer_lastname :{type:String},
   customer_tel :{type:String},
-  customer_address :{type:String}, // ที่อยู่ ผู้จอง
+  customer_address :{type:String , default:""}, // ที่อยู่ ผู้จอง
+  taxnumber:{type:String,default:""}, // หมายเลขประจำตัวผู้เสียภาษี
   payment_method :{type:String}, // วิธีการชำระเงิน 
   deposit :{type:String},  // จำนวนเงินจอง
   checkin_type : {type:String}, 

@@ -439,10 +439,18 @@ export const Receipt = () => {
                                 </p>
                                 <p>
                                 <label> สถานะใบเสร็จ </label>
-                                <input className ={styles.spaceonerem} name = "status" 
+                                    <select  className ={styles.spaceonerem}  name = "status" 
+                                     disabled={!selectrooms.editmode}  
+                                     value={selectrooms.status}  
+                                     onChange={handlerChangereceiptinformation}
+                                       >
+                                        <option>รอการพิมพ์</option>
+                                        <option>สำเร็จ</option>
+                                    </select>
+                                {/* <input className ={styles.spaceonerem} name = "status" 
                                  disabled={!selectrooms.editmode}
                                  value={selectrooms.status} 
-                                 onChange={handlerChangereceiptinformation} ></input>
+                                 onChange={handlerChangereceiptinformation} ></input> */}
                                 </p>
                                 <p>
                                 <label>รายละเอียดใบเสร็จ</label>
