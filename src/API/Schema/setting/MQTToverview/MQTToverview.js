@@ -12,7 +12,9 @@ export const Sub_MQTTHISTORY = gql`
 `;
 export const Sub_MQTTClients = gql`
     subscription{
-      submqttabaseclients
+      submqttabaseclients{
+        id
+      }
     }
 `;
 

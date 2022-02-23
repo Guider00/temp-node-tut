@@ -4,7 +4,10 @@ import { useSubscription } from '@apollo/client';
 import {  Sub_MQTTHISTORY , Sub_MQTTClients } from '../../../API/Schema/setting/MQTToverview/MQTToverview'
 export const MQTToverview = () =>{
     const [showhistory,setshowhistory] = useState(false) 
+    const [showclient,setshowclient] = useState(false)
     const [historys,sethistorys] = useState([])
+
+
 
     const handlerstartmqttserver =() =>{
 
@@ -18,6 +21,7 @@ export const MQTToverview = () =>{
     const sub_mqtthistory = useSubscription(Sub_MQTTHISTORY );
     const sub_mqttclient  = useSubscription(Sub_MQTTClients)
     
+    console.log(sub_mqttclient)
 
     
     return (
@@ -32,13 +36,23 @@ export const MQTToverview = () =>{
              </div>
           </div>
           <div>
-             <h2> Clients</h2>
+             <h2> Clients
+              <button style={{ backgroundColor:(showclient)?"green":"red" }}onClick={()=>{setshowclient(!showclient)}}> arrowdown </button>
+             </h2>
              <div>
                 {  
-                  ( sub_mqttclient.data  && sub_mqttclient.data.sub_mqttclient ) ?
-                    sub_mqttclient.data.sub_mqttclient.map( (client,index)=>(
-                            {client}
-                    ))
+                  (showclient && sub_mqttclient &&  sub_mqttclient.data  && sub_mqttclient.data.submqttabaseclients ) ?
+                    <ul>
+                         {
+                            sub_mqttclient.data.submqttabaseclients.map( (client,index)=>(
+                           <li   style={{border: "1px solid black",listStylePosition:'inside',padding:"1rem"}} key={index+1} name={`li-history${index}`}>
+                                 {client.id}
+                              
+                                 
+                           </li>
+                           ) )
+                        }
+                     </ul>
                     :null
                 }
              </div>
