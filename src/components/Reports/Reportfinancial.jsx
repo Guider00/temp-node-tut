@@ -81,14 +81,13 @@ export const Reportfinancial = () => {
         let Data = list.price
         let priceInNumber = parseInt(Data.replace(/,/g, ''), 10);
         let _price = Number(priceInNumber ? (priceInNumber) * 107 / 100 : 0).toFixed(2)
-        let _profit = list.status === 'รอการชำระเงิน' ? 0 : Number(priceInNumber ? (priceInNumber) * 107 / 100 : 0).toFixed(2)
-        let _amountInvoice = (list.data.Invoice === null || list.data.Invoice) ? 1 : 0
-        let _unpaid = list.status === 'รอการชำระเงิน' ? Number(priceInNumber ? (priceInNumber) : 0).toFixed(2) : 0
+        let _profit = list.status === 'ชำระเงินแล้ว' ? Number(priceInNumber ? (priceInNumber) * 107 / 100 : 0).toFixed(2) : 0
+        let _amountInvoice = (list.data.Invoice === null || list.data.Invoice) || (list.data.Room === null || list.data.Room) ? 1 : 0
         let _unpaidAmount = list.status === 'รอการชำระเงิน' ? 1 : 0
 
 
 
-        return ({ price: _price, profit: _profit, amountInvoice: _amountInvoice, unpaid: _unpaid, unpaidAmount: _unpaidAmount })
+        return ({ price: _price, profit: _profit, amountInvoice: _amountInvoice, unpaidAmount: _unpaidAmount })
 
 
     }
@@ -98,6 +97,7 @@ export const Reportfinancial = () => {
 
 
     const validateTotal = (lists, DataChart) => {
+        console.log('lists',lists)
 
 
         if ((lists && lists.length > 0) && (DataChart && DataChart.labels.length > 0)) {
@@ -109,29 +109,34 @@ export const Reportfinancial = () => {
             let data = []
             let data2 = []
             let y = []
-
+            
 
             lists.map(list => {
                 let date = (new Date(list.duedate));
                 let dateM = `${date.getMonth() + 1}`;
                 let trueDay = getMonthName(dateM) + -`${date.getFullYear()}`
                 let i = DataChart.labels.length
-
+                
                 for(let e = 0 ; e < i ; e++){
                     if (trueDay === DataChart.labels[e]) {
                         _totalprice += (Number(ConvertData(list).price) ? Number(ConvertData(list).price) : 0)
                         _profit += (Number(ConvertData(list).profit) ? Number(ConvertData(list).profit) : 0)
                         _amountInvoice += (Number(ConvertData(list).amountInvoice) ? Number(ConvertData(list).amountInvoice) : 0)
-                        _unpaid += (Number(ConvertData(list).unpaid) ? Number(ConvertData(list).unpaid) : 0)
                         _unpaidAmount += (Number(ConvertData(list).unpaidAmount) ? Number(ConvertData(list).unpaidAmount) : 0)
                         data = [...data,Number(ConvertData(list).price),DataChart.labels[e] ]
                         
                     }
 
                 }
+
                 
                 
             })
+
+            _unpaid = _totalprice - _profit
+
+
+                
             return ({
                 data2:data2,data:data,totalprice: Number(_totalprice).toFixed(0), profit: Number(_profit).toFixed(0),
                 amountInvoice: Number(_amountInvoice).toFixed(0), unpaid: Number(_unpaid).toFixed(0),
