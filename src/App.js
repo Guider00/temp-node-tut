@@ -15,6 +15,9 @@ import { Portmeter } from './components/Setting/PortMeter/PortMeter';
 import { Overviewmeter } from './components/Setting/Overviewmeter/Overviewmeter';
 import { Address } from './components/Setting/Address/Address';
 
+import { Realtimetable } from './components/Setting/Realtimetable/Realtimetable';
+import { MQTToverview } from './components/Setting/MQTToverview/MQTToverview';
+
 
 
 import { Overview } from './components/Overview/Overview'
@@ -50,6 +53,8 @@ import { Reportfinancial } from './components/Reports/Reportfinancial';
 import { Reportuntility } from './components/Reports/Reportuntility';
 import { Reportelectrical } from './components/Reports/electrical/Reportelectrical';
 import { Reportwater } from './components/Reports/water/Reportwater';
+
+
 
 import { CreateInvoic } from './components/CreateInvoice/CreateInvoice'
 
@@ -199,7 +204,12 @@ const _Report_electrical = () =>(
 const _Report_water = () =>(
   <> <Reportwater/> </>
 )
-
+const _MQTToverview =()=>(
+  <> <MQTToverview/> </>
+)
+const _Realtimetable =()=>(
+  <> <Realtimetable/> </>
+)
 
 
 
@@ -267,6 +277,8 @@ function App() {
             <Route exact path="/report_electrical" component={_Report_electrical}/>
             <Route exact path="/report_water" component={_Report_water}/>
 
+            <Route exact path="/MQTToverview" component={_MQTToverview}/>
+            <Route exact path="/Realtimetable" component={_Realtimetable}/>
 
             <Route exact path="/note" component={_Note} />
 

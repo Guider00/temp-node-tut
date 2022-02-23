@@ -62,10 +62,19 @@ export const API_GET_Reimbursement = gql`
             }
             
 `;
+export const API_CREATE_Reimbursement  = gql`
+        mutation createReimbursement($input:ReimbursementInput){
+                createReimbursement(input:$input){
+                        id
+                        errors
+                }
+        }
+`
 export const API_ADD_Reimbursement = gql`
 	mutation createReimbursement($input: ReimbursementInput) {
 		createReimbursement(input: $input) {
 			id
+                        errors
 		}
 	}
 `;

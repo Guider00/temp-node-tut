@@ -1,27 +1,74 @@
 const { mqtt_publich } = require('./publish')
 const {PORT_MQTT_AEDES ,PORT_MQTTT_MOSCA } =  require('./config')
+
+const  Apollo =  require('./../../controllers/graphql/schema/Apollo')
+let server = null 
 let aedes_clients = []
 let aedes_history_packets = []
 
 
 const _aedes_clients = () => {
-    return (JSON.parse(JSON.stringify(aedes_clients)));
+    let  _aedes_clients_id =  aedes_clients.map(client => ({id: client.id }) )
+    return (JSON.parse(JSON.stringify(_aedes_clients_id)));
 }
 const _aedes_history_packets = () =>{
     return (JSON.parse(JSON.stringify(aedes_history_packets)));
 }
 
-const removeElement = (array, elem) => {
-    var index = array.indexOf(elem);
-    if (index > -1) {
-        array.splice(index, 1);
+const removeElement = (clients, id) => {
+   
+    const  index_remove =  clients.findIndex(client => client.id === id )
+    if (index_remove > -1) {
+        clients.splice(index_remove, 1);
     }
 }
-
+const clearallclient = () =>{
+    try{
+        aedes_clients.map((client)=>{
+            client.close()   //force disconnect client 
+            return true
+        })
+    }catch(e){
+        console.error('mqtt aedes clear client error')
+    }
+    
+}
+const handler_stopcommand =  async () =>{
+    return new Promise((resolve,reject )=>{
+        try{
+            clearallclient()
+            server.close()
+            resolve( true)
+        }catch(e){
+            console.error('close server Error')
+        }
+    }).catch(e=>{
+            console.error('close server Error')
+    })
+   
+}
+const  handler_startcommand = () =>{
+    try{
+        _mqtt_server_aedes_initial()
+    }catch(e){
+         console.error('mqtt start server Error')
+    }
+    return true
+}
+const handler_reconnect = async () =>{
+    try{
+      let _close_event =   await  handler_stopcommand()
+      let _start_event =  handler_startcommand()
+      return ( _close_event &  _start_event  )
+    }catch(e){
+         console.error('reconnect server Error')
+    }
+}
+       
 
 const _mqtt_server_aedes_initial = () => {
     const aedes = require('aedes')()
-    const server = require('net').createServer(aedes.handle)
+    server = require('net').createServer(aedes.handle)
     const port = PORT_MQTT_AEDES  
 
 
@@ -36,7 +83,7 @@ const _mqtt_server_aedes_initial = () => {
     })
     aedes.on('client', function (client) {
         if(client && client.id){
-            aedes_clients = [client.id , ...aedes_clients ]
+            aedes_clients = [client , ...aedes_clients ]
         }
         //console.log('Client Connected: \x1b[33m' + (client ? client.id : client) + '\x1b[0m', 'to broker', aedes.id)
     })
@@ -50,19 +97,21 @@ const _mqtt_server_aedes_initial = () => {
 
     aedes.on('disconnect', function (client) {
         removeElement(aedes_clients, client.id)
+        Apollo.updatemqttclients();
         //  console.log('Client Connected: \x1b[33m' + (client ? client.id : client) + '\x1b[0m', 'to broker', aedes.id)
     })
 
     aedes.on('publish', async function (packet, client) {
-          console.log('some one puclic', packet.topic)
-          mqtt_publich(packet,client)
-          if(client && client.id){
+          console.log('some one puclic', packet.topic )
             aedes_history_packets = [ packet , ...aedes_history_packets]
             if(aedes_history_packets.length > MAX_HISTORY_PACKET){
                 aedes_history_packets.pop()
             }
+            Apollo.updatehistorymqtt()
+          if(client && client.id){
+            mqtt_publich(packet,client)
+           // console.log('Client \x1b[31m' + (client ? client.id : 'BROKER_' + aedes.id) + '\x1b[0m has published', packet.payload.toString(), 'on', packet.topic, 'to broker', aedes.id)
           }
-        //console.log('Client \x1b[31m' + (client ? client.id : 'BROKER_' + aedes.id) + '\x1b[0m has published', packet.payload.toString(), 'on', packet.topic, 'to broker', aedes.id)
     })
 }
 
