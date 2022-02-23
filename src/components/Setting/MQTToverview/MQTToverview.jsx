@@ -34,10 +34,12 @@ export const MQTToverview = () =>{
           <div>
              <h2> Clients</h2>
              <div>
-                {
+                {  
+                  ( sub_mqttclient.data  && sub_mqttclient.data.sub_mqttclient ) ?
                     sub_mqttclient.data.sub_mqttclient.map( (client,index)=>(
                             {client}
                     ))
+                    :null
                 }
              </div>
           </div>
