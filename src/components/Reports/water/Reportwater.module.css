@@ -1,0 +1,295 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.container{
+    height: 100%;
+    padding: 20px;
+    min-width: 500px;
+
+}
+.container>.headText{
+    margin: 1rem;
+    
+
+}
+.container>.cardMain{
+    display: flex;
+    flex-wrap: nowrap;
+
+}
+
+.container>.cardMain>.cardData{
+    flex-basis: 45%;
+    margin: 1rem;
+    border: 1px solid black;
+    height: 100%;
+    padding: 15px;
+    border-radius: 10px;
+    min-width: 720px;
+    
+}
+.container>.cardMain>.cardData>.header{
+    background-color: darkgray;
+    padding-left: 2rem;
+}
+.container>.cardMain>.cardData>.body{
+    margin-top: 0.5rem;
+    padding: 5px;
+    text-align: center;
+}
+.container>.cardMain>.cardData>.body>.selectBuilding{
+    margin: 2rem;
+    padding: 10px;
+    border-bottom: 1px solid black;
+}
+.container>.cardMain>.cardData>.body>.selectBuilding>div:nth-child(1){
+    display: flex;
+    justify-content: center;
+}
+.container>.cardMain>.cardData>.body>.selectBuilding>div:nth-child(1)>label{
+    flex-basis: 20%;
+    
+}
+.container>.cardMain>.cardData>.body>.selectBuilding>div:nth-child(1)>select{
+    flex-basis: 20%;
+    text-align: center;
+}
+.container>.cardMain>.cardData>.body>.selectBuilding>div:nth-child(1)>input{
+    flex-basis: 20%;
+    text-align: center;
+    
+}
+.container>.cardMain>.cardData>.body>.selectBuilding>div:nth-child(1)>label:nth-child(5){
+    flex-wrap: wrap;
+    
+}
+.container>.cardMain>.cardData>.body>.selectDate{
+    padding: 10px;
+    margin: 2rem;
+    border-bottom: 1px solid black;
+}
+.container>.cardMain>.cardData>.body>.selectDate>div:nth-child(2){
+    display: flex;
+    justify-content: center;
+}
+.container>.cardMain>.cardData>.body>.selectDate>div:nth-child(2)>div:nth-child(2){
+    flex-basis:20%;
+    
+}
+.container>.cardMain>.cardData>.body>.selectDate>div:nth-child(2)>div:nth-child(5){
+    flex-basis: 20%;
+    
+}
+
+.container>.cardMain>.cardData>.body>.selectDate>div:nth-child(2)>label{
+    flex-basis: 20%;
+    min-width: 100px;
+}
+
+.container>.cardMain>.cardData>.body>.selectDate>div:nth-child(2)>input{
+    flex-basis: 15%;
+    margin: 0.5rem;
+    margin-top: 0;
+    min-width: 100px;
+}
+
+
+.container>.cardMain>.cardData>.body>.selectDefault{
+    margin: 2rem;
+    padding: 10px;
+    border-bottom: 1px solid black;
+}
+.container>.cardMain>.cardData>.body>.selectDefault>div:nth-child(2){
+    width: 50%;
+    margin: 0.5rem auto;
+    display: grid;
+    grid-template-columns: 180px 180px 180px;
+    grid-gap: 0.5rem;
+    
+}
+.container>.cardMain>.cardData>.body>.selectDefault>div:nth-child(4){
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    
+}
+.container>.cardMain>.cardData>.body>.selectDefault>div:nth-child(4)>label{
+    flex-basis: 15%;
+    margin-left: 0;
+    margin-right: 0.5rem;
+    
+    
+}
+.container>.cardMain>.cardData>.body>.selectDefault>div:nth-child(4)>input{
+    flex-basis: 20%;
+    text-align: center;
+    
+}
+
+.head{
+    text-align: left;
+    margin: 0.5rem;
+    font-size: large;
+}
+.head>input{
+    margin: 0.5rem;
+}
+
+.buttonStyles{
+    width: 100px;
+    transition: 0.1s;
+    cursor: pointer;
+}
+.buttonStyles:hover{
+    width: 100px;
+    transform: scale(1.05);
+}
+
+@media only screen and (max-width:1300px) {
+    .container>.cardMain{
+        flex-wrap: wrap;
+    
+    }
+    .container>.cardMain>.cardSelect>.cardBox{
+        min-width: 720px;
+    }
+
+    
+}
+
+
+input{
+    text-align: center;
+}
+select{
+    text-align: center;
+}
+
+
+
+.datePicker{
+    text-align: center;
+    width: 130px;
+    
+   
+}
+
+
+.container>.cardMain>.cardSelect{
+    flex-basis: 45%;
+    margin: 1rem;
+    border: 1px solid black;
+    height: 700px;
+    padding: 15px;
+    border-radius: 10px;
+}
+.container>.cardMain>.cardSelect>.cardBox>.header{
+    background-color: darkgray;
+    padding-left: 2rem;
+}
+
+.container>.cardMain>.cardSelect>.cardBox>.body>.resultData{
+    margin: 0.5rem;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: #daf7e7;
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
+    
+    
+}
+.container>.cardMain>.cardSelect>.cardBox>.body>.resultData>div{
+    
+    margin: 0.5rem auto;
+    padding: 15px;
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: 100px 1fr 220px 1fr;
+    
+}
+.container>.cardMain>.cardSelect>.cardBox>.body>.resultData>div>div:nth-child(8)>label:nth-child(2){
+    margin: 0.5rem;
+    
+    
+}
+.container>.cardMain>.cardSelect>.cardBox>.body>.resultDataTest{
+    margin: 0.5rem;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: rgb(239, 239, 240);
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
+    
+    
+}
+.container>.cardMain>.cardSelect>.cardBox>.body>.resultDataTest>div{
+    
+    margin: 0.5rem auto;
+    padding: 15px;
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: 100px 1fr 220px 1fr;
+    
+}
+.container>.cardMain>.cardSelect>.cardBox>.body>.resultDataTest>div>div:nth-child(8)>label:nth-child(2){
+    margin: 0.5rem;
+    
+    
+}
+.frontBold{
+    font-weight: bold;
+}
+.container>.cardMain>.cardSelect>.cardBox>.body>.tableContent{
+    margin: 0.5rem auto;
+    border-bottom: 1px solid black;
+    overflow: auto;
+    height: 24rem;
+    
+}
+.container>.cardMain>.cardSelect>.cardBox>.body>.tableContent>table{
+    margin: 1rem auto;
+    border-collapse: collapse;
+    margin-top: 0;
+    overflow: auto;
+    width: 98%;
+}
+.container>.cardMain>.cardSelect>.cardBox>.body>.tableContent>table>.header{
+    background-color: rgba(95,195,241,255);
+    position: sticky;
+    top: 0;
+}
+.container>.cardMain>.cardSelect>.cardBox>.body>.tableContent>table>.body{
+    table-layout: fixed;
+    max-height: 5px;
+    overflow: auto;
+}
+.container>.cardMain>.cardSelect>.cardBox>.button{
+   
+    padding: 20px;
+    text-align: right;
+}
+.container>.cardMain>.cardSelect>.cardBox>.button>button{
+    margin: 0.5rem;
+    width: 100px;
+    transition: 0.1s;
+    cursor: pointer;
+    
+}
+.container>.cardMain>.cardSelect>.cardBox>.button>button:hover{
+    transform: scale(1.05);
+    
+}
+
+.value{
+    margin-left: 1rem;
+}
+
+
+.ExplicitIcon{
+    color: rgb(8, 151, 72);
+}
+.PictureAsPdfIcon{
+    color: rgb(202, 149, 51);
+}
+.LocalPrintshopIcon{
+    color: rgb(51, 104, 202);
+}
