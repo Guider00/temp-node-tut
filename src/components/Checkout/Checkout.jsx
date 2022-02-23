@@ -25,6 +25,7 @@ import { API_ADD_Invoice , API_UPDATE_Invoice } from '../../API/Schema/Invoice/I
 import { API_CREATE_Checkin ,API_DELETE_Checkin , API_UPDATE_Checkin } from '../../API/Schema/Checkin/Checkin'
 import { API_CREATE_Contract , API_DELETE_Contract , API_UPDATE_Contract } from '../../API/Schema/Contract/Contract'
 import { API_CREATE_Receipt }  from '../../API/Schema/Receipt/Receipt'
+import { API_CREATE_Reimbursement } from '../../API/Schema/Reimbursement/Reimbursement'
 
 import { Rooms_to_table } from './function';
 
@@ -79,15 +80,16 @@ export const Checkout = () => {
 			RoomType:"",
 			checkout_date :"",
 			calculate_price_type:"ตามจำนวนวัน",
-			
+			rental_deposit:"",
+			total_cost:"",
 
-			start_unit_electrical : "",
+			start_unit_electrical : "0",
 			start_unit_electrical_date :"",
-			end_unit_electrical :  "",
+			end_unit_electrical :  "0",
 			end_unit_electrical_date :  "",
-			start_unit_water : "",
+			start_unit_water : "0",
 			start_unit_water_date : "",
-			end_unit_water :  "",
+			end_unit_water :  "0",
 			end_unit_water_date :  "",
 
 			cashback:""
@@ -138,6 +140,8 @@ export const Checkout = () => {
 			RoomType:"",
 			checkout_date :"",
 			calculate_price_type:"ตามจำนวนวัน",
+			rental_deposit:"",
+			total_cost:"",
 			
 
 			start_unit_electrical : "",
@@ -171,6 +175,8 @@ export const Checkout = () => {
 				RoomType:room.data.RoomType.name,
 				checkout_date :room.data.checkout_date,
 				calculate_price_type:"ตามจำนวนวัน",
+				rental_deposit:room.data.RoomType.deposit_rent,
+				total_cost:"",
 
 				start_unit_electrical : "",
 				start_unit_electrical_date :"",
@@ -188,8 +194,9 @@ export const Checkout = () => {
 
 	const GET_Rooms = useQuery(API_GET_Rooms);
 	const [ updateRoom, mutationuploadFile ] = useMutation(API_UPDATE_Room)
-	const [ crateInvoice ] = useMutation(API_ADD_Invoice)
+	const [ createInvoice ] = useMutation(API_ADD_Invoice)
 	const [ deleteContract] = useMutation(API_DELETE_Contract)
+	const [ createReimbursement ]  = useMutation(API_CREATE_Reimbursement)
 
 
 	useEffect(
@@ -496,13 +503,38 @@ export const Checkout = () => {
 															></input>
 														</div>
 													</div>
+
+													<div className={styles.row}>
+														<div className={styles.label}>
+															<label>เงินค่าเช่าล่วงหน้า</label>
+														</div>
+														<div className={styles.input}>
+															<input type="text" id="rental_deposit"   disabled={true} 
+															value={formdetailroom.rental_deposit} 
+															onChange={handlerchangeformdetailsroom}
+															></input>
+														</div>
+													</div>
+													<div className={styles.row}>
+														<div className={styles.label}>
+															<label>ค่าใช้จ่ายทั้งหมด</label>
+														</div>
+														<div className={styles.input}>
+															<input type="text" id="total_cost"  disabled={true}
+															value={formdetailroom.total_cost} 
+															onChange={handlerchangeformdetailsroom}
+															></input>
+														</div>
+													</div>
+
+
 													<div className={styles.row}>
 														<div className={styles.label}>
 															<label>คืนเงิน</label>
 														</div>
 														<div className={styles.input}>
-															<input type="text" id="cashback" 
-															value={formdetailroom.cashback} 
+															<input type="text" id="cashback"  disabled={true} 
+															value={ ( formdetailroom.rental_deposit -  formdetailroom.total_cost ) ?  formdetailroom.rental_deposit -  formdetailroom.total_cost  : 0 } 
 															onChange={handlerchangeformdetailsroom}
 															></input>
 														</div>
@@ -529,7 +561,7 @@ export const Checkout = () => {
 																			addvat:true 
 																		} } )
 																}
-																settableprice([...[
+																let _tableprice = [...[
 																	{name:"ค่าเช่า",number:1,
 																	price:_selectedroom.data.RoomType.monthlyprice,
 																	costvat:(Number(_selectedroom.data.RoomType.monthlyprice)*0.07).toFixed(2),
@@ -538,21 +570,27 @@ export const Checkout = () => {
 																	},
 																	{
 																	name:"ค่าไฟ",																	
-																	number:Number(formdetailroom.end_unit_electrical) - Number(formdetailroom.start_unit_electrical),
+																	number: ( Number(formdetailroom.end_unit_electrical ) - Number(formdetailroom.start_unit_electrical)) ?   ( Number(formdetailroom.end_unit_electrical ) - Number(formdetailroom.start_unit_electrical)) : 0    ,
 																	price:Number(_selectedroom.data.RoomType.rate_electrical),
 																	costvat:Number(Number(_selectedroom.data.RoomType.rate_electrical) * (Number(formdetailroom.end_unit_electrical) - Number(formdetailroom.start_unit_electrical))*0.07).toFixed(2),
 																	totalprice:Number(Number(_selectedroom.data.RoomType.rate_electrical) * (Number(formdetailroom.end_unit_electrical) - Number(formdetailroom.start_unit_electrical))*1.07).toFixed(2) ,
 																	addvat:true
 																	},
 																	{name:"ค่าน้ำ",
-																	number:Number(formdetailroom.end_unit_water) - Number(formdetailroom.start_unit_water),
+																	number: (Number(formdetailroom.end_unit_water) - Number(formdetailroom.start_unit_water) ) ? Number(formdetailroom.end_unit_water) - Number(formdetailroom.start_unit_water)  : 0 ,
 																	price:Number(_selectedroom.data.RoomType.rate_water),
 																	costvat:Number(Number(_selectedroom.data.RoomType.rate_water) * (Number(formdetailroom.end_unit_water) - Number(formdetailroom.start_unit_water))*0.07).toFixed(2),
 																	totalprice:Number(Number(_selectedroom.data.RoomType.rate_water) * (Number(formdetailroom.end_unit_water) - Number(formdetailroom.start_unit_water))*1.07).toFixed(2),
 																	addvat:true 
 																	},
 																	...option_room													
-																]])
+																]];
+															
+																settableprice(_tableprice)
+																let   _formdetailroom = JSON.parse(JSON.stringify ( formdetailroom))
+																_formdetailroom.total_cost =   _tableprice.reduce((acc,obj)=>{return acc+Number(obj.totalprice) ;} ,0 )  // sum totalprice 
+																setformdetailroom(_formdetailroom)
+
 															}
 														}}>
 														 คำนวณค่าใช้จ่าย <CalculateIcon/>
@@ -585,6 +623,12 @@ export const Checkout = () => {
 																	 seteditmodetableprices(!editmodetableprice)
 																 }}
 																 > {editmodetableprice ? "ยกเลิกการแก้ไข": "แก้ไขรายการค่าใช้จ่าย"} </button>
+																 <button onClick={ ()=>{
+																	 seteditmodetableprices(false)
+																  let   _formdetailroom = JSON.parse(JSON.stringify ( formdetailroom))
+																_formdetailroom.total_cost =   tableprice.reduce((acc,obj)=>{return acc+Number(obj.totalprice) ;} ,0 )  // sum totalprice 
+																setformdetailroom(_formdetailroom)
+																 }}> บันทึก</button>
 															</div>
 															<div className={styles.table}>
 															
@@ -657,8 +701,25 @@ export const Checkout = () => {
 
 
 													<div className={styles.rowmenu}>
-														<button disabled={(selectedroom === null)} onClick={ async ()=>{ 
+														<button disabled={
+															(selectedroom === null) ||  ( ( formdetailroom.rental_deposit -  formdetailroom.total_cost ) < 0)
+														} 
+														onClick={ async ()=>{ 
+															 // create ใบคืนเงินประกัน 
+															 try{
+																//  await createReimbursement({
+																// 	 variables:{
+																// 		 input:{
+																// 			 invoiceid:
+																// 			 contractid:
+																// 		 }
+																// 	 }
+																//  })
+															 }catch(e){
+																 	console.error(" สร้าง ใบคืนเงินประกัน Error ");
+															 }
 														 }}
+														
 														 > สร้างใบคืนเงินประกัน <PictureAsPdfIcon/> </button>
 														<button  disabled={(selectedroom === null)} onClick={ async ()=>{ 
 															console.log('tableprice',tableprice)
@@ -672,22 +733,30 @@ export const Checkout = () => {
 																
 																return {
 																		name: data.name,
-																		number: `${data.number}`,
 																		price: `${data.price}`,
+																		vat:"7",
+																		number_item: `${data.number}`,
+																		type_price : `ราคาไม่รวมvat`,
 																		selectvat : `${data.addvat}`,
-																		type_price : `ราคาไม่รวมvat`
+																		
 																		}
 															})
+
+
 															console.log('_list',_list)
-																let _res = await crateInvoice({
+															try{
+																let _res = await createInvoice({
 																			variables:{
 																				input:{
+																					roomid: selectedroom.id,
 																					status:"รอการชำระเงิน",
-																					lists:[..._list]
+																					lists: JSON.parse(JSON.stringify([..._list]))
 																				}
 																			}
 																		})
-
+															}catch(e){
+																console.error(" สร้าง Invoice Error ");
+															}
 															export_Invoice_pdf(selectedroom , newtable)
 
 														

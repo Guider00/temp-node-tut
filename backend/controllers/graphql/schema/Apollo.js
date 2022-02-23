@@ -157,6 +157,7 @@ let AllMeter  = ""
 let Rooms = ""
 var count = 0
  // << Test interval event 
+ /*
 setInterval(() => {
   adddevicelist("myport","mydevice","mytag",count++)
 
@@ -185,7 +186,7 @@ setInterval(() => {
 
 
 }, 1000);
-
+ */
 
 // ---------------------------- // 
 
@@ -195,9 +196,11 @@ const submqtt = [];
 const sub_abes_history_packets = []
 const sub_databasestatus = []
 const sub_devicemeterrealtime = [] 
+const sub_mqttabaseclients=[]
 const sub_rooms = []
 
 const resulte_history_packets = () => aedes_history_packets().map((item) => ({ payload: String.fromCharCode.apply(null, (JSON.parse(JSON.stringify(item.payload)).data)).replace(/(?:\r\n|\r|\n)/g, ''), topic: item.topic }))
+const resulte_mqttclients = () =>aedes_clients().map((item)=>({id:item.id})) 
 
 const subscribers = [];
 const onMqttUpdate = (fn) => submqtt.push(fn);  //  set new user 
@@ -205,7 +208,12 @@ const onMessagesUpdates = (fn) => subscribers.push(fn);   // save new user subsc
 const registersub = (arr_subscribers, fn) => { arr_subscribers.push(fn) }
 const onMessagesBroadcast = (subscribers) => { subscribers.forEach((fn) => fn()) } // broadcast to all user
 
-
+const updatehistorymqtt = ()=>{
+   onMessagesBroadcast(sub_abes_history_packets)
+}
+const updatemqttclients = () =>{
+   onMessagesBroadcast(sub_mqttabaseclients)
+}
 
 const typeDefs = gql`
 ${Checkinschema}
@@ -234,9 +242,12 @@ ${Reimbursementschema}
 type SubMQTTServerstatus{
   name:String!
 }
-
+type MQTTClient{
+  id:String!
+  
+}
 type MQTTHistory_packets{
-  topic:String!
+  topic:String
   payload:String
 }
 type Tag{
@@ -360,6 +371,7 @@ type Message {
     mqtthistory_packets:[MQTTHistory_packets!]
     subdatabasestatus:String
     subdevicemeterrealtime:[Tag!]
+    submqttabaseclients:[MQTTClient!] 
  
 
     
@@ -572,6 +584,7 @@ const resolvers = {
       subscribe: (parent, args, { user }) => {
 
         const channel = Math.random().toString(36).slice(2, 16); // generate  subscription id
+        console.log('resulte_history_packets',aedes_history_packets())
         registersub(sub_abes_history_packets, () => pubsub.publish(channel, { mqtthistory_packets: resulte_history_packets })); // << update new user  subscription
         setTimeout(() => pubsub.publish(channel, { mqtthistory_packets: resulte_history_packets }), 0); // <<  update ข้อมูล มายัง id ปัจจุบัน 
         return pubsub.asyncIterator(channel);  // << return data to  s
@@ -589,11 +602,22 @@ const resolvers = {
       }
 
     },
+    submqttabaseclients:{
+      subscribe: (parent,args,{ user} ) =>{
+
+       // if (user === undefined || user === null) { throw Error("Permission denied") }
+        const channel = Math.random().toString(36).slice(2, 15); // generate  subscription id
+       
+        registersub(sub_mqttabaseclients, () => pubsub.publish(channel, { submqttabaseclients: resulte_mqttclients })); // << update new user  subscription
+        setTimeout(() => pubsub.publish(channel, { submqttabaseclients: resulte_mqttclients }), 0); // <<  update ข้อมูล มายัง id ปัจจุบัน 
+        return pubsub.asyncIterator(channel);  // << return data to  s
+      }
+    },
      // << ยังไม่ได้ ทำ 
     subdevicemeterrealtime:{
       subscribe: (parent, args, { user }) => {
         console.log('user', user)
-        if (user === undefined || user === null) { throw Error("Permission denied") }
+        //  if (user === undefined || user === null) { throw Error("Permission denied") }
         const channel = Math.random().toString(36).slice(2, 15); // generate  subscription id
         registersub(sub_devicemeterrealtime, () => pubsub.publish(channel, { subdevicemeterrealtime: getAllMeter })); // << update new user  subscription
         setTimeout(() => pubsub.publish(channel, { subdevicemeterrealtime: getAllMeter }), 0); // <<  update ข้อมูล มายัง id ปัจจุบัน 
@@ -676,4 +700,5 @@ const startApolloServer = async (app) => {
 }
 
 exports.startApolloServer = startApolloServer
+exports.updatehistorymqtt= updatehistorymqtt
 
