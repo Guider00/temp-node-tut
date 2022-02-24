@@ -18,6 +18,11 @@ import { API_queryroomprice  , API_queryBuildings , API_queryFloors, API_updateR
 import {
 	API_GET_RoomType
 } from '../../API/Schema/setting/RoomType/RoomType';
+
+import {
+	API_GET_MeterRooms
+} from '../../API/Schema/MeterRoom/MeterRoom';
+
 import { useQuery, useMutation } from '@apollo/client';
 
 
@@ -212,13 +217,13 @@ let group_by_floor = uniqe_floors.map(floor => {
     return Rooms.filter(room => room.floor === floor)
 })
 
-console.log(group_by_floor)
+
 
 
 export const Overview = () => {
 
      const GET_RoomType  = useQuery(API_GET_RoomType)
-  
+     const  MeterRooms = useQuery(API_GET_MeterRooms)
     useEffect( ()=>{
         // let option_roomtype = [];
          
@@ -228,7 +233,8 @@ export const Overview = () => {
         //        console.log('option_roomtype',option_roomtype)
         //         setoptionRoomType(option_roomtype)
         // }
-    },[GET_RoomType])
+    
+    },[GET_RoomType.data , MeterRooms.data])
 
 
     const [_optionbuilding,setoptionbuilding] = useState([])
@@ -377,12 +383,19 @@ export const Overview = () => {
                type = type.map(e =>  ({label:e , value:e})  )
             }
 
-            let res_meterroom = await API_queryMeterRooms()
-            console.log('meter room',res_meterroom)
-            if(res_meterroom && res_meterroom.status === 200){
-                meterroom =  res_meterroom.data.MeterRooms.map(e =>  ({label:e.name , value:e.id})  )
+            // let res_meterroom = await API_queryMeterRooms()
+      
+            // if(res_meterroom && res_meterroom.status === 200){
+            //     meterroom =  res_meterroom.data.MeterRooms.map(e =>  ({label:e.name , value:e.id})  )
 
+            // }
+             
+            if( MeterRooms && MeterRooms.data && MeterRooms.data.length > 0 ){
+                
+                meterroom =   [...MeterRooms.data.MeterRooms.map(e=> ({label:e.name , value:e.id}) ) ] 
+              
             }
+
              let res_roomtype =    await GET_RoomType.refetch();
              console.log('res_roomtype',res_roomtype)
             if(res_roomtype && res_roomtype.data){
@@ -544,7 +557,7 @@ export const Overview = () => {
                         <label> ประเภทห้อง </label>
                         <select onchange={(e)=>{console.log(e.target.value)}}>
                              <option> All </option>
-                            { _optionRoomType ? _optionRoomType.map(item => <option>{item.label}</option>) :null}
+                            { _optionRoomType && _optionRoomType.length  ? _optionRoomType.map(item => <option>{item.label}</option>) :null}
                         </select>
                     </div>
 

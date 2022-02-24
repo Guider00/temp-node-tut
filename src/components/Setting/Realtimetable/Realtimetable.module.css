@@ -1,0 +1,50 @@
+.boxinput{
+    display: flex;
+    justify-content:center;
+   
+}
+.forminput{
+    display: flex;
+   
+    justify-content:center;
+    border-color: black;
+    border-radius: 1em;
+    border: 1px solid black;
+    padding: 1rem;
+    align-items:center
+}
+.forminput>.row50{
+    display: flex;
+    flex-basis: 50%;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+.forminput>.row50>label{
+    font-size: x-large;
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+.forminput>.row50>select{
+    font-size: large;
+    width: 100px;
+}
+
+.boxtable{
+    display: flex;
+    margin-top: 1rem;
+    padding: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.boxtable>.row{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    flex-basis: 100%;
+}
+.boxtable>.row>table{
+    min-width: 30rem;
+}
+
+

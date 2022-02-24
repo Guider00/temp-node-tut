@@ -25,8 +25,8 @@ const { RoomTypeschema,RoomTypeschema_query,RoomTypeschema_mutation ,queryRoomTy
  addlistoptioninRoomType , deletelistoptioninRoomType
  } = require('./RoomType/RoomType')
 const { RoomPriceschema} = require('./Roomprice/Roomprice')
-const { Portmeterschema } = require('./PortMeter/PortMeter')
-const { MeterRoomschema } = require('./MeterRoom/MeterRoom')
+
+
 
 
 
@@ -144,6 +144,31 @@ const Reimbursementmutation ={
 }
 
 
+
+const { Portmeterschema , Portmeterschema_query, Portmeterschema_mutation,Portmeters,queryPortmeterByid,createPortmeter,deletePortmeter,updatePortmeter }  =  require('./PortMeter/PortMeter') 
+const Portmeterquery = {
+   Portmeters : Portmeters,
+   queryPortmeterByid:queryPortmeterByid,
+}
+
+const Portmetermutation = {
+   createPortmeter : createPortmeter,
+   updatePortmeter :updatePortmeter,
+   deletePortmeter: deletePortmeter
+}
+
+ const { MeterRoomschema ,MeterRoomschema_query , MeterRoomschema_mutation, MeterRooms , queryMeterRoomByid , createMeterRoom,deleteMeterRoom,updateMeterRoom } = require('./MeterRoom/MeterRoom')
+const MeterRoomquery = {
+   MeterRooms : MeterRooms,
+   queryMeterRoomByid:queryMeterRoomByid,
+}
+const MeterRoommutation = {
+   createMeterRoom : createMeterRoom,
+   updateMeterRoom :updateMeterRoom,
+   deleteMeterRoom: deleteMeterRoom
+}
+
+
 const { Fileschema ,  UploadFile_query  ,  UploadFileschema_mutation  , UploadFile , singleUpload }  = require('./UploadFile/UploadFile') 
 
 const { getAllMeter , adddevicelist }  = require ('../../../MQTT/server/devicemeters')
@@ -157,7 +182,7 @@ let AllMeter  = ""
 let Rooms = ""
 var count = 0
  // << Test interval event 
- /*
+ 
 setInterval(() => {
   adddevicelist("myport","mydevice","mytag",count++)
 
@@ -165,18 +190,18 @@ setInterval(() => {
 
 setInterval(() => {
 
-  if (test !== JSON.stringify(aedes_history_packets()) || dbstatus !== readyState()) {
-    test = JSON.stringify(aedes_history_packets())
-    dbstatus = readyState()
+  // if (test !== JSON.stringify(aedes_history_packets()) || dbstatus !== readyState()) {
+  //   test = JSON.stringify(aedes_history_packets())
+  //   dbstatus = readyState()
 
-    // sub_abes_history_packets.forEach((sub_id) => pubsub.publish(sub_id,  { mqtthistory_packets: resulte_history_packets   }   ) )
-    onMessagesBroadcast(sub_abes_history_packets)
-    onMessagesBroadcast(sub_databasestatus)
+  //   // sub_abes_history_packets.forEach((sub_id) => pubsub.publish(sub_id,  { mqtthistory_packets: resulte_history_packets   }   ) )
+  //   onMessagesBroadcast(sub_abes_history_packets)
+  //   onMessagesBroadcast(sub_databasestatus)
 
 
-  } else {
+  // } else {
 
-  }
+  // }
 
   // << On change  meter device  >> //
   if( AllMeter  !==  JSON.stringify(getAllMeter() ) ) {
@@ -186,7 +211,7 @@ setInterval(() => {
 
 
 }, 1000);
- */
+ 
 
 // ---------------------------- // 
 
@@ -317,7 +342,8 @@ type Message {
     ${Receiptschema_query}
     ${Checkinschema_query}
     ${Reimbursementschema_query}
-
+    ${Portmeterschema_query}
+    ${MeterRoomschema_query}
     submqttserverstatus:[SubMQTTServerstatus]
     mqtthistory_packets:[MQTTHistory_packets]
     login(email:String!,password:String!):String
@@ -345,7 +371,8 @@ type Message {
      ${Receiptschema_mutation}
      ${Checkinschema_mutation}
      ${Reimbursementschema_mutation}
-
+     ${Portmeterschema_mutation}
+     ${MeterRoomschema_mutation}
     postMessage(user: String!, content: String!): ID!
     signup (email:String! , password:String! ,level:String!) : Signup
     login (email:String! , password:String!): Login!
@@ -444,6 +471,8 @@ const resolvers = {
     ...Receiptquery,
     ...Checkinquery,
     ...Reimbursementquery,
+    ...Portmeterquery,
+    ...MeterRoomquery,
 
 
   },
@@ -491,6 +520,8 @@ const resolvers = {
     ...Receiptmutation,
     ...Checkinmutation,
     ...Reimbursementmutation,
+    ...Portmetermutation,
+    ...MeterRoommutation,
     
  
 

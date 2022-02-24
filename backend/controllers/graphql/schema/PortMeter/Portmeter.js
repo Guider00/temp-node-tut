@@ -33,6 +33,16 @@ input PortmeterInput {
     version: String
  }
        `
+const _Portmeter_query =`
+    Portmeters :[Portmeter]
+    queryPortmeterByid: Portmeter
+`
+const _Portmeter_mutation = `
+    createPortmeter(input:PortmeterInput):MessageCreate!,
+    updatePortmeter(id:ID!,input:PortmeterInput):MessageUpdate,
+    deletePortmeter(id:ID!):MessageDelete
+`
+
 const _createPortmeter = async (payload) => {
     try {
         if (payload && payload.input) {
@@ -48,7 +58,7 @@ const _createPortmeter = async (payload) => {
     }
 }
 
-const _queryPortmeters = async() =>{
+const _Portmeters = async() =>{
     try {
         let estimatedDocumentCount = await db.estimatedDocumentCount();
         let resulted = await db.find({})
@@ -102,8 +112,14 @@ const _queryPortmeterByid = async(payload) =>{
 
 
 exports.queryPortmeterByid = _queryPortmeterByid
-exports.queryPortmeters    = _queryPortmeters
+exports.Portmeters    = _Portmeters
 exports.updatePortmeter    = _updatePortmeter
 exports.deletePortmeter    = _deletePortmeter
 exports.createPortmeter    = _createPortmeter
+
+exports.Portmeterschema_query = _Portmeter_query
+exports.Portmeterschema_mutation = _Portmeter_mutation
+
 exports.Portmeterschema    = _Portmeterschema
+
+

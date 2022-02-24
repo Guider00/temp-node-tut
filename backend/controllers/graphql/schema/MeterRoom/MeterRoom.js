@@ -67,6 +67,17 @@ input MeterRoomInput {
  }
        `
 
+const _MeterRoomschema_query =`
+    MeterRooms :[MeterRoom],
+    queryMeterRoomByid: MeterRoom
+`
+
+const _MeterRoomschema_mutation =`
+    createMeterRoom(input:MeterRoomInput):MessageCreate!,
+    updateMeterRoom(id:ID!,input:MeterRoomInput):MessageUpdate,
+    deleteMeterRoom(id:ID!):MessageDelete
+`
+
 
 
 const _queryMeterRoomByid = async (payload) =>{
@@ -85,7 +96,7 @@ const _queryMeterRoomByid = async (payload) =>{
         return error
     }
 }
-const _queryMeterRooms = async () => {
+const _MeterRooms = async () => {
     try {
         let resulted = await db.find({})
         let data = await Promise.all( resulted.map(payload => payload._doc).map( async (payload) => {
@@ -164,13 +175,21 @@ const _updateMeterRoomwater = async (payload) => {
 
 
 exports.queryMeterRoomByid      = _queryMeterRoomByid
-exports.queryMeterRooms         = _queryMeterRooms
+exports.MeterRooms         = _MeterRooms
 
-exports.updateMeterRoom         = _updateMeterRoom
+
+
+
 exports.updateMeterRoomkwh      = _updateMeterRoomkwh
 exports.updateMeterRoomwater    = _updateMeterRoomwater
+
+exports.updateMeterRoom         = _updateMeterRoom
 exports.deleteMeterRoom         = _deleteMeterRoom
 exports.createMeterRoom         = _createMeterRoom
+
+
+exports.MeterRoomschema_query   = _MeterRoomschema_query
+exports.MeterRoomschema_mutation = _MeterRoomschema_mutation
 
 exports.MeterRoomschema         = _MeterRoomschema
 

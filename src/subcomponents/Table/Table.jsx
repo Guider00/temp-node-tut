@@ -24,7 +24,7 @@ export const  Table = ({Data,onClickDelete , onClickEdit , maxWidth}) =>{
              <div className={styls.div}> 
                <table className={styls.table}>
              
-                
+                    
                        
                     <tbody >
                          <tr>
@@ -65,11 +65,7 @@ export const  Table = ({Data,onClickDelete , onClickEdit , maxWidth}) =>{
 
                          }
 
-                              {/*
-                                |   #   | name           | name2          | ....
-                                |   1   | body[property] | body[property] | ....
-                                |   2   | body[property] | body[property] | ....
-                            */}
+                           
                          </tr>
                          
                         
@@ -86,12 +82,12 @@ export const  Table = ({Data,onClickDelete , onClickEdit , maxWidth}) =>{
 
                           
                                 <>
-                                   <td  key={`tbl_${input.property}_index`}>
+                                   <td  key={`tbl_${input.property}_${index}`}>
                                         <div>
                                              {
                                               input.idtolabel ? 
-                                              <input value={  input.idtolabel( data_display(ele_body,input.property) )  } type="text"/>  :
-                                              <input value={ data_display(ele_body,input.property)} type="text"/> 
+                                              <input disabled={true} value={  input.idtolabel( data_display(ele_body,input.property) )  } type="text"/>  :
+                                              <input disabled={true} value={ data_display(ele_body,input.property)} type="text"/> 
                                              }
                                            
                                         </div>
@@ -108,7 +104,7 @@ export const  Table = ({Data,onClickDelete , onClickEdit , maxWidth}) =>{
                                     Data.disablemenu ?
                                     ( Data.topic.length > (width > 800? (6) : (4)) ) ?  <td></td> : null 
                                      :  // << disable menu 
-                                    <td key={row_index}>
+                                    <td key={`menutable_${row_index}`}>
                                             <div>
                                                 <button onClick={()=>{ 
                                                     onClickDelete?
@@ -130,6 +126,9 @@ export const  Table = ({Data,onClickDelete , onClickEdit , maxWidth}) =>{
 
                         
                     </tbody> 
+
+
+
                 </table>
                 </div>
             : null
