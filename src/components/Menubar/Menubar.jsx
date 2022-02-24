@@ -265,6 +265,7 @@ export const Menubar = () => {
                             { label: "Portmeter", href: "/Portmeter", icon: "settings" },
                             { label: "overviewmeter", href: "/overviewmeter", icon: "settings" },
                             { label: "MQTTOverview", href: "/MQTToverview", icon: "settings" },
+                            { label: "Realtimetable", href: "/Realtimetable", icon: "settings" },
                             { label: "Address" , href: "/Address",icon: "settings"}
 
                         ]} />

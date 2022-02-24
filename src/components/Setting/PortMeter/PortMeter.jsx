@@ -1,6 +1,8 @@
 
 import { useEffect, useState } from "react"
 import styles from "./Portmeter.module.css"
+import {  useQuery } from '@apollo/client';
+
 import Add from '@material-ui/icons/Add';
 import Table from '../../../subcomponents/Table/Table'
 
@@ -10,6 +12,8 @@ import { Validate } from '../../../subcomponents/Regex/Regex'
 
 import {  API_createPortmeter, API_updatePortmeter, API_deletePortmeter,   API_queryPortmeters } from '../../../API/index'
 
+
+import {   API_GET_Portmeters   } from '../../../API/Schema/PortMeter/PortMeter'
 
 export const Portmeter = () => {
     const [_portmeters, setportmeters] = useState({
@@ -31,6 +35,9 @@ export const Portmeter = () => {
         setportmeters({ ...catch_value })
 
     }
+
+     const Portmeters = useQuery(API_GET_Portmeters);
+
 
     const [_load, setload] = useState(false);
 
@@ -129,9 +136,11 @@ export const Portmeter = () => {
     useEffect(() => {
         const getAPI = async () => {
 
-            let table = await API_query()
-             
-
+           // let table = await API_query()
+           let  table = [] 
+            if(Portmeters.data){
+                table = [...Portmeters.data.Portmeters]
+            }
 
 
 
@@ -343,7 +352,7 @@ export const Portmeter = () => {
             setload(true)
         }
         getAPI()
-    }, [_load])
+    }, [_load , Portmeters.data])
 
 
 

@@ -97,12 +97,12 @@ export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs, Mo
                                                                     , e.form.fn_compare))
                                                         }
                                                         onChange={event =>  {console.log('event.target.value',event.target.value,e.form.options) ; onchange(event.target.value, index , e.property) } } >
-                                                        {
+                                                        { e && e.form && e.form.options ?
                                                             e.form.options.map((opt, index) =>
                                                                 <option value={opt.value} >
                                                                     {opt.label}
                                                                 </option>
-                                                            )
+                                                            ) : null
                                                         }
                                                     </select>
                                                 </div> : null

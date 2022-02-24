@@ -1,4 +1,56 @@
 
+import { gql } from '@apollo/client';
+
+
+export const API_GET_Portmeters = gql`
+
+query{
+    Portmeters {
+                id
+                name
+                protocol
+                comport
+                baudrate
+                readtimeout
+                writetimeout
+                stopbits
+                databits
+                autoreconnect
+                ipaddress
+                tcp_port
+                topic
+                version     
+      }
+}
+
+`;
+export const API_CREATE_Portmeter = gql`
+    mutation createPortmeter($input:PortmeterInput!){
+        createPortmeter(input: $input){
+             id
+             errors
+        }
+    }
+`;
+export const API_DELETE_Portmeter = gql`
+	mutation deletePortmeter($id: ID!) {
+		deletePortmeter(id: $id) {
+			n
+			deletedCount
+		}
+	}
+`;
+export const API_UPDATE_Portmeter = gql`
+mutation updatePortmeter($id:ID! , $input:PortmeterInput){
+	updatePortmeter(id:$id,input:$input){
+		n
+		nModified
+	}
+}
+` ;
+
+
+
 
 export const queryPortmeterByid = (id) =>{
     return {query:`

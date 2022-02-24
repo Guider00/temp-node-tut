@@ -1,4 +1,4 @@
-const { queryMeterRooms  } = require('../../controllers/graphql/schema/MeterRoom/MeterRoom')
+const { MeterRooms  } = require('../../controllers/graphql/schema/MeterRoom/MeterRoom')
 const {inc_rx }  = require('./command')
 
 const {adddevicelist } = require ('./devicemeters')
@@ -55,7 +55,7 @@ const _mqtt_publich = async (packet,client) =>{
 
             setTimeout(async() => {
                 try{
-                const meters = await queryMeterRooms()
+                const meters = await MeterRooms()
             //    let  listdevices =    meters.map(  x =>  {  return x } ) // <<  get only have deveui   [obj , obj ]
        
 

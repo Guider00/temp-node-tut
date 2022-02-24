@@ -1,3 +1,66 @@
+import { gql } from '@apollo/client';
+
+
+
+export const API_GET_MeterRooms = gql`
+
+query{
+ 	MeterRooms {
+    id
+    name
+    portmeter{
+      id
+      name
+      protocol
+    }
+    deveui
+    device_address
+    device_model
+    inmemory_kwh
+    inmemory_finished_kwh
+    inmemory_kwh_date
+    
+    inmemory_water
+    inmemory_finished_water
+    inmemory_finished_water_date
+
+  }
+}
+
+`;
+export const API_CREATE_MeterRoom = gql`
+    mutation createMeterRoom($input:MeterRoomInput!){
+        createMeterRoom(input: $input){
+             id
+             errors
+        }
+    }
+`;
+export const API_DELETE_MeterRoom = gql`
+	mutation deleteMeterRoom($id: ID!) {
+		deleteMeterRoom(id: $id) {
+			n
+			deletedCount
+		}
+	}
+`;
+export const API_UPDATE_MeterRoom = gql`
+mutation updateMeterRoom($id:ID! , $input:MeterRoomInput){
+	updateMeterRoom(id:$id,input:$input){
+		n
+		nModified
+	}
+}
+` ;
+
+
+
+
+
+
+
+
+
 
 export const queryMeterRoomByid = (id) =>{
     return {query:`
