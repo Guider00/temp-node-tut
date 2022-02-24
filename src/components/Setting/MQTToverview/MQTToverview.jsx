@@ -27,7 +27,7 @@ export const MQTToverview = () => {
       setClickedHistory(index)
 
    }
-  
+
 
 
    const handlerstartmqttserver = () => {
@@ -143,14 +143,13 @@ export const MQTToverview = () => {
                                        name={`li-history${index}`}
                                        onClick={() => toggle(index)}
                                     >
-                                       {index + 1}  topic  {history.topic}
+                                       {index + 1}    
 
                                        <div className={styles.historyInfo}>
                                           {clickedHistory === index ?
                                              <div>
-                                                <h5>payload</h5>
-                                                {history.payload}
-
+                                                <div> <label style = {{fontWeight:'bold'}}>topic :</label> {history.topic} </div>
+                                                <div> <label style = {{fontWeight:'bold'}}>payload :</label> {history.payload} </div>
                                              </div>
                                              : null}
 
