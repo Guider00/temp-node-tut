@@ -1,0 +1,254 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.container{
+    width: 100%;
+    height: 100%;
+}
+.container>.card{
+    margin: 0.5rem;
+    padding: 5px;
+    height: 90%;
+    min-width: 600px;
+    border: 1px solid black;
+    border-radius: 5px;
+    box-shadow: 1px 1px 10px  rgba(0, 0, 0, 0.3);
+    background-color: rgb(243, 244, 245);
+
+}
+.container>.card>.header{
+    padding: 5px;
+    margin: 0.5rem auto;
+    margin-bottom: 0;
+    display: flex;
+    justify-content: center;
+    
+}
+
+.container>.Content{
+    padding-left: 1rem;
+    width: 250px;
+    margin: 1rem;
+    text-align: center;
+
+}
+
+.container>.card>.header>.Status{
+    flex-basis: 30%;
+    height: 150px;
+    display: grid;
+    margin: 0.5rem;
+    padding: 5px;
+    border-radius: 10px;
+    margin-bottom: 0;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+    border: 1px solid black;
+    background-color: rgb(255, 255, 255);
+
+}
+.lastMessage{
+    margin: 0.5rem;
+    flex-basis: 30%;
+    height: 150px;
+    border-radius: 10px;
+    border: 1px solid black;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+    padding: 5px;
+    background-color: rgb(255, 255, 255);
+}
+.container>.card>.header>.Status>h2{
+    margin: 0.5rem auto;
+
+}
+.container>.card>.header>.Status>div{
+    display: flex;
+    justify-content: center;
+}
+.container>.card>.header>.Status>div>div:nth-child(1){
+    width: 15%;
+    min-width: 80px;
+    margin: 0.2rem;
+    text-align: center;
+    
+}
+.container>.card>.header>.Status>div>div:nth-child(1)>button{
+    width: 32px;
+    border-radius: 100px;
+    
+}
+
+.container>.card>.header>.Status>div>div:nth-child(2){
+    width: 15%;
+    min-width: 80px;
+    margin: 0.2rem;
+    text-align: center;
+    
+}
+.container>.card>.header>.Status>div>div:nth-child(2)>button{
+    width: 32px;
+    border-radius: 100px;
+    
+}
+.container>.card>.header>.Status>div>div:nth-child(3){
+    width: 15%;
+    min-width: 80px;
+    margin: 0.2rem;
+    text-align: center;
+    
+}
+.container>.card>.header>.Status>div>div:nth-child(3)>button{
+    width: 32px;
+    border-radius: 100px;
+    
+}
+
+
+.container>.card>.body{
+    margin: 0.5rem auto;
+    width: 90%;
+    padding: 20px;
+    padding-top: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr ;
+    grid-gap: 12px;
+}
+
+@media only screen and (max-width:900px) {
+    .container>.card>.body{
+        
+        padding: 20px;
+        display: grid;
+        grid-template-columns: 1fr ;
+        grid-gap: 5px;
+    }
+
+    
+}
+
+
+.container>.card>.body>.clients{
+    padding: 5px;
+    border: 1px solid black;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background-color: rgb(232, 243, 252);
+    
+}
+.container>.card>.body>.clients:hover{
+    background-color: rgb(255, 255, 255);
+    
+}
+
+.container>.card>.body>.clients>.head{
+    margin: 0.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+.container>.card>.body>.clients>.head>h2{
+    margin: 0.5rem;
+    
+}
+.container>.card>.body>.clients>.head>button{
+    margin: 0.5rem;
+    height: 20%;
+    display: flex;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    
+}
+.container>.card>.body>.clients>.head>button:hover{
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);
+    
+}
+.container>.card>.body>.clients>.head>button>label{
+    margin: 0.2rem;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+.downIcon{
+    color: aliceblue;
+    height: 25px;
+    width: 50px;
+    transform: rotate(0);
+}
+.upIcon{
+    transform: rotate(180deg);
+}
+.container>.card>.body>.viewHistory{
+    padding: 10px;
+    border: 1px solid black;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background-color: rgb(185, 220, 248);
+}
+.container>.card>.body>.viewHistory:hover{
+    background-color: rgb(255, 255, 255);
+    
+}
+.container>.card>.body>.viewHistory>.head{
+    margin: 0.5rem;
+    display: flex;
+    justify-content: center;
+}
+.container>.card>.body>.viewHistory>.head>h2{
+    margin: 0.5rem;
+    
+}
+.container>.card>.body>.viewHistory>.head>button{
+    margin: 0.5rem;
+    height: 20%;
+    display: flex;
+    padding: 5px;
+    border-radius: 5px;
+    color: rgb(255, 255, 255);
+    
+}
+.container>.card>.body>.viewHistory>.head>button:hover{
+    cursor: pointer;
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);
+    
+}
+.container>.card>.body>.viewHistory>.head>button>label{
+    margin: 0.2rem;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+.clientData{
+    background-color: rgb(234, 243, 222);
+    max-height: 400px;
+    overflow: auto;
+    border-radius: 5px;
+}
+.historyTopic{
+    background-color: rgb(245, 243, 238);
+    max-height: 400px;
+    overflow: auto;
+    border-radius: 5px;
+    
+}
+.messageData{
+    background-color: rgb(245, 216, 245);
+    max-height: 80px;
+    overflow: auto;
+    border-radius: 5px;
+
+}
+.lastMessage>.head{
+    margin: 0.5rem;
+    display: flex;
+    justify-content: center;
+}
+.lastMessage>.head>h2{
+    margin: 0.5rem;
+    
+}
+.historyInfo{
+    border-radius: 5px;
+    background-color: rgb(206, 235, 206);
+}
