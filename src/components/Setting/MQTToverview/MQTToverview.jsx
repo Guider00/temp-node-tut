@@ -143,12 +143,11 @@ export const MQTToverview = () => {
                                        name={`li-history${index}`}
                                        onClick={() => toggle(index)}
                                     >
-                                       {index + 1}    
+                                       {index + 1}  <label style = {{fontWeight:'bold'}}>topic :</label> {history.topic} 
 
                                        <div className={styles.historyInfo}>
                                           {clickedHistory === index ?
                                              <div>
-                                                <div> <label style = {{fontWeight:'bold'}}>topic :</label> {history.topic} </div>
                                                 <div> <label style = {{fontWeight:'bold'}}>payload :</label> {history.payload} </div>
                                              </div>
                                              : null}
