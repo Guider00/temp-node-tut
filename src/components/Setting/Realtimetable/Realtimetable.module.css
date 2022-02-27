@@ -1,3 +1,9 @@
+*{
+    margin: 0;
+    padding: 0;
+    
+}
+
 .boxinput{
     display: flex;
     justify-content:center;
@@ -7,9 +13,7 @@
     display: flex;
    
     justify-content:center;
-    border-color: black;
     border-radius: 1em;
-    border: 1px solid black;
     padding: 1rem;
     align-items:center
 }
@@ -26,25 +30,82 @@
 }
 .forminput>.row50>select{
     font-size: large;
-    width: 100px;
+    width: 90px;
+    border: 0.5px solid black;
+    border-radius: 5px;
 }
-
+.forminput>.row50>select:hover{
+    border: 0.5px solid rgb(20, 162, 172);
+    
+}
+.button{
+    font-size: larger;
+    height: 30px;
+    color: rgb(235, 134, 1);
+    width: 30px;
+    margin: 0.5rem;
+    border-radius: 50px;
+}
 .boxtable{
-    display: flex;
     margin-top: 1rem;
+}
+.boxtable>.topic{
+    text-align: center;
     padding: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
+}
+.boxtable>.topic>h3{
+    font-size: 1.5rem;
 }
 .boxtable>.row{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    text-align: center;
     padding: 1rem;
-    flex-basis: 100%;
 }
 .boxtable>.row>table{
-    min-width: 30rem;
+    border-collapse:collapse ;
+    width: 100%;
+    height: 100%;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+}
+.boxtable>.row>table>tbody>tr:hover{
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
 }
 
+.nextpage{
+    margin: 0.5rem;
+}
 
+.container{
+    min-width: 650px;
+    width:100%;
+    border-radius: 10px;
+    height: 860px;
+    font-family: 'Fahkwang', sans-serif;
+    background-color: azure;
+}
+.container>.header{
+    min-width: 460px;
+    padding: 1rem;
+    border-radius: 10px;
+    margin: 1rem auto;
+    text-align: center;
+    width: 40%;
+    border: 1px solid black;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 2px 0 rgb(90 97 105 / 11%), 0 4px 8px rgb(90 97 105 / 12%), 0 10px 10px rgb(90 97 105 / 6%), 0 7px 70px rgb(90 97 105 / 10%);
+}
+.container>.header>h1{
+    margin: 0.5rem;
+    color: rgb(0, 0, 0);
+}
+
+.container>.body{
+    min-width: 460px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 1rem auto;
+    width: 60%;
+    height:50%;
+    border: 1px solid black;
+    box-shadow: 0 2px 0 rgb(90 97 105 / 11%), 0 4px 8px rgb(90 97 105 / 12%), 0 10px 10px rgb(90 97 105 / 6%), 0 7px 70px rgb(90 97 105 / 10%);
+}
