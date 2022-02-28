@@ -56,7 +56,8 @@ const _queryReimbursementByid = async(payload ,payload2) =>{
             resulted.Invoice = await require (`../Invoice/Invoice`).queryInvoiceByid({id : resulted.invoiceid } )
         }
         if(resulted.contractid){
-             resulted.Contract = await require (`../Contract/Contract`).queryContractdetailsByid({id : resulted.contractid } )
+         //    resulted.Contract = await require (`../Contract/Contract`).queryContractdetailsByid({id : resulted.contractid } )
+         resulted.Contract = await require (`../Contract/Contract`).queryContractByid({id : resulted.contractid } )
         }
 
         return (
@@ -74,7 +75,7 @@ const _Reimbursements =async (filter) =>{
             if(payload){
                 payload.id = payload._id.toString()
                 payload.Invoice  = await require (`../Invoice/Invoice`).queryInvoiceByid({id:payload.invoiceid})
-                payload.Contract = await require (`../Contract/Contract`).queryContractdetailsByid({id:payload.contractid})
+                payload.Contract = await require (`../Contract/Contract`).queryContractByid({id:payload.contractid})
 
                 return payload
             }else{

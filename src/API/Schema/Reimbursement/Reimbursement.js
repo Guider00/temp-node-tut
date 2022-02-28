@@ -53,6 +53,20 @@ export const API_GET_Reimbursement = gql`
                 Check_in
                 status
                 Check_out
+                
+                Room{
+                        id
+                        name
+                        members{
+                                name
+                                lastname
+                        }
+                        floor{
+                                building{
+                                        name
+                                }
+                        }
+                }
             
                 
             }
