@@ -1,0 +1,109 @@
+.containerDialog{
+    width:500px;
+    max-width: 100%;
+    margin: 0 auto;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 999;
+    padding: 10px 20px 40px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(198, 198, 218);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.containerDialog>.titleClose{
+ display: flex;
+ justify-content: flex-end;
+}
+.containerDialog>.titleClose>.close{
+   
+    background-color: rgb(198, 198, 218);
+    color: crimson;
+    cursor: pointer;
+    font-size: larger;
+    border: none;
+   }
+   .containerDialog>.titleClose>.close:hover{
+    box-shadow: 0px 5px 15px;
+    border-radius: 40px;
+   }
+
+  
+
+.containerDialog>.body{
+    display: inline-block;
+    text-align: center;
+    margin-top: 5px;
+    
+   }
+   .containerDialog>.footer{
+       text-align: center;
+      
+   }
+
+   .containerDialog>.footer>.confirm{
+    width: 80px;
+    height: 40px;
+    margin: 10px;
+    margin-left: 40px;
+    border: none;
+    cursor: pointer;
+    background-color: royalblue;
+    border-radius: 10px;
+   }
+   .containerDialog>.footer>.confirm{
+    width: 80px;
+    height: 40px;
+    margin: 10px;
+    margin-left: 40px;
+    border: none;
+    cursor: pointer;
+    background-color: royalblue;
+    border-radius: 10px;
+    transition: 0.3s;
+   }
+
+
+   .containerDialog>.footer>.confirm:hover{
+    transform: translate(0,-6px);
+    box-shadow: 10px -10px 25px 0 rgba(57, 168, 202, 0.5),-10px 10px 25px 0 rgba(34, 138, 223, 0.5);
+    cursor: pointer;
+    
+   
+   }
+   .containerDialog>.footer>.cancel{
+    width: 80px;
+    height: 40px;
+    margin: 10px;
+    border: none;
+    cursor: pointer;
+    background-color: crimson;
+    border-radius: 10px;
+    transition: 0.3s;
+   }
+   .containerDialog>.footer>.cancel:hover{
+    transform: translate(0,-6px);
+    box-shadow: 10px -10px 25px 0 rgba(224, 83, 83, 0.5),-10px 10px 25px 0 rgba(228, 133, 133, 0.5);
+    cursor: pointer;
+   }
+  
+.span{
+    margin: 1rem;
+    color: red;
+    height: 20px;
+    display: none;
+}
+
+
+input:invalid ~ .span{
+    display: block;
+}
+
+input:invalid[focused = "true"]{
+    border: 1px solid red;
+}
+
+

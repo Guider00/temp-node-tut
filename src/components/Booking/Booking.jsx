@@ -39,9 +39,6 @@ import {
 	API_UPDATE_Room
 } from '../../API/Schema/Room/Room'
 
-//Dialog
-import { DialogFunction } from "../../subcomponents/Dialog/Dialog";
-
 const filter_rooms = (rooms, options_search, DateStart, DateEnd) => {
 	let _filter_table = []
 	if (rooms && options_search) {
@@ -161,6 +158,7 @@ export const Booking = () => {
 	})
 
 	const [action, setaction] = useState('create');
+
 
 	const setdefault_forminput = () => {
 		setformbooking({
@@ -404,9 +402,6 @@ export const Booking = () => {
 
 
 	}
-	//Dialog
-
-    const { defaultDialog, handleDialog, checkData } = DialogFunction();
 
 
 	//Calendar
