@@ -195,8 +195,11 @@ export const Checkout = () => {
 	const GET_Rooms = useQuery(API_GET_Rooms);
 	const [ updateRoom, mutationuploadFile ] = useMutation(API_UPDATE_Room)
 	const [ createInvoice ] = useMutation(API_ADD_Invoice)
+	const [ invoicecheckout ,setinvoicecheckout ] = useState("")
 	const [ deleteContract] = useMutation(API_DELETE_Contract)
 	const [ createReimbursement ]  = useMutation(API_CREATE_Reimbursement)
+
+
 
 
 	useEffect(
@@ -706,15 +709,24 @@ export const Checkout = () => {
 														} 
 														onClick={ async ()=>{ 
 															 // create ใบคืนเงินประกัน 
+															 console.log('selectedroom',)
 															 try{
-																//  await createReimbursement({
-																// 	 variables:{
-																// 		 input:{
-																// 			 invoiceid:
-																// 			 contractid:
-																// 		 }
-																// 	 }
-																//  })
+															//	 console.log(`invoiceid':${ invoiceid }+ 'contractid: ${ contractid } `)
+															  let data =  await createReimbursement({
+																	 variables:{
+																		 input:{
+																			 invoiceid: invoicecheckout,
+																			 cashback : ( formdetailroom.rental_deposit -  formdetailroom.total_cost ).toString(),
+																			 contractid: selectedroom.data.Contract.id
+																		 }
+																	 }
+																 })
+																if( data ){
+
+																}else{
+																	console.error('data',data)
+																}
+															
 															 }catch(e){
 																 	console.error(" สร้าง ใบคืนเงินประกัน Error ");
 															 }
@@ -754,6 +766,10 @@ export const Checkout = () => {
 																				}
 																			}
 																		})
+																if(_res && _res.data){
+																	setinvoicecheckout(_res.data.id)
+																}
+
 															}catch(e){
 																console.error(" สร้าง Invoice Error ");
 															}

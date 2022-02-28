@@ -3,7 +3,7 @@ const mongoose = require("mongoose")
 const schemaDefinition = new mongoose.Schema({
 
   
-    cashback_date:{type:String},
+    cashback_date:{type:String,default:  new Date()  },
     status:{type:String , default:"ยังไม่คืน"},
     cashback:{type:String , default: "0"},
     invoiceid:{type:String},

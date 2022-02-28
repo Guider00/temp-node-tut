@@ -4,6 +4,7 @@ import { useEffect,useState } from "react";
 import { useMutation,useQuery } from "@apollo/client";
 import { API_GET_Reimbursement,API_ADD_Reimbursement,API_DELETE_Reimbursement,API_UPDATE_Reimbursement} from '../../API/Schema/Reimbursement/Reimbursement'
 import {  export_Reimbursement_pdf } from '../../general_functions/pdf/export/export_pdf';
+import {  toYYMMDD } from '../../general_functions/convert';
 import { Rooms_to_table , filter_rooms} from "./function";
 
 //address
@@ -26,12 +27,17 @@ export const  Reimbursement = () => {
     const { defaultData } = AddressData();
 
     const getReimbursement = useQuery(API_GET_Reimbursement)
-    console.log("getReimbursement",getReimbursement)
+  
     const [rooms , setrooms] = useState([]);
     const [FilterRooms,setFilterRooms] = useState([]);
+    const [Reimbursements, setReimbursements] = useState([]);
+    const [FilterReimbursements, setFilterReimbursements] = useState([]);
+    const [ selectedReimbursements , setselectedReimbursements] = useState([]);
+
     const [ IDrooms , setIDrooms]=useState([]);
     const [deleteReimbursement , mutationdeleteReimbursement] = useMutation(API_DELETE_Reimbursement)
-    
+    const [updateReimbursement , mutationupdateReimbursement] = useMutation(API_UPDATE_Reimbursement)
+
     const [formFilter ,setFormfilter] = useState({
         id: null,
         option_search:'ทั้งหมด',
@@ -57,7 +63,7 @@ export const  Reimbursement = () => {
         let _formFilter = formFilter
         
         if(e.target.id === 'text'){
-            let text = /[^0-9a-zA-Zก-๙/]/ig;
+            let text = /[^0-9_-a-zA-Zก-๙/]/ig;
             e.target.value = e.target.value.replace(text,'')
             _formFilter[e.target.id] = e.target.value;
             setFormfilter({..._formFilter})
@@ -78,16 +84,42 @@ export const  Reimbursement = () => {
     useEffect(()=>{
 
         if(getReimbursement && getReimbursement.data && getReimbursement.data.Reimbursements){
-            let _rooms = rooms
-            _rooms = Rooms_to_table(getReimbursement.data.Reimbursements)
-            setrooms([..._rooms])
-            setFilterRooms([..._rooms])
-            console.log('validateRoom',_rooms)
-            
-            
+
+          
+            let _Reimbursements =  [...getReimbursement.data.Reimbursements]
+            setReimbursements( _Reimbursements )
+            if(formFilter.option_search === 'อาคาร'){
+               _Reimbursements =   _Reimbursements.map(Reimbursement =>{
+                    if( Reimbursement.Contract.Room.floor.building.name.search(formFilter.text) !==  -1 )
+                    {
+                        return  Reimbursement
+                    }
+                } )
+                
+            }
+            else if(formFilter.option_search === 'ชื่อห้อง'){
+                _Reimbursements =   _Reimbursements.map(Reimbursement =>{
+                    if( Reimbursement.Contract.Room.name.search(formFilter.text) !==  -1 )
+                    {
+                        return  Reimbursement
+                    }
+                } )
+            }
+             else if(formFilter.option_search === 'วันที่คืน'){
+                _Reimbursements =   _Reimbursements.map(Reimbursement =>{
+                    if( 
+                        toYYMMDD(Reimbursement.cashback_date).search(formFilter.text) !== -1 
+                      )
+                    {
+                        return  Reimbursement
+                    }
+                } )
+            }
+              console.log(_Reimbursements)
+            setFilterReimbursements(_Reimbursements)
         }
 
-    },[getReimbursement])
+    },[getReimbursement , getReimbursement.data , formFilter ])
 
 
 
@@ -108,10 +140,7 @@ export const  Reimbursement = () => {
                     </select>
                     <button className={styles.headerall}
                     onClick={() =>{
-                        let _filter_rooms = []
-                        _filter_rooms = filter_rooms(rooms, formFilter)
-                        setFilterRooms(_filter_rooms)
-                        console.log("_filter_rooms",_filter_rooms)
+                        getReimbursement.refetch();
                     }}
                     
                     >กรอง</button>  
@@ -137,8 +166,8 @@ export const  Reimbursement = () => {
                                     </tr>
 
                                 </thead>
-                                <tbody className={styles.tbody}> {FilterRooms.map( 
-                                    (room) => room ? (
+                                <tbody className={styles.tbody}> {FilterReimbursements.map( 
+                                    (reimbursements) => reimbursements && reimbursements.Contract &&reimbursements.Contract.Room ? (
                                         <tr  >
                                             <td>    
                                                 <input 
@@ -148,30 +177,29 @@ export const  Reimbursement = () => {
                                                 id="myCheckboxId"
                                                 onChange={(e)=>{
                                                     const check = e.target.checked
-                                                    let id = room.id
+                                                    let id = reimbursements.id
                                                     if(check){
-                                                        let _IDrooms = IDrooms
-                                                        _IDrooms = [..._IDrooms,room]
-                                                        setIDrooms(_IDrooms)
-                                                        console.log('_IDrooms',_IDrooms)
+                                                        let _selectedReimbursements = selectedReimbursements
+                                                        _selectedReimbursements = [..._selectedReimbursements,reimbursements]
+                                                        setselectedReimbursements(_selectedReimbursements)
+                                                   
 
                                                     }else{
-                                                        let _IDrooms = IDrooms.filter(room => room.id !== id)
-                                                        setIDrooms(_IDrooms)
-                                                        console.log('_IDrooms',_IDrooms)
-                                    
+                                                        let _selectedReimbursements = selectedReimbursements.filter(Reimbursement => Reimbursements.id !== id)
+                                                        setselectedReimbursements(_selectedReimbursements)
+                                                    
                                                     }
                                                 }}></input>
                                             </td>
-                                            <td>{room.building ? room.building : '---'}</td>
-                                            <td>{room.roomName ? room.roomName : '---'}</td>
-                                            <td>{room.contractID ? room.contractID : '---'}</td>
-                                            <td>{room.invoiceID ? room.invoiceID : '---'}</td>
-                                            <td>{room.name ? room.name : '---'}</td>
-                                            <td>{room.surname ? room.surname : '---'}</td>
-                                            <td>{room.cashBack ? room.cashBack : '---'}</td>
-                                            <td>{room.status ? room.status : '---'}</td>
-                                            <td>{room.cashBack_date ? room.cashBack_date : '---'}</td>
+                                            <td>{reimbursements.Contract.Room.floor.building.name ? reimbursements.Contract.Room.floor.building.name : '---'}</td>
+                                            <td>{reimbursements.Contract.Room.name ? reimbursements.Contract.Room.name : '---'}</td>
+                                            <td>{reimbursements.Contract.id? reimbursements.Contract.id : '---'}</td>
+                                            <td>{reimbursements.Invoice && reimbursements.Invoice.id ? reimbursements.Invoice.id : '---'}</td>
+                                            <td>{reimbursements.Contract.Room.members[0].name ? reimbursements.Contract.Room.members[0].name : '---'}</td>
+                                            <td>{reimbursements.Contract.Room.members[0].lastname ? reimbursements.Contract.Room.members[0].lastname : '---'}</td>
+                                            <td>{reimbursements.cashback ? reimbursements.cashback : '0'}</td>
+                                            <td>{reimbursements.status ? reimbursements.status : '---'}</td>
+                                            <td>{reimbursements.cashback_date ? toYYMMDD(reimbursements.cashback_date) : '---'}</td>
                                             
                                         
                                             
@@ -186,72 +214,111 @@ export const  Reimbursement = () => {
                    
 
                 </div>
-                <button className={styles.button}
-                onClick={()=>{
-                    if(IDrooms.length > 0){
-                        export_Reimbursement_pdf(IDrooms,'IDrooms','',defaultData)
+                <div className={styles.buttonzone}>
+                    <button className={styles.button}
+                    onClick={()=>{
+                        if(selectedReimbursements.length > 0){
+                              Promise.all(selectedReimbursements).then((selectedReimbursements)=>{
+                                    selectedReimbursements.map(async (Reimbursement)=>{
+                                        let _Reimbursement = JSON.parse(JSON.stringify(Reimbursement))
+                                        _Reimbursement.status = "สำเร็จ"
+                                        try{
+                                        let res = await updateReimbursement({
+                                              variables:{
+                                                    id:`${_Reimbursement.id}`,
+                                                    input:{
+                                                        status:"สำเร็จ"
+                                                    }
+                                                    
+                                                    }
+                                        })
+                                        if(res && res.data){
+                                            getReimbursement.refetch()
+                                        }else{
 
-                    }else{
-                        console.log("empty select")
-                    }
-                   
+                                        }
+                                        }catch(e){
+                                           console.error('เปลี่ยนสถานะคืนเงินไม่สำเร็จ');
+                                        }
+
+                                    } )
+                              })
+                        }else{
+                            console.log("empty select")
+                        }
                     
-                }}
-                >คืนเงินประกันภัย</button>  
-                <button className={styles.buttonDelete}
-                onClick={()=>{
+                        
+                    }}
+                    >คืนเงินประกันภัย</button>  
 
-                    let myCheckboxName = document.getElementsByName('myCheckboxName');
-                                let myCheckboxNameLen = myCheckboxName.length
-                
-                                Promise.all(IDrooms).then((IDrooms)=>{
-                                    IDrooms.map(async (room)=>{
-                                   
-                                        let _res = await deleteReimbursement({
-                                            variables:{
-                                                id:`${room.id}`
-                                                }
-                                            })
-                                            
-                                        if(_res){
-                                            
-    
-    
-                                            for (var x=0; x<myCheckboxNameLen; x++){
-                                                myCheckboxName[x].checked=false;
-                                                }
-                                            
-                                            let _IDrooms = IDrooms.filter(item => item !== item)
-                                            setIDrooms(_IDrooms)
-    
-                                            console.log('_IDrooms_IDrooms',_IDrooms)
-                                            
-                                            
-    
-                                            getReimbursement.refetch();
-        
-                                            }
-                                        else{
-                                            console.log('error')
-                                            }
-    
-                                            
-                                            
-                                            
-    
-    
-    
-                                            
-    
-                                       
-                                    }
+                    <button className={styles.button}
+                    onClick={()=>{
+                        if(selectedReimbursements.length > 0){
+                            export_Reimbursement_pdf(selectedReimbursements,'IDrooms','',defaultData)
+
+                        }else{
+                            console.log("empty select")
+                        }
+                    
+                        
+                    }}
+                    >Export pdf</button> 
+
+
+                    <button className={styles.buttonDelete}
+                    onClick={()=>{
+
+                        let myCheckboxName = document.getElementsByName('myCheckboxName');
+                                    let myCheckboxNameLen = myCheckboxName.length
                                     
-                                    )
+                                    Promise.all(selectedReimbursements).then((selectedReimbursements)=>{
+                                        selectedReimbursements.map(async (Reimbursement)=>{
+                                    
+                                            let _res = await deleteReimbursement({
+                                                variables:{
+                                                    id:`${Reimbursement.id}`
+                                                    }
+                                                })
+                                                
+                                            if(_res && _res.data){
+                                                
+        
+        
+                                                // for (var x=0; x<myCheckboxNameLen; x++){
+                                                //     myCheckboxName[x].checked=false;
+                                                //     }
+                                                
+                                                // let _IDrooms = IDrooms.filter(item => item !== item)
+                                                // setIDrooms(_IDrooms)
+        
+                                                // console.log('_IDrooms_IDrooms',_IDrooms)
+                                                
+                                                
+        
+                                                getReimbursement.refetch();
+            
+                                                }
+                                            else{
+                                                console.log('error')
+                                                }
+        
+                                                
+                                                
+                                                
+        
+        
+        
+                                                
+        
+                                        
+                                        }
+                                        
+                                        )
 
-                                })
-                }}
-                >ลบที่เลือก</button>
-                
+                                    })
+                    }}
+                    >ลบที่เลือก</button>
+                </div>
                 
                 <div className={styles.footer}>
                     <h3 className={styles.footertext}>
