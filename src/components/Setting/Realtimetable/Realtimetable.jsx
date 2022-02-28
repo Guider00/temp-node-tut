@@ -111,7 +111,7 @@ export const Realtimetable = () => {
 									</tr>
 								</thead>
 								<tbody>
-									<tr className={styles.od}>
+									{/* <tr className={styles.od}>
 										<td>1</td>
 										<td>2</td>
 										<td>3</td>
@@ -130,20 +130,20 @@ export const Realtimetable = () => {
 										<td>1</td>
 										<td>2</td>
 										<td>3</td>
-									</tr>
-									{/* {filter_datatable(
+									</tr> */}
+									{filter_datatable(
 									subdevicemeterrealtime.data.subdevicemeterrealtime,
 									portselected,
 									deviceselected
 								).map((list, index) => {
 									return index >= tablestartindex - 1 && index <= tablestoptindex - 1 ? (
-										<tr key={`tablelist${index}`}>
+										<tr key={`tablelist${index}`} className={styles.od}>
 											<td>{index + 1}</td>
 											<td>{list.tag}</td>
 											<td>{list.value}</td>
 										</tr>
 									) : null;
-								})} */}
+								})}
 								</tbody>
 								<tfoot>
 									<tr>
