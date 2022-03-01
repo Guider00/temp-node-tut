@@ -73,6 +73,8 @@ export const Menubar = () => {
     },[api_subalert])
     return (
         <>
+           
+           
             <div className={styles.menu}>
                 <div className={styles.logo} >
                     <img src="/image/logo.png" alt="logo" width="60" height="50" />
