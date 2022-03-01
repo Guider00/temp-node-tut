@@ -755,7 +755,7 @@ export const Checkout = () => {
 															})
 
 
-															console.log('_list',_list)
+															
 															try{
 																let _res = await createInvoice({
 																			variables:{
@@ -768,6 +768,7 @@ export const Checkout = () => {
 																		})
 																if(_res && _res.data){
 																	setinvoicecheckout(_res.data.id)
+																	console.log('สร้างใบแจ้งหนี้ ',_res.data.addInvoice.id)
 																}
 
 															}catch(e){
