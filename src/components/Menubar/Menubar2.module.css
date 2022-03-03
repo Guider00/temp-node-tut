@@ -1,0 +1,376 @@
+.menu{
+    display: flex;
+    background-color: #ddd;
+    padding: 0.5em;
+    box-shadow: 0px 1px 1px rgb(0 0 0 / 15%);
+
+    
+}
+.dropdown{
+    display: flex;
+}
+.dropdown>div{
+    height: 100%;
+}
+.dropdown>div>div{
+    height: 100%;
+}
+@media screen and (max-width: 1000px) {
+    .dropdown>div{
+        height: 100%;
+        width: 100%;
+    }
+    .dropdown>div>div{
+        height: 45px;
+        width: 100%;
+    }
+}
+.menu>.logo{
+    width: 10vw;
+    text-align: center;
+   
+}
+.menu>.logo>img{
+    margin: 0.5rem auto;
+   
+}
+.menu>div{
+    display: flex;
+
+}
+
+.menu>.ZoneMenu{
+    display: none;
+    padding: 0.5rem;
+}
+.menu>.menu_left{
+    padding: 0.5rem;
+}
+.menu>.menu_left_1{
+    padding: 0.5rem;
+}
+.menu>.menu_right>.db_status{
+    
+    flex-flow: column wrap
+}
+.menu>.menu_right>.db_status >div{
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+
+@media screen and (max-width: 1000px) {
+    .menu>.menu_right>.db_status{
+    
+      display: none;
+    }
+    .menu_left{
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 80px;
+        left: -110%;
+        width: 100%;
+    }
+    .menu_left_1 {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 75px;
+        left: -10px;
+        width: 100%;
+    }
+    .menu>.menu_left>div>a>button{
+        width: 100%;
+     }
+     .menu>.menu_left_1>div>a>button{
+        width: 100%;
+     }
+     .menu>.ZoneMenu{
+        display: block;
+        padding: 0.5rem;
+        margin-top: 0;
+    }
+    
+    .dropdown{
+    display: flex;
+    justify-content: center;
+    }
+    
+
+}
+.Menubar{
+    margin-top: 0.5rem;
+    width: 50px;
+    height: 35px;
+}
+
+
+
+.menu>.menu_left>div>div{
+    display: flex;
+    align-items: center;
+    height: 100%;
+ }
+
+.menu>.menu_left>div>a>button{
+   height: 100%;
+}
+
+.menu>.menu_left_1>div>div{
+    display: flex;
+    align-items: center;
+    height: 100%;
+ }
+
+.menu>.menu_left_1>div>a>button{
+   height: 100%;
+}
+
+.menu>div>.logout{
+    margin-left: 0.5rem;
+}
+
+
+
+.optionright{
+   
+    float: right;
+    align-items: center;
+    margin-left: auto;
+    margin-right: 1em;
+    justify-content: center;
+    display: flex;
+
+    font-size: 0.8rem;
+}
+.optionright>.red{
+    width: 2rem;
+    height: 1.5rem;
+    display: flex;
+    font-weight: bolder;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+    background-color: red;
+    border-radius: 5px;
+}
+.optionright>.cornflowerblue{
+    width: 2rem;
+    height: 1.5rem;
+    display: flex;
+    font-weight: bolder;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+    background-color: cornflowerblue;
+    border-radius: 5px;
+}
+.optionright>.gray{
+    width: 2rem;
+    height: 1.5rem;
+    display: flex;
+    font-weight: bolder;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+    background-color: gray;
+    border-radius: 5px;
+
+}
+.optionright>.green{
+    width: 2rem;
+    height: 1.5rem;
+    display: flex;
+    font-weight: bolder;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+    background-color: green;
+    border-radius: 5px;
+
+}
+.optionright>.yellow{
+    width: 2rem;
+    height: 1.5rem;
+    display: flex;
+    font-weight: bolder;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+    background-color: yellow;
+    border-radius: 5px;
+
+}
+.optionright>.orange{
+    width: 2rem;
+    height: 1.5rem;
+    display: flex;
+    font-weight: bolder;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+    background-color: orange;
+    border-radius: 5px;
+
+}
+
+
+
+
+
+
+
+
+.menu_1{
+    display: flex;
+    background-color: #ddd;
+    padding: 0.5em;
+    box-shadow: 0px 1px 1px rgb(0 0 0 / 15%);
+
+    
+}
+.dropdown{
+    display: flex;
+}
+.dropdown>div{
+    height: 100%;
+}
+.dropdown>div>div{
+    height: 100%;
+}
+@media screen and (max-width: 1000px) {
+    .dropdown>div{
+        height: 100%;
+        width: 100%;
+    }
+    .dropdown>div>div{
+        height: 45px;
+        width: 100%;
+    }
+}
+.menu_1>.logo{
+    width: 10vw;
+    text-align: center;
+   
+}
+.menu_1>.logo>img{
+    margin: 0.5rem auto;
+   
+}
+.menu_1>div{
+    display: flex;
+
+}
+
+.menu_1>.ZoneMenu{
+    display: none;
+    padding: 0.5rem;
+}
+.menu_1>.menu_left{
+    padding: 0.5rem;
+}
+.menu_1>.menu_right{
+    padding: 0.5rem;
+    height: 10%;
+}
+.menu_1>.menu_left_1{
+    padding: 0.5rem;
+}
+
+
+@media screen and (max-width: 1000px) {
+    .menu_1{
+        height: 680px;
+    
+        
+    }
+    .menu_1>.menu_right>.db_status{
+    
+      display: none;
+    }
+    .menu_left{
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 80px;
+        left: -110%;
+        width: 100%;
+    }
+    .menu_left_1 {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 75px;
+        left: -10px;
+        width: 100%;
+    }
+    .menu_1>.menu_left>div>a>button{
+        width: 100%;
+     }
+     .menu_1>.menu_left_1>div>a>button{
+        width: 100%;
+     }
+     .menu_1>.ZoneMenu{
+        display: block;
+        padding: 0.5rem;
+    }
+    .dropdown{
+    display: flex;
+    justify-content: center;
+    }
+    .logout{
+        margin: auto;
+    
+    }
+    .ZoneMenu{
+            margin-top: 0.5rem;
+    }
+    .ZoneMenu>button{
+        border-radius: 5px;
+}
+    
+    
+
+}
+.Menubar{
+    margin-top: 0.5rem;
+    width: 50px;
+    height: 35px;
+}
+
+
+
+.menu_1>.menu_left>div>div{
+    display: flex;
+    align-items: center;
+    height: 100%;
+ }
+
+.menu_1>.menu_left>div>a>button{
+   height: 100%;
+}
+
+.menu_1>.menu_left_1>div>div{
+    display: flex;
+    align-items: center;
+    height: 100%;
+ }
+
+.menu_1>.menu_left_1>div>a>button{
+   height: 100%;
+}
+
+.menu_1>div>.logout{
+    margin-left: 0.5rem;
+}
+
+
+
