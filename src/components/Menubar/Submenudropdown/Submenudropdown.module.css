@@ -4,11 +4,17 @@
     position: relative;
     display: inline-block;
     height: 100%;
+    width: 100%;
   }
 .dropbtn:hover, .dropbtn:focus {
     background-color: #cfcfcf;
 }
 .dropbtn {
+  
+    border-radius: 5px;
+    background-color: rgb(255, 0, 0);
+    text-align: center;
+    width: 100%;
     background-color: #efefef;
     color:black;
     align-items: center;
