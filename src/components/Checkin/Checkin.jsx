@@ -65,7 +65,7 @@ const filter_rooms = (rooms, options_search) => {
 					return (room.name && room.floor && room.name.search(options_search.text)) !== -1 ||
 						(options_search.text === '')
 				} else if (options_search.keyword === 'อาคาร') {
-					console.log('124')
+			
 					return (room.building.search(options_search.text) !== -1) ||
 						(options_search.text === '')
 				} else if (options_search.keyword === 'ชั้น') {
@@ -618,9 +618,7 @@ export const Checkin = () => {
 
 			let Rooms = Rooms_to_table(GET_Rooms.data.Rooms)
 
-			// let _filter_rooms  =[]
-			// _filter_rooms = filter_rooms([...Rooms] , options_search)
-			// setrooms(_filter_rooms);
+
 
 			if (Rooms) {
 				let start_date = DateStart ? new Date(DateStart) : new Date()
@@ -632,15 +630,16 @@ export const Checkin = () => {
 
 					let { bookings, checkin } = room.data
 					let _schbooking = bookings.map((booking) => {
-						let { checkin_date, checkin_date_exp, checkin_type } = booking;
+						if(booking){
+							let { checkin_date, checkin_date_exp, checkin_type } = booking;
 
-						return ({
-							"checkin_date": checkin_date ? new Date(Number(checkin_date)).getTime() : checkin_date,
-							"checkin_date_exp": checkin_date_exp ? new Date(Number(checkin_date_exp)).getTime() : checkin_date_exp,
-							"checkin_type": checkin_type,
-							booking: booking
-						})
-
+							return ({
+								"checkin_date": checkin_date ? new Date(Number(checkin_date)).getTime() : checkin_date,
+								"checkin_date_exp": checkin_date_exp ? new Date(Number(checkin_date_exp)).getTime() : checkin_date_exp,
+								"checkin_type": checkin_type,
+								booking: booking
+							})
+						}
 					}).filter(item => item)
 
 
@@ -754,8 +753,8 @@ export const Checkin = () => {
 					return room
 				})
 				console.log('room_support', _rooms)
-
-				setrooms([..._rooms])
+				let _filter_rooms = filter_rooms(_rooms,options_search)
+				setrooms([..._filter_rooms])
 
 			}
 			setloading(true);
@@ -783,7 +782,7 @@ export const Checkin = () => {
 			}
 		}
 
-	}, [GET_Rooms, loading, DateStart, DateEnd, roomType_search])
+	}, [GET_Rooms, loading, DateStart, DateEnd, roomType_search,options_search])
 	console.log('GET_Rooms', GET_Rooms)
 	return (
 		<div>	{defaultCalendar.isLoading && <CalendarPicker onCalendar={CalendarDate} start={handleStart}
@@ -917,16 +916,17 @@ export const Checkin = () => {
 									</select>
 
 									<button onClick={async () => {
-										let start_date = DateStart ? new Date(DateStart) : new Date()
-										let end_date = DateEnd ? new Date(DateEnd) : new Date()
-										start_date = start_date.getTime()
-										end_date = end_date.getTime()
+										GET_Rooms.refetch()
+										// let start_date = DateStart ? new Date(DateStart) : new Date()
+										// let end_date = DateEnd ? new Date(DateEnd) : new Date()
+										// start_date = start_date.getTime()
+										// end_date = end_date.getTime()
 
-										let _filter_rooms = []
-										console.log('DateStart,DateEnd', start_date, end_date)
-										_filter_rooms = filter_rooms(rooms, options_search, start_date, end_date)
+										// let _filter_rooms = []
+										// console.log('DateStart,DateEnd', start_date, end_date)
+										// _filter_rooms = filter_rooms(rooms, options_search, start_date, end_date)
 
-										setrooms(_filter_rooms);
+										// setrooms(_filter_rooms);
 
 									}}>
 										{' '}
@@ -1007,20 +1007,21 @@ export const Checkin = () => {
 															})
 
 														} else {
+																console.log('debug checkin date',room.data.bookings[0])
 															setformcheckin({
 																id_contact: "",
-																checkin_date: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 &&
+																checkin_date: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 && room.data.bookings[0] &&
 																	room.data.bookings[0].checkin_date ? formatDate(new Date(Number(room.data.bookings[0].checkin_date))) : "2021-12-08",
-																checkin_date_exp: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 &&
+																checkin_date_exp: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 && room.data.bookings[0] &&
 																	room.data.bookings[0].checkin_date ? formatDate(new Date(Number(room.data.bookings[0].checkin_date_exp))) : "2021-12-08",
-																checkin_type: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 &&
+																checkin_type: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 && room.data.bookings[0] && 
 																	room.data.bookings[0].checkin_type ? room.data.bookings[0].checkin_type : "",
-																rental_period: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 &&
+																rental_period: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 && room.data.bookings[0] && 
 																	room.data.bookings[0].checkin_date && room.data.bookings[0].checkin_date_exp ?
 																	DiffDate(new Date(Number(room.data.bookings[0].checkin_date)), new Date(Number(room.data.bookings[0].checkin_date_exp))) : "",
-																rental_deposit: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 &&
+																rental_deposit: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 && room.data.bookings[0] && 
 																	room.data.bookings[0].deposit ? room.data.bookings[0].deposit : "",
-																rental_period_day: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 &&
+																rental_period_day: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 && room.data.bookings[0] && 
 																	room.data.bookings[0].checkin_date && room.data.bookings[0].checkin_date_exp ?
 																	DiffDate(new Date(Number(room.data.bookings[0].checkin_date)), new Date(Number(room.data.bookings[0].checkin_date_exp))) : "",
 																branch: "",
@@ -1720,7 +1721,9 @@ export const Checkin = () => {
 							<div className={styles.rowmenu} style={{ float: "right" }}>
 
 								<button disabled={
-									selectedroom && selectedroom.data && selectedroom.data.checkin ? false : true
+									selectedroom && selectedroom.data 
+									&& selectedroom.data.members && selectedroom.data.members.length > 0 
+									&& selectedroom.data.checkin ? false : true
 								}
 									onClick={async () => {
 										if (selectedroom && selectedroom.data && selectedroom.data.checkin) {
@@ -1782,6 +1785,7 @@ export const Checkin = () => {
 								<button
 									disabled={
 										selectedroom && selectedroom.data && selectedroom.data.Contract &&
+										selectedroom.data.members && selectedroom.data.members.length > 0  && 
 											selectedroom.data.Contract.id ? false : true
 									}
 									onClick={async () => {
@@ -1807,8 +1811,7 @@ export const Checkin = () => {
 												})
 
 												if (_res && _res.data && _res.data.addInvoice && _res.data.addInvoice.id) {
-													handleChangePath('/createinvoice')
-													handleDialog("The request was successful !!!!! Go Createinvoice page?", true)
+										
 													// สร้างใบแจ้งหนี้สำเร็จ //
 
 													let _idreceipt = _res.data.addInvoice.id
@@ -1827,6 +1830,10 @@ export const Checkin = () => {
 														try {
 															console.log('_updatetableoption', _updatetableoption)
 															export_Invoice_pdf(selectedroom, [..._updatetableoption], toYYMM(now))
+
+															handleChangePath('/invoice')
+															handleDialog("The request was successful !!!!! Go invoice page?", true)
+
 															refetch_roomMember()
 														} catch (e) {
 															console.log(e)
@@ -1856,7 +1863,9 @@ export const Checkin = () => {
 
 								<button
 									disabled={
-										selectedroom && selectedroom.data && selectedroom.data.checkinInvoice ? false : true
+										selectedroom && selectedroom.data 
+										&& selectedroom.data.members && selectedroom.data.members.length > 0 
+										&& selectedroom.data.checkinInvoice ? false : true
 									}
 									onClick={async () => {
 										// เปลี่ยน สถานะ ใบแจ้งหนี้  เป็นชำระเงิน
@@ -1874,16 +1883,18 @@ export const Checkin = () => {
 												if (_res && _res.data) {
 													console.log('update กำชำระเงินสำเร็จ')
 													try {
+														
 														refetch_roomMember()
 													} catch (e) {
-														console.log(e)
+														
+														console.error("ชำระใบแจ้งหนี้ไม่สำเร็จ",e)
 													}
 
 
 												}
 
 											} catch (e) {
-
+												console.error("ชำระใบแจ้งหนี้ไม่สำเร็จ",e)
 											}
 
 										}
@@ -1894,6 +1905,7 @@ export const Checkin = () => {
 								<button
 									disabled={
 										selectedroom && selectedroom.data && selectedroom.data.checkinInvoice
+										&& selectedroom.data.members && selectedroom.data.members.length > 0 
 											&& selectedroom.data.checkinInvoice.status === 'สำเร็จ' ? false : true
 									}
 									onClick={async () => {
