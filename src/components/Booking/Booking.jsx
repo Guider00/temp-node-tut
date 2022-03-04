@@ -39,17 +39,20 @@ import {
 	API_UPDATE_Room
 } from '../../API/Schema/Room/Room'
 
-const filter_rooms = (rooms, options_search, DateStart, DateEnd) => {
+import {
+ toYYYYMMDD
+} from '../../general_functions/convert'
+
+const filter_rooms = (rooms, options_search) => {
 	let _filter_table = []
 	if (rooms && options_search) {
-		console.log('roomsfilter', rooms, DateStart, DateEnd)
 		_filter_table = rooms.filter(room => {
-
+				console.log('debug',(options_search.text === ''),room,options_search.keyword)
 			if (room) {
 				if (options_search.keyword === 'ทั้งหมด') {
 					return (room.name && room.name.search(options_search.text) !== -1) ||
-						(room.building && room.building.search(options_search.text) !== -1) ||
-						(room.floor && room.floor.search(options_search.text) !== -1) ||
+						( room.floor && room.floor.building && room.floor.building.name && room.floor.building.name.search(options_search.text) !== -1) ||
+						(room.floor && room.floor.name  &&room.floor.search(options_search.text) !== -1) ||
 						(room.RoomType && room.RoomType.name && room.RoomType.name.search(options_search.text) !== -1) ||
 						(options_search.text === '')
 						;
@@ -58,10 +61,10 @@ const filter_rooms = (rooms, options_search, DateStart, DateEnd) => {
 						(options_search.text === '')
 					)
 				} else if (options_search.keyword === 'อาคาร') {
-					return (room.building.search(options_search.text) !== -1) ||
+					return (room.floor && room.floor.building &&  room.floor.building.name.search(options_search.text) !== -1) ||
 						(options_search.text === '')
 				} else if (options_search.keyword === 'ชั้น') {
-					return (room.floor.search(options_search.text) !== -1) ||
+					return (room.floor && room.floor.name.search(options_search.text) !== -1) ||
 						(options_search.text === '')
 				} else if (options_search.keyword === 'ประเภทห้อง') {
 					return (room.RoomType && room.RoomType.name && room.RoomType.name.search(options_search.text) !== -1) ||
@@ -123,6 +126,7 @@ export const Booking = () => {
 
 	const booking = useQuery(API_GET_Booking);
 	const api_rooms = useQuery(API_GET_Rooms);
+	const [refectapiroom ,  setrefectapiroom ] = useState(false);
 
 
 	const [updateRoom, mutationupdateRoom] = useMutation(API_UPDATE_Room)
@@ -224,9 +228,9 @@ export const Booking = () => {
 	const handleChangedALLformroom = (room) => {
 		if (room) {
 			let _formroom = formroom;
-
+			console.log('debug change form room',room)
 			for (const property in _formroom) {
-				if (property === 'building') {
+				if (property === 'building' && room['floor']['building'] ) {
 					_formroom[property] = room['floor']['building']['name'];
 				} else if (property === 'floor') {
 					_formroom[property] = room['floor']['name'];
@@ -322,11 +326,11 @@ export const Booking = () => {
 	const [defaultCalendar, setdefaultCalendar] = useState({
 		isLoading: false
 	});
-	const [DateStart, setDateStart] = useState(null)
-	const [DateEnd, setDateEnd] = useState(null)
+	const [DateStart, setDateStart] = useState( toYYYYMMDD ( (new Date()) ) )
+	const [DateEnd, setDateEnd] = useState(     toYYYYMMDD (   (new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) ))  )
 	const [DateRange, setDateRange] = useState([])
 
-
+	console.log('debug DateEnd',DateEnd)
 	const handleCalendar = (isLoading) => {
 		setdefaultCalendar({
 			isLoading: isLoading,
@@ -408,14 +412,14 @@ export const Booking = () => {
 
 	useEffect(
 		() => {
-			async function fetchData() {
-				let Rooms = await getRooms();
-				console.log('Rooms', Rooms);
-				//	setrooms(Rooms);
-			}
+			// async function fetchData() {
+			// 	let Rooms = await getRooms();
+			// 	console.log('Rooms', Rooms);
+			// 	//	setrooms(Rooms);
+			// }
 
 
-			fetchData();
+			// fetchData();
 			setloadingpage(true);
 
 
@@ -423,28 +427,30 @@ export const Booking = () => {
 		[loadingpage, DateRange]
 	);
 	useEffect(() => {
+		console.log('debug',api_rooms)
 		if (api_rooms.data) {
-			console.log('api_rooms', api_rooms.data)
-
+		
 			if (api_rooms.data.Rooms && api_rooms.data.Rooms.length) {
 
 				let start_date = DateStart ? new Date(DateStart) : new Date()
 				let end_date = DateEnd ? new Date(DateStart) : new Date()
 				start_date = start_date.getTime()
 				end_date = end_date.getTime()
-				console.log("debug", start_date, end_date)
+			
 				let roomschedules = api_rooms.data.Rooms.map((room) => {
 					let { bookings, checkin } = room
+						console.log("debug bookings", bookings)
 					let _schbooking = bookings.map((booking) => {
-						let { checkin_date, checkin_date_exp, checkin_type } = booking;
+						if(booking){
+							let { checkin_date, checkin_date_exp, checkin_type } = booking;
 
-						return ({
-							"checkin_date": checkin_date ? new Date(Number(checkin_date)).getTime() : checkin_date,
-							"checkin_date_exp": checkin_date_exp ? new Date(Number(checkin_date_exp)).getTime() : checkin_date_exp,
-							"checkin_type": checkin_type,
-							booking: booking
-						})
-
+							return ({
+								"checkin_date": checkin_date ? new Date(Number(checkin_date)).getTime() : checkin_date,
+								"checkin_date_exp": checkin_date_exp ? new Date(Number(checkin_date_exp)).getTime() : checkin_date_exp,
+								"checkin_type": checkin_type,
+								booking: booking
+							})
+						}
 					}).filter(item => item)
 
 					let _schcheckin = {
@@ -459,13 +465,13 @@ export const Booking = () => {
 					return { room: room, sch: sch }
 				})
 
-				console.log('roomschedules6', roomschedules)
+				console.log('debug roomschedules', roomschedules)
 				let room_support = roomschedules.map((roomschedule) => {
 					let { room } = roomschedule
 
 					// console.log(`debug roomschedule`,roomschedule)
 					let condition = roomschedule.sch.map(({ checkin_date_exp, checkin_date, checkin_type }) => {
-						//	 console.log(`debug roomschedule`,checkin_date_exp , end_date , ( checkin_date_exp === null  || (end_date <  checkin_date &&    end_date < checkin_date_exp ) ))
+							 console.log(`debug roomschedule`,checkin_date_exp , end_date , ( checkin_date_exp === null  || (end_date <  checkin_date &&    end_date < checkin_date_exp ) ))
 
 						if (roomType_search.roomtype === 'ทั้งหมด') {
 							if (
@@ -561,17 +567,18 @@ export const Booking = () => {
 				let _rooms = room_support.map(({ room }) => {
 					return room
 				})
-				console.log('room_support', _rooms)
-				setrooms([..._rooms]);
+				console.log('debug room_support',options_search, _rooms)
+				let _filter_rooms = filter_rooms(_rooms, options_search)
+				setrooms([..._filter_rooms]);
 
 			}
 
 
 		}
-	}, [api_rooms, api_rooms.data, DateStart, DateEnd, roomType_search])
+	}, [api_rooms, api_rooms.data,api_rooms.loading, DateStart, DateEnd, roomType_search,options_search])
 
 
-	// console.log('rooms', rooms);
+	 console.log('debug rooms', rooms);
 	// console.log('selectedroom', selectedroom);
 
 
@@ -677,6 +684,7 @@ export const Booking = () => {
 										value={DateEnd}
 										onChange={(e) => {
 											let { value } = e.target
+											console.log('debug set end date',value)
 											setDateEnd(value)
 										}} />
 									<button
@@ -718,13 +726,11 @@ export const Booking = () => {
 
 									</select>
 									<button onClick={async () => {
-										let Rooms = await getRooms();
-
-										let _filter_rooms = []
-										console.log('DateStart,DateEnd', DateStart, DateEnd)
-										_filter_rooms = filter_rooms(Rooms, options_search, DateStart, DateEnd)
-
-										setrooms(_filter_rooms);
+								
+									
+										  api_rooms.refetch();
+											
+									
 									}}>
 										{' '}
 										ค้นหา<SearchIcon />{' '}
@@ -743,9 +749,10 @@ export const Booking = () => {
 										<th> ประเภทห้อง</th>
 										<th> สถานะ</th>
 									</tr>
+								
 									{rooms
 										.filter(
-											(room) => (room && room && room.status === 'ย้ายออก') || room.status === 'ห้องว่าง'
+											(room) => (room  && room.status === 'ย้ายออก') || room.status === 'ห้องว่าง'
 										)
 										.map(
 											(room, index) =>

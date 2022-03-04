@@ -10,6 +10,11 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import SearchIcon from '@material-ui/icons/Search';
 import CalculateIcon from '@mui/icons-material/Calculate';
 
+import Dialog from '../../subcomponents/Dialog/Dialog'
+import { DialogFunction } from "../../subcomponents/Dialog/Dialog";
+
+
+
 import { export_Invoice_pdf  , export_Receipt_pdf } from '../../general_functions/pdf/export/export_pdf';
 
 
@@ -68,6 +73,14 @@ export const Checkout = () => {
 	const [ rooms, setrooms ] = useState([]);
 	const [ loading, setloading ] = useState(false);
 	const [ selectedroom, setselectedroom ] = useState(null);
+	 //  << dialog function 
+	const { defaultDialog, handleDialog, checkData } = DialogFunction();
+	const [path, setPath] = useState([''])
+	const handleChangePath = (props) => {
+		setPath(props)
+
+	}
+	 // ------------------------------ // 
 	const [ options_search  ,setoptions_search] = useState({
 		text:"",
 		keyword:"ทั้งหมด"
@@ -224,7 +237,8 @@ export const Checkout = () => {
         <div>
            		<div className={styles.zone1}>
 				   	<div className={styles.bigbox}>
-						
+						{defaultDialog.isLoading && <Dialog onDialog={checkData} nextPage={path} message={defaultDialog.message} />}
+
 						<div className={styles.tableroomselect}>
 							<div className={styles.headertable}>
 								<div className={styles.text}> ห้องเช่าและแจ้งย้ายออก </div>
@@ -712,7 +726,7 @@ export const Checkout = () => {
 															 console.log('selectedroom',)
 															 try{
 															//	 console.log(`invoiceid':${ invoiceid }+ 'contractid: ${ contractid } `)
-															  let data =  await createReimbursement({
+															  let res =  await createReimbursement({
 																	 variables:{
 																		 input:{
 																			 invoiceid: invoicecheckout,
@@ -721,10 +735,12 @@ export const Checkout = () => {
 																		 }
 																	 }
 																 })
-																if( data ){
+																if( res ){
+																handleChangePath('/Reimbursement')
+																handleDialog("The request was successful !!!!! Go Reimbursement page?", true)
 
 																}else{
-																	console.error('data',data)
+																	console.error('data',res)
 																}
 															
 															 }catch(e){
@@ -768,6 +784,9 @@ export const Checkout = () => {
 																		})
 																if(_res && _res.data){
 																	setinvoicecheckout(_res.data.id)
+																	handleChangePath('/invoice')
+																	handleDialog("The request was successful !!!!! Go invoice page?", true)
+
 																	console.log('สร้างใบแจ้งหนี้ ',_res.data.addInvoice.id)
 																}
 
@@ -795,7 +814,7 @@ export const Checkout = () => {
 															if(_res){
 																console.log('update status Room ')
 																	
-																setselectedroom(null)
+																
 																clerformrdetailsroom();
 																clertableprice();
 																setTimeout(() => {
@@ -822,13 +841,23 @@ export const Checkout = () => {
 																		id: _room.id,
 																		input: {
 																			status:"ห้องว่าง",
-																			checkout_date:""
+																			checkout_date:"",
+																			checkin_date:"",
+																			checkinid:null,
+																			contractid:null,
+																			checkinInvoiceid:null,
+																			checkinReceiptid:null,
+																			members:[],
+																			
 																		}
 																	}
 																});
 															if(_res){
 																console.log('update status Room ')
-																
+
+																handleChangePath('/home')
+																handleDialog("The request was successful !!!!! Go Home page?", true)
+
 																setselectedroom(null)
 																clerformrdetailsroom();
 																clertableprice();
