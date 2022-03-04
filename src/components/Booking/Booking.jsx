@@ -21,6 +21,7 @@ import { export_booking_pdf, export_Receipt_pdf } from '../../general_functions/
 import CalendarPicker from '../../subcomponents/Calendar/Calendar.js';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 
+
 import {
 	API_GET_Booking,
 	API_ADD_Booking,
@@ -270,13 +271,33 @@ export const Booking = () => {
 
 		}
 	};
+	const [error , setError] = useState({})
+
+
+	//ฟังก์ชั่นแจ้งเตือนกรณีลืมกรอก Data
+	const placeholder = (e) => {
+		let id = (e.target.id).split("_")
+		if (!e.target.value) {
+			if (id[1] === undefined) {
+				return e.target.placeholder = `${id[0]} not require`
+
+			} else {
+				return e.target.placeholder = `${id[1]} not require`
+			}
+
+		}
+
+	}
 	const handleChangedformbooking = (e) => {
 		let _formbooking = formbooking;
 		console.log('e', e.target.value, e.target.id, _formbooking[e.target.id]);
 
+		placeholder(e)
+		console.log('error',error)
 		if (e.target.id && _formbooking.hasOwnProperty(e.target.id)) {
 			if (e.target.id === 'customer_name' || e.target.id === 'customer_lastname') {
-				let text = /[^0-9a-zA-Zก-๙ ]/ig;
+
+				let text = /[^0-9\u0E00-\u0E7Fa-zA-Z' ./\n]/ig;
 				e.target.value = e.target.value.replace(text, '')
 				_formbooking[e.target.id] = e.target.value;
 				setformbooking({ ..._formbooking });

@@ -6,23 +6,23 @@
     max-height: 800px;
 }
 .table{
-   
-    border: 1px solid #dddd;
+    
+    border: 1px solid rgb(255, 255, 255);
     margin: 1em;
     max-width: 800px;
  
 }
  th {
-     
-  padding-top: 0.5em;
-  padding-bottom: 0.5em;
-  text-align: center;
-  background-color: #04AA6D;
-  color: white;
+    border: 1px solid rgb(218, 186, 186);
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    text-align: center;
+    background-color: #04AA6D;
+    color: white;
 }
 td {
    
-    border: 1px solid #ddd;
+    border: 1px solid rgb(218, 186, 186);
     padding-top: 0.5em;
     padding-bottom: 0.5em;
     text-align: center;

@@ -20,7 +20,11 @@
     border-radius: 4px;
     display: flex;
     flex-wrap: wrap;
+    
    
+}
+::placeholder{
+    color: red;
 }
 .headertable>.text{
     font-size: x-large;
@@ -97,8 +101,9 @@
    
 }
 .bodytable>table{
-    width: 100%;
+    width: 95%;
    
+    border-collapse: collapse;
 
     padding-left: 2rem;
     padding-right: 2rem;
