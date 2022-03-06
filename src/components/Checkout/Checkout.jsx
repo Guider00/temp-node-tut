@@ -652,13 +652,13 @@ export const Checkout = () => {
 																<table className={styles.tableStyles}>
 																	<thead className={styles.thead}>
 																		<tr>
-																			<th  width={'50px'}>#</th>
+																			<th>#</th>
 																			<th>ชื่อรายการ</th>
 																			<th>จำนวน</th>
 																			<th>ราคา</th>
-																			<th width={'120px'}>ภาษี</th>
-																			<th width={'120px'}>ราคาทั้งหมด</th>
-																			<th width={'120px'} >ภาษี</th>
+																			<th>ภาษี</th>
+																			<th>ราคาทั้งหมด</th>
+																			<th>ภาษี</th>
 																			 {editmodetableprice ? <th></th>:null}
 																		</tr>
 																	</thead>
@@ -666,23 +666,27 @@ export const Checkout = () => {
 																		{
 																		tableprice.map( (list,index) => 
 																		<tr>
-																			<td>{index}</td>
+																			<td >
+																				<input style={{textAlign : 'center' , width:'60px' , border:'none'}} value={index}/>
+																				</td>
 																			<td>
-																			<input  style={{textAlign : 'center'}} value={list.name}   type="text"  disabled={ !editmodetableprice} 
+																			<input  style={{textAlign : 'center' , width:'100px', border:'none'}} value={list.name}   type="text"  disabled={ !editmodetableprice} 
 																			 onChange ={(e)=>handleronChangetableprice(e,index,'name')}
 																			/>
 
 																			</td>
-																			<td><input style={{textAlign : 'center'}} value={list.number} type="text"  disabled={ !editmodetableprice} 
+																			<td><input style={{textAlign : 'center' , width:'100px', border:'none'}} value={list.number} type="text"  disabled={ !editmodetableprice} 
 																			onChange ={(e)=>handleronChangetableprice(e,index,'number')}
 																			/></td>
-																			<td><input style={{textAlign : 'center'}} value={list.price}  type="text"  disabled={ !editmodetableprice}
+																			<td><input style={{textAlign : 'center' , width:'100px', border:'none'}} value={list.price}  type="text"  disabled={ !editmodetableprice}
 																				onChange ={(e)=>handleronChangetableprice(e,index,'price')}
 																			/></td>
-																			<td>{list.costvat}</td>
-																			<td>{list.totalprice}</td>
+																			<td style={{textAlign : 'center' , width:'100px'}} >{list.costvat}</td>
+																			<td style={{textAlign : 'center' , width:'100px'}} >{list.totalprice}</td>
 																			<td>
-																				<input type="checkbox"checked={list.addvat} 
+																				<input 
+																				style={{textAlign : 'center' , width:'80px'}}
+																				type="checkbox"checked={list.addvat} 
 																				onChange={()=>{
 																					
 																					let _tableprice = tableprice

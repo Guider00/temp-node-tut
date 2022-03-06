@@ -197,11 +197,11 @@ export const CreateInvoic = () => {
 
                             <div className={styles.radio1}>
                                 <input type="radio" id='D1' name='D1' checked={disabled.D1} onChange={handleChangeRadio} />
-                                <lable>ออกตามรอบบิล</lable>
+                                <label>ออกตามรอบบิล</label>
                             </div>
                             <div className={styles.radio2}>
                                 <input type="radio" id='D2' name='D2' checked={disabled.D2} onChange={handleChangeRadio} />
-                                <lable>กำหนดเอง</lable>
+                                <label>กำหนดเอง</label>
                             </div>
 
                         </div>
