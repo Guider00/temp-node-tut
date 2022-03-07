@@ -1,4 +1,22 @@
-.body:hover{
+@media screen and (max-width: 991px) {
+    .body{
+        margin-left: 18%;
+    
+   
+    }
+   
+}
+@media screen and (max-width: 500px) {
+    .body{
+        margin-left: 0.5rem;
+    
+   
+    }
+   
+}
+
+.body{
+    
    
 }
 .icon{
@@ -10,7 +28,7 @@
 .number{
     display: flex;
     position: relative;
-    left: -0.75rem;
+    left: -0.3rem;
     top: -0.65rem;
     border-radius: 50%;
     justify-content: center;
@@ -20,9 +38,7 @@
     min-height: 1rem;
     max-width: 1.4rem;
     max-height: 1.4rem;
-    
     padding-right: 0.3rem;
- 
     background-color: red;
     z-index: 2;
 }
