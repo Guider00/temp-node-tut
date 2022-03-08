@@ -37,7 +37,7 @@ export const Tablebooking = (props) => {
 
     //Dialog
 
-    const { defaultDialog,handleDialog, checkData } = DialogFunction();
+    const { defaultDialog, handleDialog, checkData } = DialogFunction();
 
     useEffect(() => {
         async function fetchdata() {
@@ -59,24 +59,27 @@ export const Tablebooking = (props) => {
         <div>
             {defaultDialog.isLoading && <Dialog onDialog={checkData} nextPage={'/check_in'} message={defaultDialog.message} />}
             <div className={styles.tablebooking}>
-                <table >
-                    <tr>
-                        <th>ห้อง</th>
-                        <th>ชื่อ</th>
-                        <th>นามสกุล</th>
-                        <th>เงินจอง</th>
-                        <th>วันที่ต้องการ</th>
-                        <th>วันที่สิ้นสุดการจอง</th>
-                        <th>เลขที่ใบจอง</th>
-                        <th>สถานะ</th>
-                        <th>ใบเสร็จ</th>
-                        <th>ยืนยันการเข้าพัก</th>
-                        <th>แจ้งเตือน</th>
-                        <th></th>
-                    </tr>
-                    {props && props.data && props.data.Bookings ?
-                        <> {props.data.Bookings.map(booking =>
-                            <tr style={{
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ห้อง</th>
+                            <th>ชื่อ</th>
+                            <th>นามสกุล</th>
+                            <th>เงินจอง</th>
+                            <th>วันที่ต้องการ</th>
+                            <th>วันที่สิ้นสุดการจอง</th>
+                            <th>เลขที่ใบจอง</th>
+                            <th>สถานะ</th>
+                            <th>ใบเสร็จ</th>
+                            <th>ยืนยันการเข้าพัก</th>
+                            <th>แจ้งเตือน</th>
+                            <th></th>
+                        </tr>
+
+                    </thead>
+                    <tbody>{props && props.data && props.data.Bookings ?
+                        <>{props.data.Bookings.map((booking, index) =>
+                            <tr key={index} style={{
                                 backgroundColor:
                                     formatDate(new Date(Number(booking.checkin_date))) === formatDate(new Date()) || new Date(Number(booking.checkin_date)) <= new Date()
                                         ? "darkgray" : "white"
@@ -157,31 +160,8 @@ export const Tablebooking = (props) => {
 
 
                             </tr>)
-                        }</> :
-                        <tr>
-                            <td>{"---"}</td>
-                            <td>{"---"}</td>
-                            <td>{"---"}</td>
-                            <td>{"---"}</td>
-                            <td>{"---"}</td>
-                            <td>{"---"}</td>
-                            <td>{"---"}</td>
-                            <td>{"---"}</td>
-                            <td>   <button> <NotificationsIcon /></button> </td>
-                            <td>
-
-
-                                <button><EditIcon /> </button>
-                                <button><UploadFileIcon /></button>
-                                <button><CheckCircleOutlineIcon /></button>
-                                <button ><AssignmentIcon /></button>
-                                <button > <ReceiptIcon /></button>
-                                <button><DeleteIcon /></button>
-
-                            </td>
-
-                        </tr>
-                    }
+                        }</> : null
+                    }</tbody>
                 </table>
             </div>
             {showmodal ? <Modalupload handleclose={() => { setmodal(false) }} booking={modalbooking} handleSave={handleSaveimage} /> : null}

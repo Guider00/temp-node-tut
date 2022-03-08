@@ -339,7 +339,7 @@ export const Contract = () => {
                 <div className={styles.zone1}>
                     <div className={styles.header}>
                         <div className={styles.title}>
-                            <lable className={styles.contract}>รายการสัญญา</lable>
+                            <label className={styles.contract}>รายการสัญญา</label>
                         </div>
                         <div className={styles.dateinput}>
                             <label className={styles.date}>วันที่ :</label>
@@ -347,7 +347,7 @@ export const Contract = () => {
                                 id='checkin_date'
                                 type='date'
                                 max={DateEnd}
-                                value={DateStart}
+                                value={DateStart ? DateStart : ''}
                                 className={styles.inputdate}
                                 onChange={(e) => {
                                     let { value } = e.target
@@ -364,7 +364,8 @@ export const Contract = () => {
                             <input
                                 id='checkin_date_exp'
                                 min={DateStart}
-                                type='date' value={DateEnd}
+                                type='date' 
+                                value={DateEnd ? DateStart : ''}
                                 className={styles.inputdate}
                                 onChange={(e) => {
                                     let { value } = e.target
@@ -389,8 +390,8 @@ export const Contract = () => {
                             <label className={styles.building}>อาคาร :</label>
                             <select id='option_search' className={styles.select} onChange={handleChangedformfilter}>
                                 <option> เลือกอาคารทั้งหมด </option>
-                                {building.map((room) => room ? (
-                                    <option>{room}</option>
+                                {building.map((room , index) => room ? (
+                                    <option key={index.toString()} >{room}</option>
                                 ) : null)
 
                                 }
@@ -442,8 +443,9 @@ export const Contract = () => {
                                 </thead>
                                 {console.log("filterrooms", filterrooms, [...filterrooms].reverse())}
                                 <tbody className={styles.body}>{
-                                    (tbsortingstyle_newmetoold ? [...filterrooms].reverse() : filterrooms).map((item) => item ?
-                                        (<tr
+                                    (tbsortingstyle_newmetoold ? [...filterrooms].reverse() : filterrooms).map((item , index) => item ?
+                                        (<tr 
+                                            key={index.toString()}
                                             onClick={() => {
                                                 let _selectedcontract = selectedcontract
                                                 _selectedcontract = item
@@ -533,13 +535,13 @@ export const Contract = () => {
                         </div>
                     </div>
                     <div className={styles.subheader}>
-                        <lable className={styles.subheadertext}>ชื่อประเภทห้อง :</lable>
+                        <label className={styles.subheadertext}>ชื่อประเภทห้อง :</label>
                         <select className={styles.subheaderselect}
-                            value={selectedcontract && selectedcontract.Room && selectedcontract.Room.RoomType &&
+                            defaultValue={selectedcontract && selectedcontract.Room && selectedcontract.Room.RoomType &&
                                 selectedcontract.Room.RoomType.name ? selectedcontract.Room.RoomType.name : ""}
                         >
                             {console.log('roomtypes', roomtypes)}
-                            {roomtypes.map(roomtype => <option>{roomtype && roomtype.name ? roomtype.name : "---"}</option>)
+                            {roomtypes.map((roomtype , index) => <option key={index.toString()}>{roomtype && roomtype.name ? roomtype.name : "---"}</option>)
 
                             }
 
@@ -550,7 +552,7 @@ export const Contract = () => {
                     <div className={styles.inputmonthandday}>
                         <h1 className={styles.line}></h1>
                         <div className={styles.month}>
-                            <lable className={styles.month}>รายเดือน :</lable>
+                            <label className={styles.month}>รายเดือน :</label>
                             <input
                                 id='month'
                                 name='month'
@@ -563,7 +565,7 @@ export const Contract = () => {
                                 }
                             />
                             <div className={styles.input1}>
-                                <lable className={styles.inputtext1}>ค่าเช่าห้อง :</lable>
+                                <label className={styles.inputtext1}>ค่าเช่าห้อง :</label>
                                 <input
                                     placeholder='0.00'
                                     disabled={disabled.disabledMonth}
@@ -571,7 +573,7 @@ export const Contract = () => {
                                     defaultValue={selectedcontract && selectedcontract.Room && selectedcontract.Room.RoomType &&
                                         selectedcontract.Room.RoomType.monthlyprice ? selectedcontract.Room.RoomType.monthlyprice : ""}
                                 ></input>
-                                <lable className={styles.inputtext2}>ค่าประกัน :</lable>
+                                <label className={styles.inputtext2}>ค่าประกัน :</label>
                                 <input
                                     placeholder='0.00'
                                     disabled={disabled.disabledMonth}
@@ -580,20 +582,20 @@ export const Contract = () => {
                                         selectedcontract.Room.checkin.rental_deposit ? selectedcontract.Room.checkin.rental_deposit : ""}
                                 ></input>
                                 <br />
-                                <lable className={styles.inputtext3}>ค่าเช่าล่วงหน้า :</lable>
+                                <label className={styles.inputtext3}>ค่าเช่าล่วงหน้า :</label>
                                 <input
                                     disabled={disabled.disabledMonth}
                                     placeholder='0.00'
                                     className={styles.inputtext3}></input>
                             </div>
-                            <lable className={styles.submonth}>ค่าสาธารณูปโภค</lable>
+                            <label className={styles.submonth}>ค่าสาธารณูปโภค</label>
                             <div className={styles.input2}>
-                                <lable className={styles.inputtext1}>คิดค่าใช้จ่าย</lable>
-                                <lable className={styles.inputtext2}>อัตราบริการต่อหน่วย</lable>
-                                <lable className={styles.inputtext3}>อัตราต่อขั้นต่ำ</lable>
-                                <lable className={styles.inputtext4}>เหมาจ่าย</lable>
+                                <label className={styles.inputtext1}>คิดค่าใช้จ่าย</label>
+                                <label className={styles.inputtext2}>อัตราบริการต่อหน่วย</label>
+                                <label className={styles.inputtext3}>อัตราต่อขั้นต่ำ</label>
+                                <label className={styles.inputtext4}>เหมาจ่าย</label>
                                 <br />
-                                <lable className={styles.inputtext5}>ไฟฟ้า :</lable>
+                                <label className={styles.inputtext5}>ไฟฟ้า :</label>
                                 <input
                                     disabled={disabled.disabledMonth}
                                     placeholder='0.00'
@@ -614,7 +616,7 @@ export const Contract = () => {
                                     disabled={disabled.disabledMonth}
                                     placeholder='0.00'
                                     className={styles.inputbox2} />
-                                <lable>บาท</lable>
+                                <label>บาท</label>
                                 <input
                                     disabled={disabled.disabledMonth}
                                     placeholder='0.00'
@@ -625,9 +627,9 @@ export const Contract = () => {
                                     defaultValue={selectedcontract && selectedcontract.Room && selectedcontract.Room.RoomType &&
                                         selectedcontract.Room.RoomType.totalprice_electrical ? selectedcontract.Room.RoomType.totalprice_electrical : ""}
                                 />
-                                <lable>บาท</lable>
+                                <label>บาท</label>
                                 <br />
-                                <lable className={styles.inputtext7}>น้ำ :</lable>
+                                <label className={styles.inputtext7}>น้ำ :</label>
                                 <input
                                     disabled={disabled.disabledMonth}
                                     placeholder='0.00'
@@ -643,7 +645,7 @@ export const Contract = () => {
                                     disabled={disabled.disabledMonth}
                                     placeholder='0.00'
                                     className={styles.inputbox2}></input>
-                                <lable>บาท</lable>
+                                <label>บาท</label>
                                 <input
                                     id='D12'
                                     placeholder='0.00' className={styles.checkbox2} type='checkbox' />
@@ -653,13 +655,13 @@ export const Contract = () => {
                                     defaultValue={selectedcontract && selectedcontract.Room && selectedcontract.Room.RoomType &&
                                         selectedcontract.Room.RoomType.totalprice_water ? selectedcontract.Room.RoomType.totalprice_water : ""}
                                 />
-                                <lable>บาท</lable>
+                                <label>บาท</label>
                             </div>
 
                         </div>
                         <h1 className={styles.line}></h1>
                         <div className={styles.day}>
-                            <lable className={styles.day}>รายวัน :</lable>
+                            <label className={styles.day}>รายวัน :</label>
                             <input
                                 id='day'
                                 name='day'
@@ -671,7 +673,7 @@ export const Contract = () => {
 
                             />
                             <div className={styles.input1}>
-                                <lable className={styles.inputtext1}>ค่าเช่าห้อง :</lable>
+                                <label className={styles.inputtext1}>ค่าเช่าห้อง :</label>
                                 <input
                                     disabled={disabled.disabledDay}
                                     placeholder='0.00'
@@ -680,14 +682,14 @@ export const Contract = () => {
                                         selectedcontract.Room.RoomType.dailyprice ? selectedcontract.Room.RoomType.dailyprice : ""}
                                 />
                             </div>
-                            <lable className={styles.subday}>ค่าสาธารณูปโภค</lable>
+                            <label className={styles.subday}>ค่าสาธารณูปโภค</label>
                             <div className={styles.input2}>
-                                <lable className={styles.inputtext1}>คิดค่าใช้จ่าย</lable>
-                                <lable className={styles.inputtext2}>อัตราบริการต่อหน่วย</lable>
-                                <lable className={styles.inputtext3}>อัตราต่อขั้นต่ำ</lable>
-                                <lable className={styles.inputtext4}>เหมาจ่าย</lable>
+                                <label className={styles.inputtext1}>คิดค่าใช้จ่าย</label>
+                                <label className={styles.inputtext2}>อัตราบริการต่อหน่วย</label>
+                                <label className={styles.inputtext3}>อัตราต่อขั้นต่ำ</label>
+                                <label className={styles.inputtext4}>เหมาจ่าย</label>
                                 <br />
-                                <lable className={styles.inputtext5}>ไฟฟ้า :</lable>
+                                <label className={styles.inputtext5}>ไฟฟ้า :</label>
                                 <input
                                     disabled={disabled.disabledDay}
                                     placeholder='0.00' className={styles.inputtext6} type='checkbox' />
@@ -699,7 +701,7 @@ export const Contract = () => {
                                     disabled={disabled.disabledDay}
                                     placeholder='0.00'
                                     className={styles.inputbox2}></input>
-                                <lable>บาท</lable>
+                                <label>บาท</label>
                                 <input
                                     disabled={disabled.disabledDay}
                                     placeholder='0.00'
@@ -709,9 +711,9 @@ export const Contract = () => {
                                     disabled={disabled.disabledDay}
                                     placeholder='0.00'
                                     className={styles.inputbox3}></input>
-                                <lable>บาท</lable>
+                                <label>บาท</label>
                                 <br />
-                                <lable className={styles.inputtext7}>น้ำ :</lable>
+                                <label className={styles.inputtext7}>น้ำ :</label>
                                 <input
                                     disabled={disabled.disabledDay}
                                     placeholder='0.00'
@@ -724,7 +726,7 @@ export const Contract = () => {
                                     disabled={disabled.disabledDay}
                                     placeholder='0.00'
                                     className={styles.inputbox2}></input>
-                                <lable>บาท</lable>
+                                <label>บาท</label>
                                 <input
                                     disabled={disabled.disabledDay}
                                     placeholder='0.00'
@@ -734,7 +736,7 @@ export const Contract = () => {
                                     disabled={disabled.disabledDay}
                                     placeholder='0.00'
                                     className={styles.inputbox3}></input>
-                                <lable>บาท</lable>
+                                <label>บาท</label>
                             </div>
                             <h1 className={styles.line}></h1>
                             <div className={styles.input3} >

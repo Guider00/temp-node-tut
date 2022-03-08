@@ -147,7 +147,7 @@ export const Realtimetable = () => {
 								</tbody>
 								<tfoot>
 									<tr>
-										<td colspan="3">
+										<td colSpan="3">
 											<button
 												className={styles.button}
 												name="back"

@@ -298,9 +298,9 @@ export const CreateInvoic = () => {
                                 <tbody className={styles.body}>
 
                                     {filterrooms.filter((room) => (room && room.status === 'มีคนอยู่' )).map(
-                                        (room) =>
+                                        (room , index) =>
                                             room ? (
-                                                <tr>
+                                                <tr key={index}>
                                                     <td width={'20px'} ><input
                                                         type='checkbox'
                                                         name={room.id}

@@ -290,6 +290,8 @@
     overflow-y: auto;
     max-height: 24rem;
 }
+
+
 .container>.display>.zone2>.box2>.table{
   
     margin: 1rem;
@@ -358,8 +360,6 @@
         
 }
 .container>.display>.zone2>.box2>.display>.topic2{
-
-   
     border: 1px solid black ;
     border-radius: 15px;
     margin: 0.5rem ;
@@ -368,31 +368,18 @@
     width: 400px;
     height: 120px;
 }
-.container>.display>.zone2>.box2>.display>.topic3{
-    margin: 0.5rem ;
-    
-    border: 1px solid black ;
-    border-radius: 15px;
-    text-align: center;
-    
-    width: 350px;
-    height: 120px;
-}
+
 .container>.display>.zone2>.box2>.display{
-    
+    margin: 1.5rem;
+    margin-bottom: 0;
     display: flex;
     justify-content: center;
-    
 }
 .container>.display>.zone2>.box2>.display>.topic2>.text1{
-  
-    margin-top: 1rem;
     margin-left: 5rem;
    
 }
 .container>.display>.zone2>.box2>.display>.topic2>.text2{
-    
-    margin-top: 1rem;
     margin-left: 5rem;
    
 }
@@ -430,19 +417,26 @@
      margin-right: 1rem;
  }
 
-
+ .container>.display>.zone2>.box2>.display>.topic3{
+    margin: 0.5rem ;
+    
+    border: 1px solid black ;
+    border-radius: 15px;
+    text-align: center;
+    
+    width: 350px;
+    height: 120px;
+}
 
  .container>.display>.zone2>.box2>.display>.topic3>.text1{
+     margin-right: 1rem;
     
-    margin-top: 1rem;
-    margin: 3rem;
     
    
 }
 .container>.display>.zone2>.box2>.display>.topic3>.text2{
+    margin-left: 3rem;
     
-    margin-top: 1rem;
-    margin: 2rem;
    
 }
 .container>.display>.zone2>.box2>.display>.topic3>.input>.input1{
@@ -455,7 +449,7 @@
  .container>.display>.zone2>.box2>.display>.topic3>.input>.input2{
      margin-left: 1rem;
      
-     width: 42%;
+     width: 45%;
      
      
   }
@@ -467,10 +461,9 @@
    
 }
 .container>.display>.zone2>.box2>.topic4{
-
     text-align: center;
-    
     margin: 1rem auto;
+    margin-top: 0;
     width: 100%;
     height: 10%;
     
@@ -478,46 +471,45 @@
 .container>.display>.zone2>.box2>.topic4>.text1{
     
     margin-top: 1rem;
-    margin-left:5rem;
+    margin-left:16rem;
    
 }
 .container>.display>.zone2>.box2>.topic4>.text2{
     
     margin-top: 1rem;
-    margin-left: 5rem;
+    margin-left: 7rem;
    
 }
 
 .container>.display>.zone2>.box2>.topic4>.text3{
     
     margin-top: 1rem;
-    margin-left: 4rem;
+    margin-left: 6rem;
    
 }
 .container>.display>.zone2>.box2>.topic4>.input>.input1{
     
     margin-left: 1rem;
-    width: 15%;
+    width: 18%;
     
     
  }
  .container>.display>.zone2>.box2>.topic4>.input>.input2{
     
     margin-left: 1rem;
-    width: 15%;
+    width: 18%;
     
     
  }
  .container>.display>.zone2>.box2>.topic4>.input>.input3{
     
     margin-left: 1rem;
-    width: 15%;
+    width: 18%;
     
     
  }
  .container>.display>.zone2>.box2>.topic4>.input>.text4{
-    
-    margin-left: 1rem;
+    margin-left: 8rem;
     width: 15%;
     
     
@@ -576,6 +568,7 @@
 
     
 .topzone{
+    font-size: 0.9rem;
     width: 90%;
     height: 15%;
     margin: 1rem auto;
@@ -588,7 +581,7 @@
     
 }
 .topzone>.top>.textX{
-    margin: 0.2rem;
+    margin: 0.1rem auto;
     margin-left: 1rem;
     width: 100%;
     

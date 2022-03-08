@@ -222,9 +222,9 @@ export const Reportfinancial = () => {
                                 <h1>{TotalValue.totalprice}</h1>
                             </div>
                             <div className={styles.detail}>
-                                <lable></lable>
+                                <label></label>
                                 <br />
-                                <lable>vs. previous period</lable>
+                                <label>vs. previous period</label>
                             </div>
 
                         </div>
@@ -234,9 +234,9 @@ export const Reportfinancial = () => {
                                 <h1>{TotalValue.profit}</h1>
                             </div>
                             <div className={styles.detail}>
-                                <lable>90%</lable>
+                                <label>90%</label>
                                 <br />
-                                <lable>vs. previous period</lable>
+                                <label>vs. previous period</label>
                             </div>
 
                         </div>
@@ -246,9 +246,9 @@ export const Reportfinancial = () => {
                                 <h1>{TotalValue.amountInvoice}</h1>
                             </div>
                             <div className={styles.detail}>
-                                <lable>90%</lable>
+                                <label>90%</label>
                                 <br />
-                                <lable>vs. previous period</lable>
+                                <label>vs. previous period</label>
                             </div>
 
                         </div>
@@ -258,9 +258,9 @@ export const Reportfinancial = () => {
                                 <h1>{TotalValue.unpaid}</h1>
                             </div>
                             <div className={styles.detail}>
-                                <lable></lable>
+                                <label></label>
                                 <br />
-                                <lable>vs. previous period</lable>
+                                <label>vs. previous period</label>
                             </div>
 
                         </div>

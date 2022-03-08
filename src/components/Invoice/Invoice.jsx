@@ -143,8 +143,8 @@ export const Invoice = () => {
 
     }
 
-     //ฟังก์ชั่นเช็คการลบข้อมูลที่เลือก
-     const checkstate = async (state) => {
+    //ฟังก์ชั่นเช็คการลบข้อมูลที่เลือก
+    const checkstate = async (state) => {
 
         if (state) {
             Promise.all(IDrooms).then((IDrooms) => {
@@ -358,22 +358,22 @@ export const Invoice = () => {
                             <div className={styles.date}>
                                 <div className={styles.part1}>
                                     <input type="radio"></input>
-                                    <lable className={styles.onerem}>วันที่</lable>
+                                    <label className={styles.onerem}>วันที่</label>
                                     <input className={styles.side1}
                                         type='date'
                                         max={DateEnd}
-                                        value={DateStart}
+                                        value={DateStart ? DateStart : ''}
                                         onChange={(e) => {
                                             let { value } = e.target
                                             setDateStart(value)
                                         }}
                                     />
 
-                                    <lable>ถึง</lable>
+                                    <label>ถึง</label>
                                     <input className={styles.side2}
                                         type='date'
                                         min={DateStart}
-                                        value={DateEnd}
+                                        value={DateEnd ? DateEnd : ''}
                                         onChange={(e) => {
                                             let { value } = e.target
                                             setDateEnd(value)
@@ -389,22 +389,22 @@ export const Invoice = () => {
                                         }}
                                     ><EventNoteIcon /></button>
 
-                                    <lable>แสดงผล</lable>
+                                    <label>แสดงผล</label>
                                     <input className={styles.side3} placeholder='0.00'></input>
-                                    <lable>เดือน</lable>
+                                    <label>เดือน</label>
                                 </div>
                                 <div className={styles.part2}>
                                     <input type="radio"></input>
-                                    <lable className={styles.semirem}>รอบบิล</lable>
+                                    <label className={styles.semirem}>รอบบิล</label>
                                     <input className={styles.side1} type='date' />
 
-                                    <lable>ถึง</lable>
+                                    <label>ถึง</label>
                                     <input className={styles.side2} type='date' />
 
                                 </div>
                                 <div className={styles.part3}>
                                     <input type="checkbox" id='select-all' onChange={selectAll} />
-                                    <lable className={styles.onerem}>เลือกทั้งหมด</lable>
+                                    <label className={styles.onerem}>เลือกทั้งหมด</label>
 
                                 </div>
 
@@ -636,7 +636,7 @@ export const Invoice = () => {
                                 <div>ชำระทั้งหมดที่เลือก</div>
                             </button>
                             <button className={styles.button3}
-                                onClick={ () => {
+                                onClick={() => {
                                     handleConfirm('Are you sure to Delete?', true)
                                 }
                                 }
@@ -747,11 +747,11 @@ export const Invoice = () => {
                             </div>
 
                             <div className={styles.topic4}>
-                                <lable className={styles.text1} >วันที่เริ่ม</lable>
-                                <lable className={styles.text2} >วันที่สิ้นสุด</lable>
-                                <lable className={styles.text3} >ค่าโทรศัพท์</lable>
+                                <label className={styles.text1} >วันที่เริ่ม</label>
+                                <label className={styles.text2} >วันที่สิ้นสุด</label>
+                                <label className={styles.text3} >ค่าโทรศัพท์</label>
                                 <div className={styles.input}>
-                                    <lable className={styles.text4} >โทรศัพท์</lable>
+                                    <label className={styles.text4} >โทรศัพท์</label>
                                     <input name="inmemory_phone_date" value={formmeter.inmemory_phone_date} onChange={handlerChangeformmeter} className={styles.input1} type='date' />
                                     <input name="inmemory_finished_phone_date" value={formmeter.inmemory_finished_phone_date} onChange={handlerChangeformmeter} className={styles.input2} type='date' />
                                     <input name="phone_price" value={formmeter.phone_price} onChange={handlerChangeformmeter} className={styles.input3} placeholder='0.00' />
@@ -900,26 +900,26 @@ export const Invoice = () => {
 
                                 <div className={styles.lastresult}>
                                     <div className={styles.head} >
-                                        <lable>รวม</lable>
-                                        <input className={styles.onerem} placeholder='0.00' value={sumlists_to_show(
+                                        <label>รวม</label>
+                                        <input className={styles.onerem} placeholder='0.00' defaultValue={sumlists_to_show(
                                             selectroom && selectroom.lists ? selectroom.lists : []
                                         ).totalprice}>
                                         </input>
-                                        <lable className={styles.onerem}>บาท</lable>
+                                        <label className={styles.onerem}>บาท</label>
                                     </div>
                                     <div className={styles.head}>
-                                        <lable>ภาษีมูลค่าเพิ่ม 7%</lable>
-                                        <input className={styles.onerem} placeholder='0.00' value={sumlists_to_show(
+                                        <label>ภาษีมูลค่าเพิ่ม 7%</label>
+                                        <input className={styles.onerem} placeholder='0.00' defaultValue={sumlists_to_show(
                                             selectroom && selectroom.lists ? selectroom.lists : []
                                         ).totalvat}></input>
-                                        <lable className={styles.onerem}>บาท</lable>
+                                        <label className={styles.onerem}>บาท</label>
                                     </div>
                                     <div className={styles.head}>
-                                        <lable>รวมยอกเงินสุทธิ</lable>
-                                        <input className={styles.onerem} placeholder='0.00' value={sumlists_to_show(
+                                        <label>รวมยอกเงินสุทธิ</label>
+                                        <input className={styles.onerem} placeholder='0.00' defaultValue={sumlists_to_show(
                                             selectroom && selectroom.lists ? selectroom.lists : []
                                         ).grandtotal}></input>
-                                        <lable className={styles.onerem}>บาท</lable>
+                                        <label className={styles.onerem}>บาท</label>
                                     </div>
 
                                 </div>
@@ -938,7 +938,7 @@ export const Invoice = () => {
                                 }}
                             >
                                 <i><EditOutlinedIcon /></i>
-                                <div>{editselectroom ? "ยกเลิกแก้ไข" : "แก้ไข"}   </div>
+                                <div>{editselectroom ? "ยกเลิกแก้ไข" : "แก้ไข"}</div>
                             </button>
                             <button className={styles.button2} onClick={async () => {
                                 let _invoice = { ...selectroom }
@@ -985,7 +985,7 @@ export const Invoice = () => {
 
                     </div>
                 </div>
-                <div class={styles.buttonzone}>
+                <div className={styles.buttonzone}>
 
 
 

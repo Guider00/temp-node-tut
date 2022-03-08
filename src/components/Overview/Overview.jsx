@@ -12,42 +12,41 @@ import { useEffect, useState } from 'react';
 import { Floormodal } from '../Setting/Floor/Floormodal'
 
 
-import { API_queryroomprice  , API_queryBuildings , API_queryFloors, API_updateRoom, API_deleteRoom, API_queryMembers, API_queryRooms, API_createRoom , API_queryMeterRooms} from  '../../API/index'
+import { API_queryroomprice, API_queryBuildings, API_queryFloors, API_updateRoom, API_deleteRoom, API_queryMembers, API_queryRooms, API_createRoom, API_queryMeterRooms } from '../../API/index'
 
 
 import {
-	API_GET_RoomType
+    API_GET_RoomType
 } from '../../API/Schema/setting/RoomType/RoomType';
 
 import {
-	API_GET_MeterRooms
+    API_GET_MeterRooms
 } from '../../API/Schema/MeterRoom/MeterRoom';
 
 import { useQuery, useMutation } from '@apollo/client';
 
 
-import  { Inputconfig  , drowdownmenuroomconfig , option_status_room }  from './config'
+import { Inputconfig, drowdownmenuroomconfig, option_status_room } from './config'
 
-const color_roomstatur = (status) =>{
-    switch (status)
-    {
-        case "จอง" :
-        return 'cornflowerblue'   
-        case "ว่าง" :
-        return 'rgb(90,90,90)'
-        case"ไม่ว่าง" :
-        return 'red'
-        case"ย้ายออก" :
-        return 'red'
-        case"ย้ายเข้า" :
-        return 'yellow'
-        case"เช่า" :
-        case"มีคนอยู่" :
-        return 'green'
-        case"ปรับปรุง":
-        return 'orange'
+const color_roomstatur = (status) => {
+    switch (status) {
+        case "จอง":
+            return 'cornflowerblue'
+        case "ว่าง":
+            return 'rgb(90,90,90)'
+        case "ไม่ว่าง":
+            return 'red'
+        case "ย้ายออก":
+            return 'red'
+        case "ย้ายเข้า":
+            return 'yellow'
+        case "เช่า":
+        case "มีคนอยู่":
+            return 'green'
+        case "ปรับปรุง":
+            return 'orange'
         default:
-        return 'gray'
+            return 'gray'
     }
 
 }
@@ -222,251 +221,247 @@ let group_by_floor = uniqe_floors.map(floor => {
 
 export const Overview = () => {
 
-     const GET_RoomType  = useQuery(API_GET_RoomType)
-     const  MeterRooms = useQuery(API_GET_MeterRooms)
-    useEffect( ()=>{
+    const GET_RoomType = useQuery(API_GET_RoomType)
+    const MeterRooms = useQuery(API_GET_MeterRooms)
+    useEffect(() => {
         // let option_roomtype = [];
-         
+
         // if(GET_RoomType.loading === false){
-           
+
         //         option_roomtype =  GET_RoomType.data.RoomTypes.map(e =>  ({label:e.name , value:e.id})  )
         //        console.log('option_roomtype',option_roomtype)
         //         setoptionRoomType(option_roomtype)
         // }
-    
-    },[GET_RoomType.data , MeterRooms.data])
+
+    }, [GET_RoomType.data, MeterRooms.data])
 
 
-    const [_optionbuilding,setoptionbuilding] = useState([])
-    const [_optionfloor,setoptionfloor] = useState([])
-    const [_optionRoomType,setoptionRoomType] = useState([])
-    const [_optionmember,setoptionmember] = useState([])
-    const [_optionstatus,setoptionstatus] = useState([])
-    const [_optionmeterroom,setoptionmeterroom] = useState([])
-    console.log('_optionmember :',_optionmember)
-    console.log('_optionstatus :',_optionstatus)
-    console.log('_optionmeterroom :',_optionmeterroom)
+    const [_optionbuilding, setoptionbuilding] = useState([])
+    const [_optionfloor, setoptionfloor] = useState([])
+    const [_optionRoomType, setoptionRoomType] = useState([])
+    const [_optionmember, setoptionmember] = useState([])
+    const [_optionstatus, setoptionstatus] = useState([])
+    const [_optionmeterroom, setoptionmeterroom] = useState([])
+    console.log('_optionmember :', _optionmember)
+    console.log('_optionstatus :', _optionstatus)
+    console.log('_optionmeterroom :', _optionmeterroom)
 
-     // drop dowm menu //
-     const [_dropdowmmenu , setdropdownmenu] = useState(null)
- 
-
-
-    const [_showmodal,setshowmodal] = useState(false)
-    const [_load,setload] = useState(false)
-    const [_modalaction,setmodalaction] = useState("");
-    const [_modaldata,setmodaldata] = useState({});
-
-    const [_groupbyfloor,setgroupbyfloor] = useState([]);
+    // drop dowm menu //
+    const [_dropdowmmenu, setdropdownmenu] = useState(null)
 
 
-    const [_rooms,setroom] =useState({
-        topic:[],
-        body:[],
-        inputs:[]
+
+    const [_showmodal, setshowmodal] = useState(false)
+    const [_load, setload] = useState(false)
+    const [_modalaction, setmodalaction] = useState("");
+    const [_modaldata, setmodaldata] = useState({});
+
+    const [_groupbyfloor, setgroupbyfloor] = useState([]);
+
+
+    const [_rooms, setroom] = useState({
+        topic: [],
+        body: [],
+        inputs: []
     })
 
-    const Onclick_create =(data) =>{
+    const Onclick_create = (data) => {
 
 
         setmodalaction('Create')
         setshowmodal(true)
-        
+
 
     }
-    const onClickEdit =(id ,data) =>{
-        console.log("Update",id,data)
-   
-        _rooms.inputs = _rooms.inputs.map( (item,_index) => 
-        {
-                if(data.hasOwnProperty(item.property) && data.hasOwnProperty(item.property) ){
-                    if( data[item.property] && typeof data[item.property] === 'object' && data[item.property].hasOwnProperty("id")  ){
-                        return {...item, form: {...item.form , "value": data[item.property].id} }; //gets everything that was already in item, and updates "done"
-                    }else{
-                        return {...item, form: {...item.form , "value": data[item.property]} }; //gets everything that was already in item, and updates "done"
-                    }
-                }else{
-                    return {...item,}
+    const onClickEdit = (id, data) => {
+        console.log("Update", id, data)
+
+        _rooms.inputs = _rooms.inputs.map((item, _index) => {
+            if (data.hasOwnProperty(item.property) && data.hasOwnProperty(item.property)) {
+                if (data[item.property] && typeof data[item.property] === 'object' && data[item.property].hasOwnProperty("id")) {
+                    return { ...item, form: { ...item.form, "value": data[item.property].id } }; //gets everything that was already in item, and updates "done"
+                } else {
+                    return { ...item, form: { ...item.form, "value": data[item.property] } }; //gets everything that was already in item, and updates "done"
                 }
+            } else {
+                return { ...item, }
+            }
         });
 
-  
-         let catch_value = _rooms
-        setroom({...catch_value} )
-        setmodaldata({...data})  // <<set id input
+
+        let catch_value = _rooms
+        setroom({ ...catch_value })
+        setmodaldata({ ...data })  // <<set id input
         setmodalaction("Update") // << action type
         setshowmodal(true)
 
     }
-    const handleronchange = async (value ,index ,property )=>{
-      
+    const handleronchange = async (value, index, property) => {
 
-     
-        _rooms.inputs = _rooms.inputs.map( (item,_index) => 
-           {
-             if (_index === index){
-               return {...item, form: {...item.form , "value": value} }; //gets everything that was already in item, and updates "done"
-             }
 
-             return item; // else return unmodified item 
-       });
-       let catch_value = _rooms
 
-        if(property === 'building'){
-            let option  =  await  get_API_Inputoption();
-            let floor_options = option.floor.filter( floor => floor.building.id === value)
-            if(catch_value.inputs && catch_value.inputs.find(inp => inp.property === 'floor')   ){
-                 catch_value.inputs.find(inp => inp.property === 'floor').form.options = [...floor_options]
-                 if(floor_options.length > 0 ){
-                 catch_value.inputs.find(inp => inp.property === 'floor').form.value = floor_options[0].value
-                 }
+        _rooms.inputs = _rooms.inputs.map((item, _index) => {
+            if (_index === index) {
+                return { ...item, form: { ...item.form, "value": value } }; //gets everything that was already in item, and updates "done"
+            }
+
+            return item; // else return unmodified item 
+        });
+        let catch_value = _rooms
+
+        if (property === 'building') {
+            let option = await get_API_Inputoption();
+            let floor_options = option.floor.filter(floor => floor.building.id === value)
+            if (catch_value.inputs && catch_value.inputs.find(inp => inp.property === 'floor')) {
+                catch_value.inputs.find(inp => inp.property === 'floor').form.options = [...floor_options]
+                if (floor_options.length > 0) {
+                    catch_value.inputs.find(inp => inp.property === 'floor').form.value = floor_options[0].value
+                }
             }
         }
-       
 
-       setroom({...catch_value} )
-       
-   }
-    const Save = async (id,inputs,action) =>{
-       
-      let  data =  inputs.map(item => {
-             return { [item.property]: item.form.value}
-        }).reduce((accumulator, currentValue)=>{
-            return {...accumulator , ...currentValue}
+
+        setroom({ ...catch_value })
+
+    }
+    const Save = async (id, inputs, action) => {
+
+        let data = inputs.map(item => {
+            return { [item.property]: item.form.value }
+        }).reduce((accumulator, currentValue) => {
+            return { ...accumulator, ...currentValue }
         })
-       
-        console.log('Update id data',id ,action,data)
+
+        console.log('Update id data', id, action, data)
 
         let res
-        if(action === "Update" && id){
-            res  = await API_updateRoom(id,data)
-        }else if(action === "Create"){
-            res =  await API_createRoom(data)
+        if (action === "Update" && id) {
+            res = await API_updateRoom(id, data)
+        } else if (action === "Create") {
+            res = await API_createRoom(data)
         }
-        
-        if(res && res.status === 200){
+
+        if (res && res.status === 200) {
             setshowmodal(false)
-        }else{
+        } else {
             setshowmodal(false) // Alert
         }
         setload(false)
     }
-    
-    const onClick_Delete = (id) =>{
-       
+
+    const onClick_Delete = (id) => {
+
         API_deleteRoom(id)
         setload(false)
     }
-    
-    const get_API_Inputoption = async () =>{
-        return new Promise( async (resolve,rejcet) =>{
-            let building = [],floor = [] ,member = [] , meterroom = [] ,type=[],status =[] ,_RoomType ={}
+
+    const get_API_Inputoption = async () => {
+        return new Promise(async (resolve, rejcet) => {
+            let building = [], floor = [], member = [], meterroom = [], type = [], status = [], _RoomType = {}
             let res_building = await API_queryBuildings()
-            if(res_building && res_building.status === 200)
-            {
-            
-                 building =  res_building.data.Buildings.map(e =>  ({label:e.name , value:e.id})  )
+            if (res_building && res_building.status === 200) {
+
+                building = res_building.data.Buildings.map(e => ({ label: e.name, value: e.id }))
             }
-            let res_floor =  await API_queryFloors()
-            if(res_floor && res_floor.status === 200)
-            {
-                floor =  res_floor.data.Floors.map(e =>  ({label:e.name , value:e.id , building:e.building})  )
+            let res_floor = await API_queryFloors()
+            if (res_floor && res_floor.status === 200) {
+                floor = res_floor.data.Floors.map(e => ({ label: e.name, value: e.id, building: e.building }))
             }
 
             let res_member = await API_queryMembers()
-            if(res_member && res_member.status === 200){
-                member =  res_member.data.Members.map(e =>  ({label:e.name , value:e.id})  )
+            if (res_member && res_member.status === 200) {
+                member = res_member.data.Members.map(e => ({ label: e.name, value: e.id }))
             }
-            let res =  await API_queryroomprice()
-            if( res && res.status === 200){
-                type =   get_option(res.data.roomprices,'name')
-               type = type.map(e =>  ({label:e , value:e})  )
+            let res = await API_queryroomprice()
+            if (res && res.status === 200) {
+                type = get_option(res.data.roomprices, 'name')
+                type = type.map(e => ({ label: e, value: e }))
             }
 
             // let res_meterroom = await API_queryMeterRooms()
-      
+
             // if(res_meterroom && res_meterroom.status === 200){
             //     meterroom =  res_meterroom.data.MeterRooms.map(e =>  ({label:e.name , value:e.id})  )
 
             // }
-             
-            if( MeterRooms && MeterRooms.data && MeterRooms.data.length > 0 ){
-                
-                meterroom =   [...MeterRooms.data.MeterRooms.map(e=> ({label:e.name , value:e.id}) ) ] 
-              
-            }
 
-             let res_roomtype =    await GET_RoomType.refetch();
-             console.log('res_roomtype',res_roomtype)
-            if(res_roomtype && res_roomtype.data){
-                _RoomType =  res_roomtype.data.RoomTypes.map(e =>  ({label:e.name , value:e.id})  )
+            if (MeterRooms && MeterRooms.data && MeterRooms.data.length > 0) {
+
+                meterroom = [...MeterRooms.data.MeterRooms.map(e => ({ label: e.name, value: e.id }))]
 
             }
 
-             // set Option form input
+            let res_roomtype = await GET_RoomType.refetch();
+            console.log('res_roomtype', res_roomtype)
+            if (res_roomtype && res_roomtype.data) {
+                _RoomType = res_roomtype.data.RoomTypes.map(e => ({ label: e.name, value: e.id }))
+
+            }
+
+            // set Option form input
             status = option_status_room
-            resolve({'building':building,'floor':floor,'member':member,'meterroom':meterroom,'RoomType':_RoomType,status:status})
-        }).catch(e=>{
-            console.log('Promis Error',e);
-           return({building:[],floor:[],member:[],type:[],status:[]})
+            resolve({ 'building': building, 'floor': floor, 'member': member, 'meterroom': meterroom, 'RoomType': _RoomType, status: status })
+        }).catch(e => {
+            console.log('Promis Error', e);
+            return ({ building: [], floor: [], member: [], type: [], status: [] })
         })
     }
-    const getRooms = async () =>{
-        return new Promise(async (resolve,reject)=>{
+    const getRooms = async () => {
+        return new Promise(async (resolve, reject) => {
             let res = await API_queryRooms()
-            console.log('query Room ',res)
-            let table =[]
-            if(res && res.status === 200){
-                table =  res.data.rooms.map((data) =>{
+            console.log('query Room ', res)
+            let table = []
+            if (res && res.status === 200) {
+                table = res.data.rooms.map((data) => {
                     let _data = data
                     return {
-                        id:data.id ,data:_data ,
-                        building:data.building ? data.building.name:"---",
-                        floor:data.floor ? data.floor.name:'---',
-                        name:data.name, 
-                        status:data.status ? data.status:'---',
-                        member:data.member ? data.member.name : '---',
-                        metername:data.meterroom ? data.meterroom.name : '---'
+                        id: data.id, data: _data,
+                        building: data.building ? data.building.name : "---",
+                        floor: data.floor ? data.floor.name : '---',
+                        name: data.name,
+                        status: data.status ? data.status : '---',
+                        member: data.member ? data.member.name : '---',
+                        metername: data.meterroom ? data.meterroom.name : '---'
                     }
-                } )
+                })
             }
 
             resolve(table)
-        }).catch(e =>{
-            console.log('Promise Error',e)
+        }).catch(e => {
+            console.log('Promise Error', e)
             return []
         })
     }
-  
-   
-    useEffect(  ()=>{
-        const inital_data = async ()=>{
-            let option  =  await  get_API_Inputoption();
+
+
+    useEffect(() => {
+        const inital_data = async () => {
+            let option = await get_API_Inputoption();
             let table = await getRooms()
-            console.log('table',table)
+            console.log('table', table)
             setoptionbuilding(option.building)
             setoptionfloor(option.floor)
             setoptionmember(option.member)
             setoptionstatus(option.status)
             setoptionmeterroom(option.meterroom)
             setoptionRoomType(option.RoomType)
-      
-            
+
+
             let inputconfig = Inputconfig();
-            console.log('inputconfig' ,inputconfig)
-            inputconfig.inputs = inputconfig.inputs.map( (ele,_index)=>{
+            console.log('inputconfig', inputconfig)
+            inputconfig.inputs = inputconfig.inputs.map((ele, _index) => {
                 switch (ele.property) {
                     case "building":
                         ele.form.options = option.building
-                        ele.form.value =   option.building.length > 0 ? option.building[0].value : 'All'
+                        ele.form.value = option.building.length > 0 ? option.building[0].value : 'All'
                         break;
                     case "floor":
                         ele.form.options = option.floor
-                        ele.form.value =  option.floor.length > 0 ? option.floor[0].value :'All'
+                        ele.form.value = option.floor.length > 0 ? option.floor[0].value : 'All'
                         break;
                     case "member":
                         ele.form.options = option.member
-                        ele.form.value =  option.member.length > 0 ? option.member[0].value :'All'
+                        ele.form.value = option.member.length > 0 ? option.member[0].value : 'All'
                         break;
                     case "status":
                         ele.form.options = option.status
@@ -474,11 +469,11 @@ export const Overview = () => {
                         break;
                     case "meterroom":
                         ele.form.options = option.meterroom
-                        ele.form.value =  option.meterroom.length > 0 ? option.meterroom[0].value :'All'
+                        ele.form.value = option.meterroom.length > 0 ? option.meterroom[0].value : 'All'
                         break;
-                    case 'RoomType' :
+                    case 'RoomType':
                         ele.form.options = option.RoomType
-                        ele.form.value =  option.RoomType.length > 0 ? option.RoomType[0].value :'All'
+                        ele.form.value = option.RoomType.length > 0 ? option.RoomType[0].value : 'All'
                         break;
                     default:
                         break;
@@ -488,38 +483,38 @@ export const Overview = () => {
 
             setroom({
                 showindex: true,
-                topic:inputconfig.topic,
-                body:table,
-                inputs:inputconfig.inputs
-             })
+                topic: inputconfig.topic,
+                body: table,
+                inputs: inputconfig.inputs
+            })
 
 
-             let uniqe_floors = get_option(table, 'floor')
-             console.log('uniqe_floors',uniqe_floors)
-              let group_by_floor = uniqe_floors.map(floor => {
+            let uniqe_floors = get_option(table, 'floor')
+            console.log('uniqe_floors', uniqe_floors)
+            let group_by_floor = uniqe_floors.map(floor => {
                 return table.filter(room => room.floor === floor)
-             })
-             setgroupbyfloor(group_by_floor)
-             console.log('_groupbyfloor',group_by_floor)
-             setload(true)
+            })
+            setgroupbyfloor(group_by_floor)
+            console.log('_groupbyfloor', group_by_floor)
+            setload(true)
 
 
         }
         inital_data()
-        
-    },[_load])
+
+    }, [_load])
     return (
-        <> 
-            { _showmodal? <Floormodal  onClose={ ()=>setshowmodal(false) } 
+        <>
+            {_showmodal ? <Floormodal onClose={() => setshowmodal(false)}
 
-            Data={_modaldata}
-            onSave={Save}  
-            onchange={handleronchange}
+                Data={_modaldata}
+                onSave={Save}
+                onchange={handleronchange}
 
-            Action={_modalaction} 
-            Inputs={_rooms.inputs}  
+                Action={_modalaction}
+                Inputs={_rooms.inputs}
 
-            ></Floormodal> :null }
+            ></Floormodal> : null}
 
             {/* <div className={styles.main} >
                     <div className={styles.header}>
@@ -536,116 +531,117 @@ export const Overview = () => {
             </div> */}
 
             <div className={styles.body}>
-             { _optionbuilding && _optionfloor && _optionRoomType ?
-                <div className={styles.rowmenu}>
-                    <div className={styles.option}>
-                        <label> อาคาร</label>
-                        <select onchange={(e)=>{console.log(e.target.value)}}>
-                            <option> All </option>
-                            {_optionbuilding.map(item => <option>{item.label}</option> )}
-                        </select>
-                    </div>
-                    <div className={styles.option}>
-                        <label> ชั้น</label>
-                        <select onchange={(e)=>{console.log(e.target.value)}}>
-                            <option> All </option>
-                            {_optionfloor.map(item => <option>{item.label}</option>)}
-                        </select>
-                    </div>
+                {_optionbuilding && _optionfloor && _optionRoomType ?
+                    <div className={styles.rowmenu}>
+                        <div className={styles.option}>
+                            <label> อาคาร</label>
+                            <select onchange={(e) => { console.log(e.target.value) }}>
+                                <option> All </option>
+                                {_optionbuilding.map((item, index) => <option key={index}>{item.label}</option>)}
+                            </select>
+                        </div>
+                        <div className={styles.option}>
+                            <label> ชั้น</label>
+                            <select onchange={(e) => { console.log(e.target.value) }}>
+                                <option> All </option>
+                                {_optionfloor.map((item, index) => <option key={index}>{item.label}</option>)}
+                            </select>
+                        </div>
 
-                    <div className={styles.option} >
-                        <label> ประเภทห้อง </label>
-                        <select onchange={(e)=>{console.log(e.target.value)}}>
-                             <option> All </option>
-                            { _optionRoomType && _optionRoomType.length  ? _optionRoomType.map(item => <option>{item.label}</option>) :null}
-                        </select>
-                    </div>
+                        <div className={styles.option} >
+                            <label> ประเภทห้อง </label>
+                            <select onchange={(e) => { console.log(e.target.value) }}>
+                                <option> All </option>
+                                {_optionRoomType && _optionRoomType.length ? _optionRoomType.map((item, index) => <option key={index}>{item.label}</option>) : null}
+                            </select>
+                        </div>
 
-                    <div className={styles.option} >
-                        <label> สถานะห้อง </label>
-                        <select  onchange={(e)=>{console.log(e.target.value)}}>
-                            <option> All </option>
-                            {get_option(Rooms, 'status').map(build => <option>{build}</option>)}
-                        </select>
-                    </div>
+                        <div className={styles.option} >
+                            <label> สถานะห้อง </label>
+                            <select onchange={(e) => { console.log(e.target.value) }}>
+                                <option> All </option>
+                                {get_option(Rooms, 'status').map((build, index) => <option key={index}>{build}</option>)}
+                            </select>
+                        </div>
 
-                    
+
                         <div className={styles.optionbtn} >
-                            <button onClick={()=> Onclick_create()}> 
+                            <button onClick={() => Onclick_create()}>
                                 <div> สร้างห้อง </div>
-                                <div><Add/> </div> 
+                                <div><Add /> </div>
                             </button>
                         </div>
-                    
 
-                   
-                </div>
-                 :
-                 null }
+
+
+                    </div>
+                    :
+                    null}
                 {
-                    _groupbyfloor.map( (group_floor ,index) => < >
-                        <div key={ `floor_${index}}`}className={styles.line}> ชั้น {group_floor[0]['floor']} </div>
+                    _groupbyfloor.map((group_floor, index) => < >
+                        <div key={`floor_${index}}`} className={styles.line}> ชั้น {group_floor[0]['floor']} </div>
                         <div className={styles.row}>
-                            {group_floor.map( (room,index) =>
+                            {group_floor.map((room, index) =>
                                 <div key={`room_${index}`} className={styles.card}>
                                     <div>
                                         <div className={styles.topic} style={{
-                                                backgroundColor: color_roomstatur (room.status)
-                                            }}>
-                                            <div className={styles.front} >  
-                                                <div  className={styles.btn} onClick={()=>{ 
-                                                    setdropdownmenu(  _dropdowmmenu === null  ? room.id :   _dropdowmmenu !== room.id  ? room.id : null  );
-                                                      console.log( "Room ID ",room.id , room.data  ) 
-                                                      console.log(" Room index",index , _dropdowmmenu) }} >
+                                            backgroundColor: color_roomstatur(room.status)
+                                        }}>
+                                            <div className={styles.front} >
+                                                <div className={styles.btn} onClick={() => {
+                                                    setdropdownmenu(_dropdowmmenu === null ? room.id : _dropdowmmenu !== room.id ? room.id : null);
+                                                    console.log("Room ID ", room.id, room.data)
+                                                    console.log(" Room index", index, _dropdowmmenu)
+                                                }} >
                                                     <ArrowDropDownIcon />
-                                                   
-                                                </div  >
-                                                 { _dropdowmmenu === room.id ? <div className={styles.dropdownmenu}>
-                                                    {
-                                                     drowdownmenuroomconfig.map(menu =>
-                                                     (  
-                                                        <div onClick={()=>{ window.location.href = `/${menu.link}` }}>
-                                                            <span>{menu.label}</span>
-                                                        </div>
-                                                        )
-                                                     )
-                                                    }
-                                                      
-                                                </div> :null}
 
-                           
+                                                </div  >
+                                                {_dropdowmmenu === room.id ? <div className={styles.dropdownmenu}>
+                                                    {
+                                                        drowdownmenuroomconfig.map((menu, index) =>
+                                                        (
+                                                            <div key={index} onClick={() => { window.location.href = `/${menu.link}` }}>
+                                                                <span>{menu.label}</span>
+                                                            </div>
+                                                        )
+                                                        )
+                                                    }
+
+                                                </div> : null}
+
+
                                             </div>
                                             <div className={styles.text} >{room.name} </div>
-                                            
-                                    
+
+
                                             <div className={styles.back}   >
-                                                <div  className={styles.btn} onClick={()=>{ onClickEdit(room.id,room.data)  }} >
-                                                <SettingsIcon />
+                                                <div className={styles.btn} onClick={() => { onClickEdit(room.id, room.data) }} >
+                                                    <SettingsIcon />
                                                 </div  >
 
-                                                 
-                                                <div  className={styles.btn} onClick={()=>{ onClick_Delete(room.id)  }} >
-                                                    <DeleteIcon/>
+
+                                                <div className={styles.btn} onClick={() => { onClick_Delete(room.id) }} >
+                                                    <DeleteIcon />
                                                 </div>
-                                              
+
                                             </div>
 
                                         </div>
-                                        
+
                                         <div className={styles.body} >
-                                            <div  className={styles.image}>
-                                                <img src="./image/powermeter.jpg" alt="Trulli" width="60" height="60"/>
+                                            <div className={styles.image}>
+                                                <img src="./image/powermeter.jpg" alt="Trulli" width="60" height="60" />
                                             </div>
-                                            
+
                                             <div className={styles.text}>
-                                            {room.metername}
+                                                {room.metername}
                                             </div>
-                                           
+
                                         </div>
                                         <div className={styles.footer}>
-                                            <div className={styles.front}> {(room.type === "fan") ? 
-                                           
-                                                                                       null     :  <img src="./image/powermeter.jpg" alt="Trulli" width="24" height="24"/>} 
+                                            <div className={styles.front}> {(room.type === "fan") ?
+
+                                                null : <img src="./image/powermeter.jpg" alt="Trulli" width="24" height="24" />}
                                             </div>
                                             <div className={styles.text} ></div>
                                             <div className={styles.back} > <MonetizationOnIcon /></div>
@@ -653,7 +649,7 @@ export const Overview = () => {
                                     </div>
                                 </div>
                             )}
-                        </div> 
+                        </div>
                     </>)
                 }
 

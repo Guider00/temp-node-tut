@@ -209,12 +209,11 @@ export const Reimbursement = () => {
                             </tr>
 
                         </thead>
-                        <tbody className={styles.tbody}> {FilterReimbursements.map(
+                        <tbody className={styles.tbody}>{FilterReimbursements.map(
                             (reimbursements) => reimbursements && reimbursements.Contract && reimbursements.Contract.Room ? (
-                                <tr  >
+                                <tr>
                                     <td>
                                         <input
-
                                             type="checkbox"
                                             name="myCheckboxName"
                                             id="myCheckboxId"
@@ -232,8 +231,7 @@ export const Reimbursement = () => {
                                                     setselectedReimbursements(_selectedReimbursements)
 
                                                 }
-                                            }}></input>
-                                    </td>
+                                            }}></input></td>
                                     <td>{reimbursements.Contract.Room.floor.building.name ? reimbursements.Contract.Room.floor.building.name : '---'}</td>
                                     <td>{reimbursements.Contract.Room.name ? reimbursements.Contract.Room.name : '---'}</td>
                                     <td>{reimbursements.Contract.id ? reimbursements.Contract.id : '---'}</td>
@@ -243,14 +241,9 @@ export const Reimbursement = () => {
                                     <td>{reimbursements.cashback ? reimbursements.cashback : '0'}</td>
                                     <td>{reimbursements.status ? reimbursements.status : '---'}</td>
                                     <td>{reimbursements.cashback_date ? toYYMMDD(reimbursements.cashback_date) : '---'}</td>
-
-
-
                                 </tr>
                             ) : null
-                        )}
-
-                        </tbody>
+                        )}</tbody>
 
 
                     </table>
@@ -325,7 +318,7 @@ export const Reimbursement = () => {
 
                 <div className={styles.footer}>
                     <h3 className={styles.footertext}>
-                        <lable className={styles.highlight}> คืนเงินประกัน </lable>
+                        <label className={styles.highlight}> คืนเงินประกัน </label>
                         : คือขั้นตอนการอัพเดตสถานะของห้องเช่าที่มีประกันห้องไว้ ขั้นตอนนี้ต้องทำหลังจากมีการย้ายออกและทำการชำระเงิน
                         และผู้ให้เช่าได้ทำการคืนเงินประกันเรียบร้อยแล้ว
                     </h3>

@@ -302,7 +302,7 @@ export const Address = () => {
 
 
                     <div className={styles.inputstyle}>
-                        <lable className={styles.text}>ชื่อบริษัท</lable>
+                        <label className={styles.text}>ชื่อบริษัท</label>
                         <input className={styles.input}
                             id='name'
                             name='name'
@@ -311,10 +311,10 @@ export const Address = () => {
                             style={formErrorsAddress.name === undefined ? { borderColor: 'black' } : { borderColor: 'red' }}
                             onChange={handleOnchangeAddress}
                         />
-                        <lable className={styles.error}>{formErrorsAddress.name}</lable>
+                        <label className={styles.error}>{formErrorsAddress.name}</label>
                     </div>
                     <div className={styles.inputstyle}>
-                        <lable className={styles.text}>เบอร์โทร</lable>
+                        <label className={styles.text}>เบอร์โทร</label>
                         <input className={styles.input}
                             id='tel'
                             name='tel'
@@ -323,10 +323,10 @@ export const Address = () => {
                             style={formErrorsAddress.tel === undefined ? { borderColor: 'black' } : { borderColor: 'red' }}
                             onChange={handleOnchangeAddress}
                         />
-                        <lable className={styles.error}>{formErrorsAddress.tel}</lable>
+                        <label className={styles.error}>{formErrorsAddress.tel}</label>
                     </div>
                     <div className={styles.inputstyle}>
-                        <lable className={styles.text}>เลขที่</lable>
+                        <label className={styles.text}>เลขที่</label>
                         <input className={styles.input}
                             id='no'
                             name='no'
@@ -335,10 +335,10 @@ export const Address = () => {
                             style={formErrorsAddress.no === undefined ? { borderColor: 'black' } : { borderColor: 'red' }}
                             onChange={handleOnchangeAddress}
                         />
-                        <lable className={styles.error}>{formErrorsAddress.no}</lable>
+                        <label className={styles.error}>{formErrorsAddress.no}</label>
                     </div>
                     <div className={styles.inputstyle}>
-                        <lable className={styles.text}>ถนน</lable>
+                        <label className={styles.text}>ถนน</label>
                         <input className={styles.input}
                             id='road'
                             name='road'
@@ -347,10 +347,10 @@ export const Address = () => {
                             style={formErrorsAddress.road === undefined ? { borderColor: 'black' } : { borderColor: 'red' }}
                             onChange={handleOnchangeAddress}
                         />
-                        <lable className={styles.error}>{formErrorsAddress.road}</lable>
+                        <label className={styles.error}>{formErrorsAddress.road}</label>
                     </div>
                     <div className={styles.inputstyle}>
-                        <lable className={styles.text}>หมู่บ้าน</lable>
+                        <label className={styles.text}>หมู่บ้าน</label>
                         <input className={styles.input}
                             id='village'
                             name='village'
@@ -359,10 +359,10 @@ export const Address = () => {
                             style={formErrorsAddress.village === undefined ? { borderColor: 'black' } : { borderColor: 'red' }}
                             onChange={handleOnchangeAddress}
                         />
-                        <lable className={styles.error}>{formErrorsAddress.village}</lable>
+                        <label className={styles.error}>{formErrorsAddress.village}</label>
                     </div>
                     <div className={styles.inputstyle}>
-                        <lable className={styles.text}>ตรอก/ซอย</lable>
+                        <label className={styles.text}>ตรอก/ซอย</label>
                         <input className={styles.input}
                             id='alley'
                             name='alley'
@@ -371,10 +371,10 @@ export const Address = () => {
                             style={formErrorsAddress.alley === undefined ? { borderColor: 'black' } : { borderColor: 'red' }}
                             onChange={handleOnchangeAddress}
                         />
-                        <lable className={styles.error}>{formErrorsAddress.alley}</lable>
+                        <label className={styles.error}>{formErrorsAddress.alley}</label>
                     </div>
                     <div className={styles.inputstyle}>
-                        <lable className={styles.text}>ตำบล/แขวง</lable>
+                        <label className={styles.text}>ตำบล/แขวง</label>
                         <input className={styles.input}
                             id='boundary'
                             name='boundary'
@@ -383,10 +383,10 @@ export const Address = () => {
                             style={formErrorsAddress.boundary === undefined ? { borderColor: 'black' } : { borderColor: 'red' }}
                             onChange={handleOnchangeAddress}
                         />
-                        <lable className={styles.error}>{formErrorsAddress.boundary}</lable>
+                        <label className={styles.error}>{formErrorsAddress.boundary}</label>
                     </div>
                     <div className={styles.inputstyle}>
-                        <lable className={styles.text}>อำเภอ/เขต</lable>
+                        <label className={styles.text}>อำเภอ/เขต</label>
                         <input className={styles.input}
                             id='district'
                             name='district'
@@ -395,10 +395,10 @@ export const Address = () => {
                             style={formErrorsAddress.district === undefined ? { borderColor: 'black' } : { borderColor: 'red' }}
                             onChange={handleOnchangeAddress}
                         />
-                        <lable className={styles.error}>{formErrorsAddress.district}</lable>
+                        <label className={styles.error}>{formErrorsAddress.district}</label>
                     </div>
                     <div className={styles.inputstyle}>
-                        <lable className={styles.text}>จังหวัด</lable>
+                        <label className={styles.text}>จังหวัด</label>
                         <input className={styles.input}
                             id='province'
                             name='province'
@@ -407,10 +407,10 @@ export const Address = () => {
                             style={formErrorsAddress.province === undefined ? { borderColor: 'black' } : { borderColor: 'red' }}
                             onChange={handleOnchangeAddress}
                         />
-                        <lable className={styles.error}>{formErrorsAddress.province}</lable>
+                        <label className={styles.error}>{formErrorsAddress.province}</label>
                     </div>
                     <div className={styles.inputstyle}>
-                        <lable className={styles.text}>เลขไปรษณีย์</lable>
+                        <label className={styles.text}>เลขไปรษณีย์</label>
                         <input className={styles.input}
                             id='code'
                             name='code'
@@ -419,7 +419,7 @@ export const Address = () => {
                             style={formErrorsAddress.code === undefined ? { borderColor: 'black' } : { borderColor: 'red' }}
                             onChange={handleOnchangeAddress}
                         />
-                        <lable className={styles.error}>{formErrorsAddress.code}</lable>
+                        <label className={styles.error}>{formErrorsAddress.code}</label>
                     </div>
 
 
@@ -468,7 +468,7 @@ export const Address = () => {
                 <div className={styles.inputbox}>
                     <div className={styles.inputstyle}>
 
-                        <lable className={styles.text}>รหัสใบเสร็จ</lable>
+                        <label className={styles.text}>รหัสใบเสร็จ</label>
                         <input className={styles.input}
                             name='receipt'
                             id='receipt'
@@ -477,7 +477,7 @@ export const Address = () => {
                             style={formErrors.receipt === undefined ? { borderColor: 'black' } : { borderColor: 'red' }}
                             onChange={handleOnchangeReceipt}
                         />
-                        <lable className={styles.error}>{formErrors.receipt}</lable>
+                        <label className={styles.error}>{formErrors.receipt}</label>
                         <button className={styles.deleteOne}
                             onClick={() => {
                                 let _defaultData = defaultData
@@ -493,7 +493,7 @@ export const Address = () => {
                     </div>
                     <div className={styles.inputstyle}>
 
-                        <lable className={styles.text}>รหัสใบกำกับภาษี</lable>
+                        <label className={styles.text}>รหัสใบกำกับภาษี</label>
                         <input className={styles.input}
                             name='invoice'
                             id='invoice'
@@ -502,7 +502,7 @@ export const Address = () => {
                             style={formErrors.invoice === undefined ? { borderColor: 'black' } : { borderColor: 'red' }}
                             onChange={handleOnchangeReceipt}
                         />
-                        <lable className={styles.error}>{formErrors.invoice}</lable>
+                        <label className={styles.error}>{formErrors.invoice}</label>
                         <button className={styles.deleteOne}
                             onClick={() => {
                                 let _defaultData = defaultData
@@ -519,7 +519,7 @@ export const Address = () => {
                     </div>
                     <div className={styles.inputstyle}>
 
-                        <lable className={styles.text}>รหัสใบคืนเงินประกัน</lable>
+                        <label className={styles.text}>รหัสใบคืนเงินประกัน</label>
                         <input className={styles.input}
                             name='reimbursement'
                             id='reimbursement'
@@ -528,7 +528,7 @@ export const Address = () => {
                             style={formErrors.reimbursement === undefined ? { borderColor: 'black' } : { borderColor: 'red' }}
                             onChange={handleOnchangeReceipt}
                         />
-                        <lable className={styles.error}>{formErrors.reimbursement}</lable>
+                        <label className={styles.error}>{formErrors.reimbursement}</label>
                         <button className={styles.deleteOne}
                             onClick={() => {
                                 let _defaultData = defaultData
@@ -545,7 +545,7 @@ export const Address = () => {
                     </div>
                     <div className={styles.inputstyle}>
 
-                        <lable className={styles.text}>รหัสใบจอง</lable>
+                        <label className={styles.text}>รหัสใบจอง</label>
                         <input className={styles.input}
                             name='booking'
                             id='booking'
@@ -554,7 +554,7 @@ export const Address = () => {
                             style={formErrors.booking === undefined ? { borderColor: 'black' } : { borderColor: 'red' }}
                             onChange={handleOnchangeReceipt}
                         />
-                        <lable className={styles.error}>{formErrors.booking}</lable>
+                        <label className={styles.error}>{formErrors.booking}</label>
                         <button className={styles.deleteOne}
                             onClick={() => {
                                 let _defaultData = defaultData
@@ -572,7 +572,7 @@ export const Address = () => {
 
                     <div className={styles.inputstyle}>
 
-                        <lable className={styles.text}>รหัสใบแจ้งหนี้</lable>
+                        <label className={styles.text}>รหัสใบแจ้งหนี้</label>
                         <input className={styles.input}
                             name='bill'
                             id='bill'
@@ -581,7 +581,7 @@ export const Address = () => {
                             style={formErrors.bill === undefined ? { borderColor: 'black' } : { borderColor: 'red' }}
                             onChange={handleOnchangeReceipt}
                         />
-                        <lable className={styles.error}>{formErrors.bill}</lable>
+                        <label className={styles.error}>{formErrors.bill}</label>
                         <button className={styles.deleteOne}
                             onClick={() => {
                                 let _defaultData = defaultData
@@ -602,7 +602,7 @@ export const Address = () => {
 
                     <div className={styles.inputstyle}>
 
-                        <lable className={styles.text}>เลขที่บัญชี</lable>
+                        <label className={styles.text}>เลขที่บัญชี</label>
                         <input className={styles.input}
                             name='accNo'
                             id='accNo'
@@ -611,7 +611,7 @@ export const Address = () => {
                             style={formErrors.accNo === undefined ? { borderColor: 'black' } : { borderColor: 'red' }}
                             onChange={handleOnchangeReceipt}
                         />
-                        <lable className={styles.error}>{formErrors.accNo}</lable>
+                        <label className={styles.error}>{formErrors.accNo}</label>
                         <button className={styles.deleteOne}
                             onClick={() => {
                                 let _defaultData = defaultData
@@ -631,7 +631,7 @@ export const Address = () => {
                     </div>
                     <div className={styles.inputstyle}>
 
-                        <lable className={styles.text}>วันที่คิดรอบบิล</lable>
+                        <label className={styles.text}>วันที่คิดรอบบิล</label>
                         <div>
                             <DatePicker
 
@@ -647,7 +647,7 @@ export const Address = () => {
 
                         </div>
 
-                        <lable className={styles.error}>{formErrors.billDate}</lable>
+                        <label className={styles.error}>{formErrors.billDate}</label>
                         <button className={styles.deleteOne}
                             onClick={() => {
 
@@ -671,7 +671,7 @@ export const Address = () => {
                     </div>
                     <div className={styles.inputstyle}>
 
-                        <lable className={styles.text}>วันที่ตัดรอบบิล</lable>
+                        <label className={styles.text}>วันที่ตัดรอบบิล</label>
                         <div>
                             <DatePicker
 
@@ -686,7 +686,7 @@ export const Address = () => {
                             />
 
                         </div>
-                        <lable className={styles.error}>{formErrors.billEnd}</lable>
+                        <label className={styles.error}>{formErrors.billEnd}</label>
                         <button className={styles.deleteOne}
                             onClick={() => {
                                 UnlockBillEnd()

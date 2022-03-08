@@ -143,10 +143,10 @@ export const Checkoutinform = () => {
 
                             </thead>
                             <tbody className={styles.body}>
-                            {filterrooms.filter((room) => (room && room.status === 'ย้ายออก') || room.status === 'มีคนอยู่').map(
-                                        (room) =>
+                            {filterrooms.filter((room ) => (room && room.status === 'ย้ายออก') || room.status === 'มีคนอยู่').map(
+                                        (room , index) =>
                                             room ? (
-                                                <tr>
+                                                <tr key={index}>
                                                     <td width={'60px'}>{room.room ? room.room : '---'}</td>
                                                     <td width={'60px'} >{room.building ? room.building : '---'}</td>
                                                     <td width={'60px'} >{room.floor ? room.floor : '---'}</td>

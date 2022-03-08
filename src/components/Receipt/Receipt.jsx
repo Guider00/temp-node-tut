@@ -280,7 +280,7 @@ export const Receipt = () => {
 
                                 </div>
                                 <p>
-                                    <lable >อาคาร</lable>
+                                    <label >อาคาร</label>
                                     <input className={styles.Building} id="building" value={formsearch.building} onChange={handleChangeformsearch} ></input>
                                 </p>
 

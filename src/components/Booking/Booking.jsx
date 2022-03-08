@@ -271,7 +271,7 @@ export const Booking = () => {
 
 		}
 	};
-	const [error , setError] = useState({})
+	const [error, setError] = useState({})
 
 
 	//ฟังก์ชั่นแจ้งเตือนกรณีลืมกรอก Data
@@ -293,7 +293,7 @@ export const Booking = () => {
 		console.log('e', e.target.value, e.target.id, _formbooking[e.target.id]);
 
 		placeholder(e)
-		console.log('error',error)
+		console.log('error', error)
 		if (e.target.id && _formbooking.hasOwnProperty(e.target.id)) {
 			if (e.target.id === 'customer_name' || e.target.id === 'customer_lastname') {
 
@@ -685,7 +685,7 @@ export const Booking = () => {
 										type='date'
 										name="input_searchdatecheckin"
 										max={DateEnd}
-										value={DateStart}
+										value={DateStart ? DateStart : ''}
 										onChange={(e) => {
 											let { value } = e.target
 											setDateStart(value)
@@ -695,7 +695,7 @@ export const Booking = () => {
 										type='date'
 										name="input_searchdatecheckout"
 										min={DateStart}
-										value={DateEnd}
+										value={DateEnd ? DateEnd : ''}
 										onChange={(e) => {
 											let { value } = e.target
 											setDateEnd(value)
@@ -757,22 +757,22 @@ export const Booking = () => {
 						<div className={styles.zonetable}>
 							<div className={styles.bodytable}>
 								<table>
-									<tr>
-										<th> ห้อง</th>
-										<th> อาคาร</th>
-										<th> ชั้น</th>
-										<th> ประเภทห้อง</th>
-										<th> สถานะ</th>
-									</tr>
-									{rooms
-										.filter(
+									<thead>
+										<tr>
+											<th>ห้อง</th>
+											<th>อาคาร</th>
+											<th>ชั้น</th>
+											<th>ประเภทห้อง</th>
+											<th>สถานะ</th>
+										</tr>
+									</thead>
+									<tbody>{rooms.filter(
 											(room) => (room && room && room.status === 'ย้ายออก') || room.status === 'ห้องว่าง'
-										)
-										.map(
+										).map(
 											(room, index) =>
 												room ? (
 
-													<tr
+													<tr key={index}
 														onClick={() => {
 															setselectedroom(room);
 															handleChangedALLformroom(room);
@@ -789,8 +789,7 @@ export const Booking = () => {
 														}}
 														style={{
 															background: selectedroom && selectedroom.id === room.id ? 'lightgray' : 'none'
-														}}
-													>
+														}}>
 														<td>{room && room.name ? room.name : '---'}</td>
 														<td>{room && room.floor && room.floor.building ? room.floor.building.name : '---'}</td>
 														<td>{room && room.floor ? room.floor.name : '---'}</td>
@@ -798,7 +797,7 @@ export const Booking = () => {
 														<td>{room && room.status ? room.status : '---'}</td>
 													</tr>
 												) : null
-										)}
+										)}</tbody>
 								</table>
 							</div>
 						</div>
@@ -1066,7 +1065,7 @@ export const Booking = () => {
 											<label> ค่าเช่าล้วงหน้า </label>
 										</div>
 										<div className={styles.input}>
-											<input value={formroom.deposit_rent} type="text" />
+											<input defaultValue={formroom.deposit_rent} type="text" />
 										</div>
 									</div>
 								</div>
@@ -1077,7 +1076,7 @@ export const Booking = () => {
 										</div>
 										<div>
 											<input
-												value={formroom.nameroomtype}
+												defaultValue={formroom.nameroomtype}
 												type="text" />
 										</div>
 									</div>
@@ -1088,7 +1087,7 @@ export const Booking = () => {
 										<div className={styles.input}>
 											<input
 												type="text"
-												value={formroom.dailyprice}
+												defaultValue={formroom.dailyprice}
 											/>
 										</div>
 									</div>
@@ -1185,6 +1184,7 @@ export const Booking = () => {
 			<div className={styles.zone2}>
 				<div className={styles.bigboxtable}>
 					<Tablebooking
+						key={'1'}
 						loading={booking.loading}
 						data={booking.data}
 						handlerdelete={(_booking) => {

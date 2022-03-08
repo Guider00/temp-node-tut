@@ -418,7 +418,7 @@ export const Reportwater = () => {
                                         <label className={styles.frontBold}>อาคาร</label>
                                         <label>{showData.building}</label>
 
-                                        <lable className={styles.frontBold}>ประมาณราคาโดย ราคา/หน่วย</lable>
+                                        <label className={styles.frontBold}>ประมาณราคาโดย ราคา/หน่วย</label>
                                         <div>
                                             <label>{showData.price}</label>
                                             <label className={styles.frontBold}>บาท</label>
@@ -513,7 +513,7 @@ export const Reportwater = () => {
                                         <label className={styles.frontBold}>อาคาร</label>
                                         <label>-</label>
 
-                                        <lable className={styles.frontBold}>ประมาณราคาโดย ราคา/หน่วย</lable>
+                                        <label className={styles.frontBold}>ประมาณราคาโดย ราคา/หน่วย</label>
                                         <div>
                                             <label>-</label>
                                             <label className={styles.frontBold}>บาท</label>
