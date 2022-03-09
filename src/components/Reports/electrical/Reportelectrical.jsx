@@ -5,21 +5,21 @@ import ExplicitIcon from '@mui/icons-material/Explicit';
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
 import { API_queryBuildings } from '../../../API';
 
-const filter_rooms = (rooms, formFilter, selectType) => {
-    let _filter_rooms = []
-    if (rooms && formFilter) {
-        _filter_rooms = rooms.filter(room => {
-            if (formFilter.building === 'เลือกอาคารทั้งหมด' && (selectType.sum === true)) {
-                console.log('All')
-            } else if (formFilter.building === 'A' && (selectType.sum === false)) {
+// const filter_rooms = (rooms, formFilter, selectType) => {
+//     let _filter_rooms = []
+//     if (rooms && formFilter) {
+//         _filter_rooms = rooms.filter(room => {
+//             if (formFilter.building === 'เลือกอาคารทั้งหมด' && (selectType.sum === true)) {
+//                 console.log('All')
+//             } else if (formFilter.building === 'A' && (selectType.sum === false)) {
 
-            }
-        })
-    }
+//             }
+//         })
+//     }
 
 
 
-}
+// }
 
 
 
@@ -50,7 +50,7 @@ export const Reportelectrical = () => {
     })
     //Function รับค่า ERROR
     const [formErrors, setFormErrors] = useState({ 'default': 'nothingChange' })
-    const [defaultFormErrors, setDefaultFormErrors] = useState({ 'default': 'nothingChange' })
+    const [defaultFormErrors] = useState({ 'default': 'nothingChange' })
 
     //Function เลือก disabled enable clearData รายละเอียดและผลรวม
 
@@ -380,12 +380,12 @@ export const Reportelectrical = () => {
                                     className={styles.buttonStyles}
                                     onClick={() => {
 
-                                        if ((selectType.detail === false || selectType.sum === false) && Object.keys(formErrors).length != 0 && selectType.type === '1') {
+                                        if ((selectType.detail === false || selectType.sum === false) && Object.keys(formErrors).length !== 0 && selectType.type === '1') {
                                             setFormErrors(validate(formFilter))
                                             setShowTablePrice(false)
                                             console.log('Type 1')
                                         }
-                                        else if ((selectType.detail === false || selectType.sum === false) && Object.keys(formErrors).length != 0 && selectType.type === '2') {
+                                        else if ((selectType.detail === false || selectType.sum === false) && Object.keys(formErrors).length !== 0 && selectType.type === '2') {
                                             setFormErrors(validateDate(formFilter))
                                             setShowTablePrice(false)
                                             console.log('Type 2')
@@ -394,7 +394,7 @@ export const Reportelectrical = () => {
                                             setShowData(formFilter)
                                             setShowTablePrice(true)
                                         }
-                                        else if ((selectType.detail === false && selectType.sum === false) && Object.keys(formErrors).length != 0 && selectType.type === '0') {
+                                        else if ((selectType.detail === false && selectType.sum === false) && Object.keys(formErrors).length !== 0 && selectType.type === '0') {
                                             setShowTablePrice(false)
                                             console.log('โปรเลือก Type by checkbox')
                                         }

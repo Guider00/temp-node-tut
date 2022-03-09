@@ -1,19 +1,16 @@
 import { useEffect, useState } from 'react';
 
 import styles from './Checkout.module.css';
-import AddIcon from '@mui/icons-material/Add';
 import SaveIcon from '@mui/icons-material/Save';
-import EditIcon from '@mui/icons-material/Edit';
-import AssignmentIcon from '@mui/icons-material/Assignment';
 import ArticleIcon from '@mui/icons-material/Article';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import SearchIcon from '@material-ui/icons/Search';
 import CalculateIcon from '@mui/icons-material/Calculate';
 
-import { export_Invoice_pdf, export_Receipt_pdf } from '../../general_functions/pdf/export/export_pdf';
+import { export_Invoice_pdf} from '../../general_functions/pdf/export/export_pdf';
 
 
-import { API_queryRooms, API_queryBuildings, API_updateMeterRoomkwh, API_updateMeterRoomwater } from '../../API/index';
+// import { API_queryRooms} from '../../API/index';
 
 
 
@@ -21,10 +18,8 @@ import { API_queryRooms, API_queryBuildings, API_updateMeterRoomkwh, API_updateM
 
 import { useQuery, useMutation } from '@apollo/client';
 import { API_UPDATE_Room, API_GET_Rooms } from '../../API/Schema/Room/Room'
-import { API_ADD_Invoice, API_UPDATE_Invoice } from '../../API/Schema/Invoice/Invoice'
-import { API_CREATE_Checkin, API_DELETE_Checkin, API_UPDATE_Checkin } from '../../API/Schema/Checkin/Checkin'
-import { API_CREATE_Contract, API_DELETE_Contract, API_UPDATE_Contract } from '../../API/Schema/Contract/Contract'
-import { API_CREATE_Receipt } from '../../API/Schema/Receipt/Receipt'
+import { API_ADD_Invoice } from '../../API/Schema/Invoice/Invoice'
+// import { API_DELETE_Contract} from '../../API/Schema/Contract/Contract'
 import { API_CREATE_Reimbursement } from '../../API/Schema/Reimbursement/Reimbursement'
 
 import { Rooms_to_table } from './function';
@@ -32,39 +27,39 @@ import { Rooms_to_table } from './function';
 import { filter_rooms } from '../../general_functions/filter'
 
 
-const getRooms = async () => {
-	return new Promise(async (resolve, reject) => {
-		let res = await API_queryRooms();
-		let table = [];
-		if (res && res.status === 200) {
-			table = res.data.rooms.map((data) => {
-				let _data = data;
-				return {
-					id: data.id,
-					data: _data,
-					building: (data.floor && data.floor.building && data.floor.building.name) ? data.floor.building.name : '---',
-					floor: data.floor ? data.floor.name : '---',
-					name: data.name,
-					status: data.status ? data.status : '---',
-					member: data.member ? data.member.name : '---',
-					memberlastname: data.member ? data.member.lastname : '---',
-					metername: data.meterroom ? data.meterroom.name : '---',
-					meterroom: data.meterroom ? data.meterroom : '---',
-					checkout_date: data.checkout_date ? data.checkout_date : '---',
-					checkin_date: data.checkin_date ? data.checkin_date : '---'
-				};
-			});
-		}
+// const getRooms = async () => {
+// 	return new Promise(async (resolve, reject) => {
+// 		let res = await API_queryRooms();
+// 		let table = [];
+// 		if (res && res.status === 200) {
+// 			table = res.data.rooms.map((data) => {
+// 				let _data = data;
+// 				return {
+// 					id: data.id,
+// 					data: _data,
+// 					building: (data.floor && data.floor.building && data.floor.building.name) ? data.floor.building.name : '---',
+// 					floor: data.floor ? data.floor.name : '---',
+// 					name: data.name,
+// 					status: data.status ? data.status : '---',
+// 					member: data.member ? data.member.name : '---',
+// 					memberlastname: data.member ? data.member.lastname : '---',
+// 					metername: data.meterroom ? data.meterroom.name : '---',
+// 					meterroom: data.meterroom ? data.meterroom : '---',
+// 					checkout_date: data.checkout_date ? data.checkout_date : '---',
+// 					checkin_date: data.checkin_date ? data.checkin_date : '---'
+// 				};
+// 			});
+// 		}
 
-		resolve(table);
-	}).catch((e) => {
-		console.log('Promise Error', e);
-		return [];
-	});
-};
+// 		resolve(table);
+// 	}).catch((e) => {
+// 		console.log('Promise Error', e);
+// 		return [];
+// 	});
+// };
 
 export const Checkout = () => {
-	const [textfilter, settextfilter] = useState('');
+	// const [textfilter, settextfilter] = useState('');
 	const [rooms, setrooms] = useState([]);
 	const [loading, setloading] = useState(false);
 	const [selectedroom, setselectedroom] = useState(null);
@@ -193,10 +188,10 @@ export const Checkout = () => {
 	}
 
 	const GET_Rooms = useQuery(API_GET_Rooms);
-	const [updateRoom, mutationuploadFile] = useMutation(API_UPDATE_Room)
+	const [updateRoom] = useMutation(API_UPDATE_Room)
 	const [createInvoice] = useMutation(API_ADD_Invoice)
 	const [invoicecheckout, setinvoicecheckout] = useState("")
-	const [deleteContract] = useMutation(API_DELETE_Contract)
+	// const [deleteContract] = useMutation(API_DELETE_Contract)
 	const [createReimbursement] = useMutation(API_CREATE_Reimbursement)
 
 
@@ -217,7 +212,7 @@ export const Checkout = () => {
 				setloading(true);
 
 			}
-		}, [GET_Rooms, loading]
+		}, [GET_Rooms, loading ,options_search]
 	);
 
 	return (

@@ -1,7 +1,5 @@
 import styles from "./Menubar.module.css";
 import Home from "@material-ui/icons/Home";
-
-import ListAlt from "@material-ui/icons/ListAlt";
 import Book from "@material-ui/icons/Book";
 import Folder from "@material-ui/icons/Folder";
 
@@ -10,7 +8,7 @@ import { Submenudropdown } from "./Submenudropdown/Submenudropdown";
 import { useSubscription, gql } from "@apollo/client";
 import { useEffect, useState } from "react";
 
-import { Button, Navbar, Container, Nav } from "react-bootstrap";
+import { Navbar, Container, Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const GET_MESSAGES = gql`

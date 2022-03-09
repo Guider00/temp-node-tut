@@ -234,8 +234,8 @@ export const Usermanagement = () => {
     //UpdateCode
 
     const GetUser = useQuery(API_GET_UserManagement)
-    const [ DeleteUser, mutationDeleteUser] = useMutation(API_DELETE_UserManagement)
-    const [ UpdateUser, mutationUpdateUser] = useMutation(API_UPDATE_UserManagement)
+    const [ DeleteUser] = useMutation(API_DELETE_UserManagement)
+    const [ UpdateUser] = useMutation(API_UPDATE_UserManagement)
     const [User , setUser] = useState([])
 
 
@@ -391,7 +391,7 @@ export const Usermanagement = () => {
             setUser(_User)
 
         }
-    },[GetUser])
+    },[GetUser,User])
 
 
 
@@ -506,7 +506,7 @@ export const Usermanagement = () => {
                                                             handleDialog(`Are you sure you want to Save This  ID : ${user.id}`,true , '4')
                                                             console.log('success',nameChange.name)
 
-                                                        }if(Object.keys(formErrors).length > 0 && formErrors.error != '' ){
+                                                        }if(Object.keys(formErrors).length > 0 && formErrors.error !== '' ){
                                                             handleDialog(`Your name is not validate !!!`,true,'')
                                                             console.log('error validate')
 

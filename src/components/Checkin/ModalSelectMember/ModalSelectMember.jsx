@@ -4,11 +4,10 @@ import React from "react";
 import styles from './ModalSelectMember.module.css';
 import CloseIcon from '@mui/icons-material/Close';
 import CancelIcon from '@mui/icons-material/Cancel';
-import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
 
 import { API_GET_Members } from '../../../API/Schema/Member/Member'
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 
 

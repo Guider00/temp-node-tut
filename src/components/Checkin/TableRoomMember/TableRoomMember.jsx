@@ -5,18 +5,18 @@ import styles from './TableRoomMember.module.css';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
-import UploadFileIcon from '@mui/icons-material/UploadFile';
+// import UploadFileIcon from '@mui/icons-material/UploadFile';
 
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import CancelIcon from '@mui/icons-material/Cancel';
+// import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+// import CancelIcon from '@mui/icons-material/Cancel';
 
-import { formatDate } from '../../../general_functions/convert'
+// import { formatDate } from '../../../general_functions/convert'
 // import { Modalupload } from '../Modalupload/Modalupload'
 
 export const TableRoomMember = (props) => {
     const [loading, setloading] = useState(false)
-    const [showmodal, setmodal] = useState(false)
-    const [modalbooking, setmodalbooking] = useState(null)
+    // const [showmodal, setmodal] = useState(false)
+    // const [modalbooking, setmodalbooking] = useState(null)
 
     useEffect(() => {
         async function fetchdata() {
@@ -25,12 +25,12 @@ export const TableRoomMember = (props) => {
         }
         fetchdata()
     }, [loading])
-    const handleSaveimage = (booking, file) => {
+    // const handleSaveimage = (booking, file) => {
 
-        if (props && props.handleSaveimage) {
-            props.handleSaveimage(booking, file)
-        }
-    }
+    //     if (props && props.handleSaveimage) {
+    //         props.handleSaveimage(booking, file)
+    //     }
+    // }
     console.log('TableRoomMember', props.data)
 
     return (loading ?

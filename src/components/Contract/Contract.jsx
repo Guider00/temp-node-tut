@@ -1,6 +1,5 @@
 import styles from './Contract.module.css';
 import SaveIcon from '@mui/icons-material/Save';
-import EditIcon from '@mui/icons-material/Edit';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -10,14 +9,12 @@ import CalendarPicker from '../../subcomponents/Calendar/Calendar.js';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import {
     API_GET_Contract,
-    API_CREATE_Contract,
-    API_DELETE_Contract,
-    API_UPDATE_Contract
+    API_DELETE_Contract
 } from '../../API/Schema/Contract/Contract'
 import {
     API_GET_RoomType
 } from '../../API/Schema/RoomType/RoomType'
-import { API_UPDATE_Room, API_GET_Rooms } from '../../API/Schema/Room/Room'
+import {  API_GET_Rooms } from '../../API/Schema/Room/Room'
 import { export_Contract } from '../../general_functions/pdf/export/export_pdf';
 import { FileUploader } from './FileUploader/FileUploader'
 import { filter_rooms, Rooms_to_table, ChangeRadio, FormFilter } from './function';
@@ -41,8 +38,8 @@ export const Contract = () => {
 
     const getRooms = useQuery(API_GET_Rooms)
     const Contract = useQuery(API_GET_Contract);
-    const [deleteContract, mutationdeleteContract] = useMutation(API_DELETE_Contract);
-    const updateContract = useMutation(API_UPDATE_Contract);
+    const [deleteContract] = useMutation(API_DELETE_Contract);
+    // const updateContract = useMutation(API_UPDATE_Contract);
     const query_RoomType = useQuery(API_GET_RoomType);
     const [roomtypes, setroomtypes] = useState([])
     const [loadingpage, setloadingpage] = useState(false)
@@ -50,7 +47,7 @@ export const Contract = () => {
     const [building, setbuilding] = useState([])
     const [filterrooms, setfilterrooms] = useState([]);
     const [IDrooms, setIDrooms] = useState([]);
-    const [dateRange, setdateRange] = useState([]);
+    // const [dateRange, setdateRange] = useState([]);
     const [getStart, setgetStart] = useState({});
     const [getEnd, setgetEnd] = useState([]);
     const [tbsortingstyle_newmetoold, settbsortingstyle_newmetoold] = useState(true);
@@ -82,12 +79,12 @@ export const Contract = () => {
     }
 
     const selectAll = () => {
-        let myCheckboxId = document.querySelector('#myCheckboxId')
+        // let myCheckboxId = document.querySelector('#myCheckboxId')
         let myCheckboxMain = document.querySelector('#select-all');
         let myCheckboxName = document.getElementsByName('myCheckboxName');
         let myCheckboxNameLen = myCheckboxName.length
 
-        if (myCheckboxMain.checked == true) {
+        if (myCheckboxMain.checked === true) {
 
             for (var x = 0; x < myCheckboxNameLen; x++) {
                 myCheckboxName[x].checked = true;
@@ -102,8 +99,8 @@ export const Contract = () => {
 
         }
         else {
-            for (var x = 0; x < myCheckboxNameLen; x++) {
-                myCheckboxName[x].checked = false;
+            for (var z = 0; z < myCheckboxNameLen; x++) {
+                myCheckboxName[z].checked = false;
             }
 
             let _IDrooms = IDrooms.filter(item => item !== item)
@@ -550,7 +547,7 @@ export const Contract = () => {
                     </div>
 
                     <div className={styles.inputmonthandday}>
-                        <h1 className={styles.line}></h1>
+                        {/* <h1 className={styles.line}></h1> */}
                         <div className={styles.month}>
                             <label className={styles.month}>รายเดือน :</label>
                             <input
@@ -659,7 +656,7 @@ export const Contract = () => {
                             </div>
 
                         </div>
-                        <h1 className={styles.line}></h1>
+                        {/* <h1 className={styles.line}></h1> */}
                         <div className={styles.day}>
                             <label className={styles.day}>รายวัน :</label>
                             <input
@@ -738,16 +735,12 @@ export const Contract = () => {
                                     className={styles.inputbox3}></input>
                                 <label>บาท</label>
                             </div>
-                            <h1 className={styles.line}></h1>
+                            {/* <h1 className={styles.line}></h1> */}
                             <div className={styles.input3} >
                                 <FileUploader handleFile={(file) =>
                                     console.log('file', file)
                                 } />
 
-                            </div>
-
-                            <div>
-                                <h1 className={styles.line}></h1>
                             </div>
 
                             <div className={styles.buttonzone}>

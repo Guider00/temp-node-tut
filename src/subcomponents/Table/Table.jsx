@@ -79,7 +79,7 @@ export const Table = ({ Data, onClickDelete, onClickEdit, maxWidth }) => {
 
 
                                                     <>
-                                                        <td key={`tbl_${input.property}_${index}`}>
+                                                        <td key={`tbl2_${input.property}_${index}`}>
                                                             <div>
                                                                 {
                                                                     input.idtolabel ?

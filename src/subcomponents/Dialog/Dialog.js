@@ -13,6 +13,7 @@ export default function Dialog({message , onDialog , nextPage}){
             <div className={styles.footer}>
                 <a 
                 href={nextPage}
+                rel="noreferrer"
                 target="_blank"
                 ><button className={styles.confirm}
                 onClick={

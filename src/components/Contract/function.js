@@ -5,7 +5,7 @@ export const filter_rooms = (rooms , formfilter ,getStart,getEnd) =>{
     if(rooms && formfilter){
         _filter_table = rooms.filter(room =>{
             if(room){
-                if(formfilter.option_search === 'เลือกอาคารทั้งหมด' && getStart == 17356266000000 && getEnd == 19249722000000 ){
+                if(formfilter.option_search === 'เลือกอาคารทั้งหมด' && getStart === 17356266000000 && getEnd === 19249722000000 ){
                     console.log('All')
                     return ( room.Contractnumber && room.Contractnumber.search(formfilter.text) !==-1) ||
                     ( room.RoomType && room.RoomType.search(formfilter.text) !==-1) ||
@@ -39,6 +39,7 @@ export const filter_rooms = (rooms , formfilter ,getStart,getEnd) =>{
             }else{
                 return false;
             }
+            return null ;
         })
     }
     return _filter_table
@@ -49,6 +50,7 @@ export const Rooms_to_table = (Rooms) =>{
     let table = [];
         table = Rooms.map((data)=>{
             let _data = data;
+            console.log('data',_data)
             return{
                 building:
                     data.floor && data.floor.building && data.floor.building.name
@@ -94,7 +96,7 @@ export const ChangeRadio = () =>{
 export const FormFilter = () =>{
 
 
-    const [defaultformfilter ,setdefaultformfilter] = useState({
+    const [defaultformfilter] = useState({
         id: null,
         checkin_date: '01/01/2520',
         checkin_date_exp: '01/01/2580',

@@ -308,7 +308,7 @@ export const HandleForm = () => {
     //validate
 
 
-    const [blankAddress, setblankblankAddress] = useState({
+    const [blankAddress] = useState({
         id: "",
         name: "",
         code: "",
@@ -322,7 +322,7 @@ export const HandleForm = () => {
         alley: "",
     })
 
-    const [blankReceipt, setblankReceipt] = useState({
+    const [blankReceipt] = useState({
         id: "",
         receipt: "",
         invoice: "",

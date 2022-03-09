@@ -187,9 +187,9 @@ export const Invoice = () => {
     const [IDrooms, setIDrooms] = useState([])
     const [rooms, setrooms] = useState([])
     const [filterrooms, setfilterrooms] = useState([])
-    const [deleteInvoice, mutationdeleteInvoice] = useMutation(API_DELETE_Invoice);
-    const [updateInvoice, mutationupdateInvoice] = useMutation(API_UPDATE_Invoice);
-    const [createReceipt, mutationcreateReceipt] = useMutation(API_CREATE_Receipt);
+    const [deleteInvoice] = useMutation(API_DELETE_Invoice);
+    const [updateInvoice] = useMutation(API_UPDATE_Invoice);
+    const [createReceipt] = useMutation(API_CREATE_Receipt);
     const [selectroom, setselectroom] = useState(null)
     const [editselectroom, seteditselectroom] = useState(false)
 
@@ -226,6 +226,8 @@ export const Invoice = () => {
                 _totalprice += Number(list_to_show(list).price)
                 _totalvat += Number(list_to_show(list).vat)
                 _grandtotal += Number(list_to_show(list).total)
+
+                return null;
             })
 
             return ({ totalprice: Number(_totalprice).toFixed(2), totalvat: Number(_totalvat).toFixed(2), grandtotal: Number(_grandtotal).toFixed(2) })
@@ -266,8 +268,8 @@ export const Invoice = () => {
 
 
         else {
-            for (var x = 0; x < myCheckboxNameLen; x++) {
-                myCheckboxName[x].checked = false;
+            for (var z = 0; z < myCheckboxNameLen; z++) {
+                myCheckboxName[z].checked = false;
             }
 
             let _IDrooms = IDrooms.filter(item => item !== item)
@@ -330,14 +332,14 @@ export const Invoice = () => {
         }
 
 
-    }, [Invoice, Invoice.data, rooms])
+    }, [Invoice, Invoice.data, rooms , IDrooms ,selectroom ])
 
 
     let header_table = ["", "เลขที่ใบแจ้งหนี้", "ชื่อห้อง", "วันที่ออก", "สถานะ", "สถานะการพิมพ์", "รอบบิล"]
-    let sim_table = [{ "": "", "เลขที่ใบแจ้งหนี้": "INMV20190030000097", "ชื่อห้อง": "201", "วันที่ออก": "30/12/2021", "สถานะ": "รอชำระเงิน", "สถานะการพิมพ์": "ยังไม่พิมพ์", "รอบบิล": "04/2562" }]
+    // let sim_table = [{ "": "", "เลขที่ใบแจ้งหนี้": "INMV20190030000097", "ชื่อห้อง": "201", "วันที่ออก": "30/12/2021", "สถานะ": "รอชำระเงิน", "สถานะการพิมพ์": "ยังไม่พิมพ์", "รอบบิล": "04/2562" }]
 
     let header_table2 = ["รายการ", "ชื่อรายการค่าใช้จ่าย", "จำนวน", "จำนวนเงิน", "ราคา", "ภาษีมูลค่าเพิ่ม", "ผลรวม", "ภาษี"]
-    let sim_table2 = [{ "รายการ": "1", "ชื่อรายการค่าใช้จ่าย": "INMV20190030000097", "จำนวน": "1", "จำนวนเงิน": "1200.00", "ราคา": "100.00", "ภาษีมูลค่าเพิ่ม": "888.00", "จำนวนเงิน": "888.00", "ภาษี": "" }]
+    // let sim_table2 = [{ "รายการ": "1", "ชื่อรายการค่าใช้จ่าย": "INMV20190030000097", "จำนวน": "1", "จำนวนเงิน": "1200.00", "ราคา": "100.00", "ภาษีมูลค่าเพิ่ม": "888.00", "จำนวนเงิน": "888.00", "ภาษี": "" }]
 
 
 

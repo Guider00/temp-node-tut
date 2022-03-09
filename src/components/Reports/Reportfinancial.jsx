@@ -13,6 +13,7 @@ export const Data_to_table = (e) => {
     let table = [];
     table = e.map((data) => {
         let _data = data;
+        console.log(_data)
         return {
             data: data,
             status: data.status ? data.status : '---',
@@ -71,7 +72,7 @@ export const Reportfinancial = () => {
 
 
     const getMonthName = (month) => {
-        let d = new Date
+        let d = new Date()
         d.setMonth(month - 1);
         let monthName = d.toLocaleDateString('default', { month: 'long' });
         return monthName
@@ -108,7 +109,7 @@ export const Reportfinancial = () => {
             let _unpaidAmount = 0
             let data = []
             let data2 = []
-            let y = []
+            // let y = []
             
 
             lists.map(list => {
@@ -130,7 +131,7 @@ export const Reportfinancial = () => {
                 }
 
                 
-                
+                return null;
             })
 
             _unpaid = _totalprice - _profit
@@ -166,7 +167,7 @@ export const Reportfinancial = () => {
 
         }
 
-    }, [invoice, receipt])
+    }, [invoice, receipt , Data])
 
 
     useEffect(() => {

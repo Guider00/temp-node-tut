@@ -18,7 +18,7 @@ export const export_booking_pdf = (booking, owner, customer_details) => {
         let bookingReference = booking.booking_number ? booking.booking_number : Noanswer;
         let Client = booking.customer_name ? `${booking.customer_name} ${booking.customer_lastname}` : Noanswer
         let Customer_tel = booking.customer_tel ? booking.customer_tel : Noanswer
-        let Customer_address = booking.customer_address ? booking.customer_address : Noanswer
+        // let Customer_address = booking.customer_address ? booking.customer_address : Noanswer
         let memberID = Noanswer
         let Country = Noanswer
 
@@ -28,13 +28,13 @@ export const export_booking_pdf = (booking, owner, customer_details) => {
         let Address2 = " Leela valley village"
         let Hotelcontact = "+667569577"
 
-        let Numberroom = "1"
-        let Numberbeds = Noanswer
-        let Numberadults = Noanswer
-        let Numberchildren = Noanswer
-        let Breakfast = Noanswer
-        let Roomtype = booking.Room.RoomType.name
-        let Pomotion = "-"
+        // let Numberroom = "1"
+        // let Numberbeds = Noanswer
+        // let Numberadults = Noanswer
+        // let Numberchildren = Noanswer
+        // let Breakfast = Noanswer
+        // let Roomtype = booking.Room.RoomType.name
+        // let Pomotion = "-"
         let Arrival = booking.checkin_date ? formatDate(new Date(Number(booking.checkin_date))) : Noanswer;
         let Departure = booking.checkin_date_exp ? formatDate(new Date(Number(booking.checkin_date_exp))) : Noanswer;
 
@@ -76,7 +76,7 @@ export const export_booking_pdf = (booking, owner, customer_details) => {
 
 
         const doc = new jsPDF('p', 'mm', [250, 210]);
-        let pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
+        // let pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
         let pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
         try {
             const img = new Image()
@@ -175,8 +175,8 @@ export const export_booking_pdf = (booking, owner, customer_details) => {
         doc.text("Booking Reference : ", 15, 13 * 5, { align: 'left' })
         doc.text("หมายเลขอ้างอิงการจอง :", 15, 70, { align: 'left' })
 
-        doc.text("Room Type :" ,102, 13*5+3, {align: 'left'})
-        doc.text("ประเภทห้อง :" ,102, 73, {align: 'left'})
+        doc.text("Room Type :", 102, 13 * 5 + 3, { align: 'left' })
+        doc.text("ประเภทห้อง :", 102, 73, { align: 'left' })
 
         // doc.text("Number of Extra Beds :" ,102, 13*5+3, {align: 'left'})
         // doc.text("จำนวนเตียงเสริม :" ,102, 73, {align: 'left'})
@@ -203,7 +203,7 @@ export const export_booking_pdf = (booking, owner, customer_details) => {
         // doc.text("Breakfast :" ,102, 13*8+3, {align: 'left'})
         // doc.text("อาหารเช้า :" ,102, 112, {align: 'left'})
 
-        doc.text("Hotel :", 102,93, { align: 'left' })
+        doc.text("Hotel :", 102, 93, { align: 'left' })
         doc.text("โรงแรม :", 102, 98, { align: 'left' })
 
 
@@ -346,12 +346,14 @@ const numbertothailanguage = (number) => {
                     bef_res = num[parseInt(chr)] + pos[index] + bef_res
                 }
             }
+            return null;
 
         });
 
         if (after_db !== "") {
             [...after_db].map((chr, index, arry) => {
                 aft_res = aft_res + num[parseInt(chr)]
+                return null;
             })
         }
 
@@ -576,6 +578,7 @@ export const export_Contract = (contracts, defaultData) => {
             if (contracts.length > 0 && index !== (contracts.length - 1)) {
                 doc.addPage()
             }
+            return null;
         })
 
 
@@ -599,12 +602,14 @@ export const export_Contract = (contracts, defaultData) => {
     //  openInNewTab(`http://jaelfaulconinsurance${Math.floor(Math.random() * 10) + 1}.com`)
 
 }
-function openInNewTab(href) {
-    Object.assign(document.createElement('a'), {
-        target: '_blank',
-        href: href,
-    }).click();
-}
+// function openInNewTab(href) {
+//     Object.assign(document.createElement('a'), {
+//         target: '_blank',
+//         href: href,
+//     }).click();
+
+//     return null;
+// }
 // ใบแจ้งหนี้  // 
 export const export_Invoice_pdf = (room, table_prices, monthlybilling) => {
     const document_name = 'ใบแจ้งหนี้'
@@ -618,15 +623,15 @@ export const export_Invoice_pdf = (room, table_prices, monthlybilling) => {
     let Name = room && room.data && room.data.members && room.data.members.length > 0
         ? `${room.data.members[0].name}  ${room.data.members[0].lastname} ` : '--------'
     let Address1 = room && room.data && room.data.members && room.data.members.length > 0 && room.data.members[0].address ? room.data.members[0].address : "........................................."   // ที่อยู่ ของผู้รับบิล
-    let Address2 = "........................................."    // ที่อยู่ ของผู้รับบิล
+    // let Address2 = "........................................."    // ที่อยู่ ของผู้รับบิล
     let No = (room && room.data && room.data.id) ? room.data.id : "---"
     let _Date = formatDate(new Date())
     let HoneNo = room && room.data.name ? room.data.name : "------"
     let Month = monthlybilling ? monthlybilling : "-----"
-    let Grand = "144.00"
-    let Backforward = "0.00"
+    // let Grand = "144.00"
+    // let Backforward = "0.00"
 
-    let Money = "0.00"
+    // let Money = "0.00"
     let credit = "  ...คนออกบิล... "
     let Time = toHHMMSS(new Date())
     let note = "เลขที่บัญชี 2878-xxxxxx-x"
@@ -822,6 +827,7 @@ export const export_Invoices_pdf = (Invoices, defaultData) => {
 
     let AddressForm = defaultData
     if (Invoices && Array.isArray(Invoices)) {
+
         const document_name = 'ใบแจ้งหนี้'
         let business_Address_1 = AddressForm.no + " ซอย " + AddressForm.alley + " ถนน " + AddressForm.road ? AddressForm.no + " ซอย " + AddressForm.alley + " ถนน " + AddressForm.road : '---'
         let business_Address_2 = " แขวง " + AddressForm.boundary + " เขต " + AddressForm.district + " จังหวัด " + AddressForm.province + " " + AddressForm.code ? " แขวง " + AddressForm.boundary + " เขต " + AddressForm.district + " จังหวัด " + AddressForm.province + " " + AddressForm.code : '---'
@@ -839,10 +845,10 @@ export const export_Invoices_pdf = (Invoices, defaultData) => {
             let _Date = formatDate(new Date())
             let HoneNo = Invoice && Invoice.Room && Invoice.Room.name ? Invoice.Room.name : "------"
             let Month = Invoice && Invoice.monthlybilling ? formatDate(Invoice.monthlybilling) : "-----"
-            let Grand = "144.00"
-            let Backforward = "0.00"
+            // let Grand = "144.00"
+            // let Backforward = "0.00"
             let Vat = 7;
-            let Money = "0.00"
+            // let Money = "0.00"
             let credit = "  ...คนออกบิล... "
             let Time = toHHMMSS(new Date())
             let note = "เลขที่บัญชี 2878-xxxxxx-x"
@@ -1021,6 +1027,8 @@ export const export_Invoices_pdf = (Invoices, defaultData) => {
             if (Invoices.length > 0 && index !== (Invoices.length - 1)) {
                 doc.addPage()
             }
+
+            return null;
         })
         let src_pdf = doc.output('datauristring');
         const iframe = `
@@ -1031,7 +1039,9 @@ export const export_Invoices_pdf = (Invoices, defaultData) => {
         x.document.open();
         x.document.write(iframe);
         x.document.close();
+
     }
+
 }
 // ใบเสร็จ  //
 
@@ -1040,7 +1050,7 @@ export const export_Invoices_pdf = (Invoices, defaultData) => {
  * @param  {} type
  */
 export const export_Receipt_pdf = (booking: Booking, type, table_prices) => {
-    const document_name = 'ใบเสร็จ'
+    // const document_name = 'ใบเสร็จ'
     let Vat = 7;
     if (booking === undefined) {
         alert('ไม่มีข้อมูลในการสร้าง ใบเสร็จ')
@@ -1071,14 +1081,14 @@ export const export_Receipt_pdf = (booking: Booking, type, table_prices) => {
     console.log('export_Receipt_pdf', booking)
     let Name = booking.customer_name ? `${booking.customer_name} ${booking.customer_lastname}` : Noanswer
     let Address1 = booking && booking.customer_address ? booking.customer_address : "-----------------" /// ที่อยู่ ผู้รับใบเสร็จ 
-    let Address2 = "-----------------"
+    // let Address2 = "-----------------"
     let No = booking.id ? booking.id : Noanswer
     let _Date = formatDate(new Date())
     let HoneNo = booking.Room && booking.Room.floor && booking.Room.floor.building && booking.Room.floor.building.name ? booking.Room.floor.building.name : Noanswer
     let Room = booking.Room && booking.Room.name ? booking.Room.name : Noanswer
-    let Money = "0.00"
-    let credit = "  ...คนออกบิล... "
-    let Time = toHHMMSS(new Date())
+    // let Money = "0.00"
+    // let credit = "  ...คนออกบิล... "
+    // let Time = toHHMMSS(new Date())
 
     let _total_price = 0
     let _total_vat = 0
@@ -1088,7 +1098,7 @@ export const export_Receipt_pdf = (booking: Booking, type, table_prices) => {
         _total_vat += (item.selectvat === "คิดvat" ? _price * (Vat / 100) : 0)
         return 1;
     })
-    let Grandtotal = `${_total_price.toFixed(2)}`
+    // let Grandtotal = `${_total_price.toFixed(2)}`
     let Vat_Grandtotal = `${_total_vat.toFixed(2)}`
     let End_Grandtotal = `${(_total_price + _total_vat).toFixed(2)}`
 
@@ -1305,7 +1315,7 @@ export const export_Receipts_pdf = (Receipts) => {
                 return 1;
             })
 
-            let Grandtotal = `${_total_price.toFixed(2)}`
+            // let Grandtotal = `${_total_price.toFixed(2)}`
             let Vat_Grandtotal = `${_total_vat.toFixed(2)}`
             let End_Grandtotal = `${(_total_price + _total_vat).toFixed(2)}`
 
@@ -1471,7 +1481,11 @@ export const export_Receipts_pdf = (Receipts) => {
                 doc.addPage()
             }
 
-        })
+            return null;
+
+        }
+
+        )
         let src_pdf = doc.output('datauristring');
         const iframe = `<title>${document_name}</title><iframe width='100%' type="application/pdf"   height='100%' src="${src_pdf}"></iframe>`
         const x = window.open();
@@ -1517,14 +1531,14 @@ export const export_Reimbursement_pdf = (booking, type, table_price, defaultData
     console.log('export_Receipt_pdf', booking)
     let Name = booking.customer_name ? `${booking.customer_name} ${booking.customer_lastname}` : Noanswer
     let Address1 = booking && booking.customer_address ? booking.customer_address : "-----------------" /// ที่อยู่ ผู้รับใบเสร็จ 
-    let Address2 = "-----------------"
+    // let Address2 = "-----------------"
     let No = booking.id ? booking.id : Noanswer
     let _Date = formatDate(new Date())
     let HoneNo = booking.Room && booking.Room.floor && booking.Room.floor.building && booking.Room.floor.building.name ? booking.Room.floor.building.name : Noanswer
     let Room = booking.Room && booking.Room.name ? booking.Room.name : Noanswer
-    let Money = "0.00"
-    let credit = "  ...คนออกบิล... "
-    let Time = toHHMMSS(new Date())
+    // let Money = "0.00"
+    // let credit = "  ...คนออกบิล... "
+    // let Time = toHHMMSS(new Date())
 
     let _total_price = 0
 
@@ -1737,18 +1751,18 @@ export const export_taxinvoice_pdf = (room, table_price, defaultData) => {
     let Name = room && room.data && room.data.members && room.data.members.length > 0
         ? `${room.data.members[0].name}  ${room.data.members[0].lastname} ` : '--------'
     let Address1 = "........................................."   // ที่อยู่ ของผู้รับบิล
-    let Address2 = "........................................."    // ที่อยู่ ของผู้รับบิล
+    // let Address2 = "........................................."    // ที่อยู่ ของผู้รับบิล
     let No = (room && room.data && room.data.id) ? room.data.id : "---"
     let _Date = formatDate(new Date())
     let HoneNo = room.name ? room.name : "------"
     let Month = "12/2021"
-    let Grand = "144.00"
-    let Backforward = "0.00"
+    // let Grand = "144.00"
+    // let Backforward = "0.00"
 
     let Money = "0.00"
     let credit = "  ...คนออกบิล... "
     let Time = toHHMMSS(new Date())
-    let note = "เลขที่บัญชี 2878-xxxxxx-x"
+    // let note = "เลขที่บัญชี 2878-xxxxxx-x"
 
 
     let table_prices = table_price ? table_price : [{
@@ -1987,7 +2001,7 @@ export const export_taxinvoices_pdf = (Receipts) => {
             let HoneNo = receipt && receipt.Invoice && receipt.Invoice.Room && receipt.Invoice.Room.floor && receipt.Invoice.Room.floor.building
                 && receipt.Invoice.Room.floor.building.name ? receipt.Invoice.Room.floor.building.name : Noanswer
 
-            let Room = receipt && receipt.Invoice && receipt.Invoice.Room && receipt.Invoice.Room.name ? receipt.Invoice.Room.name : Noanswer
+            // let Room = receipt && receipt.Invoice && receipt.Invoice.Room && receipt.Invoice.Room.name ? receipt.Invoice.Room.name : Noanswer
 
 
             let _table_prices = receipt && receipt.lists ? receipt.lists : [{
@@ -1998,17 +2012,17 @@ export const export_taxinvoices_pdf = (Receipts) => {
             }]
 
             let _total_price = 0
-            let _total_vat = 0
+            // let _total_vat = 0
             _table_prices.map(item => {
                 let _price = (item && item.price) ? (item.type_price === "ราคารวมvat" ? Number(item.price * 100.0 / 107.0) : Number(item.price)) : 0
                 _total_price += _price;
-                _total_vat += (item.selectvat === "คิดvat" ? _price * (Vat / 100) : 0)
+                // _total_vat += (item.selectvat === "คิดvat" ? _price * (Vat / 100) : 0)
                 return 1;
             })
 
             let Grandtotal = `${_total_price.toFixed(2)}`
-            let Vat_Grandtotal = `${_total_vat.toFixed(2)}`
-            let End_Grandtotal = `${(_total_price + _total_vat).toFixed(2)}`
+            // let Vat_Grandtotal = `${_total_vat.toFixed(2)}`
+            // let End_Grandtotal = `${(_total_price + _total_vat).toFixed(2)}`
 
             const names = _table_prices.map(_table_prices => _table_prices.name);
             const Units = _table_prices.map(_table_prices => (_table_prices.unit !== undefined) ? `${_table_prices.unit}` : '1');
@@ -2179,6 +2193,9 @@ export const export_taxinvoices_pdf = (Receipts) => {
             if (Receipts.length > 0 && index !== (Receipts.length - 1)) {
                 doc.addPage()
             }
+
+
+            return null;
 
         })
 

@@ -6,19 +6,15 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import {
     API_GET_Address,
     API_ADD_Address,
-    API_DELETE_Address,
-    API_UPDATE_Address
 } from '../../../API/Schema/Address/Address'
 
 import {
     API_GET_Receiptnumber,
     API_ADD_Receiptnumber,
-    API_DELETE_Receiptnumber,
-    API_UPDATE_Receiptnumber
 } from '../../../API/Schema/Receiptnumber/Receiptnumber'
 import { useQuery, useMutation } from '@apollo/client';
 import { HandleForm } from "./function";
-import { export_address_pdf } from "../../../general_functions/pdf/export/export_pdf";
+// import { export_address_pdf } from "../../../general_functions/pdf/export/export_pdf";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -30,9 +26,9 @@ export const Address = () => {
     const [imageURLs, setimageURLs] = useState([]);
     const [address, setaddress] = useState([]);
     const [ReceiptNumber, setReceiptNumber] = useState({})
-    const [addAddress, mutationaddAddress] = useMutation(API_ADD_Address)
+    const [addAddress] = useMutation(API_ADD_Address)
     const Address = useQuery(API_GET_Address);
-    const [addReceiptnumber, mutationaddReceiptnumber] = useMutation(API_ADD_Receiptnumber)
+    const [addReceiptnumber] = useMutation(API_ADD_Receiptnumber)
     const Receiptnumber = useQuery(API_GET_Receiptnumber)
 
     const { handleOnchangeReceipt, handleChangebill, handleOnchangeAddress, formErrorsAddress, formErrors, defaultData, setdefaultData, defaultAddress, setdefaultAddress, handleClick, disableReceipt, setDisableReceipt, disabledAddress, disabledReceipt, setDisabledReceipt, 
@@ -266,7 +262,7 @@ export const Address = () => {
 
     )
 
-    const [startDate, setStartDate] = useState();
+    // const [startDate, setStartDate] = useState();
 
 
 
@@ -285,7 +281,7 @@ export const Address = () => {
 
                             <i className={styles.icon1} hidden><CloudUploadIcon className={styles.icon2} /> </i>
                             <i className={styles.icon1}>{imageURLs.map(imageSrc => (
-                                <img className={styles.icon3} src={imageSrc} />
+                                <img className={styles.icon3} src={imageSrc} alt=""/>
                             ))}
                             </i>
 
@@ -706,7 +702,7 @@ export const Address = () => {
                 </div>
                 <div className={styles.save}>
                     <button id="D6"
-                        className={disabledReceipt == false ? styles.savestyle : styles.saveDisabled}
+                        className={disabledReceipt === false ? styles.savestyle : styles.saveDisabled}
                         disabled={disabledReceipt}
                         onClick={() => {
                             if (Object.keys(formErrors).length === 0) {

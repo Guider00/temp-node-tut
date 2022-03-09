@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
 import styles from './Checkin.module.css';
-import { API_queryRooms, API_queryBuildings, API_updateMeterRoomkwh, API_updateMeterRoomwater } from '../../API/index';
-import { Table } from "../../subcomponents/Table/Table"
+// import { API_queryRooms} from '../../API/index';
+// import { Table } from "../../subcomponents/Table/Table"
 
 
 import SearchIcon from '@material-ui/icons/Search';
@@ -19,8 +19,8 @@ import { API_UPDATE_Room, API_GET_Rooms } from '../../API/Schema/Room/Room'
 import { API_createMember, API_updateMember } from '../../API/Schema/Member/Member'
 
 import { API_ADD_Invoice, API_UPDATE_Invoice } from '../../API/Schema/Invoice/Invoice'
-import { API_CREATE_Checkin, API_DELETE_Checkin, API_UPDATE_Checkin } from '../../API/Schema/Checkin/Checkin'
-import { API_CREATE_Contract, API_DELETE_Contract, API_UPDATE_Contract } from '../../API/Schema/Contract/Contract'
+import { API_CREATE_Checkin} from '../../API/Schema/Checkin/Checkin'
+import { API_CREATE_Contract} from '../../API/Schema/Contract/Contract'
 import { API_CREATE_Receipt } from '../../API/Schema/Receipt/Receipt'
 
 import { export_Receipt_pdf, export_Contract, export_Invoice_pdf } from '../../general_functions/pdf/export/export_pdf';
@@ -95,37 +95,37 @@ const filter_rooms = (rooms, options_search) => {
 	}
 	return _filter_table
 }
-const getRooms = async () => {
-	return new Promise(async (resolve, reject) => {
-		let res = await API_queryRooms();
-		let table = [];
-		if (res && res.status === 200) {
-			table = res.data.rooms.map((data) => {
-				let _data = data;
-				return {
-					id: data.id,
-					data: _data,
-					building:
-						data.floor && data.floor.building && data.floor.building.name
-							? data.floor.building.name
-							: '---',
-					floor: data.floor ? data.floor.name : '---',
-					name: data.name,
-					status: data.status ? data.status : '---',
-					member: data.member ? data.member.name : '---',
-					metername: data.meterroom ? data.meterroom.name : '---',
-					meterroom: data.meterroom ? data.meterroom : '---',
+// const getRooms = async () => {
+// 	return new Promise(async (resolve, reject) => {
+// 		let res = await API_queryRooms();
+// 		let table = [];
+// 		if (res && res.status === 200) {
+// 			table = res.data.rooms.map((data) => {
+// 				let _data = data;
+// 				return {
+// 					id: data.id,
+// 					data: _data,
+// 					building:
+// 						data.floor && data.floor.building && data.floor.building.name
+// 							? data.floor.building.name
+// 							: '---',
+// 					floor: data.floor ? data.floor.name : '---',
+// 					name: data.name,
+// 					status: data.status ? data.status : '---',
+// 					member: data.member ? data.member.name : '---',
+// 					metername: data.meterroom ? data.meterroom.name : '---',
+// 					meterroom: data.meterroom ? data.meterroom : '---',
 
-				};
-			});
-		}
+// 				};
+// 			});
+// 		}
 
-		resolve(table);
-	}).catch((e) => {
-		console.log('Promise Error', e);
-		return [];
-	});
-};
+// 		resolve(table);
+// 	}).catch((e) => {
+// 		console.log('Promise Error', e);
+// 		return [];
+// 	});
+// };
 const Rooms_to_table = (Rooms) => {
 	let table = [];
 	table = Rooms.map((data) => {
@@ -163,7 +163,7 @@ export const Checkin = () => {
 
 	}
 
-	const [textfilter, settextfilter] = useState('');
+	// const [textfilter, settextfilter] = useState('');
 	const [rooms, setrooms] = useState([]);
 	const [loading, setloading] = useState(false);
 	const [selectedroom, setselectedroom] = useState(null);
@@ -179,11 +179,11 @@ export const Checkin = () => {
 
 	const GET_Rooms = useQuery(API_GET_Rooms);
 
-	const [updateRoom, mutationuploadFile] = useMutation(API_UPDATE_Room)
-	const [addmemberinRoom, mutationaddmemberinRoom] = useMutation(API_UPDATE_MemberInRoom)
-	const [deletememberinRoom, mutationdelememberinRoom] = useMutation(API_DELET_MemberInRoom)
-	const [createMember, mutationcreateMember] = useMutation(API_createMember)
-	const [updateMember, mutationupdateMember] = useMutation(API_updateMember)
+	const [updateRoom] = useMutation(API_UPDATE_Room)
+	const [addmemberinRoom] = useMutation(API_UPDATE_MemberInRoom)
+	const [deletememberinRoom] = useMutation(API_DELET_MemberInRoom)
+	const [createMember] = useMutation(API_createMember)
+	const [updateMember] = useMutation(API_updateMember)
 
 	const [crateInvoice] = useMutation(API_ADD_Invoice)
 	const [updateInvoice] = useMutation(API_UPDATE_Invoice)
@@ -310,18 +310,18 @@ export const Checkin = () => {
 		}
 	}
 	//  function in file
-	const clearformcheckin = () => {
-		setformcheckin({
-			id_contact: "",
-			checkinnumber: "",
-			checkintype: "",
-			checkin_date_exp: "",
-			rental_period: "",
-			rental_deposit: "",
-			rental_period_day: "",
-			branch: "",
-		})
-	}
+	// const clearformcheckin = () => {
+	// 	setformcheckin({
+	// 		id_contact: "",
+	// 		checkinnumber: "",
+	// 		checkintype: "",
+	// 		checkin_date_exp: "",
+	// 		rental_period: "",
+	// 		rental_deposit: "",
+	// 		rental_period_day: "",
+	// 		branch: "",
+	// 	})
+	// }
 	const clerformroomtype = () => {
 		setformroomtype({
 			id: "",
@@ -481,9 +481,9 @@ export const Checkin = () => {
 		// _res = await updateBooking({
 
 	}
-	const handlerselectrooms = (e) => {
+	// const handlerselectrooms = (e) => {
 
-	}
+	// }
 	const handlerchangeformroomtype = (e) => {
 		let _formroomtype = formroomtype
 		if (e.target.id && _formroomtype.hasOwnProperty(e.target.id)) {
@@ -663,7 +663,7 @@ export const Checkin = () => {
 
 				let room_support = roomschedules.map((roomschedule) => {
 					let { room } = roomschedule
-
+					console.log('room',room)
 					let condition = roomschedule.sch.map(({ checkin_date_exp, checkin_date, checkin_type }) => {
 
 						if (roomType_search.roomtype === 'ทั้งหมด') {
@@ -744,6 +744,8 @@ export const Checkin = () => {
 							}
 						}
 
+						return null;
+
 
 					})
 
@@ -783,7 +785,7 @@ export const Checkin = () => {
 			}
 		}
 
-	}, [GET_Rooms, loading, DateStart, DateEnd, roomType_search])
+	}, [GET_Rooms, loading, DateStart, DateEnd, roomType_search , reselectedroom , selectedroom])
 	console.log('GET_Rooms', GET_Rooms)
 	return (
 		<div>	{defaultCalendar.isLoading && <CalendarPicker onCalendar={CalendarDate} start={handleStart}

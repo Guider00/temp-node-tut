@@ -1,14 +1,13 @@
 import styles from './Checkoutinform.module.css';
 import { useEffect, useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
-import {
-    API_GET_Checkoutinform,
-    API_CREATE_Checkoutinform,
-    API_DELETE_Checkoutinform,
-    API_UPDATE_Checkoutinform
-} from '../../API/Schema/Checkoutinform/Checkoutinform'
+// import {
+//     API_GET_Checkoutinform,
+//     API_CREATE_Checkoutinform,
+//     API_DELETE_Checkoutinform,
+//     API_UPDATE_Checkoutinform
+// } from '../../API/Schema/Checkoutinform/Checkoutinform'
 
 import { API_UPDATE_Room ,API_GET_Rooms} from '../../API/Schema/Room/Room'
 import { filter_rooms , getRooms } from './function';
@@ -29,7 +28,7 @@ export const Checkoutinform = () => {
 
 
     
-    const [ checkboxs_select , setcheckboxs_select] = useState([])
+    // const [ checkboxs_select , setcheckboxs_select] = useState([])
     const [ options_search  ,setoptions_search] = useState({
 		text:"",
 		keyword:"ทั้งหมด"
@@ -39,9 +38,8 @@ export const Checkoutinform = () => {
     const [ loadingpage, setloadingpage ] = useState(false);
     const Checkoutinform = useQuery(API_GET_Rooms);
     const [checkoutinforms,setcheckoutinforms] = useState()
-    const [updateStatus , mutationupdatestatus] = useMutation(API_UPDATE_Room)
+    const [updateStatus] = useMutation(API_UPDATE_Room)
     useEffect(() => {
-        
         if(Checkoutinform && Checkoutinform.data && Checkoutinform.data.Rooms){
             console.log("checkinform-1",Checkoutinform.data.Rooms);
             let _checkoutinforms = checkoutinforms
@@ -51,7 +49,7 @@ export const Checkoutinform = () => {
             console.log("checkinform-2",checkoutinforms);
         }
 
-    })
+    },[setcheckoutinforms,Checkoutinform,checkoutinforms])
 
  
     useEffect(
@@ -72,7 +70,7 @@ export const Checkoutinform = () => {
 
 
     let head_table = ["ห้อง" ,"อาคาร" ,"ชั้น" ,"ประเภทห้อง" ,"สถานะ" ,"ชื่อ" ,"นามสกุล" ,"เวลาที่ต้องย้ายออก","ยกเลิกแจ้งย้ายออก"]
-    let body_table = [{"ห้อง":"226","อาคาร":"อาคาร B","ชั้น":"2","ประเภทห้อง":"ห้องแอร์","สถานะ":"เช่า","ชื่อ":"ใจดี","นามสกุล":"มากมาย","วันที่ต้องย้ายออก":"12/12/2564"}]
+    // let body_table = [{"ห้อง":"226","อาคาร":"อาคาร B","ชั้น":"2","ประเภทห้อง":"ห้องแอร์","สถานะ":"เช่า","ชื่อ":"ใจดี","นามสกุล":"มากมาย","วันที่ต้องย้ายออก":"12/12/2564"}]
     return (
         
         

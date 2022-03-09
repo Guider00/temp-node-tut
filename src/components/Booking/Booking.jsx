@@ -6,7 +6,7 @@ import styles from './Booking.module.css';
 import SearchIcon from '@material-ui/icons/Search';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
-import EditIcon from '@material-ui/icons/Edit';
+// import EditIcon from '@material-ui/icons/Edit';
 
 import { ModalAlert } from '../../subcomponents/ModalAlert/ModalAlert';
 
@@ -14,7 +14,7 @@ import { Tablebooking } from './Tablebooking/Tablebooking';
 import { formatDate } from '../../general_functions/convert';
 
 import { useQuery, useMutation } from '@apollo/client';
-import { API_queryRooms, API_queryBuildings, API_updateMeterRoomkwh, API_updateMeterRoomwater } from '../../API/index';
+import { API_queryRooms} from '../../API/index';
 
 import { export_booking_pdf, export_Receipt_pdf } from '../../general_functions/pdf/export/export_pdf';
 
@@ -33,7 +33,6 @@ import {
 	API_GET_Rooms
 } from '../../API/Schema/Room/Room';
 import {
-	UploadFile,
 	SingleUpload,
 } from '../../API/Schema/UploadFile/UploadFile';
 import {
@@ -126,18 +125,18 @@ export const Booking = () => {
 	const api_rooms = useQuery(API_GET_Rooms);
 
 
-	const [updateRoom, mutationupdateRoom] = useMutation(API_UPDATE_Room)
+	const [updateRoom] = useMutation(API_UPDATE_Room)
 
-	const [uploadFile, mutationuploadFile] = useMutation(SingleUpload);
+	const [uploadFile] = useMutation(SingleUpload);
 
-	const [createBooking, mutationcreatebook] = useMutation(API_ADD_Booking);
+	const [createBooking] = useMutation(API_ADD_Booking);
 
-	const [deleteBooking_and_BookinginRoom, mutation_deletebook_and_BookinginRoom] = useMutation(API_DELETE_Booking_and_BookinginRoom);
-	const [deleteBooking, mutation_deletebook] = useMutation(API_DELETE_Booking);
+	const [deleteBooking_and_BookinginRoom] = useMutation(API_DELETE_Booking_and_BookinginRoom);
+	const [deleteBooking] = useMutation(API_DELETE_Booking);
 
-	const [updateBooking, mutation_updatebook] = useMutation(API_UPDATE_Booking);
+	const [updateBooking] = useMutation(API_UPDATE_Booking);
 
-	const [textfilter, settextfilter] = useState('');
+	// const [textfilter, settextfilter] = useState('');
 
 	const [alert, setalert] = useState({
 
@@ -158,7 +157,7 @@ export const Booking = () => {
 		roomtype: "ทั้งหมด",
 	})
 
-	const [action, setaction] = useState('create');
+	// const [action, setaction] = useState('create');
 
 
 	const setdefault_forminput = () => {
@@ -271,7 +270,7 @@ export const Booking = () => {
 
 		}
 	};
-	const [error, setError] = useState({})
+	const [error] = useState({})
 
 
 	//ฟังก์ชั่นแจ้งเตือนกรณีลืมกรอก Data
@@ -309,7 +308,7 @@ export const Booking = () => {
 				setformbooking({ ..._formbooking });
 
 			} else if (e.target.id === 'customer_tel' || e.target.id === 'deposit') {
-				let text = /[^\d+(\.\d)?\d*$]/ig;
+				let text = /[^\d+(\d)?\d*$]/ig;
 				e.target.value = e.target.value.replace(text, '')
 				_formbooking[e.target.id] = e.target.value;
 				setformbooking({ ..._formbooking });
@@ -483,6 +482,7 @@ export const Booking = () => {
 				console.log('roomschedules6', roomschedules)
 				let room_support = roomschedules.map((roomschedule) => {
 					let { room } = roomschedule
+					console.log('room',room)
 
 					// console.log(`debug roomschedule`,roomschedule)
 					let condition = roomschedule.sch.map(({ checkin_date_exp, checkin_date, checkin_type }) => {

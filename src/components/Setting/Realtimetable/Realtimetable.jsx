@@ -9,7 +9,7 @@ const DEFAULTSTATTABLEINDEX = 1;
 const DEFAULTSIZETABLEINDEX = 10;
 const DEFAULTSTOPTABLEINDEX = DEFAULTSTATTABLEINDEX - 1 + DEFAULTSIZETABLEINDEX;
 export const Realtimetable = () => {
-	const [devicename, setdevicename] = useState('');
+	// const [devicename, setdevicename] = useState('');
 	const [ports, setports] = useState([]);
 	const [devices, setdevices] = useState([]);
 	const [portselected, setportselected] = useState('---');
@@ -17,7 +17,7 @@ export const Realtimetable = () => {
 
 	const [tablestartindex, settablestartindex] = useState(DEFAULTSTATTABLEINDEX);
 	const [tablestoptindex, settablestoptindex] = useState(DEFAULTSTOPTABLEINDEX);
-	const [tableviewsize, settableviewsize] = useState(DEFAULTSIZETABLEINDEX);
+	const [tableviewsize] = useState(DEFAULTSIZETABLEINDEX);
 	const Portmeters = useQuery(API_GET_Portmeters);
 	const MeterRooms = useQuery(API_GET_MeterRooms);
 

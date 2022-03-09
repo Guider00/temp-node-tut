@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 import { Floormodal } from '../Setting/Floor/Floormodal'
 
 
-import { API_queryroomprice, API_queryBuildings, API_queryFloors, API_updateRoom, API_deleteRoom, API_queryMembers, API_queryRooms, API_createRoom, API_queryMeterRooms } from '../../API/index'
+import { API_queryroomprice, API_queryBuildings, API_queryFloors, API_updateRoom, API_deleteRoom, API_queryMembers, API_queryRooms, API_createRoom} from '../../API/index'
 
 
 import {
@@ -23,7 +23,7 @@ import {
     API_GET_MeterRooms
 } from '../../API/Schema/MeterRoom/MeterRoom';
 
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery} from '@apollo/client';
 
 
 import { Inputconfig, drowdownmenuroomconfig, option_status_room } from './config'
@@ -211,10 +211,10 @@ arr = arr.filter(function (value, index, array) {    //<< uniqe type
     return array.indexOf(value) === index;
 });
 console.log(arr)
-let uniqe_floors = get_option(Rooms, 'floor')
-let group_by_floor = uniqe_floors.map(floor => {
-    return Rooms.filter(room => room.floor === floor)
-})
+// let uniqe_floors = get_option(Rooms, 'floor')
+// // let group_by_floor = uniqe_floors.map(floor => {
+// //     return Rooms.filter(room => room.floor === floor)
+// // })
 
 
 
@@ -376,6 +376,7 @@ export const Overview = () => {
             if (res && res.status === 200) {
                 type = get_option(res.data.roomprices, 'name')
                 type = type.map(e => ({ label: e, value: e }))
+                console.log(type)
             }
 
             // let res_meterroom = await API_queryMeterRooms()
