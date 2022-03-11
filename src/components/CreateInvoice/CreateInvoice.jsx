@@ -3,9 +3,9 @@ import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
 import styles from './CreateInvoice.module.css';
 import { useEffect, useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-import { API_queryRooms } from '../../API/index';
-import { API_GET_Invoice, API_ADD_Invoice, API_DELETE_Invoice, API_UPDATE_Invoice } from '../../API/Schema/Invoice/Invoice'
-import { API_GET_Rooms, API_UPDATE_Room } from '../../API/Schema/Room/Room'
+// import { API_queryRooms } from '../../API/index';
+import {  API_ADD_Invoice } from '../../API/Schema/Invoice/Invoice'
+import { API_GET_Rooms } from '../../API/Schema/Room/Room'
 import { filter_rooms, Change } from './function';
 import Dialog from '../../subcomponents/Dialog/Dialog';
 import { DialogFunction } from '../../subcomponents/Dialog/Dialog';
@@ -16,18 +16,18 @@ import "react-datepicker/dist/react-datepicker.css";
 
 export const CreateInvoic = () => {
 
-    const [Invoices, setInvoices] = useState([])
+    // const [Invoices, setInvoices] = useState([])
     const [options_search, setoptions_search] = useState({
         text: "",
         keyword: "ทั้งหมด"
     })
     const [rooms, setrooms] = useState([]);
 
-    const [loadingpage, setloadingpage] = useState(false);
-    const [addInvoice, mutationaddInvoice] = useMutation(API_ADD_Invoice);
-    const [deleteInvoice, mutationdeleteInvoice] = useMutation(API_DELETE_Invoice);
+    const [setloadingpage] = useState(false);
+    const [addInvoice] = useMutation(API_ADD_Invoice);
+    // const [deleteInvoice, mutationdeleteInvoice] = useMutation(API_DELETE_Invoice);
     const [date, setdate] = useState([]);
-    const invoices = useQuery(API_GET_Invoice)
+    // const invoices = useQuery(API_GET_Invoice)
     const GET_Rooms = useQuery(API_GET_Rooms)
     const { disabled, handleChangeRadio, filterrooms, setfilterrooms, IDrooms, setIDrooms } = Change();
 
@@ -52,29 +52,29 @@ export const CreateInvoic = () => {
 
 
 
-    const getRooms = async () => {
-        return new Promise(async (resolve, reject) => {
+    // const getRooms = async () => {
+    //     return new Promise(async (resolve, reject) => {
 
-            let res = await API_queryRooms();
-            let table = [];
-            if (res && res.status === 200) {
-                table = res.data.rooms.map((data) => {
-                    let _data = data;
-                    return {
-                        id: data.id,
-                        building:
-                            data.floor && data.floor.building && data.floor.building.name
-                                ? data.floor.building.name
-                                : '---',
-                        floor: data.floor ? data.floor.name : '---',
-                        RoomType: data.RoomType ? data.RoomType.name : '---',
-                        room: data.name ? data.name : '---',
-                        status: data.status ? data.status : '---'
-                    };
-                });
-            }
-        })
-    }
+    //         let res = await API_queryRooms();
+    //         let table = [];
+    //         if (res && res.status === 200) {
+    //             table = res.data.rooms.map((data) => {
+    //                 let _data = data;
+    //                 return {
+    //                     id: data.id,
+    //                     building:
+    //                         data.floor && data.floor.building && data.floor.building.name
+    //                             ? data.floor.building.name
+    //                             : '---',
+    //                     floor: data.floor ? data.floor.name : '---',
+    //                     RoomType: data.RoomType ? data.RoomType.name : '---',
+    //                     room: data.name ? data.name : '---',
+    //                     status: data.status ? data.status : '---'
+    //                 };
+    //             });
+    //         }
+    //     })
+    // }
 
 
 
@@ -133,7 +133,6 @@ export const CreateInvoic = () => {
                 //	_filter_rooms = filter_rooms([...Rooms] , options_search)
                 setrooms(Rooms);
                 setfilterrooms(Rooms);
-                setloadingpage(true);
 
             }
         },
@@ -298,9 +297,9 @@ export const CreateInvoic = () => {
                                 <tbody className={styles.body}>
 
                                     {filterrooms.filter((room) => (room && room.status === 'มีคนอยู่' )).map(
-                                        (room) =>
+                                        (room , index) =>
                                             room ? (
-                                                <tr>
+                                                <tr key={index}>
                                                     <td width={'20px'} ><input
                                                         type='checkbox'
                                                         name={room.id}

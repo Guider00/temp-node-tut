@@ -1,62 +1,3 @@
-.menu{
-    display: flex;
-    
-
-    background-color: #ddd;
-    padding: 0.5em;
-    box-shadow: 0px 1px 1px rgb(0 0 0 / 15%);
-
-    
-}
-.menu_icon{
-    
-}
-.menu>.logo{
-    width: 10vw;
-    text-align: center;
-   
-}
-.menu>div{
-    display: flex;
-
-}
-.menu>.menu_right{
-    display: flex;
-    margin-left: auto;
-    align-items: center;
-}
-.menu>.menu_right>.db_status{
-    
-    flex-flow: column wrap
-}
-.menu>.menu_right>.db_status >div{
-    display: flex;
-    width: 100%;
-    justify-content: space-evenly;
-}
-
-@media screen and (max-width: 680px) {
-    .menu>.menu_right>.db_status{
-    
-      display: none;
-    }
-}
-
-
-.menu>div>div{
-    display: flex;
-    align-items: center;
-    height: 100%;
- }
-
-.menu>div>a>button{
-   height: 100%;
-}
-
-.menu>div>.logout{
-    margin-left: 0.5rem;
-}
-
 
 
 .optionright{
@@ -145,4 +86,134 @@
     background-color: orange;
     border-radius: 5px;
 
+}
+.menu_right{
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+}
+
+.menu_right>.db_status >div{
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+
+a>button{
+   height: 100%;
+}
+
+.logout{
+    margin-left: 0.5rem;
+}
+
+.container{
+    text-align: center;
+
+}
+.md{
+    border: 1px solid black;
+    margin: 0.2rem;
+    background-color: azure;
+    border-radius: 5px;
+    font-size: 0.9rem;
+
+}
+.md:hover{
+    background-color: rgb(203, 252, 252);
+
+}
+@media screen and (max-width: 991px) {
+    .md{
+        margin: 0;
+        background-color: #f8faf8;
+    }
+    .md:hover{
+        background-color: rgb(203, 252, 252);
+    
+    }
+}
+
+.dropdownReport{
+    margin: 0.5rem;
+    height:90px;
+    font-size: 0.9rem;
+}
+.dropdownSetting{
+    margin-right: 0.5rem;
+    height:90px;
+    font-size: 0.9rem;
+    margin-right: 1rem;
+}
+@media screen and (max-width: 1670px) {
+    .optionright{
+        display: grid;
+        grid-gap: 0.3rem;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        margin: 0.5rem auto;
+    }
+    .menu{
+        display: flex;
+        flex-direction: column;
+    }
+    .dropdownReport{
+        margin: 0.5rem;
+        height:90px;
+    }
+    .dropdownSetting{
+        margin-right: 0.5rem;
+        height:90px;
+    }
+    .menu>.menu_right>.db_status{
+        display: none;
+      }
+}
+@media screen and (max-width: 1460px) {
+    .dropdownReport{
+        margin: 0.5rem;
+        height:140px;
+    }
+    .dropdownSetting{
+        margin-right: 0.5rem;
+        height:140px;
+    }
+   
+}
+@media screen and (max-width: 991px) {
+    .dropdownReport{
+        margin-left: 0;
+        height:40px;
+    }
+    .dropdownSetting{
+        height:40px;
+    }
+    
+    .menu_right{
+        width: 100%;
+    }
+    .none{
+        display: none;
+    }
+    .db_status{
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .optionright{
+        display: grid;
+        grid-gap: 0.3rem;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        margin: 0.5rem auto;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .optionright{
+        display: grid;
+        grid-gap: 0.3rem;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        margin: 0.5rem auto;
+    }
 }

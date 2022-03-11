@@ -2,10 +2,10 @@ import React from "react";
 import styles from './Reimbursement.module.css';
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { API_GET_Reimbursement, API_ADD_Reimbursement, API_DELETE_Reimbursement, API_UPDATE_Reimbursement } from '../../API/Schema/Reimbursement/Reimbursement'
+import { API_GET_Reimbursement,API_DELETE_Reimbursement, API_UPDATE_Reimbursement } from '../../API/Schema/Reimbursement/Reimbursement'
 import { export_Reimbursement_pdf } from '../../general_functions/pdf/export/export_pdf';
 import { toYYMMDD } from '../../general_functions/convert';
-import { Rooms_to_table, filter_rooms } from "./function";
+// import { Rooms_to_table, filter_rooms } from "./function";
 
 //address
 import { AddressData } from "../../subcomponents/AddressData/AddressData";
@@ -22,15 +22,15 @@ export const Reimbursement = () => {
 
     const getReimbursement = useQuery(API_GET_Reimbursement)
 
-    const [rooms, setrooms] = useState([]);
-    const [FilterRooms, setFilterRooms] = useState([]);
+    // const [rooms, setrooms] = useState([]);
+    // const [FilterRooms, setFilterRooms] = useState([]);
     const [Reimbursements, setReimbursements] = useState([]);
     const [FilterReimbursements, setFilterReimbursements] = useState([]);
     const [selectedReimbursements, setselectedReimbursements] = useState([]);
 
-    const [IDrooms, setIDrooms] = useState([]);
-    const [deleteReimbursement, mutationdeleteReimbursement] = useMutation(API_DELETE_Reimbursement)
-    const [updateReimbursement, mutationupdateReimbursement] = useMutation(API_UPDATE_Reimbursement)
+    // const [IDrooms, setIDrooms] = useState([]);
+    const [deleteReimbursement] = useMutation(API_DELETE_Reimbursement)
+    const [updateReimbursement] = useMutation(API_UPDATE_Reimbursement)
 
     const [formFilter, setFormfilter] = useState({
         id: null,
@@ -39,7 +39,7 @@ export const Reimbursement = () => {
 
     })
 
-    const [defaultformFilter, setdefaultformFilter] = useState({
+    const [defaultformFilter] = useState({
         id: null,
         option_search: 'ทั้งหมด',
         text: '',
@@ -138,6 +138,7 @@ export const Reimbursement = () => {
                     if (Reimbursement.Contract.Room.floor.building.name.search(formFilter.text) !== -1) {
                         return Reimbursement
                     }
+                    return null;
                 })
 
             }
@@ -146,6 +147,7 @@ export const Reimbursement = () => {
                     if (Reimbursement.Contract.Room.name.search(formFilter.text) !== -1) {
                         return Reimbursement
                     }
+                    return null;
                 })
             }
             else if (formFilter.option_search === 'วันที่คืน') {
@@ -155,6 +157,7 @@ export const Reimbursement = () => {
                     ) {
                         return Reimbursement
                     }
+                    return null;
                 })
             }
             console.log(_Reimbursements)
@@ -167,7 +170,7 @@ export const Reimbursement = () => {
 
 
     let head_table = ["อาคาร", "ชื่อห้อง", "เลขที่สัญญา", "เลขที่ใบแจ้งหนี้", "ชื่อผู้เช่า", "นามสกุล", "คืนเงิน", "สถานะ", "วันที่คืน"]
-    let body_table = [{ "อาคาร": "A1", "ชื่อห้อง": "112", "เลขที่สัญญา": "F111111112", "เลขที่ใบแจ้งหนี้": "H111111", "ชื่อผู้เช่า": "ใจดี", "นามสกุล": "มากมาย", "คืนเงิน": "10000", "สถานะ": "เช่า", "วันที่คืน": "12/12/2550" }]
+    // let body_table = [{ "อาคาร": "A1", "ชื่อห้อง": "112", "เลขที่สัญญา": "F111111112", "เลขที่ใบแจ้งหนี้": "H111111", "ชื่อผู้เช่า": "ใจดี", "นามสกุล": "มากมาย", "คืนเงิน": "10000", "สถานะ": "เช่า", "วันที่คืน": "12/12/2550" }]
     return (
         <div className={styles.container}>
             {Confirm.isLoading && <Dialog onDialog={checkstate} message={Confirm.message} />}
@@ -209,12 +212,11 @@ export const Reimbursement = () => {
                             </tr>
 
                         </thead>
-                        <tbody className={styles.tbody}> {FilterReimbursements.map(
+                        <tbody className={styles.tbody}>{FilterReimbursements.map(
                             (reimbursements) => reimbursements && reimbursements.Contract && reimbursements.Contract.Room ? (
-                                <tr  >
+                                <tr>
                                     <td>
                                         <input
-
                                             type="checkbox"
                                             name="myCheckboxName"
                                             id="myCheckboxId"
@@ -232,8 +234,7 @@ export const Reimbursement = () => {
                                                     setselectedReimbursements(_selectedReimbursements)
 
                                                 }
-                                            }}></input>
-                                    </td>
+                                            }}></input></td>
                                     <td>{reimbursements.Contract.Room.floor.building.name ? reimbursements.Contract.Room.floor.building.name : '---'}</td>
                                     <td>{reimbursements.Contract.Room.name ? reimbursements.Contract.Room.name : '---'}</td>
                                     <td>{reimbursements.Contract.id ? reimbursements.Contract.id : '---'}</td>
@@ -243,14 +244,9 @@ export const Reimbursement = () => {
                                     <td>{reimbursements.cashback ? reimbursements.cashback : '0'}</td>
                                     <td>{reimbursements.status ? reimbursements.status : '---'}</td>
                                     <td>{reimbursements.cashback_date ? toYYMMDD(reimbursements.cashback_date) : '---'}</td>
-
-
-
                                 </tr>
                             ) : null
-                        )}
-
-                        </tbody>
+                        )}</tbody>
 
 
                     </table>
@@ -325,7 +321,7 @@ export const Reimbursement = () => {
 
                 <div className={styles.footer}>
                     <h3 className={styles.footertext}>
-                        <lable className={styles.highlight}> คืนเงินประกัน </lable>
+                        <label className={styles.highlight}> คืนเงินประกัน </label>
                         : คือขั้นตอนการอัพเดตสถานะของห้องเช่าที่มีประกันห้องไว้ ขั้นตอนนี้ต้องทำหลังจากมีการย้ายออกและทำการชำระเงิน
                         และผู้ให้เช่าได้ทำการคืนเงินประกันเรียบร้อยแล้ว
                     </h3>

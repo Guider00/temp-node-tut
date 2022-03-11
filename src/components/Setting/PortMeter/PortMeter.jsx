@@ -10,7 +10,7 @@ import { Floormodal } from '../Floor/Floormodal'
 import { Validate } from '../../../subcomponents/Regex/Regex'
 
 
-import {  API_createPortmeter, API_updatePortmeter, API_deletePortmeter,   API_queryPortmeters } from '../../../API/index'
+import {  API_createPortmeter, API_updatePortmeter, API_deletePortmeter} from '../../../API/index'
 
 
 import {   API_GET_Portmeters   } from '../../../API/Schema/PortMeter/PortMeter'
@@ -108,29 +108,29 @@ export const Portmeter = () => {
         setload(false)
     }
 
-    const API_query = async () =>{
-        return new Promise( async (resolve , rejcet) =>{
-            let res = await API_queryPortmeters()
-            let table = []
-            if (res && res.status === 200) {
+    // const API_query = async () =>{
+    //     return new Promise( async (resolve , rejcet) =>{
+    //         let res = await API_queryPortmeters()
+    //         let table = []
+    //         if (res && res.status === 200) {
                
-                table = res.data.Portmeters.map((data) => {
-                    let _data = data
+    //             table = res.data.Portmeters.map((data) => {
+    //                 let _data = data
                    
-                    return {...{ data: _data},  ...data }
-                })
-                console.log('data',table)
-                resolve (table)
-            }else{
-                resolve(table)
-            }
-        }).catch(e =>{
-            console.log(e)
-           return ([])
-        })
+    //                 return {...{ data: _data},  ...data }
+    //             })
+    //             console.log('data',table)
+    //             resolve (table)
+    //         }else{
+    //             resolve(table)
+    //         }
+    //     }).catch(e =>{
+    //         console.log(e)
+    //        return ([])
+    //     })
 
 
-    }
+    // }
 
 
     useEffect(() => {

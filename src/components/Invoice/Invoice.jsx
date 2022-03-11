@@ -143,8 +143,8 @@ export const Invoice = () => {
 
     }
 
-     //ฟังก์ชั่นเช็คการลบข้อมูลที่เลือก
-     const checkstate = async (state) => {
+    //ฟังก์ชั่นเช็คการลบข้อมูลที่เลือก
+    const checkstate = async (state) => {
 
         if (state) {
             Promise.all(IDrooms).then((IDrooms) => {
@@ -187,9 +187,9 @@ export const Invoice = () => {
     const [IDrooms, setIDrooms] = useState([])
     const [rooms, setrooms] = useState([])
     const [filterrooms, setfilterrooms] = useState([])
-    const [deleteInvoice, mutationdeleteInvoice] = useMutation(API_DELETE_Invoice);
-    const [updateInvoice, mutationupdateInvoice] = useMutation(API_UPDATE_Invoice);
-    const [createReceipt, mutationcreateReceipt] = useMutation(API_CREATE_Receipt);
+    const [deleteInvoice] = useMutation(API_DELETE_Invoice);
+    const [updateInvoice] = useMutation(API_UPDATE_Invoice);
+    const [createReceipt] = useMutation(API_CREATE_Receipt);
     const [selectroom, setselectroom] = useState(null)
     const [editselectroom, seteditselectroom] = useState(false)
 
@@ -226,6 +226,8 @@ export const Invoice = () => {
                 _totalprice += Number(list_to_show(list).price)
                 _totalvat += Number(list_to_show(list).vat)
                 _grandtotal += Number(list_to_show(list).total)
+
+                return null;
             })
 
             return ({ totalprice: Number(_totalprice).toFixed(2), totalvat: Number(_totalvat).toFixed(2), grandtotal: Number(_grandtotal).toFixed(2) })
@@ -266,8 +268,8 @@ export const Invoice = () => {
 
 
         else {
-            for (var x = 0; x < myCheckboxNameLen; x++) {
-                myCheckboxName[x].checked = false;
+            for (var z = 0; z < myCheckboxNameLen; z++) {
+                myCheckboxName[z].checked = false;
             }
 
             let _IDrooms = IDrooms.filter(item => item !== item)
@@ -330,14 +332,14 @@ export const Invoice = () => {
         }
 
 
-    }, [Invoice, Invoice.data, rooms])
+    }, [Invoice, Invoice.data, rooms , IDrooms ,selectroom ])
 
 
     let header_table = ["", "เลขที่ใบแจ้งหนี้", "ชื่อห้อง", "วันที่ออก", "สถานะ", "สถานะการพิมพ์", "รอบบิล"]
-    let sim_table = [{ "": "", "เลขที่ใบแจ้งหนี้": "INMV20190030000097", "ชื่อห้อง": "201", "วันที่ออก": "30/12/2021", "สถานะ": "รอชำระเงิน", "สถานะการพิมพ์": "ยังไม่พิมพ์", "รอบบิล": "04/2562" }]
+    // let sim_table = [{ "": "", "เลขที่ใบแจ้งหนี้": "INMV20190030000097", "ชื่อห้อง": "201", "วันที่ออก": "30/12/2021", "สถานะ": "รอชำระเงิน", "สถานะการพิมพ์": "ยังไม่พิมพ์", "รอบบิล": "04/2562" }]
 
     let header_table2 = ["รายการ", "ชื่อรายการค่าใช้จ่าย", "จำนวน", "จำนวนเงิน", "ราคา", "ภาษีมูลค่าเพิ่ม", "ผลรวม", "ภาษี"]
-    let sim_table2 = [{ "รายการ": "1", "ชื่อรายการค่าใช้จ่าย": "INMV20190030000097", "จำนวน": "1", "จำนวนเงิน": "1200.00", "ราคา": "100.00", "ภาษีมูลค่าเพิ่ม": "888.00", "จำนวนเงิน": "888.00", "ภาษี": "" }]
+    // let sim_table2 = [{ "รายการ": "1", "ชื่อรายการค่าใช้จ่าย": "INMV20190030000097", "จำนวน": "1", "จำนวนเงิน": "1200.00", "ราคา": "100.00", "ภาษีมูลค่าเพิ่ม": "888.00", "จำนวนเงิน": "888.00", "ภาษี": "" }]
 
 
 
@@ -358,22 +360,22 @@ export const Invoice = () => {
                             <div className={styles.date}>
                                 <div className={styles.part1}>
                                     <input type="radio"></input>
-                                    <lable className={styles.onerem}>วันที่</lable>
+                                    <label className={styles.onerem}>วันที่</label>
                                     <input className={styles.side1}
                                         type='date'
                                         max={DateEnd}
-                                        value={DateStart}
+                                        value={DateStart ? DateStart : ''}
                                         onChange={(e) => {
                                             let { value } = e.target
                                             setDateStart(value)
                                         }}
                                     />
 
-                                    <lable>ถึง</lable>
+                                    <label>ถึง</label>
                                     <input className={styles.side2}
                                         type='date'
                                         min={DateStart}
-                                        value={DateEnd}
+                                        value={DateEnd ? DateEnd : ''}
                                         onChange={(e) => {
                                             let { value } = e.target
                                             setDateEnd(value)
@@ -389,22 +391,22 @@ export const Invoice = () => {
                                         }}
                                     ><EventNoteIcon /></button>
 
-                                    <lable>แสดงผล</lable>
+                                    <label>แสดงผล</label>
                                     <input className={styles.side3} placeholder='0.00'></input>
-                                    <lable>เดือน</lable>
+                                    <label>เดือน</label>
                                 </div>
                                 <div className={styles.part2}>
                                     <input type="radio"></input>
-                                    <lable className={styles.semirem}>รอบบิล</lable>
+                                    <label className={styles.semirem}>รอบบิล</label>
                                     <input className={styles.side1} type='date' />
 
-                                    <lable>ถึง</lable>
+                                    <label>ถึง</label>
                                     <input className={styles.side2} type='date' />
 
                                 </div>
                                 <div className={styles.part3}>
                                     <input type="checkbox" id='select-all' onChange={selectAll} />
-                                    <lable className={styles.onerem}>เลือกทั้งหมด</lable>
+                                    <label className={styles.onerem}>เลือกทั้งหมด</label>
 
                                 </div>
 
@@ -636,7 +638,7 @@ export const Invoice = () => {
                                 <div>ชำระทั้งหมดที่เลือก</div>
                             </button>
                             <button className={styles.button3}
-                                onClick={ () => {
+                                onClick={() => {
                                     handleConfirm('Are you sure to Delete?', true)
                                 }
                                 }
@@ -747,11 +749,11 @@ export const Invoice = () => {
                             </div>
 
                             <div className={styles.topic4}>
-                                <lable className={styles.text1} >วันที่เริ่ม</lable>
-                                <lable className={styles.text2} >วันที่สิ้นสุด</lable>
-                                <lable className={styles.text3} >ค่าโทรศัพท์</lable>
+                                <label className={styles.text1} >วันที่เริ่ม</label>
+                                <label className={styles.text2} >วันที่สิ้นสุด</label>
+                                <label className={styles.text3} >ค่าโทรศัพท์</label>
                                 <div className={styles.input}>
-                                    <lable className={styles.text4} >โทรศัพท์</lable>
+                                    <label className={styles.text4} >โทรศัพท์</label>
                                     <input name="inmemory_phone_date" value={formmeter.inmemory_phone_date} onChange={handlerChangeformmeter} className={styles.input1} type='date' />
                                     <input name="inmemory_finished_phone_date" value={formmeter.inmemory_finished_phone_date} onChange={handlerChangeformmeter} className={styles.input2} type='date' />
                                     <input name="phone_price" value={formmeter.phone_price} onChange={handlerChangeformmeter} className={styles.input3} placeholder='0.00' />
@@ -900,26 +902,26 @@ export const Invoice = () => {
 
                                 <div className={styles.lastresult}>
                                     <div className={styles.head} >
-                                        <lable>รวม</lable>
-                                        <input className={styles.onerem} placeholder='0.00' value={sumlists_to_show(
+                                        <label>รวม</label>
+                                        <input className={styles.onerem} placeholder='0.00' defaultValue={sumlists_to_show(
                                             selectroom && selectroom.lists ? selectroom.lists : []
                                         ).totalprice}>
                                         </input>
-                                        <lable className={styles.onerem}>บาท</lable>
+                                        <label className={styles.onerem}>บาท</label>
                                     </div>
                                     <div className={styles.head}>
-                                        <lable>ภาษีมูลค่าเพิ่ม 7%</lable>
-                                        <input className={styles.onerem} placeholder='0.00' value={sumlists_to_show(
+                                        <label>ภาษีมูลค่าเพิ่ม 7%</label>
+                                        <input className={styles.onerem} placeholder='0.00' defaultValue={sumlists_to_show(
                                             selectroom && selectroom.lists ? selectroom.lists : []
                                         ).totalvat}></input>
-                                        <lable className={styles.onerem}>บาท</lable>
+                                        <label className={styles.onerem}>บาท</label>
                                     </div>
                                     <div className={styles.head}>
-                                        <lable>รวมยอกเงินสุทธิ</lable>
-                                        <input className={styles.onerem} placeholder='0.00' value={sumlists_to_show(
+                                        <label>รวมยอกเงินสุทธิ</label>
+                                        <input className={styles.onerem} placeholder='0.00' defaultValue={sumlists_to_show(
                                             selectroom && selectroom.lists ? selectroom.lists : []
                                         ).grandtotal}></input>
-                                        <lable className={styles.onerem}>บาท</lable>
+                                        <label className={styles.onerem}>บาท</label>
                                     </div>
 
                                 </div>
@@ -938,7 +940,7 @@ export const Invoice = () => {
                                 }}
                             >
                                 <i><EditOutlinedIcon /></i>
-                                <div>{editselectroom ? "ยกเลิกแก้ไข" : "แก้ไข"}   </div>
+                                <div>{editselectroom ? "ยกเลิกแก้ไข" : "แก้ไข"}</div>
                             </button>
                             <button className={styles.button2} onClick={async () => {
                                 let _invoice = { ...selectroom }
@@ -985,7 +987,7 @@ export const Invoice = () => {
 
                     </div>
                 </div>
-                <div class={styles.buttonzone}>
+                <div className={styles.buttonzone}>
 
 
 

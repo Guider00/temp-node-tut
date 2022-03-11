@@ -28,7 +28,7 @@ export const Reportwater = () => {
     })
     //Function รับค่า ERROR
     const [formErrors, setFormErrors] = useState({ 'default': 'nothingChange' })
-    const [defaultFormErrors, setDefaultFormErrors] = useState({ 'default': 'nothingChange' })
+    const [defaultFormErrors] = useState({ 'default': 'nothingChange' })
 
     //Function เลือก disabled enable clearData รายละเอียดและผลรวม
     const handleSelectType = (e) => {
@@ -362,12 +362,12 @@ export const Reportwater = () => {
                                     className={styles.buttonStyles}
                                     onClick={() => {
 
-                                        if ((selectType.detail === false || selectType.sum === false) && Object.keys(formErrors).length != 0 && selectType.type === '1') {
+                                        if ((selectType.detail === false || selectType.sum === false) && Object.keys(formErrors).length !== 0 && selectType.type === '1') {
                                             setFormErrors(validate(formFilter))
                                             setShowTablePrice(false)
                                             console.log('Type 1')
                                         }
-                                        else if ((selectType.detail === false || selectType.sum === false) && Object.keys(formErrors).length != 0 && selectType.type === '2') {
+                                        else if ((selectType.detail === false || selectType.sum === false) && Object.keys(formErrors).length !== 0 && selectType.type === '2') {
                                             setFormErrors(validateDate(formFilter))
                                             setShowTablePrice(false)
                                             console.log('Type 2')
@@ -376,7 +376,7 @@ export const Reportwater = () => {
                                             setShowData(formFilter)
                                             setShowTablePrice(true)
                                         }
-                                        else if ((selectType.detail === false && selectType.sum === false) && Object.keys(formErrors).length != 0 && selectType.type === '0') {
+                                        else if ((selectType.detail === false && selectType.sum === false) && Object.keys(formErrors).length !== 0 && selectType.type === '0') {
                                             setShowTablePrice(false)
                                             console.log('โปรเลือก Type by checkbox')
                                         }
@@ -418,7 +418,7 @@ export const Reportwater = () => {
                                         <label className={styles.frontBold}>อาคาร</label>
                                         <label>{showData.building}</label>
 
-                                        <lable className={styles.frontBold}>ประมาณราคาโดย ราคา/หน่วย</lable>
+                                        <label className={styles.frontBold}>ประมาณราคาโดย ราคา/หน่วย</label>
                                         <div>
                                             <label>{showData.price}</label>
                                             <label className={styles.frontBold}>บาท</label>
@@ -513,7 +513,7 @@ export const Reportwater = () => {
                                         <label className={styles.frontBold}>อาคาร</label>
                                         <label>-</label>
 
-                                        <lable className={styles.frontBold}>ประมาณราคาโดย ราคา/หน่วย</lable>
+                                        <label className={styles.frontBold}>ประมาณราคาโดย ราคา/หน่วย</label>
                                         <div>
                                             <label>-</label>
                                             <label className={styles.frontBold}>บาท</label>

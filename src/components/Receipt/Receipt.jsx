@@ -1,10 +1,8 @@
 
 import styles from './Receipt.module.css';
 import { useEffect, useState } from 'react';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { API_GET_Receipt, API_CREATE_Receipt, API_DELETE_Receipt, API_UPDATE_Receipt } from '../../API/Schema/Receipt/Receipt'
 import { useQuery, useMutation } from '@apollo/client';
-import { set } from 'mongoose';
 
 //confirmDialog
 import Dialog from '../../subcomponents/ConfirmAlert/ConfirmAlert';
@@ -18,9 +16,9 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
 
-import { export_Receipt_pdf, export_Receipts_pdf, export_taxinvoice_pdf, export_taxinvoices_pdf } from '../../general_functions/pdf/export/export_pdf';
+import {  export_Receipts_pdf, export_taxinvoices_pdf } from '../../general_functions/pdf/export/export_pdf';
 
-import { handlerCreateRecipt, handlerCancelRecipt, list_to_show } from './function'
+import {  list_to_show } from './function'
 import { toYYMM, toYYMMDD, getlaststring } from '../../general_functions/convert';
 export const Receipt = () => {
 
@@ -67,13 +65,13 @@ export const Receipt = () => {
         duedate: ""
 
     })
-    const [formreceiptinformation, setreceiptinformation] = useState({
-        monthlybilling: "",
-        status: "",
-        editmode: false,
-        note: "",
-        lists: []
-    })
+    // const [formreceiptinformation, setreceiptinformation] = useState({
+    //     monthlybilling: "",
+    //     status: "",
+    //     editmode: false,
+    //     note: "",
+    //     lists: []
+    // })
 
     const handleChangeformsearch = (e) => {
         let _formsearch = formsearch
@@ -206,23 +204,23 @@ export const Receipt = () => {
         settbsortingstyle_newmetoold(!_tbsortingstyle_newtoold)
     }
 
-    const building = () => {
+    // const building = () => {
 
 
-    }
-    const status = () => {
+    // }
+    // const status = () => {
 
-    }
-    const detail = () => {
-
-
-
-    }
-    const round = () => {
+    // }
+    // const detail = () => {
 
 
 
-    }
+    // }
+    // const round = () => {
+
+
+
+    // }
 
     useEffect(() => {
 
@@ -237,17 +235,17 @@ export const Receipt = () => {
 
 
 
-    }, [Receipt, Receipt.data])
+    }, [Receipt, Receipt.data ,receipt])
 
 
 
 
 
     let header_table = ["", "เลขที่ใบเสร็จ", "เลขที่ใบแจ้งหนี้", "วันที่ออกบิล", "ชื่อห้อง", "ชื่อผู้จอง", "สถานะ", "สถานะการพิมพ์", "รอบบิล"]
-    let sim_table = [{ "เลือก": "", "เลขที่ใบเสร็จ": "PEM12345678910", "เลขที่ใบแจ้งหนี้": "DEV12345678910", "วันที่ออกบิล": "1/2/2021", "ชื่อห้อง": "205", "ชื่อผู้จ..": "", "สถานะ": "ปกติ", "สถานะการพิมพ์": "พิมพ์แล้ว", "รอบบิล": "02/2022" }]
+    // let sim_table = [{ "เลือก": "", "เลขที่ใบเสร็จ": "PEM12345678910", "เลขที่ใบแจ้งหนี้": "DEV12345678910", "วันที่ออกบิล": "1/2/2021", "ชื่อห้อง": "205", "ชื่อผู้จ..": "", "สถานะ": "ปกติ", "สถานะการพิมพ์": "พิมพ์แล้ว", "รอบบิล": "02/2022" }]
 
     let header_table2 = ["รายการ", "ชื่อรายการใช้จ่าย", "จำนวน", "จำนวนเงิน", "ราคา", "ภาษีมูลค่าเพิ่ม", "จำนวนเงิน", "ภาษี"]
-    let sim_table2 = [{ "รายการ": "1", "ชื่อรายการใช้จ่าย": "ค่าเช่าห้อง", "จำนวน": "1", "จำนวนเงิน": "300.00", "ราคา": "205", "ภาษีมูลค่าเพิ่ม": "1", "จำนวนเงิน2": "200.00" }]
+    // let sim_table2 = [{ "รายการ": "1", "ชื่อรายการใช้จ่าย": "ค่าเช่าห้อง", "จำนวน": "1", "จำนวนเงิน": "300.00", "ราคา": "205", "ภาษีมูลค่าเพิ่ม": "1", "จำนวนเงิน2": "200.00" }]
 
 
     return (
@@ -280,7 +278,7 @@ export const Receipt = () => {
 
                                 </div>
                                 <p>
-                                    <lable >อาคาร</lable>
+                                    <label >อาคาร</label>
                                     <input className={styles.Building} id="building" value={formsearch.building} onChange={handleChangeformsearch} ></input>
                                 </p>
 

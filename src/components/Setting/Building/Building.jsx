@@ -106,7 +106,7 @@ export const Building = () =>{
               {_showmodal? <Buildingmodal Data={_modaldata} onSave={onSave}  onClose={onClose} Action={_modalaction}></Buildingmodal> :null} 
             <div className={styles.main} >
                     <div className={styles.header}>
-                         <lable> Building </lable> 
+                         <label> Building </label> 
                     </div>
                    
                     <div className={styles.body}>
