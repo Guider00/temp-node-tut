@@ -49,6 +49,13 @@ export const  toDDMM = (date:Date) =>{
         return ('')
     }
 }
+export const toYYYYMMDD = (date:Date) =>{
+
+    let day = ("0" + date.getDate()).slice(-2);
+    let month = ("0" + (date.getMonth() + 1)).slice(-2);
+
+    return ( date.getFullYear()+"-"+(month)+"-"+(day)  ) 
+}
 
 export const  formatDate = (date) => {
     if(date){

@@ -7,7 +7,10 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import SearchIcon from '@material-ui/icons/Search';
 import CalculateIcon from '@mui/icons-material/Calculate';
 
-import { export_Invoice_pdf} from '../../general_functions/pdf/export/export_pdf';
+import Dialog from '../../subcomponents/Dialog/Dialog'
+import { DialogFunction } from "../../subcomponents/Dialog/Dialog";
+import { export_Invoice_pdf  , export_Receipt_pdf } from '../../general_functions/pdf/export/export_pdf';
+
 
 
 // import { API_queryRooms} from '../../API/index';
@@ -59,14 +62,23 @@ import { filter_rooms } from '../../general_functions/filter'
 // };
 
 export const Checkout = () => {
-	// const [textfilter, settextfilter] = useState('');
-	const [rooms, setrooms] = useState([]);
-	const [loading, setloading] = useState(false);
-	const [selectedroom, setselectedroom] = useState(null);
-	const [options_search, setoptions_search] = useState({
-		text: "",
-		keyword: "ทั้งหมด"
+	const [ textfilter, settextfilter ] = useState('');
+	const [ rooms, setrooms ] = useState([]);
+	const [ loading, setloading ] = useState(false);
+	const [ selectedroom, setselectedroom ] = useState(null);
+	 //  << dialog function 
+	const { defaultDialog, handleDialog, checkData } = DialogFunction();
+	const [path, setPath] = useState([''])
+	const handleChangePath = (props) => {
+		setPath(props)
+
+	}
+	 // ------------------------------ // 
+	const [ options_search  ,setoptions_search] = useState({
+		text:"",
+		keyword:"ทั้งหมด"
 	})
+  
 	const [formdetailroom, setformdetailroom] = useState({
 		id: "",
 		name: "",
@@ -215,19 +227,30 @@ export const Checkout = () => {
 		}, [GET_Rooms, loading ,options_search]
 	);
 
-	return (
-		<div>
-			<div className={styles.zone1}>
-				<div className={styles.bigbox}>
 
-					<div className={styles.tableroomselect}>
-						<div className={styles.headertable}>
-							<div className={styles.text}> ห้องเช่าและแจ้งย้ายออก </div>
-							<div className={styles.input}>
-								<div className={styles.zonetextbox}>
-									<input
-										type="text"
-										value={options_search.text}
+    return (
+        <div>
+           		<div className={styles.zone1}>
+				   	<div className={styles.bigbox}>
+						{defaultDialog.isLoading && <Dialog onDialog={checkData} nextPage={path} message={defaultDialog.message} />}
+
+						<div className={styles.tableroomselect}>
+							<div className={styles.headertable}>
+								<div className={styles.text}> ห้องเช่าและแจ้งย้ายออก </div>
+								<div className={styles.input}>
+									<div className={styles.zonetextbox}>
+										<input
+											type="text"
+											value={options_search.text}
+											onChange={(e) => {
+													let _options_search = options_search
+												_options_search.text = e.target.value 
+												setoptions_search({..._options_search})
+											}}
+										/>
+									</div>
+									<div className={styles.zonebtn}>
+										<select value={options_search.keyword}
 										onChange={(e) => {
 											let _options_search = options_search
 											_options_search.text = e.target.value
@@ -329,7 +352,6 @@ export const Checkout = () => {
 										<input type="text" id="name"
 											disabled={true}
 											value={formdetailroom.name}
-
 											onChange={handlerchangeformdetailsroom}
 										></input>
 									</div>
@@ -597,6 +619,7 @@ export const Checkout = () => {
 
 											}
 										}}>
+                      
 										คำนวณค่าใช้จ่าย <CalculateIcon />
 									</button>
 								</div>
@@ -635,7 +658,6 @@ export const Checkout = () => {
 											}}> บันทึก</button>
 										</div>
 										<div className={styles.table}>
-
 											<table className={styles.tableStyles}>
 												<thead className={styles.thead}>
 													<tr>
@@ -693,6 +715,168 @@ export const Checkout = () => {
 															</td>
 															{editmodetableprice ?
 																<td> <button onClick={() => handlerdeletetableprice(index)}> X </button> </td> : null
+																			}
+																		</tr>
+																		)
+																		}
+																		
+																	</tbody>
+																</table>
+															</div> 
+														</div>
+														:
+													null}
+
+
+
+													<div className={styles.rowmenu}>
+														<button disabled={
+															(selectedroom === null) ||  ( ( formdetailroom.rental_deposit -  formdetailroom.total_cost ) < 0)
+														} 
+														onClick={ async ()=>{ 
+															 // create ใบคืนเงินประกัน 
+															 console.log('selectedroom',)
+															 try{
+															//	 console.log(`invoiceid':${ invoiceid }+ 'contractid: ${ contractid } `)
+															  let res =  await createReimbursement({
+																	 variables:{
+																		 input:{
+																			 invoiceid: invoicecheckout,
+																			 cashback : ( formdetailroom.rental_deposit -  formdetailroom.total_cost ).toString(),
+																			 contractid: selectedroom.data.Contract.id
+																		 }
+																	 }
+																 })
+																if( res ){
+																handleChangePath('/Reimbursement')
+																handleDialog("The request was successful !!!!! Go Reimbursement page?", true)
+
+																}else{
+																	console.error('data',res)
+																}
+															
+															 }catch(e){
+																 	console.error(" สร้าง ใบคืนเงินประกัน Error ");
+															 }
+														 }}
+														
+														 > สร้างใบคืนเงินประกัน <PictureAsPdfIcon/> </button>
+														<button  disabled={(selectedroom === null)} onClick={ async ()=>{ 
+															console.log('tableprice',tableprice)
+															console.log('selectedroom',selectedroom)
+															let newtable = tableprice.map(data=>{
+																let _data = data
+																_data.unit = data.number
+																return _data
+															})
+															let _list  = tableprice.map(data=>{
+																
+																return {
+																		name: data.name,
+																		price: `${data.price}`,
+																		vat:"7",
+																		number_item: `${data.number}`,
+																		type_price : `ราคาไม่รวมvat`,
+																		selectvat : `${data.addvat}`,
+																		
+																		}
+															})
+
+
+															
+															try{
+																let _res = await createInvoice({
+																			variables:{
+																				input:{
+																					roomid: selectedroom.id,
+																					status:"รอการชำระเงิน",
+																					lists: JSON.parse(JSON.stringify([..._list]))
+																				}
+																			}
+																		})
+																if(_res && _res.data){
+																	setinvoicecheckout(_res.data.id)
+																	handleChangePath('/invoice')
+																	handleDialog("The request was successful !!!!! Go invoice page?", true)
+
+																	console.log('สร้างใบแจ้งหนี้ ',_res.data.addInvoice.id)
+																}
+
+															}catch(e){
+																console.error(" สร้าง Invoice Error ");
+															}
+															export_Invoice_pdf(selectedroom , newtable)
+
+														
+														 }} > ออกใบแจ้งหนี้ <PictureAsPdfIcon/>  </button>
+													
+														<button disabled={(selectedroom === null)}  onClick={ async ()=>{ 
+														let _room = selectedroom
+														console.log('ย้ายออก',formdetailroom.checkout_date)
+														if(_room && _room.id && formdetailroom && formdetailroom.checkout_date){
+															let _res = await updateRoom({
+																	variables: {
+																		id: _room.id,
+																		input: {
+																			status:"ย้ายออก",
+            																checkout_date :formdetailroom.checkout_date
+																		}
+																	}
+																});
+															if(_res){
+																console.log('update status Room ')
+																	
+																
+																clerformrdetailsroom();
+																clertableprice();
+																setTimeout(() => {
+																		GET_Rooms.refetch() 
+																	}, 10)
+																// reface page
+															}
+														}else{
+															alert('ไม่พบค่าวันย้ายออก')
+														}
+										
+													} }>ย้ายออก <SaveIcon/> </button>
+
+													</div>
+													<div className={styles.rowmenuright}>
+														
+													<button 
+													disabled={ !(selectedroom && selectedroom.status === "ย้ายออก") }
+													onClick={ async ()=>{
+													let _room = selectedroom
+														if(_room && _room.id && formdetailroom && formdetailroom.checkout_date){
+															let _res = await updateRoom({
+																	variables: {
+																		id: _room.id,
+																		input: {
+																			status:"ห้องว่าง",
+																			checkout_date:"",
+																			checkin_date:"",
+																			checkinid:null,
+																			contractid:null,
+																			checkinInvoiceid:null,
+																			checkinReceiptid:null,
+																			members:[],
+																			
+																		}
+																	}
+																});
+															if(_res){
+																console.log('update status Room ')
+
+																handleChangePath('/home')
+																handleDialog("The request was successful !!!!! Go Home page?", true)
+
+																setselectedroom(null)
+																clerformrdetailsroom();
+																clertableprice();
+																setTimeout(() => {
+																	GET_Rooms.refetch() 
+																}, 10);
+																// reface page
 															}
 														</tr>
 													)

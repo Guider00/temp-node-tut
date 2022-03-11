@@ -517,11 +517,50 @@ export const Contract = () => {
 
                                         // }
                                     }
-                                } catch (e) {
-                                    console.log(e)
+                                }catch(e){
+                                    console.log("Export pdf Error ",e)
                                 }
                             }}
                         >พิมพ์</button>
+                        <button className={styles.print}
+                            onClick={async ()=>{
+                                try{
+                                  
+                                    if( IDrooms && IDrooms.length > 0 ){
+                                      //    export_Contract(IDrooms,defaultData)
+                                     let res = await  Promise.all(IDrooms).then(  (IDrooms) =>{
+                                        let listres = IDrooms.map( async contract=>{
+                                            try{
+                                            let res = await  deleteContract({
+                                                                                variables: { 
+                                                                                    id:`${contract.id}`
+                                                                                }
+                                                                            })
+                                                 if(res && res.data){
+                                                     return res
+                                                 }else{
+                                                      return ("ลบสัญญา Error ")
+                                                 }
+                                            }catch(e){
+                                                return e
+                                            }
+                                         } )
+                                        
+                                         return listres;
+                                     })
+                                   
+                                   
+                                         Contract.refetch()
+                                  
+                     
+    
+                                    }
+                                }catch(e){
+                                    console.error(e)
+                                }
+                            }}
+                        >ยกเลิกสัญญา</button>
+
                     </div>
 
                 </div>
