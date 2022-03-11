@@ -234,19 +234,56 @@ export const Reimbursement = () => {
                                                     setselectedReimbursements(_selectedReimbursements)
 
                                                 }
-                                            }}></input></td>
-                                    <td>{reimbursements.Contract.Room.floor.building.name ? reimbursements.Contract.Room.floor.building.name : '---'}</td>
-                                    <td>{reimbursements.Contract.Room.name ? reimbursements.Contract.Room.name : '---'}</td>
-                                    <td>{reimbursements.Contract.id ? reimbursements.Contract.id : '---'}</td>
+                                            }}></input>
+                                    </td>
+                                    <td>{reimbursements.Contract && reimbursements.Contract.Room.floor.building.name ? reimbursements.Contract.Room.floor.building.name : '---'}</td>
+                                    <td>{reimbursements.Contract && reimbursements.Contract.Room.name ? reimbursements.Contract.Room.name : '---'}</td>
+                                    <td>{reimbursements.Contract && reimbursements.Contract.id ? reimbursements.Contract.id : '---'}</td>
                                     <td>{reimbursements.Invoice && reimbursements.Invoice.id ? reimbursements.Invoice.id : '---'}</td>
-                                    <td>{reimbursements.Contract.Room.members[0].name ? reimbursements.Contract.Room.members[0].name : '---'}</td>
-                                    <td>{reimbursements.Contract.Room.members[0].lastname ? reimbursements.Contract.Room.members[0].lastname : '---'}</td>
+                                    <td>{reimbursements.Contract && reimbursements.Contract.Room.members[0].name ? reimbursements.Contract.Room.members[0].name : '---'}</td>
+                                    <td>{reimbursements.Contract && reimbursements.Contract.Room.members[0].lastname ? reimbursements.Contract.Room.members[0].lastname : '---'}</td>
                                     <td>{reimbursements.cashback ? reimbursements.cashback : '0'}</td>
                                     <td>{reimbursements.status ? reimbursements.status : '---'}</td>
                                     <td>{reimbursements.cashback_date ? toYYMMDD(reimbursements.cashback_date) : '---'}</td>
                                 </tr>
-                            ) : null
-                        )}</tbody>
+
+
+                            ) :  <tr>
+                                 <td>
+                                        <input
+
+                                            type="checkbox"
+                                            name="myCheckboxName"
+                                            id="myCheckboxId"
+                                            onChange={(e) => {
+                                                const check = e.target.checked
+                                                let id = reimbursements.id
+                                                if (check) {
+                                                    let _selectedReimbursements = selectedReimbursements
+                                                    _selectedReimbursements = [..._selectedReimbursements, reimbursements]
+                                                    setselectedReimbursements(_selectedReimbursements)
+
+
+                                                } else {
+                                                    let _selectedReimbursements = selectedReimbursements.filter(Reimbursement => Reimbursements.id !== id)
+                                                    setselectedReimbursements(_selectedReimbursements)
+
+                                                }
+                                            }}></input>
+                                    </td>
+                                    <td>{reimbursements.Invoice && reimbursements.Invoice.Room.floor.building.name ? reimbursements.Contract.Room.floor.building.name : '---'}</td>
+                                    <td>{reimbursements.Invoice && reimbursements.Invoice.Room.name ? reimbursements.Contract.Room.name : '---'}</td>
+                                    <td>{reimbursements.Contract && reimbursements.Contract.id ? reimbursements.Contract.id : 'null'}</td>
+                                    <td>{reimbursements.Invoice && reimbursements.Invoice.id ? reimbursements.Invoice.id : '---'}</td>
+                                    <td>{reimbursements.Contract && reimbursements.Contract.Room.members[0].name ? reimbursements.Contract.Room.members[0].name : '---'}</td>
+                                    <td>{reimbursements.Contract && reimbursements.Contract.Room.members[0].lastname ? reimbursements.Contract.Room.members[0].lastname : '---'}</td>
+                                    <td>{reimbursements.cashback ? reimbursements.cashback : '0'}</td>
+                                    <td>{reimbursements.status ? reimbursements.status : '---'}</td>
+                                    <td>{reimbursements.cashback_date ? toYYMMDD(reimbursements.cashback_date) : '---'}</td>
+                            </tr>
+                        )}
+
+                        </tbody>
 
 
                     </table>
