@@ -995,7 +995,7 @@ export const Checkin = () => {
 
 
 															}
-														}
+														
 
 														if (room && room.data && room.data.checkin && room.data.checkin.id) {
 															console.log('update checkin', room.data.checkin.id_contact)
