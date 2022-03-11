@@ -1,7 +1,7 @@
 
 import './App.css';
 
-import { Menubar } from './components/Menubar/Menubar';
+import { Menubar } from './components/Menubar/Menubar2';
 
 import { RoomPrice } from './components/Setting/RoomPrice/RoomPrice';
 import { RoomType } from './components/Setting/RoomType/RoomType'
