@@ -1,6 +1,6 @@
 import styles from './Input.module.css'
 // import theme from '../../theme/themes.module.css'
-import { useEffect,  useState } from 'react'
+import { useState } from 'react'
 
 import { Menudropdown } from './menudropdown/menudropdown'
 

@@ -3,7 +3,7 @@ import styles from "./Floormodal.module.css"
 import Save from '@material-ui/icons/Save';
 
 
-import { access_obj_mutilevel } from "../../../general_functions/array";
+// import { access_obj_mutilevel } from "../../../general_functions/array";
 
 export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs, Mobalname ,fontsize }) => {
 

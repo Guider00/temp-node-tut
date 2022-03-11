@@ -168,7 +168,7 @@ export const Floor = () =>{
             {_showmodal? <Floormodal Data={_modaldata} onSave={onSave}  onClose={onClose} onchange={handleronchange} Action={_modalaction} Inputs={_floors.inputs}></Floormodal> :null} 
             <div className={styles.main} >
                     <div className={styles.header}>
-                         <lable> Floor </lable> 
+                         <label> Floor </label> 
                     </div>
                    
                     <div className={styles.body}>

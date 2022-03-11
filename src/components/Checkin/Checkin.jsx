@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
 import styles from './Checkin.module.css';
-import { API_queryRooms, API_queryBuildings, API_updateMeterRoomkwh, API_updateMeterRoomwater } from '../../API/index';
-import { Table } from "../../subcomponents/Table/Table"
+// import { API_queryRooms} from '../../API/index';
+// import { Table } from "../../subcomponents/Table/Table"
 
 
 import SearchIcon from '@material-ui/icons/Search';
@@ -19,8 +19,8 @@ import { API_UPDATE_Room, API_GET_Rooms } from '../../API/Schema/Room/Room'
 import { API_createMember, API_updateMember } from '../../API/Schema/Member/Member'
 
 import { API_ADD_Invoice, API_UPDATE_Invoice } from '../../API/Schema/Invoice/Invoice'
-import { API_CREATE_Checkin, API_DELETE_Checkin, API_UPDATE_Checkin } from '../../API/Schema/Checkin/Checkin'
-import { API_CREATE_Contract, API_DELETE_Contract, API_UPDATE_Contract } from '../../API/Schema/Contract/Contract'
+import { API_CREATE_Checkin} from '../../API/Schema/Checkin/Checkin'
+import { API_CREATE_Contract} from '../../API/Schema/Contract/Contract'
 import { API_CREATE_Receipt } from '../../API/Schema/Receipt/Receipt'
 
 import { export_Receipt_pdf, export_Contract, export_Invoice_pdf } from '../../general_functions/pdf/export/export_pdf';
@@ -95,37 +95,37 @@ const filter_rooms = (rooms, options_search) => {
 	}
 	return _filter_table
 }
-const getRooms = async () => {
-	return new Promise(async (resolve, reject) => {
-		let res = await API_queryRooms();
-		let table = [];
-		if (res && res.status === 200) {
-			table = res.data.rooms.map((data) => {
-				let _data = data;
-				return {
-					id: data.id,
-					data: _data,
-					building:
-						data.floor && data.floor.building && data.floor.building.name
-							? data.floor.building.name
-							: '---',
-					floor: data.floor ? data.floor.name : '---',
-					name: data.name,
-					status: data.status ? data.status : '---',
-					member: data.member ? data.member.name : '---',
-					metername: data.meterroom ? data.meterroom.name : '---',
-					meterroom: data.meterroom ? data.meterroom : '---',
+// const getRooms = async () => {
+// 	return new Promise(async (resolve, reject) => {
+// 		let res = await API_queryRooms();
+// 		let table = [];
+// 		if (res && res.status === 200) {
+// 			table = res.data.rooms.map((data) => {
+// 				let _data = data;
+// 				return {
+// 					id: data.id,
+// 					data: _data,
+// 					building:
+// 						data.floor && data.floor.building && data.floor.building.name
+// 							? data.floor.building.name
+// 							: '---',
+// 					floor: data.floor ? data.floor.name : '---',
+// 					name: data.name,
+// 					status: data.status ? data.status : '---',
+// 					member: data.member ? data.member.name : '---',
+// 					metername: data.meterroom ? data.meterroom.name : '---',
+// 					meterroom: data.meterroom ? data.meterroom : '---',
 
-				};
-			});
-		}
+// 				};
+// 			});
+// 		}
 
-		resolve(table);
-	}).catch((e) => {
-		console.log('Promise Error', e);
-		return [];
-	});
-};
+// 		resolve(table);
+// 	}).catch((e) => {
+// 		console.log('Promise Error', e);
+// 		return [];
+// 	});
+// };
 const Rooms_to_table = (Rooms) => {
 	let table = [];
 	table = Rooms.map((data) => {
@@ -163,7 +163,7 @@ export const Checkin = () => {
 
 	}
 
-	const [textfilter, settextfilter] = useState('');
+	// const [textfilter, settextfilter] = useState('');
 	const [rooms, setrooms] = useState([]);
 	const [loading, setloading] = useState(false);
 	const [selectedroom, setselectedroom] = useState(null);
@@ -179,11 +179,11 @@ export const Checkin = () => {
 
 	const GET_Rooms = useQuery(API_GET_Rooms);
 
-	const [updateRoom, mutationuploadFile] = useMutation(API_UPDATE_Room)
-	const [addmemberinRoom, mutationaddmemberinRoom] = useMutation(API_UPDATE_MemberInRoom)
-	const [deletememberinRoom, mutationdelememberinRoom] = useMutation(API_DELET_MemberInRoom)
-	const [createMember, mutationcreateMember] = useMutation(API_createMember)
-	const [updateMember, mutationupdateMember] = useMutation(API_updateMember)
+	const [updateRoom] = useMutation(API_UPDATE_Room)
+	const [addmemberinRoom] = useMutation(API_UPDATE_MemberInRoom)
+	const [deletememberinRoom] = useMutation(API_DELET_MemberInRoom)
+	const [createMember] = useMutation(API_createMember)
+	const [updateMember] = useMutation(API_updateMember)
 
 	const [crateInvoice] = useMutation(API_ADD_Invoice)
 	const [updateInvoice] = useMutation(API_UPDATE_Invoice)
@@ -310,18 +310,18 @@ export const Checkin = () => {
 		}
 	}
 	//  function in file
-	const clearformcheckin = () => {
-		setformcheckin({
-			id_contact: "",
-			checkinnumber: "",
-			checkintype: "",
-			checkin_date_exp: "",
-			rental_period: "",
-			rental_deposit: "",
-			rental_period_day: "",
-			branch: "",
-		})
-	}
+	// const clearformcheckin = () => {
+	// 	setformcheckin({
+	// 		id_contact: "",
+	// 		checkinnumber: "",
+	// 		checkintype: "",
+	// 		checkin_date_exp: "",
+	// 		rental_period: "",
+	// 		rental_deposit: "",
+	// 		rental_period_day: "",
+	// 		branch: "",
+	// 	})
+	// }
 	const clerformroomtype = () => {
 		setformroomtype({
 			id: "",
@@ -481,9 +481,9 @@ export const Checkin = () => {
 		// _res = await updateBooking({
 
 	}
-	const handlerselectrooms = (e) => {
+	// const handlerselectrooms = (e) => {
 
-	}
+	// }
 	const handlerchangeformroomtype = (e) => {
 		let _formroomtype = formroomtype
 		if (e.target.id && _formroomtype.hasOwnProperty(e.target.id)) {
@@ -662,7 +662,7 @@ export const Checkin = () => {
 
 				let room_support = roomschedules.map((roomschedule) => {
 					let { room } = roomschedule
-
+					console.log('room',room)
 					let condition = roomschedule.sch.map(({ checkin_date_exp, checkin_date, checkin_type }) => {
 
 						if (roomType_search.roomtype === 'ทั้งหมด') {
@@ -743,6 +743,8 @@ export const Checkin = () => {
 							}
 						}
 
+						return null;
+
 
 					})
 
@@ -781,8 +783,7 @@ export const Checkin = () => {
 
 			}
 		}
-
-	}, [GET_Rooms, loading, DateStart, DateEnd, roomType_search,options_search])
+	}, [GET_Rooms, loading, DateStart, DateEnd, roomType_search , reselectedroom , selectedroom])
 	console.log('GET_Rooms', GET_Rooms)
 	return (
 		<div>	{defaultCalendar.isLoading && <CalendarPicker onCalendar={CalendarDate} start={handleStart}
@@ -858,7 +859,7 @@ export const Checkin = () => {
 									<input
 										type='date'
 										name="input_searchdatecheckin"
-										value={DateStart}
+										value={DateStart ? DateStart : ''}
 										max={DateEnd}
 										onChange={(e) => {
 											let { value } = e.target
@@ -869,7 +870,7 @@ export const Checkin = () => {
 									<input
 										type='date'
 										name="input_searchdatecheckout"
-										value={DateEnd}
+										value={DateEnd ? DateEnd : ''}
 										min={DateStart}
 										onChange={(e) => {
 											let { value } = e.target
@@ -938,57 +939,62 @@ export const Checkin = () => {
 						</div>
 						<div className={styles.bodytable}>
 							<table>
-								<tr>
-									<th> ห้อง</th>
-									<th> อาคาร</th>
-									<th> ชั้น</th>
-									<th> ประเภทห้อง</th>
-									<th> สถานะ</th>
-									<th> ชื่อคนจอง </th>
-									<th> เบอร์ติดต่อจอง </th>
-								</tr>
-								{rooms
-									.filter((room) => (room && room.status === 'จอง') || room.status === 'ห้องว่าง' || room.status === 'ย้ายเข้า')
-									.map(
-										(room, index) =>
-											room ? (
-												<tr
-													onClick={() => {
-														setselectedroom(room);
-														console.log('ROOM_SELECTED', room)
+								<thead>
+									<tr>
+										<th> ห้อง</th>
+										<th> อาคาร</th>
+										<th> ชั้น</th>
+										<th> ประเภทห้อง</th>
+										<th> สถานะ</th>
+										<th> ชื่อคนจอง </th>
+										<th> เบอร์ติดต่อจอง </th>
+									</tr>
 
-														if (room && room.data && room.data.bookings && room.data.bookings.length > 0) {
-															if (room.data.members && room.data.members.length > 0 && room.data.members[0]) {
-																setformmember({
-																	id: "",
-																	nametitle: "",
-																	name: "",
-																	lastname: "",
-																	personalid: "",
-																	email: "",
-																	taxnumber: room.data.members[0].taxnumber,
-																	address: room.data.members[0].address,
-																	tel: room.data.members[0].tel,
-																	carid: "",
-																	note: ""
-																})
-															} else {
-																setformmember({
-																	id: "",
-																	nametitle: "",
-																	name: room.data.bookings[0].customer_name ? room.data.bookings[0].customer_name : "",
-																	lastname: room.data.bookings[0].customer_lastname ? room.data.bookings[0].customer_lastname : "",
-																	personalid: "",
-																	email: "",
-																	taxnumber: "",
-																	address: room.data.bookings[0].customer_address ? room.data.bookings[0].customer_address : "",
-																	tel: room.data.bookings[0].customer_tel ? room.data.bookings[0].customer_tel : "",
-																	carid: "",
-																	note: ""
-																})
+								</thead>
+								<tbody>
+									{rooms
+										.filter((room) => (room && room.status === 'จอง') || room.status === 'ห้องว่าง' || room.status === 'ย้ายเข้า')
+										.map(
+											(room, index) =>
+												room ? (
+													<tr key={index}
+														onClick={() => {
+															setselectedroom(room);
+															console.log('ROOM_SELECTED', room)
+
+															if (room && room.data && room.data.bookings && room.data.bookings.length > 0) {
+																if (room.data.members && room.data.members.length > 0 && room.data.members[0]) {
+																	setformmember({
+																		id: "",
+																		nametitle: "",
+																		name: "",
+																		lastname: "",
+																		personalid: "",
+																		email: "",
+																		taxnumber: room.data.members[0].taxnumber,
+																		address: room.data.members[0].address,
+																		tel: room.data.members[0].tel,
+																		carid: "",
+																		note: ""
+																	})
+																} else {
+																	setformmember({
+																		id: "",
+																		nametitle: "",
+																		name: room.data.bookings[0].customer_name ? room.data.bookings[0].customer_name : "",
+																		lastname: room.data.bookings[0].customer_lastname ? room.data.bookings[0].customer_lastname : "",
+																		personalid: "",
+																		email: "",
+																		taxnumber: "",
+																		address: room.data.bookings[0].customer_address ? room.data.bookings[0].customer_address : "",
+																		tel: room.data.bookings[0].customer_tel ? room.data.bookings[0].customer_tel : "",
+																		carid: "",
+																		note: ""
+																	})
+																}
+
+
 															}
-
-
 														}
 
 														if (room && room.data && room.data.checkin && room.data.checkin.id) {
@@ -1027,76 +1033,72 @@ export const Checkin = () => {
 																branch: "",
 															})
 														}
-
-
-
-
-
-
-
-														if (room && room.data && room.data.RoomType) {
-															setformroomtype({
-																id: room.data.RoomType.id,
-																name: room.data.name,
-																floor: room.data.floor.name,
-																building: room.data.floor.building.name,
-																RoomType: room.data.RoomType.name,
-																monthlyprice: room.data.RoomType.monthlyprice,
-																insurance: room.data.RoomType.insurance,
-																deposit_rent: room.data.RoomType.deposit_rent,
-																rate_electrical: room.data.RoomType.rate_electrical,
-																inmemory_kwh_date: room.data.meterroom.inmemory_kwh_date,
-																rate_water: room.data.RoomType.rate_water,
-																inmemory_water_date: room.data.meterroom.inmemory_water_date,
-																listoptionroom: room.data.RoomType.listoptionroom
-															})
-															let _tableoption = tableoption
-
-															if (room && room.data && room.data.checkin && room.data.checkin.Checkinoption !== null) {
-																console.log('room.data', room.data.checkin.Checkinoption)
-																if (room.data.checkin.Checkinoption && room.data.checkin.Checkinoption.length > 0) {
-																	let _body = room.data.checkin.Checkinoption.map(obj => {
-																		return {
-																			name: obj.name, price: obj.price,
-																			calculate_mode: obj.calculate_mode,
-																			selectvat: obj.selectvat,
-																			type_price: obj.type_price
-																		};
-																	});
-
-																	_tableoption.body = [..._body]
-																}
-															} else {
-																// ดึงข้อมูลจาก รายการเบิ้องต้นจากประเภทห้อง
-																_tableoption.body = [...room.data.RoomType.listoptionroom].map(data => {
-																	return ({ ...data, ...{ type_price: "ราคาไม่รวมvat" }, ...{ calculate_mode: "รายเดือน" } })
+															if (room && room.data && room.data.RoomType) {
+																setformroomtype({
+																	id: room.data.RoomType.id,
+																	name: room.data.name,
+																	floor: room.data.floor.name,
+																	building: room.data.floor.building.name,
+																	RoomType: room.data.RoomType.name,
+																	monthlyprice: room.data.RoomType.monthlyprice,
+																	insurance: room.data.RoomType.insurance,
+																	deposit_rent: room.data.RoomType.deposit_rent,
+																	rate_electrical: room.data.RoomType.rate_electrical,
+																	inmemory_kwh_date: room.data.meterroom.inmemory_kwh_date,
+																	rate_water: room.data.RoomType.rate_water,
+																	inmemory_water_date: room.data.meterroom.inmemory_water_date,
+																	listoptionroom: room.data.RoomType.listoptionroom
 																})
+																let _tableoption = tableoption
 
+																if (room && room.data && room.data.checkin && room.data.checkin.Checkinoption !== null) {
+																	console.log('room.data', room.data.checkin.Checkinoption)
+																	if (room.data.checkin.Checkinoption && room.data.checkin.Checkinoption.length > 0) {
+																		let _body = room.data.checkin.Checkinoption.map(obj => {
+																			return {
+																				name: obj.name, price: obj.price,
+																				calculate_mode: obj.calculate_mode,
+																				selectvat: obj.selectvat,
+																				type_price: obj.type_price
+																			};
+																		});
+
+																		_tableoption.body = [..._body]
+																	}
+																} else {
+																	// ดึงข้อมูลจาก รายการเบิ้องต้นจากประเภทห้อง
+																	_tableoption.body = [...room.data.RoomType.listoptionroom].map(data => {
+																		return ({ ...data, ...{ type_price: "ราคาไม่รวมvat" }, ...{ calculate_mode: "รายเดือน" } })
+																	})
+
+																}
+
+																console.log('_tableoption.body', _tableoption.body)
+																settableoption(_tableoption)
 															}
 
-															console.log('_tableoption.body', _tableoption.body)
-															settableoption(_tableoption)
-														}
+														}}
+														style={{
+															background: (selectedroom && selectedroom.id === room.id) ? 'lightgray' : 'none'
+														}}
+													>
+														<td>{room.name ? room.name : '---'}</td>
+														<td>{room.building ? room.building : '---'}</td>
+														<td>{room.floor ? room.floor : '---'}</td>
+														<td>{room.RoomType ? room.RoomType : '---'}</td>
+														<td>{room.status ? room.status : '---'}</td>
 
-													}}
-													style={{
-														background: (selectedroom && selectedroom.id === room.id) ? 'lightgray' : 'none'
-													}}
-												>
-													<td>{room.name ? room.name : '---'}</td>
-													<td>{room.building ? room.building : '---'}</td>
-													<td>{room.floor ? room.floor : '---'}</td>
-													<td>{room.RoomType ? room.RoomType : '---'}</td>
-													<td>{room.status ? room.status : '---'}</td>
+														<td>{room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 && room.data.bookings[0] && room.data.bookings[0].customer_name ?
+															room.data.bookings[0].customer_name : '---'}</td>
+														<td>{room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 && room.data.bookings[0] && room.data.bookings[0].customer_tel ?
+															room.data.bookings[0].customer_tel : '---'}</td>
 
-													<td>{room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 && room.data.bookings[0] && room.data.bookings[0].customer_name ?
-														room.data.bookings[0].customer_name : '---'}</td>
-													<td>{room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 && room.data.bookings[0] && room.data.bookings[0].customer_tel ?
-														room.data.bookings[0].customer_tel : '---'}</td>
+													</tr>
+												) : null
+										)}
 
-												</tr>
-											) : null
-									)}
+								</tbody>
+
 							</table>
 						</div>
 					</div>
@@ -1567,8 +1569,8 @@ export const Checkin = () => {
 									<table>
 										<thead>
 											<tr>
-												{tableoption.topic.map(topic =>
-													<th>{topic}</th>
+												{tableoption.topic.map((topic , index ) =>
+													<th key={index}>{topic}</th>
 
 												)}
 												<th>รายการรายเดือน</th>
@@ -1580,10 +1582,10 @@ export const Checkin = () => {
 										</thead>
 										<tbody>
 											{tableoption.body.map((data, index) =>
-												<tr>
-													<td><input type="text" value={data.name} name="name" onChange={(e) => handlerchangetableoption(e, index)}
+												<tr key={index}>
+													<td><input type="text" value={data.name ? data.name : ''} name="name" onChange={(e) => handlerchangetableoption(e, index)}
 														disabled={!tableoption.disableedit} /></td>
-													<td><input type="text" value={data.price} name="price" onChange={(e) => handlerchangetableoption(e, index)} disabled={!tableoption.disableedit} /></td>
+													<td><input type="text" value={data.price ? data.price : ''} name="price" onChange={(e) => handlerchangetableoption(e, index)} disabled={!tableoption.disableedit} /></td>
 													<td><input type='checkbox' checked={(data.calculate_mode === "รายเดือน" ? true : false)} name="calculate_mode"
 														onClick={(e) => handlerchangetableoption(e, index)}
 													/> </td>

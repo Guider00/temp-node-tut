@@ -46,7 +46,7 @@ export const AddressData = () =>{
 
          }
          console.log("defaultData",defaultData) 
-     },[Address])
+     },[ Address , defaultData])
  
      //address
 

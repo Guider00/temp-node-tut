@@ -297,6 +297,11 @@ export const Menubar = () => {
 
 
                 </div>
+                <div className={styles.ZoneMenu}>
+                    <button className={styles.Menubar} onClick={handleClick}>
+                        {click ? <CloseIcon /> : <MenuIcon />}
+                    </button>
+                </div>
                 <div className={styles.menu_right}>
                     <Notifications number={numberalart} />
                     {api_subrooms && api_subrooms.data && api_subrooms.data.subRooms ?
@@ -355,11 +360,7 @@ export const Menubar = () => {
                     </div> */}
 
                 </div>
-                <div className={styles.ZoneMenu}>
-                    <button className={styles.Menubar} onClick={handleClick}>
-                        {click ? <CloseIcon /> : <MenuIcon />}
-                    </button>
-                </div>
+                
 
 
             </nav>

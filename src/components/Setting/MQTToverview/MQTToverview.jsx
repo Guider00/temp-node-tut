@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import {  useState } from "react"
 import styles from './MQTToverview.module.css'
 import { useSubscription } from '@apollo/client';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -9,7 +9,7 @@ import { Sub_MQTTHISTORY, Sub_MQTTClients } from '../../../API/Schema/setting/MQ
 export const MQTToverview = () => {
    const [showhistory, setshowhistory] = useState(false)
    const [showclient, setshowclient] = useState(false)
-   const [historys, sethistorys] = useState([])
+   // const [historys, sethistorys] = useState([])
 
 
 
@@ -30,15 +30,15 @@ export const MQTToverview = () => {
 
 
 
-   const handlerstartmqttserver = () => {
+   // const handlerstartmqttserver = () => {
 
-   }
-   const handlerstopmqttserver = () => {
+   // }
+   // const handlerstopmqttserver = () => {
 
-   }
-   const hnalderreconnectmqttserver = () => {
+   // }
+   // const hnalderreconnectmqttserver = () => {
 
-   }
+   // }
    const sub_mqtthistory = useSubscription(Sub_MQTTHISTORY);
    const sub_mqttclient = useSubscription(Sub_MQTTClients)
 
