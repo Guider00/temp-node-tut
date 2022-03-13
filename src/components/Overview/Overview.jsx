@@ -310,7 +310,7 @@ export const Overview = () => {
         let catch_value = _rooms
 
         if (property === 'building') {
-            let option = await get_API_Inputoption();
+            let option = await get_API_Inputoption_1();
             let floor_options = option.floor.filter(floor => floor.building.id === value)
             if (catch_value.inputs && catch_value.inputs.find(inp => inp.property === 'floor')) {
                 catch_value.inputs.find(inp => inp.property === 'floor').form.options = [...floor_options]
@@ -355,7 +355,34 @@ export const Overview = () => {
         setload(false)
     }
 
-    const get_API_Inputoption = async () => {
+
+    const getRooms = async () => {
+        return new Promise(async (resolve, reject) => {
+            let res = await API_queryRooms()
+            console.log('query Room ', res)
+            let table = []
+            if (res && res.status === 200) {
+                table = res.data.rooms.map((data) => {
+                    let _data = data
+                    return {
+                        id: data.id, data: _data,
+                        building: data.building ? data.building.name : "---",
+                        floor: data.floor ? data.floor.name : '---',
+                        name: data.name,
+                        status: data.status ? data.status : '---',
+                        member: data.member ? data.member.name : '---',
+                        metername: data.meterroom ? data.meterroom.name : '---'
+                    }
+                })
+            }
+
+            resolve(table)
+        }).catch(e => {
+            console.log('Promise Error', e)
+            return []
+        })
+    }
+    const get_API_Inputoption_1 = async () => {
         return new Promise(async (resolve, rejcet) => {
             let building = [], floor = [], member = [], meterroom = [], type = [], status = [], _RoomType = {}
             let res_building = await API_queryBuildings()
@@ -407,35 +434,62 @@ export const Overview = () => {
             return ({ building: [], floor: [], member: [], type: [], status: [] })
         })
     }
-    const getRooms = async () => {
-        return new Promise(async (resolve, reject) => {
-            let res = await API_queryRooms()
-            console.log('query Room ', res)
-            let table = []
-            if (res && res.status === 200) {
-                table = res.data.rooms.map((data) => {
-                    let _data = data
-                    return {
-                        id: data.id, data: _data,
-                        building: data.building ? data.building.name : "---",
-                        floor: data.floor ? data.floor.name : '---',
-                        name: data.name,
-                        status: data.status ? data.status : '---',
-                        member: data.member ? data.member.name : '---',
-                        metername: data.meterroom ? data.meterroom.name : '---'
-                    }
-                })
-            }
-
-            resolve(table)
-        }).catch(e => {
-            console.log('Promise Error', e)
-            return []
-        })
-    }
 
 
     useEffect(() => {
+        const get_API_Inputoption = async () => {
+            return new Promise(async (resolve, rejcet) => {
+                let building = [], floor = [], member = [], meterroom = [], type = [], status = [], _RoomType = {}
+                let res_building = await API_queryBuildings()
+                if (res_building && res_building.status === 200) {
+    
+                    building = res_building.data.Buildings.map(e => ({ label: e.name, value: e.id }))
+                }
+                let res_floor = await API_queryFloors()
+                if (res_floor && res_floor.status === 200) {
+                    floor = res_floor.data.Floors.map(e => ({ label: e.name, value: e.id, building: e.building }))
+                }
+    
+                let res_member = await API_queryMembers()
+                if (res_member && res_member.status === 200) {
+                    member = res_member.data.Members.map(e => ({ label: e.name, value: e.id }))
+                }
+                let res = await API_queryroomprice()
+                if (res && res.status === 200) {
+                    type = get_option(res.data.roomprices, 'name')
+                    type = type.map(e => ({ label: e, value: e }))
+                    console.log(type)
+                }
+    
+                // let res_meterroom = await API_queryMeterRooms()
+    
+                // if(res_meterroom && res_meterroom.status === 200){
+                //     meterroom =  res_meterroom.data.MeterRooms.map(e =>  ({label:e.name , value:e.id})  )
+    
+                // }
+    
+                if (MeterRooms && MeterRooms.data && MeterRooms.data.length > 0) {
+    
+                    meterroom = [...MeterRooms.data.MeterRooms.map(e => ({ label: e.name, value: e.id }))]
+    
+                }
+    
+                let res_roomtype = await GET_RoomType.refetch();
+                console.log('res_roomtype', res_roomtype)
+                if (res_roomtype && res_roomtype.data) {
+                    _RoomType = res_roomtype.data.RoomTypes.map(e => ({ label: e.name, value: e.id }))
+    
+                }
+    
+                // set Option form input
+                status = option_status_room
+                resolve({ 'building': building, 'floor': floor, 'member': member, 'meterroom': meterroom, 'RoomType': _RoomType, status: status })
+            }).catch(e => {
+                console.log('Promis Error', e);
+                return ({ building: [], floor: [], member: [], type: [], status: [] })
+            })
+        }
+
         const inital_data = async () => {
             let option = await get_API_Inputoption();
             let table = await getRooms()
@@ -503,7 +557,7 @@ export const Overview = () => {
         }
         inital_data()
 
-    }, [_load])
+    }, [_load,GET_RoomType,MeterRooms])
     return (
         <>
             {_showmodal ? <Floormodal onClose={() => setshowmodal(false)}

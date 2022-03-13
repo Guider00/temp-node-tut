@@ -9,7 +9,7 @@ import CalculateIcon from '@mui/icons-material/Calculate';
 
 import Dialog from '../../subcomponents/Dialog/Dialog'
 import { DialogFunction } from "../../subcomponents/Dialog/Dialog";
-import { export_Invoice_pdf  , export_Receipt_pdf } from '../../general_functions/pdf/export/export_pdf';
+import { export_Invoice_pdf   } from '../../general_functions/pdf/export/export_pdf';
 
 
 
@@ -62,7 +62,7 @@ import { filter_rooms } from '../../general_functions/filter'
 // };
 
 export const Checkout = () => {
-	const [ textfilter, settextfilter ] = useState('');
+	//const [ textfilter, settextfilter ] = useState('');
 	const [ rooms, setrooms ] = useState([]);
 	const [ loading, setloading ] = useState(false);
 	const [ selectedroom, setselectedroom ] = useState(null);

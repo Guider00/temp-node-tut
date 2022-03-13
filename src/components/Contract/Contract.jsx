@@ -103,7 +103,7 @@ export const Contract = () => {
                 myCheckboxName[z].checked = false;
             }
 
-            let _IDrooms = IDrooms.filter(item => item !== item)
+            let _IDrooms = IDrooms.filter(item => item)
             setIDrooms(_IDrooms)
             console.log("IDrooms-else", _IDrooms)
 
@@ -297,7 +297,7 @@ export const Contract = () => {
 
 
         setloadingpage(true);
-    }, [getRooms, loadingpage, formfilter])
+    }, [getRooms, loadingpage, formfilter,building,getStart,getEnd])
 
 
 
@@ -317,7 +317,7 @@ export const Contract = () => {
 
         setloadingpage(true);
 
-    }, [loadingpage, Contract, query_RoomType])
+    }, [loadingpage, Contract, query_RoomType,rooms,roomtypes])
 
 
 
@@ -548,7 +548,7 @@ export const Contract = () => {
                                         
                                          return listres;
                                      })
-                                   
+                                     console.log(res)
                                    
                                          Contract.refetch()
                                   
