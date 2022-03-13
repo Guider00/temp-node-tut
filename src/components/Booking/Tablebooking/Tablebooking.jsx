@@ -86,10 +86,10 @@ export const Tablebooking = (props) => {
                     </thead>
                     <tbody>{props && props.data && props.data.Bookings ?
                         <>{props.data.Bookings.map((booking, index) =>
-                            <tr style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }} key={index} style={{
+                            <tr key={index} style={{
                                 backgroundColor:
                                     formatDate(new Date(Number(booking.checkin_date))) === formatDate(new Date()) || new Date(Number(booking.checkin_date)) <= new Date()
-                                        ? "darkgray" : "white"
+                                        ? "darkgray" : "white" , fontSize: isDesktop ? '' : isTablet ? '15px' : '' 
                             }}>
                                 <td>{booking && booking.Room && booking.Room.name ? booking.Room.name : "---"}</td>
                                 <td>{booking && booking.customer_name ? booking.customer_name : '---'}</td>

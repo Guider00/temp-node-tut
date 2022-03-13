@@ -650,6 +650,8 @@ export const Checkin = () => {
 								booking: booking
 							})
 						}
+
+						return null;
 					}).filter(item => item)
 
 
@@ -971,7 +973,6 @@ export const Checkin = () => {
 											(room, index) =>
 												room ? (
 													<tr key={index}
-														style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 														onClick={() => {
 															setselectedroom(room);
 															console.log('ROOM_SELECTED', room)
@@ -1093,7 +1094,7 @@ export const Checkin = () => {
 
 														}}
 														style={{
-															background: (selectedroom && selectedroom.id === room.id) ? 'lightgray' : 'none'
+															background: (selectedroom && selectedroom.id === room.id) ? 'lightgray' : 'none' , fontSize: isDesktop ? '' : isTablet ? '15px' : ''
 														}}
 													>
 														<td>{room.name ? room.name : '---'}</td>
@@ -1596,7 +1597,7 @@ export const Checkin = () => {
 												{tableoption.disableedit ? <th></th> : null}
 
 											</tr>
-										</thead>
+										</thead >
 										<tbody>
 											{tableoption.body.map((data, index) =>
 												<tr key={index} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>

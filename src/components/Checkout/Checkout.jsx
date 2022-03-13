@@ -9,7 +9,7 @@ import CalculateIcon from '@mui/icons-material/Calculate';
 
 import Dialog from '../../subcomponents/Dialog/Dialog'
 import { DialogFunction } from "../../subcomponents/Dialog/Dialog";
-import { export_Invoice_pdf  , export_Receipt_pdf } from '../../general_functions/pdf/export/export_pdf';
+import { export_Invoice_pdf } from '../../general_functions/pdf/export/export_pdf';
 
 
 
@@ -69,7 +69,6 @@ export const Checkout = () => {
 	const isTablet = useMediaQuery({
 		query: "(max-width: 1224px)"
 	});
-	const [ textfilter, settextfilter ] = useState('');
 	const [ rooms, setrooms ] = useState([]);
 	const [ loading, setloading ] = useState(false);
 	const [ selectedroom, setselectedroom ] = useState(null);
@@ -315,12 +314,11 @@ export const Checkout = () => {
 										(room, index) =>
 											room ? (
 												<tr 
-													style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 													key={index}
 													onClick={() => {
 														handlerselectroom(room)
 													}}
-													style={{ background: selectedroom && selectedroom.id === room.id ? 'lightgray' : 'none' }}
+													style={{ background: selectedroom && selectedroom.id === room.id ? 'lightgray' : 'none',fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 												>
 													<td>{room.name ? room.name : '---'}</td>
 													<td>{room.building ? room.building : '---'}</td>

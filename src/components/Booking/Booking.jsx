@@ -137,7 +137,6 @@ export const Booking = () => {
 
 	const booking = useQuery(API_GET_Booking);
 	const api_rooms = useQuery(API_GET_Rooms);
-	const [refectapiroom ,  setrefectapiroom ] = useState(false);
 
 
 	const [updateRoom] = useMutation(API_UPDATE_Room)
@@ -482,6 +481,7 @@ export const Booking = () => {
 								booking: booking
 							})
 						}
+						return null;
 					}).filter(item => item)
 
 					let _schcheckin = {
@@ -796,7 +796,6 @@ export const Booking = () => {
 												room ? (
 
 													<tr key={index}
-														style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 														onClick={() => {
 															setselectedroom(room);
 															handleChangedALLformroom(room);

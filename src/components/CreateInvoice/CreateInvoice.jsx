@@ -30,8 +30,6 @@ export const CreateInvoic = () => {
         keyword: "ทั้งหมด"
     })
     const [rooms, setrooms] = useState([]);
-
-    const [setloadingpage] = useState(false);
     const [addInvoice] = useMutation(API_ADD_Invoice);
     // const [deleteInvoice, mutationdeleteInvoice] = useMutation(API_DELETE_Invoice);
     const [date, setdate] = useState([]);
