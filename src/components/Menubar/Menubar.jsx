@@ -87,7 +87,6 @@ export const Menubar = () => {
                                 <div>
                                     <Home />
                                 </div>
-
                             </Nav.Link>
                             <Nav.Link href="/room" className={styles.md} >
                                 Overview

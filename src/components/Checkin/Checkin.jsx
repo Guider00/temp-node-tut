@@ -19,8 +19,8 @@ import { API_UPDATE_Room, API_GET_Rooms } from '../../API/Schema/Room/Room'
 import { API_createMember, API_updateMember } from '../../API/Schema/Member/Member'
 
 import { API_ADD_Invoice, API_UPDATE_Invoice } from '../../API/Schema/Invoice/Invoice'
-import { API_CREATE_Checkin } from '../../API/Schema/Checkin/Checkin'
-import { API_CREATE_Contract } from '../../API/Schema/Contract/Contract'
+import { API_CREATE_Checkin} from '../../API/Schema/Checkin/Checkin'
+import { API_CREATE_Contract} from '../../API/Schema/Contract/Contract'
 import { API_CREATE_Receipt } from '../../API/Schema/Receipt/Receipt'
 
 import { export_Receipt_pdf, export_Contract, export_Invoice_pdf } from '../../general_functions/pdf/export/export_pdf';
@@ -42,6 +42,7 @@ import EventNoteIcon from '@mui/icons-material/EventNote';
 
 import { formatDate } from '../../general_functions/convert'
 import { DiffDate } from '../../general_functions/time'
+
 
 import { useMediaQuery } from 'react-responsive'
 
@@ -67,7 +68,7 @@ const filter_rooms = (rooms, options_search) => {
 					return (room.name && room.floor && room.name.search(options_search.text)) !== -1 ||
 						(options_search.text === '')
 				} else if (options_search.keyword === 'อาคาร') {
-					console.log('124')
+			
 					return (room.building.search(options_search.text) !== -1) ||
 						(options_search.text === '')
 				} else if (options_search.keyword === 'ชั้น') {
@@ -627,9 +628,7 @@ export const Checkin = () => {
 
 			let Rooms = Rooms_to_table(GET_Rooms.data.Rooms)
 
-			// let _filter_rooms  =[]
-			// _filter_rooms = filter_rooms([...Rooms] , options_search)
-			// setrooms(_filter_rooms);
+
 
 			if (Rooms) {
 				let start_date = DateStart ? new Date(DateStart) : new Date()
@@ -641,15 +640,16 @@ export const Checkin = () => {
 
 					let { bookings, checkin } = room.data
 					let _schbooking = bookings.map((booking) => {
-						let { checkin_date, checkin_date_exp, checkin_type } = booking;
+						if(booking){
+							let { checkin_date, checkin_date_exp, checkin_type } = booking;
 
-						return ({
-							"checkin_date": checkin_date ? new Date(Number(checkin_date)).getTime() : checkin_date,
-							"checkin_date_exp": checkin_date_exp ? new Date(Number(checkin_date_exp)).getTime() : checkin_date_exp,
-							"checkin_type": checkin_type,
-							booking: booking
-						})
-
+							return ({
+								"checkin_date": checkin_date ? new Date(Number(checkin_date)).getTime() : checkin_date,
+								"checkin_date_exp": checkin_date_exp ? new Date(Number(checkin_date_exp)).getTime() : checkin_date_exp,
+								"checkin_type": checkin_type,
+								booking: booking
+							})
+						}
 					}).filter(item => item)
 
 
@@ -672,7 +672,7 @@ export const Checkin = () => {
 
 				let room_support = roomschedules.map((roomschedule) => {
 					let { room } = roomschedule
-					console.log('room', room)
+					console.log('room',room)
 					let condition = roomschedule.sch.map(({ checkin_date_exp, checkin_date, checkin_type }) => {
 
 						if (roomType_search.roomtype === 'ทั้งหมด') {
@@ -765,8 +765,8 @@ export const Checkin = () => {
 					return room
 				})
 				console.log('room_support', _rooms)
-
-				setrooms([..._rooms])
+				let _filter_rooms = filter_rooms(_rooms,options_search)
+				setrooms([..._filter_rooms])
 
 			}
 			setloading(true);
@@ -793,8 +793,7 @@ export const Checkin = () => {
 
 			}
 		}
-
-	}, [GET_Rooms, loading, DateStart, DateEnd, roomType_search, reselectedroom, selectedroom])
+	}, [GET_Rooms, loading, DateStart, DateEnd, roomType_search , reselectedroom , selectedroom])
 	console.log('GET_Rooms', GET_Rooms)
 	return (
 		<div>	{defaultCalendar.isLoading && <CalendarPicker onCalendar={CalendarDate} start={handleStart}
@@ -837,15 +836,11 @@ export const Checkin = () => {
 					{defaultDialog.isLoading && <Dialog onDialog={checkData} nextPage={path} message={defaultDialog.message} />}
 					<div className={styles.tableroomselect}>
 						<div className={styles.headertable}>
-							<div
-								className={styles.text}
-								style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }}
-							> รายการห้องว่างและถูกจอง </div>
+							<div className={styles.text} style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }}> รายการห้องว่างและถูกจอง </div>
 							<div className={styles.input} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 								<div className={styles.zoneselect_checkincheckout}>
 									<label> ประเภทห้อง </label>
 									<select
-
 										className={styles.roomType}
 										name="input_roomtype"
 										onChange={(e) => {
@@ -899,7 +894,7 @@ export const Checkin = () => {
 									}}><EventNoteIcon /></button>
 								</div>
 							</div>
-							<div className={styles.input} >
+							<div className={styles.input}>
 
 
 								<div className={styles.zonetextbox}>
@@ -913,7 +908,7 @@ export const Checkin = () => {
 										}}
 									/>
 								</div>
-								<div className={styles.zonebtn} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
+								<div className={styles.zonebtn}>
 									<select value={options_search.keyword}
 										style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 										onChange={(e) => {
@@ -932,17 +927,20 @@ export const Checkin = () => {
 										<option>เบอร์ติดต่อจอง</option>
 									</select>
 
-									<button onClick={async () => {
-										let start_date = DateStart ? new Date(DateStart) : new Date()
-										let end_date = DateEnd ? new Date(DateEnd) : new Date()
-										start_date = start_date.getTime()
-										end_date = end_date.getTime()
+									<button 
+									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
+									onClick={async () => {
+										GET_Rooms.refetch()
+										// let start_date = DateStart ? new Date(DateStart) : new Date()
+										// let end_date = DateEnd ? new Date(DateEnd) : new Date()
+										// start_date = start_date.getTime()
+										// end_date = end_date.getTime()
 
-										let _filter_rooms = []
-										console.log('DateStart,DateEnd', start_date, end_date)
-										_filter_rooms = filter_rooms(rooms, options_search, start_date, end_date)
+										// let _filter_rooms = []
+										// console.log('DateStart,DateEnd', start_date, end_date)
+										// _filter_rooms = filter_rooms(rooms, options_search, start_date, end_date)
 
-										setrooms(_filter_rooms);
+										// setrooms(_filter_rooms);
 
 									}}>
 										{' '}
@@ -1011,49 +1009,44 @@ export const Checkin = () => {
 
 
 															}
+														
 
-															if (room && room.data && room.data.checkin && room.data.checkin.id) {
-																console.log('update checkin', room.data.checkin.id_contact)
-																setformcheckin({
-																	id_contact: room.data.checkin.id_contact,
-																	checkin_date: room.data.checkin.checkin_date,
-																	checkin_date_exp: room.data.checkin.checkin_date_exp,
-																	checkin_type: room.data.checkin.checkin_type ? room.data.checkin.checkin_type : "",
-																	rental_period: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 &&
-																		room.data.bookings[0].checkin_date && room.data.bookings[0].checkin_date_exp ?
-																		DiffDate(new Date(Number(room.data.bookings[0].checkin_date)), new Date(Number(room.data.bookings[0].checkin_date_exp))) : "",
-																	rental_deposit: room.data.checkin.rental_deposit ? room.data.checkin.rental_deposit : "",
-																	rental_period_day: "",
-																	branch: room.data.checkin.branch,
-																})
+														if (room && room.data && room.data.checkin && room.data.checkin.id) {
+															console.log('update checkin', room.data.checkin.id_contact)
+															setformcheckin({
+																id_contact: room.data.checkin.id_contact,
+																checkin_date: room.data.checkin.checkin_date,
+																checkin_date_exp: room.data.checkin.checkin_date_exp,
+																checkin_type: room.data.checkin.checkin_type ? room.data.checkin.checkin_type : "",
+																rental_period: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 &&
+																	room.data.bookings[0].checkin_date && room.data.bookings[0].checkin_date_exp ?
+																	DiffDate(new Date(Number(room.data.bookings[0].checkin_date)), new Date(Number(room.data.bookings[0].checkin_date_exp))) : "",
+																rental_deposit: room.data.checkin.rental_deposit ? room.data.checkin.rental_deposit : "",
+																rental_period_day: "",
+																branch: room.data.checkin.branch,
+															})
 
-															} else {
-																setformcheckin({
-																	id_contact: "",
-																	checkin_date: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 &&
-																		room.data.bookings[0].checkin_date ? formatDate(new Date(Number(room.data.bookings[0].checkin_date))) : "2021-12-08",
-																	checkin_date_exp: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 &&
-																		room.data.bookings[0].checkin_date ? formatDate(new Date(Number(room.data.bookings[0].checkin_date_exp))) : "2021-12-08",
-																	checkin_type: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 &&
-																		room.data.bookings[0].checkin_type ? room.data.bookings[0].checkin_type : "",
-																	rental_period: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 &&
-																		room.data.bookings[0].checkin_date && room.data.bookings[0].checkin_date_exp ?
-																		DiffDate(new Date(Number(room.data.bookings[0].checkin_date)), new Date(Number(room.data.bookings[0].checkin_date_exp))) : "",
-																	rental_deposit: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 &&
-																		room.data.bookings[0].deposit ? room.data.bookings[0].deposit : "",
-																	rental_period_day: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 &&
-																		room.data.bookings[0].checkin_date && room.data.bookings[0].checkin_date_exp ?
-																		DiffDate(new Date(Number(room.data.bookings[0].checkin_date)), new Date(Number(room.data.bookings[0].checkin_date_exp))) : "",
-																	branch: "",
-																})
-															}
-
-
-
-
-
-
-
+														} else {
+																console.log('debug checkin date',room.data.bookings[0])
+															setformcheckin({
+																id_contact: "",
+																checkin_date: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 && room.data.bookings[0] &&
+																	room.data.bookings[0].checkin_date ? formatDate(new Date(Number(room.data.bookings[0].checkin_date))) : "2021-12-08",
+																checkin_date_exp: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 && room.data.bookings[0] &&
+																	room.data.bookings[0].checkin_date ? formatDate(new Date(Number(room.data.bookings[0].checkin_date_exp))) : "2021-12-08",
+																checkin_type: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 && room.data.bookings[0] && 
+																	room.data.bookings[0].checkin_type ? room.data.bookings[0].checkin_type : "",
+																rental_period: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 && room.data.bookings[0] && 
+																	room.data.bookings[0].checkin_date && room.data.bookings[0].checkin_date_exp ?
+																	DiffDate(new Date(Number(room.data.bookings[0].checkin_date)), new Date(Number(room.data.bookings[0].checkin_date_exp))) : "",
+																rental_deposit: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 && room.data.bookings[0] && 
+																	room.data.bookings[0].deposit ? room.data.bookings[0].deposit : "",
+																rental_period_day: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 && room.data.bookings[0] && 
+																	room.data.bookings[0].checkin_date && room.data.bookings[0].checkin_date_exp ?
+																	DiffDate(new Date(Number(room.data.bookings[0].checkin_date)), new Date(Number(room.data.bookings[0].checkin_date_exp))) : "",
+																branch: "",
+															})
+														}
 															if (room && room.data && room.data.RoomType) {
 																setformroomtype({
 																	id: room.data.RoomType.id,
@@ -1126,12 +1119,12 @@ export const Checkin = () => {
 				</div>
 
 				<div className={styles.bigbox}>
-					<div className={styles.formroom}>
+					<div className={styles.formroom} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 						<div className={styles.header} style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }}>
 							<label>ย้ายเข้า</label>
 
 						</div>
-						<div className={styles.body} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
+						<div className={styles.body}>
 							<div className={styles.row}>
 								<div className={styles.label}>
 									<label>เลขที่สัญญา</label>
@@ -1202,13 +1195,13 @@ export const Checkin = () => {
 						</div>
 					</div>
 
-					<div className={styles.formroom}>
+					<div className={styles.formroom} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 						<div className={styles.header}>
 							<div className={styles.label} style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }}>
 								<label>ย้ายเข้า</label>
 							</div>
 						</div>
-						<div className={styles.body} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
+						<div className={styles.body}>
 							<div className={styles.row}>
 								<div className={styles.label}>
 								</div>
@@ -1304,9 +1297,9 @@ export const Checkin = () => {
 								</div>
 							</div>
 							<div className={styles.rowmenu}>
-								<button
-									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
-									onClick={handleAddmembertoroom}>
+								<button 
+								style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
+								onClick={handleAddmembertoroom}>
 									{
 
 										modeformmember === 'edit' ?
@@ -1324,9 +1317,7 @@ export const Checkin = () => {
 
 
 								</button>
-								<button
-									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
-									onClick={handleClerformmember}>ยกเลิก </button>
+								<button style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }} onClick={handleClerformmember}>ยกเลิก </button>
 							</div>
 
 
@@ -1339,7 +1330,8 @@ export const Checkin = () => {
 						<div className={styles.body}>
 							<div className={styles.rowtable}>
 								<div className={styles.tableroommember}>
-									<TableRoomMember style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }} data={JSON.parse(JSON.stringify(selectedroom))}
+									<TableRoomMember 
+									data={JSON.parse(JSON.stringify(selectedroom))}
 										handlerdelete={async (member) => {
 											console.log('member id = ', member.id)
 											let _selectedroom = selectedroom
@@ -1594,7 +1586,7 @@ export const Checkin = () => {
 									<table>
 										<thead>
 											<tr style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
-												{tableoption.topic.map((topic, index) =>
+												{tableoption.topic.map((topic , index ) =>
 													<th key={index}>{topic}</th>
 
 												)}
@@ -1607,7 +1599,7 @@ export const Checkin = () => {
 										</thead>
 										<tbody>
 											{tableoption.body.map((data, index) =>
-												<tr key={index}>
+												<tr key={index} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 													<td><input type="text" value={data.name ? data.name : ''} name="name" onChange={(e) => handlerchangetableoption(e, index)}
 														disabled={!tableoption.disableedit} /></td>
 													<td><input type="text" value={data.price ? data.price : ''} name="price" onChange={(e) => handlerchangetableoption(e, index)} disabled={!tableoption.disableedit} /></td>
@@ -1709,52 +1701,54 @@ export const Checkin = () => {
 
 									}}>บันทึก รายการ <SaveIcon /> </button>
 
-								<button
-									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
-									onClick={async () => {
-										//ลบ รายการ invoices
-										let _room = selectedroom
-										try {
-											if (_room && _room.id && _room.data && _room.data.checkinInvoice) {
-												let _res = await updateRoom({
-													variables: {
-														id: _room.id,
-														input: {
-															checkinInvoiceid: null,
-															checkinid: null
-														}
+								<button 
+								style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
+								onClick={async () => {
+									//ลบ รายการ invoices
+									let _room = selectedroom
+									try {
+										if (_room && _room.id && _room.data && _room.data.checkinInvoice) {
+											let _res = await updateRoom({
+												variables: {
+													id: _room.id,
+													input: {
+														checkinInvoiceid: null,
+														checkinid: null
 													}
-												});
-												if (_res && _res.data) {
-													try {
-														GET_Rooms.refetch()
-													} catch (e) {
-														console.log(e)
-													}
-
-												} else {
-													console.log('communication Error ')
+												}
+											});
+											if (_res && _res.data) {
+												try {
+													GET_Rooms.refetch()
+												} catch (e) {
+													console.log(e)
 												}
 
+											} else {
+												console.log('communication Error ')
 											}
-										} catch (e) {
-											console.log(e)
-										}
-										console.log(_room)
-										setselectedroom(null);
-										clerformroomtype();
-									}
 
-									}>ยกเลิก </button>
+										}
+									} catch (e) {
+										console.log(e)
+									}
+									console.log(_room)
+									setselectedroom(null);
+									clerformroomtype();
+								}
+
+								}>ยกเลิก </button>
 							</div>
 
 							<div className={styles.rowmenu} style={{ float: "right" }}>
 
-								<button
-									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
-									disabled={
-										selectedroom && selectedroom.data && selectedroom.data.checkin ? false : true
-									}
+								<button 
+								style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
+								disabled={
+									selectedroom && selectedroom.data 
+									&& selectedroom.data.members && selectedroom.data.members.length > 0 
+									&& selectedroom.data.checkin ? false : true
+								}
 									onClick={async () => {
 										if (selectedroom && selectedroom.data && selectedroom.data.checkin) {
 											console.log('Export Contract', selectedroom)
@@ -1813,9 +1807,10 @@ export const Checkin = () => {
 									}}> ออกเอกสารสัญญา <ReceiptIcon /></button>
 
 								<button
-									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
+								style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 									disabled={
 										selectedroom && selectedroom.data && selectedroom.data.Contract &&
+										selectedroom.data.members && selectedroom.data.members.length > 0  && 
 											selectedroom.data.Contract.id ? false : true
 									}
 									onClick={async () => {
@@ -1841,8 +1836,7 @@ export const Checkin = () => {
 												})
 
 												if (_res && _res.data && _res.data.addInvoice && _res.data.addInvoice.id) {
-													handleChangePath('/createinvoice')
-													handleDialog("The request was successful !!!!! Go Createinvoice page?", true)
+										
 													// สร้างใบแจ้งหนี้สำเร็จ //
 
 													let _idreceipt = _res.data.addInvoice.id
@@ -1861,6 +1855,10 @@ export const Checkin = () => {
 														try {
 															console.log('_updatetableoption', _updatetableoption)
 															export_Invoice_pdf(selectedroom, [..._updatetableoption], toYYMM(now))
+
+															handleChangePath('/invoice')
+															handleDialog("The request was successful !!!!! Go invoice page?", true)
+
 															refetch_roomMember()
 														} catch (e) {
 															console.log(e)
@@ -1891,7 +1889,9 @@ export const Checkin = () => {
 								<button
 									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 									disabled={
-										selectedroom && selectedroom.data && selectedroom.data.checkinInvoice ? false : true
+										selectedroom && selectedroom.data 
+										&& selectedroom.data.members && selectedroom.data.members.length > 0 
+										&& selectedroom.data.checkinInvoice ? false : true
 									}
 									onClick={async () => {
 										// เปลี่ยน สถานะ ใบแจ้งหนี้  เป็นชำระเงิน
@@ -1909,16 +1909,18 @@ export const Checkin = () => {
 												if (_res && _res.data) {
 													console.log('update กำชำระเงินสำเร็จ')
 													try {
+														
 														refetch_roomMember()
 													} catch (e) {
-														console.log(e)
+														
+														console.error("ชำระใบแจ้งหนี้ไม่สำเร็จ",e)
 													}
 
 
 												}
 
 											} catch (e) {
-
+												console.error("ชำระใบแจ้งหนี้ไม่สำเร็จ",e)
 											}
 
 										}
@@ -1928,9 +1930,9 @@ export const Checkin = () => {
 
 								<button
 									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
-
 									disabled={
 										selectedroom && selectedroom.data && selectedroom.data.checkinInvoice
+										&& selectedroom.data.members && selectedroom.data.members.length > 0 
 											&& selectedroom.data.checkinInvoice.status === 'สำเร็จ' ? false : true
 									}
 									onClick={async () => {
