@@ -13,6 +13,7 @@ import { export_Invoice_pdf} from '../../general_functions/pdf/export/export_pdf
 // import { API_queryRooms} from '../../API/index';
 
 
+import { useMediaQuery } from 'react-responsive'
 
 
 
@@ -59,6 +60,13 @@ import { filter_rooms } from '../../general_functions/filter'
 // };
 
 export const Checkout = () => {
+
+	const isDesktop = useMediaQuery({
+        query: "(min-width: 1224px)"
+    });
+    const isTablet = useMediaQuery({
+        query: "(max-width: 1224px)"
+    });
 	// const [textfilter, settextfilter] = useState('');
 	const [rooms, setrooms] = useState([]);
 	const [loading, setloading] = useState(false);
@@ -222,7 +230,7 @@ export const Checkout = () => {
 
 					<div className={styles.tableroomselect}>
 						<div className={styles.headertable}>
-							<div className={styles.text}> ห้องเช่าและแจ้งย้ายออก </div>
+							<div className={styles.text} style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }}> ห้องเช่าและแจ้งย้ายออก </div>
 							<div className={styles.input}>
 								<div className={styles.zonetextbox}>
 									<input
@@ -235,8 +243,9 @@ export const Checkout = () => {
 										}}
 									/>
 								</div>
-								<div className={styles.zonebtn}>
+								<div className={styles.zonebtn} >
 									<select value={options_search.keyword}
+										style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 										onChange={(e) => {
 											let _options_search = options_search
 											_options_search.keyword = e.target.value
@@ -252,7 +261,9 @@ export const Checkout = () => {
 										<option> ชื่อ</option>
 										<option> สถานะ</option>
 									</select>
-									<button onClick={async () => {
+									<button 
+									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
+									onClick={async () => {
 										try {
 											await GET_Rooms.refetch()
 											setloading(false)
@@ -271,7 +282,7 @@ export const Checkout = () => {
 						<div className={styles.bodytable}>
 							<table>
 								<thead>
-									<tr>
+									<tr style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 										<th> ห้อง</th>
 										<th> อาคาร</th>
 										<th> ชั้น</th>
@@ -287,6 +298,7 @@ export const Checkout = () => {
 										(room, index) =>
 											room ? (
 												<tr key={index}
+													style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 													onClick={() => {
 														handlerselectroom(room)
 													}}
@@ -317,10 +329,10 @@ export const Checkout = () => {
 				<div className={styles.bigbox}>
 					<div className={styles.formcontact}>
 						<div className={styles.card}>
-							<div className={styles.cardheader}>
+							<div className={styles.cardheader} style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }}>
 								<label>ห้องพัก（ย้ายออก）</label>
 							</div>
-							<div className={styles.cardbody}>
+							<div className={styles.cardbody} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 								<div className={styles.row}>
 									<div className={styles.label}>
 										<label>ชื่อ</label>
@@ -543,6 +555,7 @@ export const Checkout = () => {
 
 								<div className={styles.row}>
 									<button
+										style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 										disabled={(selectedroom === null)}
 										onClick={() => {
 											if (selectedroom) {
@@ -603,7 +616,9 @@ export const Checkout = () => {
 								{showtableprice ?
 									<div>
 										<div>
-											<button onClick={() => {
+											<button 
+											style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
+											onClick={() => {
 												let _tableprice = tableprice
 												if (_tableprice.length < 10) {
 
@@ -638,7 +653,7 @@ export const Checkout = () => {
 
 											<table className={styles.tableStyles}>
 												<thead className={styles.thead}>
-													<tr>
+													<tr style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 														<th>#</th>
 														<th>ชื่อรายการ</th>
 														<th>จำนวน</th>
@@ -651,7 +666,7 @@ export const Checkout = () => {
 												</thead>
 												<tbody className={styles.tbody}>{
 													tableprice.map((list, index) =>
-														<tr key={index}>
+														<tr key={index} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 															<td>
 																<input style={{ textAlign: 'center', width: '60px', border: 'none' }} value={index} />
 															</td>
@@ -707,8 +722,10 @@ export const Checkout = () => {
 
 
 
-								<div className={styles.rowmenu}>
-									<button disabled={
+								<div className={styles.rowmenu} >
+									<button 
+									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
+									disabled={
 										(selectedroom === null) || ((formdetailroom.rental_deposit - formdetailroom.total_cost) < 0)
 									}
 										onClick={async () => {
@@ -737,7 +754,10 @@ export const Checkout = () => {
 										}}
 
 									> สร้างใบคืนเงินประกัน <PictureAsPdfIcon /> </button>
-									<button disabled={(selectedroom === null)} onClick={async () => {
+									<button 
+									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
+									disabled={(selectedroom === null)} 
+									onClick={async () => {
 										console.log('tableprice', tableprice)
 										console.log('selectedroom', selectedroom)
 										let newtable = tableprice.map(data => {
@@ -782,7 +802,9 @@ export const Checkout = () => {
 
 									}} > ออกใบแจ้งหนี้ <PictureAsPdfIcon />  </button>
 
-									<button disabled={(selectedroom === null)} onClick={async () => {
+									<button 
+										style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
+										disabled={(selectedroom === null)} onClick={async () => {
 										let _room = selectedroom
 										console.log('ย้ายออก', formdetailroom.checkout_date)
 										if (_room && _room.id && formdetailroom && formdetailroom.checkout_date) {
@@ -816,6 +838,7 @@ export const Checkout = () => {
 								<div className={styles.rowmenuright}>
 
 									<button
+										style={{ fontSize: isDesktop ? '' : isTablet ? '14px' : '' }}
 										disabled={!(selectedroom && selectedroom.status === "ย้ายออก")}
 										onClick={async () => {
 											let _room = selectedroom
@@ -847,6 +870,7 @@ export const Checkout = () => {
 
 
 									<button
+										style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 										disabled={(selectedroom === null)}
 										onClick={() => {
 											setselectedroom(null);

@@ -4,7 +4,7 @@ import styles from './CreateInvoice.module.css';
 import { useEffect, useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 // import { API_queryRooms } from '../../API/index';
-import {  API_ADD_Invoice } from '../../API/Schema/Invoice/Invoice'
+import { API_ADD_Invoice } from '../../API/Schema/Invoice/Invoice'
 import { API_GET_Rooms } from '../../API/Schema/Room/Room'
 import { filter_rooms, Change } from './function';
 import Dialog from '../../subcomponents/Dialog/Dialog';
@@ -13,8 +13,16 @@ import { DialogFunction } from '../../subcomponents/Dialog/Dialog';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+import { useMediaQuery } from 'react-responsive'
 
 export const CreateInvoic = () => {
+
+    const isDesktop = useMediaQuery({
+        query: "(min-width: 1224px)"
+    });
+    const isTablet = useMediaQuery({
+        query: "(max-width: 1224px)"
+    });
 
     // const [Invoices, setInvoices] = useState([])
     const [options_search, setoptions_search] = useState({
@@ -146,7 +154,7 @@ export const CreateInvoic = () => {
     const { defaultDialog, handleDialog, checkData } = DialogFunction();
 
     //DatePicker
-    
+
     const [startDate, setStartDate] = useState();
 
 
@@ -162,7 +170,7 @@ export const CreateInvoic = () => {
             <div className={styles.bigbox}>
 
                 <div className={styles.flex}>
-                    <div className={styles.head}>สร้างใบแจ้งหนี้</div>
+                    <div className={styles.head} style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }}>สร้างใบแจ้งหนี้</div>
                     <div className={styles.DatePick}>
                         <div className={styles.lable}> รอบบิล  </div>
                         <div className={styles.date}>
@@ -188,9 +196,9 @@ export const CreateInvoic = () => {
 
                     <div className={styles.displaybox}>
                         <div className={styles.display1}>
-                            <div className={styles.topic}>รูปแบบออกใบแจ้งหนี้</div>
+                            <div className={styles.topic} style={{ fontSize: isDesktop ? '' : isTablet ? '18px' : '' }}>รูปแบบออกใบแจ้งหนี้</div>
                         </div>
-                        <div className={styles.radio} >
+                        <div className={styles.radio} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 
 
 
@@ -207,7 +215,7 @@ export const CreateInvoic = () => {
                         <div className={styles.day}>
                             รายเดือน
                         </div>
-                        <div className={styles.flex}>
+                        <div className={styles.flex} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }} >
                             <div className={styles.lablebox}>
                                 <p>วันที่คิดรอบบิล</p>
                                 <p >วันที่ครบกำหนดชำระ</p>
@@ -227,8 +235,8 @@ export const CreateInvoic = () => {
 
                     </div>
                     <div className={styles.mainbox}>
-                        <div className={styles.topic}>
-                            <div>รายการผู้เช่า</div>
+                        <div className={styles.topic} style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }}>
+                            <div >รายการผู้เช่า</div>
                         </div>
                         <div className={styles.text}>
                             <div className={styles.flex}>
@@ -237,7 +245,7 @@ export const CreateInvoic = () => {
 
                             </div>
 
-                            <p className={styles.flex}>
+                            <p className={styles.flex} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
                                 <input className={styles.select}
                                     type="text"
                                     value={options_search.text}
@@ -252,6 +260,7 @@ export const CreateInvoic = () => {
                                 />
 
                                 <select className={styles.buttonmain}
+                                    style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
                                     value={options_search.keyword}
                                     onChange={(e) => {
                                         let _options_search = options_search
@@ -285,7 +294,7 @@ export const CreateInvoic = () => {
                         <div className={styles.maintable}>
                             <table className={styles.table}>
                                 <thead className={styles.header}>
-                                    <tr >
+                                    <tr style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }} >
                                         <td>{header_table[0]}</td>
                                         <td>{header_table[1]}</td>
                                         <td>{header_table[2]}</td>
@@ -296,10 +305,10 @@ export const CreateInvoic = () => {
                                 </thead>
                                 <tbody className={styles.body}>
 
-                                    {filterrooms.filter((room) => (room && room.status === 'มีคนอยู่' )).map(
-                                        (room , index) =>
+                                    {filterrooms.filter((room) => (room && room.status === 'มีคนอยู่')).map(
+                                        (room, index) =>
                                             room ? (
-                                                <tr key={index}>
+                                                <tr key={index} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
                                                     <td width={'20px'} ><input
                                                         type='checkbox'
                                                         name={room.id}
@@ -333,7 +342,7 @@ export const CreateInvoic = () => {
 
                         </div>
 
-                        <div className={styles.detail}>
+                        <div className={styles.detail} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
                             ออกใบแจ้งหนี้ : คือการออกใบแจ้งหนี้ให้ผู้เช่าทราบก่อนถึงวันชำระ
                             สามารถออกได้ตามรอบบิลและกำหนดเอง(กรีณีมีการพักไม่เต็มเดือน)
                             และสามารถเลือกใบแจ้งหนี้ได้ทั้งหมดพร้อมกันได้
@@ -354,7 +363,7 @@ export const CreateInvoic = () => {
 
                 </div>
 
-                <div className={styles.lastbutton}>
+                <div className={styles.lastbutton} style={{ fontSize: isDesktop ? '' : isTablet ? '12px' : '' }}>
                     <button className={styles.button} onClick={() => {
                         let _data = IDrooms.length > 0 ? true : false
                         handleDialog(defaultDialog.message, _data)

@@ -13,9 +13,7 @@ import { API_UPDATE_Room ,API_GET_Rooms} from '../../API/Schema/Room/Room'
 import { filter_rooms , getRooms } from './function';
 
 
-
-
-
+import { useMediaQuery } from 'react-responsive'
 
 
 
@@ -25,7 +23,12 @@ export const Checkoutinform = () => {
 
 
 
-
+    const isDesktop = useMediaQuery({
+        query: "(min-width: 1224px)"
+    });
+    const isTablet = useMediaQuery({
+        query: "(max-width: 1224px)"
+    });
 
     
     // const [ checkboxs_select , setcheckboxs_select] = useState([])
@@ -78,8 +81,8 @@ export const Checkoutinform = () => {
             
                 <div className= {styles.mainbox}>
                     <div className= {styles.headerstyles}>
-                        <h1 className= {styles.header}>รายการห้องเช่า</h1>
-                        <div className= {styles.subheader}>
+                        <h1 className= {styles.header} style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }} >รายการห้องเช่า</h1>
+                        <div className= {styles.subheader} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
                             <input className={styles.inputstyles}
 										type="text"
 										value={options_search.text}
@@ -96,6 +99,7 @@ export const Checkoutinform = () => {
 									/>
                             <select className={styles.selectstyles}
                                         value={ options_search.keyword } 
+                                        style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 									    onChange={ (e)=>{
 										let _options_search = options_search
 										_options_search.keyword = e.target.value 
@@ -110,8 +114,9 @@ export const Checkoutinform = () => {
                                 <option>ชั้น</option>
                                 <option>ประเภทห้อง</option>
                             </select>
-                            <button className= {styles.filterstyles}
-
+                            <button 
+                            className= {styles.filterstyles}
+                            style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
                             onClick={ async () => {
                                         
 										let _filter_rooms  =[]
@@ -127,7 +132,7 @@ export const Checkoutinform = () => {
                     <div className={styles.table}>
                         <table className={styles.tablestyles}>
                             <thead className={styles.header}>
-                                <tr>
+                                <tr style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
                                     <td>{head_table[0]}</td>
                                     <td>{head_table[1]}</td>
                                     <td>{head_table[2]}</td>
@@ -144,7 +149,7 @@ export const Checkoutinform = () => {
                             {filterrooms.filter((room ) => (room && room.status === 'ย้ายออก') || room.status === 'มีคนอยู่').map(
                                         (room , index) =>
                                             room ? (
-                                                <tr key={index}>
+                                                <tr key={index} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
                                                     <td width={'60px'}>{room.room ? room.room : '---'}</td>
                                                     <td width={'60px'} >{room.building ? room.building : '---'}</td>
                                                     <td width={'60px'} >{room.floor ? room.floor : '---'}</td>

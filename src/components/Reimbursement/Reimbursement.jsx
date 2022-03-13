@@ -2,7 +2,7 @@ import React from "react";
 import styles from './Reimbursement.module.css';
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { API_GET_Reimbursement,API_DELETE_Reimbursement, API_UPDATE_Reimbursement } from '../../API/Schema/Reimbursement/Reimbursement'
+import { API_GET_Reimbursement, API_DELETE_Reimbursement, API_UPDATE_Reimbursement } from '../../API/Schema/Reimbursement/Reimbursement'
 import { export_Reimbursement_pdf } from '../../general_functions/pdf/export/export_pdf';
 import { toYYMMDD } from '../../general_functions/convert';
 // import { Rooms_to_table, filter_rooms } from "./function";
@@ -15,7 +15,16 @@ import { AddressData } from "../../subcomponents/AddressData/AddressData";
 //confirmDialog
 import Dialog from '../../subcomponents/ConfirmAlert/ConfirmAlert';
 
+import { useMediaQuery } from 'react-responsive'
+
 export const Reimbursement = () => {
+
+    const isDesktop = useMediaQuery({
+        query: "(min-width: 1224px)"
+    });
+    const isTablet = useMediaQuery({
+        query: "(max-width: 1224px)"
+    });
 
     //address
     const { defaultData } = AddressData();
@@ -112,7 +121,7 @@ export const Reimbursement = () => {
                 )
 
             })
-            
+
 
             handleConfirm('', false)
         } else {
@@ -176,21 +185,26 @@ export const Reimbursement = () => {
             {Confirm.isLoading && <Dialog onDialog={checkstate} message={Confirm.message} />}
             <div className={styles.main}>
                 <div className={styles.header}>
-                    <h2 className={styles.headertext}>รายการคืนเงินประกัน</h2>
+                    <h2 className={styles.headertext} style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }} >รายการคืนเงินประกัน</h2>
                     <input id='text' className={styles.headerselect} onChange={handleChangedformFilter} />
-                    <select id='option_search' className={styles.headerfilter} onChange={handleChangedformFilter}>
+                    <select
+                        style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
+                        id='option_search'
+                        className={styles.headerfilter} onChange={handleChangedformFilter}>
                         <option>ทั้งหมด</option>
                         <option>อาคาร</option>
                         <option>ชื่อห้อง</option>
                         <option>วันที่คืน</option>
                     </select>
                     <button className={styles.headerall}
+                        style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
                         onClick={() => {
                             getReimbursement.refetch();
                         }}
 
                     >กรอง</button>
                     <button className={styles.headerdefault}
+                        style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
                         onClick={handleChangeformFilterTodefault}
                     >ทั้งหมด</button>
                 </div>
@@ -255,6 +269,7 @@ export const Reimbursement = () => {
                 </div>
                 <div className={styles.buttonzone}>
                     <button className={styles.button}
+                        style={{ fontSize: isDesktop ? '' : isTablet ? '12px' : '' }}
                         onClick={() => {
                             if (selectedReimbursements.length > 0) {
                                 Promise.all(selectedReimbursements).then((selectedReimbursements) => {
@@ -291,6 +306,7 @@ export const Reimbursement = () => {
                     >คืนเงินประกันภัย</button>
 
                     <button className={styles.button}
+                        style={{ fontSize: isDesktop ? '' : isTablet ? '12px' : '' }}
                         onClick={() => {
                             if (selectedReimbursements.length > 0) {
                                 export_Reimbursement_pdf(selectedReimbursements, 'IDrooms', '', defaultData)
@@ -305,16 +321,17 @@ export const Reimbursement = () => {
 
 
                     <button className={styles.buttonDelete}
+                        style={{ fontSize: isDesktop ? '' : isTablet ? '12px' : '' }}
                         onClick={() => {
-                            if(selectedReimbursements.length > 0){
+                            if (selectedReimbursements.length > 0) {
                                 console.log(selectedReimbursements)
                                 handleConfirm('Are you sure to Delete?', true)
 
-                            }else{
+                            } else {
                                 console.log('No select data')
                             }
 
-                            
+
                         }}
                     >ลบที่เลือก</button>
                 </div>

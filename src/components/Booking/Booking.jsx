@@ -2,6 +2,8 @@ import React from "react";
 
 import { useEffect, useState } from 'react';
 
+import { useMediaQuery } from 'react-responsive'
+
 import styles from './Booking.module.css';
 import SearchIcon from '@material-ui/icons/Search';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -118,7 +120,16 @@ const getRooms = async () => {
 	});
 };
 
+
+
 export const Booking = () => {
+
+	const isDesktop = useMediaQuery({
+		query: "(min-width: 1224px)"
+	});
+	const isTablet = useMediaQuery({
+		query: "(max-width: 1224px)"
+	});
 	//  const { loading, error, data } = useQuery(API_GET_Booking);
 
 	const booking = useQuery(API_GET_Booking);
@@ -650,9 +661,9 @@ export const Booking = () => {
 				<div className={styles.bigbox}>
 					<div className={styles.tableroomselect}>
 						<div className={styles.headertable}>
-							<div className={styles.text}> รายการห้องว่างและย้ายออก </div>
+							<div style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }} className={styles.text}> รายการห้องว่างและย้ายออก </div>
 							<div className={styles.input} >
-								<div className={styles.zoneselect_checkincheckout}>
+								<div className={styles.zoneselect_checkincheckout} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 									<label> ประเภทห้อง </label>
 									<select
 										className={styles.roomType}
@@ -721,8 +732,9 @@ export const Booking = () => {
 										}}
 									/>
 								</div>
-								<div className={styles.zonebtn}>
+								<div className={styles.zonebtn} >
 									<select value={options_search.keyword}
+									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 										onChange={(e) => {
 
 											let _options_search = options_search
@@ -738,7 +750,10 @@ export const Booking = () => {
 										<option>ประเภทห้อง</option>
 
 									</select>
-									<button onClick={async () => {
+									<button 
+									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
+									onClick={
+										async () => {
 										let Rooms = await getRooms();
 
 										let _filter_rooms = []
@@ -773,6 +788,7 @@ export const Booking = () => {
 												room ? (
 
 													<tr key={index}
+														style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 														onClick={() => {
 															setselectedroom(room);
 															handleChangedALLformroom(room);
@@ -788,7 +804,8 @@ export const Booking = () => {
 
 														}}
 														style={{
-															background: selectedroom && selectedroom.id === room.id ? 'lightgray' : 'none'
+															background: selectedroom && selectedroom.id === room.id ? 'lightgray' : 'none' ,
+															fontSize: isDesktop ? '' : isTablet ? '15px' : '' 
 														}}>
 														<td>{room && room.name ? room.name : '---'}</td>
 														<td>{room && room.floor && room.floor.building ? room.floor.building.name : '---'}</td>
@@ -807,10 +824,10 @@ export const Booking = () => {
 				<div className={styles.bigbox}>
 					<div>
 						<div className={styles.form_input}>
-							<div className={styles.header}>จองห้อง</div>
-							<div className={styles.body}>
+							<div className={styles.header} style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }}>จองห้อง</div>
+							<div className={styles.body} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 								<div>
-									<div>
+									<div style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 										<label> หมายเลขใบจอง </label>
 									</div>
 									<div className={styles.input}>
@@ -823,11 +840,12 @@ export const Booking = () => {
 									</div>
 								</div>
 								<div>
-									<div>
+									<div style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 										<label> รูปแบบการจอง </label>
 									</div>
 									<div className={styles.input}>
 										<select
+											style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 											id="checkin_type"
 											value={formbooking.checkin_type}
 											onChange={handleChangedformbooking}
@@ -839,11 +857,11 @@ export const Booking = () => {
 								</div>
 
 								<div>
-									<div>
+									<div style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 										<label> คำนำหน้า </label>
 									</div>
 									<div>
-										<select>
+										<select style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 											<option>นาย</option>
 											<option>นาง</option>
 											<option>นางสาว</option>
@@ -854,7 +872,7 @@ export const Booking = () => {
 									</div>
 								</div>
 								<div>
-									<div>
+									<div style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 										<label> ชื่อ </label>
 									</div>
 									<div className={styles.input}>
@@ -867,7 +885,7 @@ export const Booking = () => {
 									</div>
 								</div>
 								<div>
-									<div>
+									<div style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 										<label> นามสกุล </label>
 									</div>
 									<div>
@@ -880,7 +898,7 @@ export const Booking = () => {
 									</div>
 								</div>
 								<div>
-									<div>
+									<div style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 										<label> เบอร์ติดต่อ </label>
 									</div>
 									<div>
@@ -893,10 +911,10 @@ export const Booking = () => {
 									</div>
 								</div>
 								<div>
-									<div>
+									<div style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 										<label> ที่อยู่ตามบัตรประชาชน </label>
 									</div>
-									<div>
+									<div style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 										<textarea
 											cols="25"
 											rows="3"
@@ -909,7 +927,7 @@ export const Booking = () => {
 								</div>
 
 								<div>
-									<div>
+									<div style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 										<label> เลขประจำตัวผู้เสียภาษี </label>
 									</div>
 									<div>
@@ -926,11 +944,12 @@ export const Booking = () => {
 
 
 								<div>
-									<div>
+									<div style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 										<label> วิธีการชำระเงิน </label>
 									</div>
 									<div>
 										<select
+											style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 											id="payment_method"
 											type="text"
 											value={formbooking.payment_method}
@@ -943,11 +962,12 @@ export const Booking = () => {
 									</div>
 								</div>
 								<div>
-									<div>
+									<div style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 										<label> เงินจองห้อง </label>
 									</div>
 									<div>
 										<input
+											style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 											id="deposit"
 											type="text"
 											value={formbooking.deposit}
@@ -956,11 +976,12 @@ export const Booking = () => {
 									</div>
 								</div>
 								<div>
-									<div>
+									<div style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 										<label> วันที่ต้องการย้ายเข้า </label>
 									</div>
 									<div>
 										<input
+											style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 											id="checkin_date"
 											type="date"
 											value={formbooking && formbooking.checkin_date ? formbooking.checkin_date : ""}
@@ -969,11 +990,12 @@ export const Booking = () => {
 									</div>
 								</div>
 								<div>
-									<div>
+									<div style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 										<label> วันย้ายออก </label>
 									</div>
 									<div>
 										<input
+											style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 											id="checkin_date_exp"
 											type="date"
 											value={formbooking && formbooking.checkin_date_exp ? formbooking.checkin_date_exp : ""}
@@ -982,11 +1004,12 @@ export const Booking = () => {
 									</div>
 								</div>
 								<div>
-									<div>
+									<div style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 										<label> หมายเหตุ </label>
 									</div>
 									<div>
 										<input
+											style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 											id="note"
 											type="text"
 											value={formbooking.note}
@@ -998,15 +1021,16 @@ export const Booking = () => {
 						</div>
 
 						<div className={styles.form_input}>
-							<div className={styles.header}>ห้อง</div>
+							<div className={styles.header} style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }}>ห้อง</div>
 							<div className={styles.body_inputroom}>
 								<div>
 									<div>
-										<div>
+										<div style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 											<label> ชื่อห้อง </label>
 										</div>
 										<div>
 											<input
+												style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 												id="name"
 												type="text"
 												value={formroom.name}
@@ -1015,21 +1039,22 @@ export const Booking = () => {
 										</div>
 									</div>
 									<div>
-										<div>
+										<div style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 											<label> ค่าเช่ารายเดือน </label>
 										</div>
 										<div className={styles.input}>
-											<input id="monthlyprice" value={formroom.monthlyprice} type="text" onChange={handleChangedformroom} />
+											<input style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }} id="monthlyprice" value={formroom.monthlyprice} type="text" onChange={handleChangedformroom} />
 										</div>
 									</div>
 								</div>
 								<div>
 									<div>
-										<div>
+										<div style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 											<label> อาคาร </label>
 										</div>
 										<div>
 											<input
+												style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 												id="building"
 												type="text"
 												value={formroom.building}
@@ -1038,21 +1063,22 @@ export const Booking = () => {
 										</div>
 									</div>
 									<div>
-										<div>
+										<div style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 											<label> ค่าประกัน</label>
 										</div>
 										<div className={styles.input}>
-											<input type="text" value={formroom.insurance} onChange={handleChangedformroom} />
+											<input style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }} type="text" value={formroom.insurance} onChange={handleChangedformroom} />
 										</div>
 									</div>
 								</div>
 								<div>
 									<div>
-										<div>
+										<div style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 											<label> ชั้น </label>
 										</div>
 										<div>
 											<input
+												style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 												id="floor"
 												type="text"
 												value={formroom.floor}
@@ -1061,31 +1087,33 @@ export const Booking = () => {
 										</div>
 									</div>
 									<div>
-										<div>
+										<div style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 											<label> ค่าเช่าล้วงหน้า </label>
 										</div>
-										<div className={styles.input}>
-											<input defaultValue={formroom.deposit_rent} type="text" />
+										<div style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }} className={styles.input}>
+											<input style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }} defaultValue={formroom.deposit_rent} type="text" />
 										</div>
 									</div>
 								</div>
 								<div>
 									<div>
-										<div>
+										<div style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 											<label> ประเภทห้อง </label>
 										</div>
 										<div>
 											<input
+												style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 												defaultValue={formroom.nameroomtype}
 												type="text" />
 										</div>
 									</div>
 									<div>
-										<div>
+										<div style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 											<label> ค่าเช่ารายวัน </label>
 										</div>
 										<div className={styles.input}>
 											<input
+												style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 												type="text"
 												defaultValue={formroom.dailyprice}
 											/>

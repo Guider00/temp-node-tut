@@ -19,8 +19,8 @@ import { API_UPDATE_Room, API_GET_Rooms } from '../../API/Schema/Room/Room'
 import { API_createMember, API_updateMember } from '../../API/Schema/Member/Member'
 
 import { API_ADD_Invoice, API_UPDATE_Invoice } from '../../API/Schema/Invoice/Invoice'
-import { API_CREATE_Checkin} from '../../API/Schema/Checkin/Checkin'
-import { API_CREATE_Contract} from '../../API/Schema/Contract/Contract'
+import { API_CREATE_Checkin } from '../../API/Schema/Checkin/Checkin'
+import { API_CREATE_Contract } from '../../API/Schema/Contract/Contract'
 import { API_CREATE_Receipt } from '../../API/Schema/Receipt/Receipt'
 
 import { export_Receipt_pdf, export_Contract, export_Invoice_pdf } from '../../general_functions/pdf/export/export_pdf';
@@ -42,6 +42,8 @@ import EventNoteIcon from '@mui/icons-material/EventNote';
 
 import { formatDate } from '../../general_functions/convert'
 import { DiffDate } from '../../general_functions/time'
+
+import { useMediaQuery } from 'react-responsive'
 
 const filter_rooms = (rooms, options_search) => {
 	let _filter_table = []
@@ -151,6 +153,13 @@ const Rooms_to_table = (Rooms) => {
 }
 
 export const Checkin = () => {
+
+	const isDesktop = useMediaQuery({
+		query: "(min-width: 1224px)"
+	});
+	const isTablet = useMediaQuery({
+		query: "(max-width: 1224px)"
+	});
 
 	//Dialog
 	//ฟังก์ชั่น set path และ popup
@@ -663,7 +672,7 @@ export const Checkin = () => {
 
 				let room_support = roomschedules.map((roomschedule) => {
 					let { room } = roomschedule
-					console.log('room',room)
+					console.log('room', room)
 					let condition = roomschedule.sch.map(({ checkin_date_exp, checkin_date, checkin_type }) => {
 
 						if (roomType_search.roomtype === 'ทั้งหมด') {
@@ -785,7 +794,7 @@ export const Checkin = () => {
 			}
 		}
 
-	}, [GET_Rooms, loading, DateStart, DateEnd, roomType_search , reselectedroom , selectedroom])
+	}, [GET_Rooms, loading, DateStart, DateEnd, roomType_search, reselectedroom, selectedroom])
 	console.log('GET_Rooms', GET_Rooms)
 	return (
 		<div>	{defaultCalendar.isLoading && <CalendarPicker onCalendar={CalendarDate} start={handleStart}
@@ -828,11 +837,15 @@ export const Checkin = () => {
 					{defaultDialog.isLoading && <Dialog onDialog={checkData} nextPage={path} message={defaultDialog.message} />}
 					<div className={styles.tableroomselect}>
 						<div className={styles.headertable}>
-							<div className={styles.text}> รายการห้องว่างและถูกจอง </div>
-							<div className={styles.input} >
+							<div
+								className={styles.text}
+								style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }}
+							> รายการห้องว่างและถูกจอง </div>
+							<div className={styles.input} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 								<div className={styles.zoneselect_checkincheckout}>
 									<label> ประเภทห้อง </label>
 									<select
+
 										className={styles.roomType}
 										name="input_roomtype"
 										onChange={(e) => {
@@ -886,7 +899,7 @@ export const Checkin = () => {
 									}}><EventNoteIcon /></button>
 								</div>
 							</div>
-							<div className={styles.input}>
+							<div className={styles.input} >
 
 
 								<div className={styles.zonetextbox}>
@@ -900,8 +913,9 @@ export const Checkin = () => {
 										}}
 									/>
 								</div>
-								<div className={styles.zonebtn}>
+								<div className={styles.zonebtn} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 									<select value={options_search.keyword}
+										style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 										onChange={(e) => {
 											let _options_search = options_search
 											_options_search.keyword = e.target.value
@@ -941,7 +955,7 @@ export const Checkin = () => {
 						<div className={styles.bodytable}>
 							<table>
 								<thead>
-									<tr>
+									<tr style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 										<th> ห้อง</th>
 										<th> อาคาร</th>
 										<th> ชั้น</th>
@@ -959,6 +973,7 @@ export const Checkin = () => {
 											(room, index) =>
 												room ? (
 													<tr key={index}
+														style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 														onClick={() => {
 															setselectedroom(room);
 															console.log('ROOM_SELECTED', room)
@@ -1112,11 +1127,11 @@ export const Checkin = () => {
 
 				<div className={styles.bigbox}>
 					<div className={styles.formroom}>
-						<div className={styles.header}>
+						<div className={styles.header} style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }}>
 							<label>ย้ายเข้า</label>
 
 						</div>
-						<div className={styles.body}>
+						<div className={styles.body} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 							<div className={styles.row}>
 								<div className={styles.label}>
 									<label>เลขที่สัญญา</label>
@@ -1189,11 +1204,11 @@ export const Checkin = () => {
 
 					<div className={styles.formroom}>
 						<div className={styles.header}>
-							<div className={styles.label}>
+							<div className={styles.label} style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }}>
 								<label>ย้ายเข้า</label>
 							</div>
 						</div>
-						<div className={styles.body}>
+						<div className={styles.body} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 							<div className={styles.row}>
 								<div className={styles.label}>
 								</div>
@@ -1289,7 +1304,9 @@ export const Checkin = () => {
 								</div>
 							</div>
 							<div className={styles.rowmenu}>
-								<button onClick={handleAddmembertoroom}>
+								<button
+									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
+									onClick={handleAddmembertoroom}>
 									{
 
 										modeformmember === 'edit' ?
@@ -1307,20 +1324,22 @@ export const Checkin = () => {
 
 
 								</button>
-								<button onClick={handleClerformmember}>ยกเลิก </button>
+								<button
+									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
+									onClick={handleClerformmember}>ยกเลิก </button>
 							</div>
 
 
 						</div>
 					</div>
 					<div className={styles.formroom}>
-						<div className={styles.header}>
+						<div className={styles.header} style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }}>
 							<label>ผู้อาศัย</label>
 						</div>
 						<div className={styles.body}>
 							<div className={styles.rowtable}>
 								<div className={styles.tableroommember}>
-									<TableRoomMember data={JSON.parse(JSON.stringify(selectedroom))}
+									<TableRoomMember style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }} data={JSON.parse(JSON.stringify(selectedroom))}
 										handlerdelete={async (member) => {
 											console.log('member id = ', member.id)
 											let _selectedroom = selectedroom
@@ -1398,10 +1417,10 @@ export const Checkin = () => {
 			<div className={styles.zone2}>
 				<div className={styles.formcontact}>
 					<div className={styles.card}>
-						<div className={styles.cardheader}>
+						<div className={styles.cardheader} style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }}>
 							<label>ห้องพัก</label>
 						</div>
-						<div className={styles.cardbody}>
+						<div className={styles.cardbody} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 							<div className={styles.row}>
 								<div className={styles.label}>
 									<label>ชื่อ</label>
@@ -1574,8 +1593,8 @@ export const Checkin = () => {
 								<div className={styles.tablelist} >
 									<table>
 										<thead>
-											<tr>
-												{tableoption.topic.map((topic , index ) =>
+											<tr style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
+												{tableoption.topic.map((topic, index) =>
 													<th key={index}>{topic}</th>
 
 												)}
@@ -1620,6 +1639,7 @@ export const Checkin = () => {
 
 							<div className={styles.rowmenu}>
 								<button
+									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 									disabled={(selectedroom === null)}
 									onClick={async () => {
 										// ส่ง table option ไปบันทึกไว้ใน ห้อง 
@@ -1689,48 +1709,52 @@ export const Checkin = () => {
 
 									}}>บันทึก รายการ <SaveIcon /> </button>
 
-								<button onClick={async () => {
-									//ลบ รายการ invoices
-									let _room = selectedroom
-									try {
-										if (_room && _room.id && _room.data && _room.data.checkinInvoice) {
-											let _res = await updateRoom({
-												variables: {
-													id: _room.id,
-													input: {
-														checkinInvoiceid: null,
-														checkinid: null
+								<button
+									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
+									onClick={async () => {
+										//ลบ รายการ invoices
+										let _room = selectedroom
+										try {
+											if (_room && _room.id && _room.data && _room.data.checkinInvoice) {
+												let _res = await updateRoom({
+													variables: {
+														id: _room.id,
+														input: {
+															checkinInvoiceid: null,
+															checkinid: null
+														}
 													}
-												}
-											});
-											if (_res && _res.data) {
-												try {
-													GET_Rooms.refetch()
-												} catch (e) {
-													console.log(e)
+												});
+												if (_res && _res.data) {
+													try {
+														GET_Rooms.refetch()
+													} catch (e) {
+														console.log(e)
+													}
+
+												} else {
+													console.log('communication Error ')
 												}
 
-											} else {
-												console.log('communication Error ')
 											}
-
+										} catch (e) {
+											console.log(e)
 										}
-									} catch (e) {
-										console.log(e)
+										console.log(_room)
+										setselectedroom(null);
+										clerformroomtype();
 									}
-									console.log(_room)
-									setselectedroom(null);
-									clerformroomtype();
-								}
 
-								}>ยกเลิก </button>
+									}>ยกเลิก </button>
 							</div>
 
 							<div className={styles.rowmenu} style={{ float: "right" }}>
 
-								<button disabled={
-									selectedroom && selectedroom.data && selectedroom.data.checkin ? false : true
-								}
+								<button
+									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
+									disabled={
+										selectedroom && selectedroom.data && selectedroom.data.checkin ? false : true
+									}
 									onClick={async () => {
 										if (selectedroom && selectedroom.data && selectedroom.data.checkin) {
 											console.log('Export Contract', selectedroom)
@@ -1789,6 +1813,7 @@ export const Checkin = () => {
 									}}> ออกเอกสารสัญญา <ReceiptIcon /></button>
 
 								<button
+									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 									disabled={
 										selectedroom && selectedroom.data && selectedroom.data.Contract &&
 											selectedroom.data.Contract.id ? false : true
@@ -1864,6 +1889,7 @@ export const Checkin = () => {
 
 
 								<button
+									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 									disabled={
 										selectedroom && selectedroom.data && selectedroom.data.checkinInvoice ? false : true
 									}
@@ -1901,6 +1927,8 @@ export const Checkin = () => {
 									}}>ชำระเงิน <PaidIcon /></button>
 
 								<button
+									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
+
 									disabled={
 										selectedroom && selectedroom.data && selectedroom.data.checkinInvoice
 											&& selectedroom.data.checkinInvoice.status === 'สำเร็จ' ? false : true
