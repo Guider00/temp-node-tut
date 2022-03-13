@@ -272,7 +272,7 @@ export const Invoice = () => {
                 myCheckboxName[z].checked = false;
             }
 
-            let _IDrooms = IDrooms.filter(item => item !== item)
+            let _IDrooms = IDrooms.filter(item => item)
             setIDrooms(_IDrooms)
 
 

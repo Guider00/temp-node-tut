@@ -639,7 +639,10 @@ export const Checkin = () => {
 								"checkin_type": checkin_type,
 								booking: booking
 							})
+						}else{
+							return null 
 						}
+
 					}).filter(item => item)
 
 
@@ -783,7 +786,7 @@ export const Checkin = () => {
 
 			}
 		}
-	}, [GET_Rooms, loading, DateStart, DateEnd, roomType_search , reselectedroom , selectedroom])
+	}, [GET_Rooms, loading, DateStart, DateEnd, roomType_search , reselectedroom , selectedroom , options_search])
 	console.log('GET_Rooms', GET_Rooms)
 	return (
 		<div>	{defaultCalendar.isLoading && <CalendarPicker onCalendar={CalendarDate} start={handleStart}

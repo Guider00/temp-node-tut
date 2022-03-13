@@ -76,7 +76,7 @@ export const Rowmeter =   ( {  ref,  room ,index , _metertype, handler_onchnage 
                                     isNaN( room.meterroom.inmemory_finished_kwh ) === false ? room.meterroom.inmemory_finished_kwh  : "" :
                                     isNaN(  room.meterroom.inmemory_finished_water  )  === false ?  room.meterroom.inmemory_finished_water  :  ""): ''
                    )
-    },[name , _metertype])
+    },[name , _metertype,room.name,room.meter,room.meterroom])
     return (
         <>
 
