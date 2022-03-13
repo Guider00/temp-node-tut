@@ -83,6 +83,7 @@ export const Menubar = () => {
                     <Navbar.Collapse id="responsive-navbar-nav" className={styles.container} >
                         <Nav className="me-auto">
                             <Nav.Link href="/home" className={styles.md}>
+                                Home
                                 <div>
                                     <Home />
                                 </div>

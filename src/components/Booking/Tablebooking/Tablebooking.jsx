@@ -24,11 +24,20 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import { formatDate } from '../../../general_functions/convert'
 import { Modalupload } from '../Modalupload/Modalupload'
 
+import { useMediaQuery } from 'react-responsive'
+
 //dialog
 //Dialog
 
 
 export const Tablebooking = (props) => {
+
+    const isDesktop = useMediaQuery({
+		query: "(min-width: 1224px)"
+	});
+	const isTablet = useMediaQuery({
+		query: "(max-width: 1224px)"
+	});
     const [loading, setloading] = useState(false)
     const [showmodal, setmodal] = useState(false)
     const [modalbooking, setmodalbooking] = useState(null)
@@ -59,7 +68,7 @@ export const Tablebooking = (props) => {
             <div className={styles.tablebooking}>
                 <table>
                     <thead>
-                        <tr>
+                        <tr style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
                             <th>ห้อง</th>
                             <th>ชื่อ</th>
                             <th>นามสกุล</th>
@@ -80,7 +89,7 @@ export const Tablebooking = (props) => {
                             <tr key={index} style={{
                                 backgroundColor:
                                     formatDate(new Date(Number(booking.checkin_date))) === formatDate(new Date()) || new Date(Number(booking.checkin_date)) <= new Date()
-                                        ? "darkgray" : "white"
+                                        ? "darkgray" : "white" , fontSize: isDesktop ? '' : isTablet ? '15px' : '' 
                             }}>
                                 <td>{booking && booking.Room && booking.Room.name ? booking.Room.name : "---"}</td>
                                 <td>{booking && booking.customer_name ? booking.customer_name : '---'}</td>

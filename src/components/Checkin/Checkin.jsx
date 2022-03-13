@@ -43,6 +43,9 @@ import EventNoteIcon from '@mui/icons-material/EventNote';
 import { formatDate } from '../../general_functions/convert'
 import { DiffDate } from '../../general_functions/time'
 
+
+import { useMediaQuery } from 'react-responsive'
+
 const filter_rooms = (rooms, options_search) => {
 	let _filter_table = []
 	if (rooms && options_search) {
@@ -151,6 +154,13 @@ const Rooms_to_table = (Rooms) => {
 }
 
 export const Checkin = () => {
+
+	const isDesktop = useMediaQuery({
+		query: "(min-width: 1224px)"
+	});
+	const isTablet = useMediaQuery({
+		query: "(max-width: 1224px)"
+	});
 
 	//Dialog
 	//ฟังก์ชั่น set path และ popup
@@ -642,7 +652,6 @@ export const Checkin = () => {
 						}else{
 							return null 
 						}
-
 					}).filter(item => item)
 
 
@@ -829,8 +838,8 @@ export const Checkin = () => {
 					{defaultDialog.isLoading && <Dialog onDialog={checkData} nextPage={path} message={defaultDialog.message} />}
 					<div className={styles.tableroomselect}>
 						<div className={styles.headertable}>
-							<div className={styles.text}> รายการห้องว่างและถูกจอง </div>
-							<div className={styles.input} >
+							<div className={styles.text} style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }}> รายการห้องว่างและถูกจอง </div>
+							<div className={styles.input} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 								<div className={styles.zoneselect_checkincheckout}>
 									<label> ประเภทห้อง </label>
 									<select
@@ -903,6 +912,7 @@ export const Checkin = () => {
 								</div>
 								<div className={styles.zonebtn}>
 									<select value={options_search.keyword}
+										style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 										onChange={(e) => {
 											let _options_search = options_search
 											_options_search.keyword = e.target.value
@@ -919,7 +929,9 @@ export const Checkin = () => {
 										<option>เบอร์ติดต่อจอง</option>
 									</select>
 
-									<button onClick={async () => {
+									<button 
+									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
+									onClick={async () => {
 										GET_Rooms.refetch()
 										// let start_date = DateStart ? new Date(DateStart) : new Date()
 										// let end_date = DateEnd ? new Date(DateEnd) : new Date()
@@ -943,7 +955,7 @@ export const Checkin = () => {
 						<div className={styles.bodytable}>
 							<table>
 								<thead>
-									<tr>
+									<tr style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 										<th> ห้อง</th>
 										<th> อาคาร</th>
 										<th> ชั้น</th>
@@ -1082,7 +1094,7 @@ export const Checkin = () => {
 
 														}}
 														style={{
-															background: (selectedroom && selectedroom.id === room.id) ? 'lightgray' : 'none'
+															background: (selectedroom && selectedroom.id === room.id) ? 'lightgray' : 'none' , fontSize: isDesktop ? '' : isTablet ? '15px' : ''
 														}}
 													>
 														<td>{room.name ? room.name : '---'}</td>
@@ -1108,8 +1120,8 @@ export const Checkin = () => {
 				</div>
 
 				<div className={styles.bigbox}>
-					<div className={styles.formroom}>
-						<div className={styles.header}>
+					<div className={styles.formroom} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
+						<div className={styles.header} style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }}>
 							<label>ย้ายเข้า</label>
 
 						</div>
@@ -1184,9 +1196,9 @@ export const Checkin = () => {
 						</div>
 					</div>
 
-					<div className={styles.formroom}>
+					<div className={styles.formroom} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 						<div className={styles.header}>
-							<div className={styles.label}>
+							<div className={styles.label} style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }}>
 								<label>ย้ายเข้า</label>
 							</div>
 						</div>
@@ -1286,7 +1298,9 @@ export const Checkin = () => {
 								</div>
 							</div>
 							<div className={styles.rowmenu}>
-								<button onClick={handleAddmembertoroom}>
+								<button 
+								style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
+								onClick={handleAddmembertoroom}>
 									{
 
 										modeformmember === 'edit' ?
@@ -1304,20 +1318,21 @@ export const Checkin = () => {
 
 
 								</button>
-								<button onClick={handleClerformmember}>ยกเลิก </button>
+								<button style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }} onClick={handleClerformmember}>ยกเลิก </button>
 							</div>
 
 
 						</div>
 					</div>
 					<div className={styles.formroom}>
-						<div className={styles.header}>
+						<div className={styles.header} style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }}>
 							<label>ผู้อาศัย</label>
 						</div>
 						<div className={styles.body}>
 							<div className={styles.rowtable}>
 								<div className={styles.tableroommember}>
-									<TableRoomMember data={JSON.parse(JSON.stringify(selectedroom))}
+									<TableRoomMember 
+									data={JSON.parse(JSON.stringify(selectedroom))}
 										handlerdelete={async (member) => {
 											console.log('member id = ', member.id)
 											let _selectedroom = selectedroom
@@ -1395,10 +1410,10 @@ export const Checkin = () => {
 			<div className={styles.zone2}>
 				<div className={styles.formcontact}>
 					<div className={styles.card}>
-						<div className={styles.cardheader}>
+						<div className={styles.cardheader} style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }}>
 							<label>ห้องพัก</label>
 						</div>
-						<div className={styles.cardbody}>
+						<div className={styles.cardbody} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 							<div className={styles.row}>
 								<div className={styles.label}>
 									<label>ชื่อ</label>
@@ -1571,7 +1586,7 @@ export const Checkin = () => {
 								<div className={styles.tablelist} >
 									<table>
 										<thead>
-											<tr>
+											<tr style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 												{tableoption.topic.map((topic , index ) =>
 													<th key={index}>{topic}</th>
 
@@ -1582,10 +1597,10 @@ export const Checkin = () => {
 												{tableoption.disableedit ? <th></th> : null}
 
 											</tr>
-										</thead>
+										</thead >
 										<tbody>
 											{tableoption.body.map((data, index) =>
-												<tr key={index}>
+												<tr key={index} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 													<td><input type="text" value={data.name ? data.name : ''} name="name" onChange={(e) => handlerchangetableoption(e, index)}
 														disabled={!tableoption.disableedit} /></td>
 													<td><input type="text" value={data.price ? data.price : ''} name="price" onChange={(e) => handlerchangetableoption(e, index)} disabled={!tableoption.disableedit} /></td>
@@ -1617,6 +1632,7 @@ export const Checkin = () => {
 
 							<div className={styles.rowmenu}>
 								<button
+									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 									disabled={(selectedroom === null)}
 									onClick={async () => {
 										// ส่ง table option ไปบันทึกไว้ใน ห้อง 
@@ -1686,7 +1702,9 @@ export const Checkin = () => {
 
 									}}>บันทึก รายการ <SaveIcon /> </button>
 
-								<button onClick={async () => {
+								<button 
+								style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
+								onClick={async () => {
 									//ลบ รายการ invoices
 									let _room = selectedroom
 									try {
@@ -1725,7 +1743,9 @@ export const Checkin = () => {
 
 							<div className={styles.rowmenu} style={{ float: "right" }}>
 
-								<button disabled={
+								<button 
+								style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
+								disabled={
 									selectedroom && selectedroom.data 
 									&& selectedroom.data.members && selectedroom.data.members.length > 0 
 									&& selectedroom.data.checkin ? false : true
@@ -1788,6 +1808,7 @@ export const Checkin = () => {
 									}}> ออกเอกสารสัญญา <ReceiptIcon /></button>
 
 								<button
+								style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 									disabled={
 										selectedroom && selectedroom.data && selectedroom.data.Contract &&
 										selectedroom.data.members && selectedroom.data.members.length > 0  && 
@@ -1867,6 +1888,7 @@ export const Checkin = () => {
 
 
 								<button
+									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 									disabled={
 										selectedroom && selectedroom.data 
 										&& selectedroom.data.members && selectedroom.data.members.length > 0 
@@ -1908,6 +1930,7 @@ export const Checkin = () => {
 									}}>ชำระเงิน <PaidIcon /></button>
 
 								<button
+									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 									disabled={
 										selectedroom && selectedroom.data && selectedroom.data.checkinInvoice
 										&& selectedroom.data.members && selectedroom.data.members.length > 0 

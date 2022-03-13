@@ -36,8 +36,17 @@ import { AddressData } from "../../subcomponents/AddressData/AddressData";
 //confirmDialog
 import Dialog from '../../subcomponents/ConfirmAlert/ConfirmAlert';
 
+import { useMediaQuery } from 'react-responsive'
 
 export const Invoice = () => {
+
+    const isDesktop = useMediaQuery({
+        query: "(min-width: 1224px)"
+    });
+    const isTablet = useMediaQuery({
+        query: "(max-width: 1224px)"
+    });
+
     //address
     const { defaultData } = AddressData();
 
@@ -355,9 +364,9 @@ export const Invoice = () => {
                     <div className={styles.zone1}>
                         <div className={styles.box1}>
                             <div className={styles.topic}>
-                                <h3>รายการใบแจ้งหนี้</h3>
+                                <h3 style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }} >รายการใบแจ้งหนี้</h3>
                             </div>
-                            <div className={styles.date}>
+                            <div className={styles.date} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
                                 <div className={styles.part1}>
                                     <input type="radio"></input>
                                     <label className={styles.onerem}>วันที่</label>
@@ -411,7 +420,7 @@ export const Invoice = () => {
                                 </div>
 
                             </div>
-                            <div className={styles.main}>
+                            <div className={styles.main} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
                                 <div className={styles.research}>
                                     <input className={styles.input1}
                                         type="text"
@@ -462,7 +471,7 @@ export const Invoice = () => {
                             <div className={styles.tablecontent} >
                                 <table className={styles.table}>
                                     <thead className={styles.header}>
-                                        <tr >
+                                        <tr style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
                                             <td onClick={handlerchangesortingstyle}> {tbsortingstyle_newmetoold ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />} </td>
                                             <td>{header_table[1]}</td>
                                             <td>{header_table[2]}</td>
@@ -490,7 +499,7 @@ export const Invoice = () => {
 
 
                                                 }}>
-                                                <td>
+                                                <td style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
                                                     <input type="checkbox"
                                                         name="myCheckboxName"
                                                         id="myCheckboxId"
@@ -535,7 +544,7 @@ export const Invoice = () => {
 
 
                         </div>
-                        <div className={styles.box3}>
+                        <div className={styles.box3} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
                             <button className={styles.button1}
                                 onClick={() => {
                                     if (IDrooms && IDrooms.length > 0) {
@@ -658,9 +667,9 @@ export const Invoice = () => {
 
                             <div className={styles.topic1}>
 
-                                <h3 >บันทึกมิเตอร์</h3>
+                                <h3 style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }} >บันทึกมิเตอร์</h3>
                             </div>
-                            <div className={styles.topzone}>
+                            <div className={styles.topzone} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
                                 <div className={styles.top}>
                                     <div className={styles.textX} >ชื่อ</div>
                                     <div className={styles.inputX}>
@@ -715,7 +724,7 @@ export const Invoice = () => {
                                         setformmeter(_formmeter)
                                     }}>อ่านจาก Meter</button>
                             </div>
-                            <div className={styles.display}>
+                            <div className={styles.display} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 
                                 <div className={styles.topic2}>
                                     <label className={styles.text1}>ครั้งก่อน</label>
@@ -748,7 +757,7 @@ export const Invoice = () => {
                                 </div>
                             </div>
 
-                            <div className={styles.topic4}>
+                            <div className={styles.topic4} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
                                 <label className={styles.text1} >วันที่เริ่ม</label>
                                 <label className={styles.text2} >วันที่สิ้นสุด</label>
                                 <label className={styles.text3} >ค่าโทรศัพท์</label>
@@ -762,7 +771,7 @@ export const Invoice = () => {
 
 
                             </div>
-                            <div className={styles.topic5} >
+                            <div className={styles.topic5} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
                                 <button
                                     disabled={!editselectroom}
                                     onClick={() => {
@@ -810,13 +819,13 @@ export const Invoice = () => {
                                         console.log(formmeter)
                                     }}> เพิ่มรายการ มิเตอร์</button>
                             </div>
-                            <div className={styles.topic}>
+                            <div className={styles.topic} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
                                 รายการใช้จ่าย
                             </div>
                             <div className={styles.table}>
                                 <table >
                                     <thead className={styles.header}>
-                                        <tr >
+                                        <tr style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
                                             <td> # </td>
                                             <td>{header_table2[1]}</td>
                                             <td>{header_table2[2]}</td>
@@ -831,7 +840,7 @@ export const Invoice = () => {
                                     </thead>
                                     <tbody className={styles.body}>{
                                         (selectroom ? selectroom.lists : []).map((data, index) =>
-                                            <tr>
+                                            <tr style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
                                                 <td>{index + 1}</td>
                                                 <td> <input type='text' name="name" onChange={(e) => handlerchangelist(e, index)}
                                                     disabled={!editselectroom}
@@ -881,7 +890,7 @@ export const Invoice = () => {
 
                                 </table>
                             </div>
-                            <div button className={styles.button}>
+                            <div button className={styles.button} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 
                                 <button className={styles.button1}
                                     disabled={!editselectroom}
@@ -900,7 +909,7 @@ export const Invoice = () => {
                                     }}
                                 >เพิ่มรายการ</button>
 
-                                <div className={styles.lastresult}>
+                                <div className={styles.lastresult} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
                                     <div className={styles.head} >
                                         <label>รวม</label>
                                         <input className={styles.onerem} placeholder='0.00' defaultValue={sumlists_to_show(
@@ -932,7 +941,7 @@ export const Invoice = () => {
 
 
                         </div>
-                        <div className={styles.box4}>
+                        <div className={styles.box4} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
                             <button className={styles.button1}
                                 onClick={() => {
 

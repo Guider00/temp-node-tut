@@ -25,8 +25,21 @@
     
     
 }
-.container>.main>.header>.headertext{
-  
+@media screen and (max-width:1124px) {
+    .footertext{
+        font-size: 1rem;
+    }
+    .headertext{
+        font-size: 1.5rem;
+    }
+    .headerfilter{
+        font-size: 0.9rem;
+    }
+    .button{
+        width: 100px;
+        height: 40px;
+    }
+    
 }
 .container>.main>.header>.headerselect{
     width:30%;
