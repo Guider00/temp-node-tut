@@ -16,7 +16,6 @@ import { Tablebooking } from './Tablebooking/Tablebooking';
 import { formatDate } from '../../general_functions/convert';
 
 import { useQuery, useMutation } from '@apollo/client';
-import { API_queryRooms} from '../../API/index';
 
 import { export_booking_pdf, export_Receipt_pdf } from '../../general_functions/pdf/export/export_pdf';
 
@@ -82,7 +81,7 @@ const filter_rooms = (rooms, options_search) => {
 	return _filter_table
 }
 
-
+/*
 const getRooms = async () => {
 	return new Promise(async (resolve, reject) => {
 		let res = await API_queryRooms();
@@ -122,8 +121,6 @@ const getRooms = async () => {
 		return [];
 	});
 };
-
-
 
 export const Booking = () => {
 
@@ -480,8 +477,9 @@ export const Booking = () => {
 								"checkin_type": checkin_type,
 								booking: booking
 							})
+						}else{
+							return null 
 						}
-						return null;
 					}).filter(item => item)
 
 					let _schcheckin = {

@@ -9,7 +9,9 @@ import CalculateIcon from '@mui/icons-material/Calculate';
 
 import Dialog from '../../subcomponents/Dialog/Dialog'
 import { DialogFunction } from "../../subcomponents/Dialog/Dialog";
-import { export_Invoice_pdf } from '../../general_functions/pdf/export/export_pdf';
+
+import { export_Invoice_pdf   } from '../../general_functions/pdf/export/export_pdf';
+
 
 
 
@@ -346,10 +348,10 @@ export const Checkout = () => {
 					<div className={styles.bigbox}>
 						<div className={styles.formcontact}>
 							<div className={styles.card}>
+
 								<div className={styles.cardheader} style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }}>
 									<label>ห้องพัก（ย้ายออก）</label>
 								</div>
-	 
 								<div className={styles.cardbody} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 									<div className={styles.row}>
 										<div className={styles.label}>

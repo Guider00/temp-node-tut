@@ -111,9 +111,9 @@ export const Contract = () => {
                     myCheckboxName[z].checked = false;
                 }
 
-                let _IDrooms = IDrooms.filter(item => item !== item)
-                setIDrooms(_IDrooms)
-                console.log("IDrooms-else", _IDrooms)
+            let _IDrooms = IDrooms.filter(item => item)
+            setIDrooms(_IDrooms)
+            console.log("IDrooms-else", _IDrooms)
 
             }
 
@@ -302,10 +302,8 @@ export const Contract = () => {
         console.log('_getEnd', _getEnd)
 
     }
-
-
-    setloadingpage(true);
-}, [getRooms, loadingpage, formfilter])
+        setloadingpage(true);
+    }, [getRooms, loadingpage, formfilter,building,getStart,getEnd])
 
 
 
@@ -322,11 +320,11 @@ useEffect(() => {
         let _roomtypes = roomtypes
         _roomtypes = [...query_RoomType.data.RoomTypes]
         setroomtypes([..._roomtypes])
-    }
-
+    } 
     setloadingpage(true);
+    }, [loadingpage, Contract, query_RoomType,rooms,roomtypes])
 
-}, [loadingpage, Contract, query_RoomType])
+
 
 
 
@@ -509,26 +507,43 @@ return (
 
                 </div>
                 <div className={styles.button}>
-                    <button className={styles.print}
+                        <button className={styles.print}
+                            onClick={async ()=>{
+                                try{
+                                  
+                                    if( IDrooms && IDrooms.length > 0 ){
+                                      //    export_Contract(IDrooms,defaultData)
+                                     let res = await  Promise.all(IDrooms).then(  (IDrooms) =>{
+                                        let listres = IDrooms.map( async contract=>{
+                                            try{
+                                            let res = await  deleteContract({
+                                                                                variables: { 
+                                                                                    id:`${contract.id}`
+                                                                                }
+                                                                            })
+                                                 if(res && res.data){
+                                                     return res
+                                                 }else{
+                                                      return ("ลบสัญญา Error ")
+                                                 }
+                                            }catch(e){
+                                                return e
+                                            }
+                                         } )
+                                        
+                                         return listres;
+                                     })
+                                     console.log(res)
+                                   
+                                         Contract.refetch()
+                                  
+                     
+    
+                                    }
+                                }catch(e){
+                                    console.error(e)
 
-                        onClick={async () => {
-                            try {
-
-                                if (IDrooms && IDrooms.length > 0) {
-                                    export_Contract(IDrooms, defaultData)
-                                    // let res_s =  await Promise.all( await IDrooms.map(async  idroom=>{ 
-                                    //     console.log(idroom)
-
-                                    //     return idroom
-                                    //  } ))
-                                    // console.log('res_s',res_s)
-                                    // if(res_s){
-
-                                    // }
                                 }
-                            } catch (e) {
-                                console.log(e)
-                            }
                         }}
                     >พิมพ์</button>
                 </div>

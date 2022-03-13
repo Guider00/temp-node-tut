@@ -14,7 +14,6 @@ import { useEffect, useState } from "react"
 
 import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu';
-import { height } from '@mui/system';
 
 const GET_MESSAGES = gql`
   subscription {

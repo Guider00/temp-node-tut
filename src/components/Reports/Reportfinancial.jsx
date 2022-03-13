@@ -97,58 +97,7 @@ export const Reportfinancial = () => {
     // labels = ["March-2022","February-2022","April-2022","February-2012"]
 
 
-    const validateTotal = (lists, DataChart) => {
-        console.log('lists',lists)
 
-
-        if ((lists && lists.length > 0) && (DataChart && DataChart.labels.length > 0)) {
-            let _totalprice = 0
-            let _profit = 0
-            let _amountInvoice = 0
-            let _unpaid = 0
-            let _unpaidAmount = 0
-            let data = []
-            let data2 = []
-            // let y = []
-            
-
-            lists.map(list => {
-                let date = (new Date(list.duedate));
-                let dateM = `${date.getMonth() + 1}`;
-                let trueDay = getMonthName(dateM) + -`${date.getFullYear()}`
-                let i = DataChart.labels.length
-                
-                for(let e = 0 ; e < i ; e++){
-                    if (trueDay === DataChart.labels[e]) {
-                        _totalprice += (Number(ConvertData(list).price) ? Number(ConvertData(list).price) : 0)
-                        _profit += (Number(ConvertData(list).profit) ? Number(ConvertData(list).profit) : 0)
-                        _amountInvoice += (Number(ConvertData(list).amountInvoice) ? Number(ConvertData(list).amountInvoice) : 0)
-                        _unpaidAmount += (Number(ConvertData(list).unpaidAmount) ? Number(ConvertData(list).unpaidAmount) : 0)
-                        data = [...data,Number(ConvertData(list).price),DataChart.labels[e] ]
-                        
-                    }
-
-                }
-
-                
-                return null;
-            })
-
-            _unpaid = _totalprice - _profit
-
-
-                
-            return ({
-                data2:data2,data:data,totalprice: Number(_totalprice).toFixed(0), profit: Number(_profit).toFixed(0),
-                amountInvoice: Number(_amountInvoice).toFixed(0), unpaid: Number(_unpaid).toFixed(0),
-                unpaidAmount: Number(_unpaidAmount).toFixed(0)
-            })
-
-        }
-        else {
-            return ({ totalprice: 0, profit: 0, amountInvoice: 0, invoice: 0, unpaid: 0, unpaidAmount: 0 })
-        }
-    }
 
 
     useEffect(() => {
@@ -182,6 +131,59 @@ export const Reportfinancial = () => {
 
 
     useEffect(() => {
+        const validateTotal = (lists, DataChart) => {
+            console.log('lists',lists)
+    
+    
+            if ((lists && lists.length > 0) && (DataChart && DataChart.labels.length > 0)) {
+                let _totalprice = 0
+                let _profit = 0
+                let _amountInvoice = 0
+                let _unpaid = 0
+                let _unpaidAmount = 0
+                let data = []
+                let data2 = []
+                // let y = []
+                
+    
+                lists.map(list => {
+                    let date = (new Date(list.duedate));
+                    let dateM = `${date.getMonth() + 1}`;
+                    let trueDay = getMonthName(dateM) + -`${date.getFullYear()}`
+                    let i = DataChart.labels.length
+                    
+                    for(let e = 0 ; e < i ; e++){
+                        if (trueDay === DataChart.labels[e]) {
+                            _totalprice += (Number(ConvertData(list).price) ? Number(ConvertData(list).price) : 0)
+                            _profit += (Number(ConvertData(list).profit) ? Number(ConvertData(list).profit) : 0)
+                            _amountInvoice += (Number(ConvertData(list).amountInvoice) ? Number(ConvertData(list).amountInvoice) : 0)
+                            _unpaidAmount += (Number(ConvertData(list).unpaidAmount) ? Number(ConvertData(list).unpaidAmount) : 0)
+                            data = [...data,Number(ConvertData(list).price),DataChart.labels[e] ]
+                            
+                        }
+    
+                    }
+    
+                    
+                    return null;
+                })
+    
+                _unpaid = _totalprice - _profit
+    
+    
+                    
+                return ({
+                    data2:data2,data:data,totalprice: Number(_totalprice).toFixed(0), profit: Number(_profit).toFixed(0),
+                    amountInvoice: Number(_amountInvoice).toFixed(0), unpaid: Number(_unpaid).toFixed(0),
+                    unpaidAmount: Number(_unpaidAmount).toFixed(0)
+                })
+    
+            }
+            else {
+                return ({ totalprice: 0, profit: 0, amountInvoice: 0, invoice: 0, unpaid: 0, unpaidAmount: 0 })
+            }
+        }
+
         if (Data) {
             let _allMonth = [...new Set(Data.map((item) => {
                 let date = new Date(item.duedate);
@@ -201,7 +203,7 @@ export const Reportfinancial = () => {
                 
             }
         }
-    }, [Data])
+    }, [Data,DataChart,TotalValue])
 
 
 
