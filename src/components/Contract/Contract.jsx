@@ -15,13 +15,14 @@ import {
     API_GET_RoomType
 } from '../../API/Schema/RoomType/RoomType'
 import { API_GET_Rooms } from '../../API/Schema/Room/Room'
-import { export_Contract } from '../../general_functions/pdf/export/export_pdf';
+// import { export_Contract } from '../../general_functions/pdf/export/export_pdf';
+
 import { FileUploader } from './FileUploader/FileUploader'
 import { filter_rooms, Rooms_to_table, ChangeRadio, FormFilter } from './function';
 
 
 //address
-import { AddressData } from "../../subcomponents/AddressData/AddressData";
+// import { AddressData } from "../../subcomponents/AddressData/AddressData";
 
 //confirmDialog
 import Dialog from '../../subcomponents/ConfirmAlert/ConfirmAlert';
@@ -44,7 +45,7 @@ export const Contract = () => {
     });
     
     //address
-    const { defaultData } = AddressData();
+    // const { defaultData } = AddressData();
 
         const getRooms = useQuery(API_GET_Rooms)
     const Contract = useQuery(API_GET_Contract);
