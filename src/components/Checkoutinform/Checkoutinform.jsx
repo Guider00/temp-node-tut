@@ -158,7 +158,9 @@ export const Checkoutinform = () => {
                                                     <td width={'100px'} >{room.name}</td>
                                                     <td width={'100px'} >{room.surname}</td>
                                                     <td width={'80px'} >
-                                                        <input type = 'date'
+                                                        <input 
+                                                        className={styles.InputDate}
+                                                        type = 'date'
                                                         value={room.checkout}
                                                         onChange={(e)=>{
                                                                 try{

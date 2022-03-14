@@ -9,6 +9,8 @@
     border-radius: 20px;
     min-width: 700px;
 }
+
+
 .container>.main{
     max-width: 95%;
     background-color: rgb(255, 255, 255);
@@ -110,7 +112,7 @@
         
         table-layout: fixed;
         max-height: 5px;
-        overflow: auto;
+        overflow-y: auto;
         font-size: small;
         
         
@@ -119,7 +121,6 @@
 
     
 }
-
 
 .container>.main>.table{
     max-width: 100%;
@@ -158,7 +159,7 @@
     
     table-layout: fixed;
     max-height: 5px;
-    overflow: auto;
+    overflow-y: auto;
     
     
     
