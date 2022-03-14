@@ -30,6 +30,7 @@ export const CreateInvoic = () => {
         keyword: "ทั้งหมด"
     })
     const [rooms, setrooms] = useState([]);
+
     const [addInvoice] = useMutation(API_ADD_Invoice);
     // const [deleteInvoice, mutationdeleteInvoice] = useMutation(API_DELETE_Invoice);
     const [date, setdate] = useState([]);
@@ -142,7 +143,7 @@ export const CreateInvoic = () => {
 
             }
         },
-        [GET_Rooms]
+        [GET_Rooms,setfilterrooms]
     );
 
 
@@ -456,7 +457,7 @@ export const CreateInvoic = () => {
                                 myCheckboxMain.checked = false;
                             }
 
-                            let _IDrooms = IDrooms.filter(item => item !== item)
+                            let _IDrooms = IDrooms.filter(item => item)
                             setIDrooms(_IDrooms)
                             console.log("IDrooms-else", _IDrooms)
 

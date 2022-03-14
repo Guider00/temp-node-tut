@@ -8,7 +8,7 @@ import styles from './Booking.module.css';
 import SearchIcon from '@material-ui/icons/Search';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
-// import EditIcon from '@material-ui/icons/Edit';
+ import EditIcon from '@material-ui/icons/Edit';
 
 import { ModalAlert } from '../../subcomponents/ModalAlert/ModalAlert';
 
@@ -16,7 +16,6 @@ import { Tablebooking } from './Tablebooking/Tablebooking';
 import { formatDate } from '../../general_functions/convert';
 
 import { useQuery, useMutation } from '@apollo/client';
-import { API_queryRooms} from '../../API/index';
 
 import { export_booking_pdf, export_Receipt_pdf } from '../../general_functions/pdf/export/export_pdf';
 
@@ -54,7 +53,7 @@ const filter_rooms = (rooms, options_search) => {
 				if (options_search.keyword === 'ทั้งหมด') {
 					return (room.name && room.name.search(options_search.text) !== -1) ||
 						( room.floor && room.floor.building && room.floor.building.name && room.floor.building.name.search(options_search.text) !== -1) ||
-						(room.floor && room.floor.name  &&room.floor.search(options_search.text) !== -1) ||
+						(room.floor && room.floor.name  &&room.floor.name.search(options_search.text) !== -1) ||
 						(room.RoomType && room.RoomType.name && room.RoomType.name.search(options_search.text) !== -1) ||
 						(options_search.text === '')
 						;
@@ -82,7 +81,7 @@ const filter_rooms = (rooms, options_search) => {
 	return _filter_table
 }
 
-
+/*
 const getRooms = async () => {
 	return new Promise(async (resolve, reject) => {
 		let res = await API_queryRooms();
@@ -122,9 +121,7 @@ const getRooms = async () => {
 		return [];
 	});
 };
-
-
-
+*/
 export const Booking = () => {
 
 	const isDesktop = useMediaQuery({
@@ -480,8 +477,9 @@ export const Booking = () => {
 								"checkin_type": checkin_type,
 								booking: booking
 							})
+						}else{
+							return null 
 						}
-						return null;
 					}).filter(item => item)
 
 					let _schcheckin = {
@@ -686,7 +684,7 @@ export const Booking = () => {
 										<option>รายเดือน</option>
 									</select>
 
-									{/* <input 
+									 <input 
 									className={styles.roomType}
 									value={options_search.roomtype}
 									type='text' 
@@ -696,7 +694,7 @@ export const Booking = () => {
 										_options_search.roomtype = e.target.value 
 										setoptions_search({..._options_search})
 									}}
-									/> */}
+									/>
 
 									<label> วันที่เข้าพัก </label>
 									<input
@@ -762,13 +760,13 @@ export const Booking = () => {
 									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 									onClick={
 										async () => {
-										let Rooms = await getRooms();
+										// let Rooms = await getRooms();
 
-										let _filter_rooms = []
-										console.log('DateStart,DateEnd', DateStart, DateEnd)
-										_filter_rooms = filter_rooms(Rooms, options_search, DateStart, DateEnd)
+										// let _filter_rooms = []
+										// console.log('DateStart,DateEnd', DateStart, DateEnd)
+										// _filter_rooms = filter_rooms(Rooms, options_search, DateStart, DateEnd)
 
-										setrooms(_filter_rooms);
+										// setrooms(_filter_rooms);
 									}}>
 										{' '}
 										ค้นหา<SearchIcon />{' '}
@@ -1202,10 +1200,10 @@ export const Booking = () => {
 										{' '}
 										<SaveIcon />{' '}
 									</button>
-									{/* <button onClick={() => {}}>
+								 <button onClick={() => {}}>
 										{' '}
 										<EditIcon />{' '}
-									</button> */}
+									</button> 
 									<button onClick={() => { setdefault_forminput(); }}>
 										{' '}
 										<DeleteIcon />{' '}

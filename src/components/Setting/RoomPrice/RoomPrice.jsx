@@ -450,7 +450,7 @@ export const RoomPrice = () => {
                 console.log('update table option')
                 roomtype.body.map(room => {
                     if (room && room.id === _id) {
-                        onClickEditRoomPrice(_id, room.data)
+                      //  onClickEditRoomPrice(_id, room.data)
                     }
 
                     return null;
@@ -460,7 +460,7 @@ export const RoomPrice = () => {
             setload(true)
             setinitial(true)
         }
-    }, [GET_RoomType, GET_Rooms ,_id ,_roomtype ,onClickEditRoomPrice])
+    }, [GET_RoomType, GET_Rooms ,_id ,_roomtype ])
 
 
 

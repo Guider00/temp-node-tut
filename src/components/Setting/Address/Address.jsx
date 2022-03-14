@@ -202,7 +202,7 @@ export const Address = () => {
 
 
 
-    }, [Receiptnumber])
+    }, [Receiptnumber,ReceiptNumber,defaultData,setdefaultData])
 
 
 
@@ -256,7 +256,7 @@ export const Address = () => {
             Address.refetch()
         }
 
-    }, [Address]
+    }, [Address,address,defaultAddress,setdefaultAddress]
 
 
 
