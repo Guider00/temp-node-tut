@@ -193,16 +193,13 @@ export const Address = () => {
                 setdefaultData(_defaultData)
 
             }
-
         } else {
             Receiptnumber.refetch()
         }
 
 
 
-
-
-    }, [Receiptnumber,ReceiptNumber,defaultData,setdefaultData])
+    }, [Receiptnumber]) // eslint-disable-line react-hooks/exhaustive-deps
 
 
 
@@ -250,21 +247,20 @@ export const Address = () => {
             }
 
 
-
         }
         else {
             Address.refetch()
         }
 
-    }, [Address,address,defaultAddress,setdefaultAddress]
+
+    }, [Address] // eslint-disable-line react-hooks/exhaustive-deps
 
 
 
     )
 
-    // const [startDate, setStartDate] = useState();
-
-
+    //ใช้สำหรับแก้ funciton miss in useEffect
+    // eslint-disable-line react-hooks/exhaustive-deps
 
 
     return (

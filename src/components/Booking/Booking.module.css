@@ -23,9 +23,7 @@
     
    
 }
-::placeholder{
-    color: red;
-}
+
 .headertable>.text{
     font-size: x-large;
     flex-basis: 100%;
