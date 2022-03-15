@@ -304,7 +304,7 @@ export const Contract = () => {
 
     }
         setloadingpage(true);
-    }, [getRooms, loadingpage, formfilter,building,getStart,getEnd])
+    }, [getRooms, loadingpage]) // eslint-disable-line react-hooks/exhaustive-deps
 
 
 
@@ -323,7 +323,7 @@ useEffect(() => {
         setroomtypes([..._roomtypes])
     } 
     setloadingpage(true);
-    }, [loadingpage, Contract, query_RoomType,rooms,roomtypes])
+    }, [loadingpage, Contract]) // eslint-disable-line react-hooks/exhaustive-deps
 
 
 
