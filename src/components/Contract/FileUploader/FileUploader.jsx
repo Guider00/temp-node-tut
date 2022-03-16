@@ -1,4 +1,5 @@
 import {useState,useRef} from 'react';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 
 
 export const FileUploader = props => {
@@ -18,7 +19,7 @@ export const FileUploader = props => {
     <div >
       <label  onClick={handleClick} >{filename} </label>
       <button onClick={handleClick} style={{marginLeft:"1.5rem"}}>
-        อัพโหลด เอกสาร 
+       <FileUploadIcon/>  อัพโหลด เอกสาร 
       </button>
       <input type="file"
              ref={hiddenFileInput}

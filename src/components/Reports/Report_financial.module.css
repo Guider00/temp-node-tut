@@ -17,6 +17,13 @@
     
    
 }
+.container>.card>.header>div>input{
+    margin: 1rem;
+    
+   
+}
+
+
 .container>.card>.header>h2{
     font-size: xx-large;
     margin: 0.5rem;

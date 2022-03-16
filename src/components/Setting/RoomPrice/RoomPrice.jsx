@@ -276,8 +276,7 @@ export const RoomPrice = () => {
 
     const [_load, setload] = useState(false);
 
-    const [_initial,setinitial] = useState(false);
-    console.log('_initial',_initial)
+
 
     const [_showedit, setshowedit] = useState(false);
 
@@ -310,7 +309,6 @@ export const RoomPrice = () => {
         }
 
         setload(false)
-        setinitial(false)
     }
     const onClickEditRoomPrice = async (id, data) => {
 
@@ -409,7 +407,6 @@ export const RoomPrice = () => {
                 }
 
                 // setload(false)
-                setinitial(false)
             }
         },
         {
@@ -428,7 +425,9 @@ export const RoomPrice = () => {
 
 
     useEffect(() => {
-        console.log('do this')
+
+
+        console.log('run useEffect update roomtype')
         if (GET_RoomType.loading === false && GET_Rooms.loading === false) {
             let table = []
             if (GET_RoomType && GET_RoomType.data && GET_RoomType.data.RoomTypes) {
@@ -443,24 +442,25 @@ export const RoomPrice = () => {
                 })
             }
             console.log('table', table)
-
-            let roomtype = _roomtype
-            roomtype.body = [...table]
-            if (_id) {
-                console.log('update table option')
-                roomtype.body.map(room => {
-                    if (room && room.id === _id) {
-                      //  onClickEditRoomPrice(_id, room.data)
-                    }
-
-                    return null;
-                })
-            }
-            setroomtype(JSON.parse(JSON.stringify(roomtype)))
+            setroomtype( prestate => {
+                let roomtype =prestate
+                roomtype.body = [...table]
+                if (_id) {
+                    console.log('update table option')
+                    roomtype.body.map(room => {
+                        if (room && room.id === _id) {
+                        //  onClickEditRoomPrice(_id, room.data)
+                        }
+        
+                        return null;
+                    })
+                }
+                return ({ ...prestate,...roomtype })
+            })
             setload(true)
-            setinitial(true)
+
         }
-    }, [GET_RoomType, GET_Rooms ,_id ,_roomtype ])
+    }, [GET_RoomType, GET_Rooms ,_id  ])
 
 
 

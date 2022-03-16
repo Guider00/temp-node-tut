@@ -4,7 +4,12 @@ import { API_GET_Receipt } from '../../API/Schema/Receipt/Receipt';
 import { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { Bar } from 'react-chartjs-2'
+
+import SearchIcon from '@mui/icons-material/Search';
 import { Chart, registerables, ArcElement } from "chart.js";
+import {
+    toYYMM
+} from '../../general_functions/convert'
 Chart.register(...registerables);
 Chart.register(ArcElement);
 
@@ -70,6 +75,36 @@ export const Reportfinancial = () => {
 
     const [TotalValue, setTotalValue] = useState([])
 
+    const [Datestartselected,setDatestartselected] = useState(toYYMM( new Date().setFullYear(new Date().getFullYear() - 1)  ))
+    const [Dateendselected,setDateendselected] = useState(toYYMM( new Date() ))
+
+    const handleronChangeDatelength  = (datestart,dateend ) =>{
+        if(datestart  && dateend ){
+           let  timedatestart  =  new Date(datestart)
+           let  timedateend  =  new Date(dateend)
+            // check not over date end 
+           if(timedatestart < timedateend){
+                setDatestartselected(datestart)
+                setDateendselected(dateend)
+           }else{
+                    // set notifly Error over lab date 
+           }
+        }
+    }
+    const handlersearch = async ()=>{
+        if(Datestartselected && Dateendselected)
+        {
+            console.log('ค้นหา')
+            try{
+            await  invoice.refetch()
+            await receipt.refetch()
+           
+            }catch(e){
+                 console.error('ค้นหาข้อมูล fail ')
+            }
+        }
+    }
+
 
     const getMonthName = (month) => {
         let d = new Date()
@@ -103,20 +138,21 @@ export const Reportfinancial = () => {
     useEffect(() => {
 
         if (invoice.data) {
-            let _Invoice = Data
+           
+            let _Invoice = []
             _Invoice = Data_to_table(invoice.data.Invoices)
             setDataInvoice([..._Invoice])
 
         }
 
         if (receipt.data) {
-            let _Receipt = Data
+            let _Receipt  = [] 
             _Receipt = Data_to_table(receipt.data.Receipts)
             setDataReceipt([..._Receipt])
 
         }
 
-    }, [invoice, receipt , Data])
+    }, [invoice , invoice.data , receipt ,receipt.data  ])
 
 
     useEffect(() => {
@@ -131,6 +167,23 @@ export const Reportfinancial = () => {
 
 
     useEffect(() => {
+
+
+        if (Data) {
+            let _allMonth = [...new Set(Data.map((item) => {
+                let date = new Date(item.duedate);
+                let dateM = `${date.getMonth() + 1}`;
+                return getMonthName(dateM) + -`${date.getFullYear()}`
+
+            }))]
+
+            setDataChart((prevState) => ({
+                ...prevState,
+                labels:_allMonth
+              })); 
+        }
+    }, [Data])
+    useEffect (()=>{
         const validateTotal = (lists, DataChart) => {
             console.log('lists',lists)
     
@@ -183,27 +236,14 @@ export const Reportfinancial = () => {
                 return ({ totalprice: 0, profit: 0, amountInvoice: 0, invoice: 0, unpaid: 0, unpaidAmount: 0 })
             }
         }
-
-        if (Data) {
-            let _allMonth = [...new Set(Data.map((item) => {
-                let date = new Date(item.duedate);
-                let dateM = `${date.getMonth() + 1}`;
-                return getMonthName(dateM) + -`${date.getFullYear()}`
-
-            }))]
-            let _DataChart = JSON.parse(JSON.stringify(DataChart))
-            _DataChart.labels = _allMonth
-            setDataChart(_DataChart)
-
-            if (_DataChart.labels.length > 0) {
-                let _TotalValue = TotalValue
-                _TotalValue = validateTotal(Data, _DataChart)
-                setTotalValue(_TotalValue)
-                console.log('_DataChart', _TotalValue.data)
-                
-            }
+        if (DataChart.labels.length > 0) {
+            let _TotalValue 
+            _TotalValue = validateTotal(Data, DataChart)
+            setTotalValue(_TotalValue)
+            console.log('_DataChart', _TotalValue.data)
+            
         }
-    }, [Data,DataChart,TotalValue])
+    },[Data,DataChart])
 
 
 
@@ -217,6 +257,27 @@ export const Reportfinancial = () => {
 
                     <div className={styles.header}>
                         <h2>Financial report</h2>
+                        <div>
+                            <label> เดือนเริ่มต้น </label>
+                            <input type="month"   value={Datestartselected}
+                                onChange={(e)=>{
+                                    if(e && e.target && e.target.value ){
+                                    handleronChangeDatelength(e.target.value ,Dateendselected)
+                                    }
+                                }}
+                            />
+                            <label> เดือนสิ้นสุด </label>
+                            <input type="month"   value={Dateendselected}
+                                onChange={(e)=>{
+                                    handleronChangeDatelength()
+                                    if(e && e.target && e.target.value ){
+                                    
+                                        setDateendselected( Datestartselected ,e.target.value )
+                                    }
+                                }}
+                            />
+                            <button  onClick={ handlersearch }>  <SearchIcon/> ค้นหา </button>
+                        </div>
                     </div>
                     <div className={styles.body}>
                         <div className={styles.profit}>

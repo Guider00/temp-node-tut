@@ -203,8 +203,8 @@ export const export_booking_pdf = (booking, owner, customer_details) => {
         // doc.text("Breakfast :" ,102, 13*8+3, {align: 'left'})
         // doc.text("อาหารเช้า :" ,102, 112, {align: 'left'})
 
-        doc.text("Hotel :", 102, 93, { align: 'left' })
-        doc.text("โรงแรม :", 102, 98, { align: 'left' })
+        doc.text("Apartment/Hotel :", 102, 93, { align: 'left' })
+        doc.text("อพาร์ทเม้นท์/โรงแรม :", 102, 98, { align: 'left' })
 
 
 
