@@ -7,7 +7,7 @@ import { Notifications } from "./Notifications/Notifications";
 import { Submenudropdown } from "./Submenudropdown/Submenudropdown";
 import { useSubscription, gql } from "@apollo/client";
 import { useEffect, useState } from "react";
-
+import { useMediaQuery } from 'react-responsive'
 import { Navbar, Container, Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -57,6 +57,10 @@ const dbstatustotext = (status) => {
 };
 
 export const Menubar = () => {
+    const isDesktop = useMediaQuery({
+		query: "(max-width: 1400px)"
+	});
+	
     const { data } = useSubscription(GET_MESSAGES);
     const { subdatabasestatus } =
         data !== undefined ? data : { subdatabasestatus: null };
@@ -74,112 +78,121 @@ export const Menubar = () => {
     }, [api_subalert]);
     return (
         <>
-            <Navbar className={styles.menu} expand="lg" bg="#E8E7E7"  variant="light">
-                <Container fluid>
+            <Navbar className={styles.menu} expand="xxl" bg="#E8E7E7" variant="light">
+                <Container fluid className={styles.main} bg="primary">
                     <Navbar.Brand href='/'>
                         <img src="/image/logo.png" alt="logo" width="60" height="50" />
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav" className={styles.container} >
-                        <Nav className="me-auto">
-                            <Nav.Link href="/home" className={styles.md}>
-                                Home
-                                <div>
-                                    <Home />
-                                </div>
-                            </Nav.Link>
-                            <Nav.Link href="/room" className={styles.md} >
-                                Overview
-                                <div>
-                                    <Home />
-                                </div>
-                            </Nav.Link>
-                            <Nav.Link href="/booking" className={styles.md} >
-                                จองห้อง
-                                <div>
-                                    <Book />
+                        
+                            <Nav className="me-auto">
+                                <Nav.Link href="/home" className={styles.md}>
+                                    Home
+                                    <div>
+                                        <Home />
+                                    </div>
+                                </Nav.Link>
+                                <Nav.Link href="/room" className={styles.md} >
+                                    Overview
+                                    <div>
+                                        <Home />
+                                    </div>
+                                </Nav.Link>
+                                <Nav.Link href="/booking" className={styles.md} >
+                                    จองห้อง
+                                    <div>
+                                        <Book />
 
-                                </div>
-                            </Nav.Link>
-                            <Nav.Link href="/check_in" className={styles.md}>
-                                ย้ายเข้า
-                                <div>
-                                    <Book />
-                                </div>
-                            </Nav.Link>
-                            <Nav.Link href="/check_out"  className={styles.md}>
-                                ย้ายออก
-                                <div>
-                                    <Book />
+                                    </div>
+                                </Nav.Link>
+                                <Nav.Link href="/check_in" className={styles.md}>
+                                    ย้ายเข้า
+                                    <div>
+                                        <Book />
+                                    </div>
+                                </Nav.Link>
+                                <Nav.Link href="/check_out" className={styles.md}>
+                                    ย้ายออก
+                                    <div>
+                                        <Book />
 
-                                </div>
-                            </Nav.Link>
-                            <Nav.Link href="/checkoutinform" className={styles.md}>
-                                แจ้งย้ายออก
-                                <div>
-                                    <Book />
+                                    </div>
+                                </Nav.Link>
+                                <Nav.Link href="/checkoutinform" className={styles.md}>
+                                    แจ้งย้ายออก
+                                    <div>
+                                        <Book />
 
-                                </div>
-                            </Nav.Link>
-                            <Nav.Link href="/createinvoice" className={styles.md}>
-                                สร้างใบแจ้งหนี้
-                                <div>
-                                    <Book />
+                                    </div>
+                                </Nav.Link>
+                                <Nav.Link href="/receipt" className={styles.md}>
+                                    ใบเสร็จ
+                                    <div>
+                                        <Book />
 
-                                </div>
-                            </Nav.Link>
-                            <Nav.Link href="/invoice" className={styles.md}>
-                                ใบแจ้งหนี้
-                                <div>
-                                    <Book />
-                                </div>
-                            </Nav.Link>
-                            <Nav.Link href="/Reimbursement" className={styles.md}>
-                                คืนเงินประกัน
-                                <div>
-                                    <Book />
-                                </div>
-                            </Nav.Link>
-                            <Nav.Link href="/contract" className={styles.md}>
-                                สัญญา
-                                <div>
-                                    <Book />
-                                </div>
-                            </Nav.Link>
-                            <Nav.Link href="/note" className={styles.md}>
-                                Note Room
-                                <div>
-                                    <Book />
-                                </div>
-                            </Nav.Link>
-                        </Nav>
+                                    </div>
+                                </Nav.Link>
+                                <Nav.Link href="/createinvoice" className={styles.md}  style={{width: isDesktop ? '' : '90px'}}>
+                                    สร้างใบแจ้งหนี้
+                                    <div>
+                                        <Book />
 
-                        <div>
-                            <div className={styles.dropdownReport}>
-                                <Submenudropdown id="submenusetting" label="Report" icon="list" links={[
-                                    { label: "Financial", href: "/report_financial", icon: "book" },
-                                    { label: "electrical", href: "/report_electrical", icon: "book" },
-                                    { label: "water", href: "/report_water", icon: "book" },
-                                ]} />
+                                    </div>
+                                </Nav.Link>
+                                <Nav.Link href="/invoice" className={styles.md}>
+                                    ใบแจ้งหนี้
+                                    <div>
+                                        <Book />
+                                    </div>
+                                </Nav.Link>
+                                <Nav.Link href="/Reimbursement" className={styles.md}>
+                                    คืนเงินประกัน
+                                    <div>
+                                        <Book />
+                                    </div>
+                                </Nav.Link>
+                                <Nav.Link href="/contract" className={styles.md}>
+                                    สัญญา
+                                    <div>
+                                        <Book />
+                                    </div>
+                                </Nav.Link>
+                                <Nav.Link href="/note" className={styles.md}>
+                                    Note Room
+                                    <div>
+                                        <Book />
+                                    </div>
+                                </Nav.Link>
+                            </Nav>
+
+                            <div>
+                                <div className={styles.dropdownReport}>
+                                    <Submenudropdown id="submenusetting" label="Report" icon="list" links={[
+                                        { label: "Financial", href: "/report_financial", icon: "book" },
+                                        { label: "electrical", href: "/report_electrical", icon: "book" },
+                                        { label: "water", href: "/report_water", icon: "book" },
+                                    ]} />
+                                </div>
                             </div>
-                        </div>
-                        <div>
-                            <div className={styles.dropdownSetting}>
-                                <Submenudropdown id="submenusetting" label="Setting" icon="settings" links={[
-                                    { label: "Building", href: "/building", icon: "book" },
-                                    { label: "Floor", href: "/floor", icon: "book" },
-                                    { label: "Member", href: "/Member", icon: "person" },
-                                    { label: "RoomType", href: "/profilepriceroom", icon: "settings" },
-                                    { label: "Meter", href: "/meterroom", icon: "settings" },
-                                    { label: "Portmeter", href: "/Portmeter", icon: "settings" },
-                                    { label: "overviewmeter", href: "/overviewmeter", icon: "settings" },
-                                    { label: "MQTTOverview", href: "/MQTToverview", icon: "settings" },
-                                    { label: "Realtimetable", href: "/Realtimetable", icon: "settings" },
-                                    { label: "Address", href: "/Address", icon: "settings" }
+                            <div>
+                                <div className={styles.dropdownSetting}>
+                                    <Submenudropdown id="submenusetting" label="Setting" icon="settings" links={[
+                                        { label: "Building", href: "/building", icon: "book" },
+                                        { label: "Floor", href: "/floor", icon: "book" },
+                                        { label: "Member", href: "/Member", icon: "person" },
+                                        { label: "RoomType", href: "/profilepriceroom", icon: "settings" },
+                                        { label: "Meter", href: "/meterroom", icon: "settings" },
+                                        { label: "Portmeter", href: "/Portmeter", icon: "settings" },
+                                        { label: "overviewmeter", href: "/overviewmeter", icon: "settings" },
+                                        { label: "MQTTOverview", href: "/MQTToverview", icon: "settings" },
+                                        { label: "Realtimetable", href: "/Realtimetable", icon: "settings" },
+                                        { label: "Address", href: "/Address", icon: "settings" }
 
-                                ]} />
+                                    ]} />
+                                </div>
                             </div>
-                        </div>
+                        
                     </Navbar.Collapse>
                     <div className={styles.menu_right}>
                         <Notifications number={numberalart} />

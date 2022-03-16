@@ -226,7 +226,7 @@
 }
 
 .headertable>.input>.zonetextbox>input{
-    width: auto;
+    width: 80%;
     font-size: x-large;
     margin-left: 2rem;
     margin-right: 2rem;

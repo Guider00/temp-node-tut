@@ -31,6 +31,8 @@ import { filter_rooms } from './function';
 //address
 import { AddressData } from "../../subcomponents/AddressData/AddressData";
 
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 
 
 //confirmDialog
@@ -341,7 +343,7 @@ export const Invoice = () => {
         }
 
 
-    }, [Invoice, Invoice.data, rooms , IDrooms ,selectroom ])
+    }, [Invoice, Invoice.data, rooms, IDrooms, selectroom])
 
 
     let header_table = ["", "เลขที่ใบแจ้งหนี้", "ชื่อห้อง", "วันที่ออก", "สถานะ", "สถานะการพิมพ์", "รอบบิล"]
@@ -390,16 +392,17 @@ export const Invoice = () => {
                                             setDateEnd(value)
                                         }}
                                     />
+                                    <Tippy content='เลือกช่วงเวลาที่ต้องการให้แสดง'>
+                                        <button
+                                            className={styles.calendar}
+                                            onClick={() => {
+                                                setdefaultCalendar({
+                                                    isLoading: true
+                                                })
+                                            }}
+                                        ><EventNoteIcon /></button>
 
-                                    <button
-                                        className={styles.calendar}
-                                        onClick={() => {
-                                            setdefaultCalendar({
-                                                isLoading: true
-                                            })
-                                        }}
-                                    ><EventNoteIcon /></button>
-
+                                    </Tippy>
                                     <label>แสดงผล</label>
                                     <input className={styles.side3} placeholder='0.00'></input>
                                     <label>เดือน</label>

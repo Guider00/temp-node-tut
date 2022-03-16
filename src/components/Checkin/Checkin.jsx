@@ -46,6 +46,9 @@ import { DiffDate } from '../../general_functions/time'
 
 import { useMediaQuery } from 'react-responsive'
 
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
+
 const filter_rooms = (rooms, options_search) => {
 	let _filter_table = []
 	if (rooms && options_search) {
@@ -889,11 +892,13 @@ export const Checkin = () => {
 											setDateEnd(value)
 										}}
 									/>
+									<Tippy content='เลือกช่วงเวลาที่ต้องการเข้าพัก'>
 									<button onClick={() => {
 										setdefaultCalendar({
 											isLoading: true
 										})
 									}}><EventNoteIcon /></button>
+									</Tippy>
 								</div>
 							</div>
 							<div className={styles.input}>
