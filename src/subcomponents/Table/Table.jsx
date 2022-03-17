@@ -91,8 +91,8 @@ export const Table = ({ Data, onClickDelete, onClickEdit, maxWidth }) => {
                                                             <div>
                                                                 {
                                                                     input.idtolabel ?
-                                                                        <input disabled={true} value={input.idtolabel(data_display(ele_body, input.property))} type="text" /> :
-                                                                        <input disabled={true} value={data_display(ele_body, input.property)} type="text" />
+                                                                        <input className={styles.input_body_1} disabled={true} value={input.idtolabel(data_display(ele_body, input.property))} type="text" /> :
+                                                                        <input className={styles.input_body_2} disabled={true} value={data_display(ele_body, input.property)} type="text" />
                                                                 }
 
                                                             </div>
@@ -110,7 +110,7 @@ export const Table = ({ Data, onClickDelete, onClickEdit, maxWidth }) => {
                                                 (Data.topic.length > (width > 800 ? (6) : (4))) ? <td></td> : null
                                                 :  // << disable menu 
                                                 <td key={`menutable_${row_index}`}>
-                                                    <div>
+                                                    <div className={styles.input_body_3}>
                                                         <button onClick={() => {
                                                             onClickDelete ?
                                                                 onClickDelete(ele_body['id']) : console.log('delete', ele_body['id'])

@@ -64,8 +64,8 @@
     margin: 1rem auto;
     font-size: medium;
     background: none;
-    transition: 0.3s;
-    border-radius: 8px;
+    transition: 0.1s;
+    border-radius: 5px;
 }
 .container>.main>.header>.headerall:hover{
     transform: scale(1.1);
@@ -81,8 +81,8 @@
     font-size: medium;
     background: none;
     cursor: pointer;
-    border-radius: 8px;
-    transition: 0.3s;
+    border-radius: 5px;
+    transition: 0.1s;
    
     
     
@@ -176,8 +176,8 @@
     padding: 0.5rem;
 
     font-size: 15px;
-    border-radius: 10px;
-    transition: 0.3s;
+    border-radius: 5px;
+    transition: 0.1s;
     
     
     
@@ -195,8 +195,8 @@
     min-width: 80px;
     height:40px;
     font-size: 15px;
-    border-radius: 10px;
-    transition: 0.3s;
+    border-radius: 5px;
+    transition: 0.1s;
     
     
     

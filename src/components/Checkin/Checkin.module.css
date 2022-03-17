@@ -231,7 +231,21 @@
     margin-left: 2rem;
     margin-right: 2rem;
 }
-
+.button_search{
+    margin: 0.1rem;
+    border-radius: 5px;
+    display: flex;
+    padding: 2px;
+    
+}
+.icon_search{
+    margin-top: 0.2rem;
+}
+@media screen  and (max-width:1210px){
+    .icon_search{
+        margin: 0;
+    }
+}
 .headertable>.input>.zonebtn{
     display: flex;
     justify-content: space-evenly;

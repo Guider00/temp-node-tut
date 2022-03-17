@@ -935,6 +935,7 @@ export const Checkin = () => {
 									</select>
 
 									<button 
+									className={styles.button_search}
 									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 									onClick={async () => {
 										GET_Rooms.refetch()
@@ -951,7 +952,7 @@ export const Checkin = () => {
 
 									}}>
 										{' '}
-										ค้นหา<SearchIcon />{' '}
+										ค้นหา<SearchIcon className={styles.icon_search}/>{' '}
 									</button>
 								</div>
 

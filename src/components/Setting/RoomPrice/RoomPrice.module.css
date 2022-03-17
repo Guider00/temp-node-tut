@@ -1,4 +1,7 @@
-
+.tablestyle{
+    background-color: red;
+    width: 100%;
+}
 .header{
     display: flex;
     flex-direction: row;
@@ -57,9 +60,36 @@
 
 .body>.row{
     display: flex;
-    flex-basis: 100%;
+    flex-direction: column;
     margin-top: 1rem;
     margin-bottom: 0.5rem;
+}
+.body>.row>div:nth-child(1){
+    padding: 5px;
+    display: flex;
+    justify-content: space-around;
+}
+.body>.row>div:nth-child(2){
+    padding: 5px;
+    display: flex;
+    justify-content: space-around;
+}
+.body>.row>button{
+    margin:0.5rem auto;
+    text-align: center;
+    color: white;
+    background-color:rgb(218, 116, 0);
+    width: 20%;
+    border: none;
+    border-radius: 5px;
+    padding: 2px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    
+}
+.body>.row>button:hover{
+    transform: scale(1.05);
+    background-color:rgb(230, 127, 10);
+    
 }
 .body>.topic{
     display: flex;

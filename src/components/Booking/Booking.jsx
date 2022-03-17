@@ -763,6 +763,7 @@ export const Booking = () => {
 
 									</select>
 									<button
+										className={styles.button_search}
 										style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 										onClick={
 											async () => {
@@ -775,7 +776,7 @@ export const Booking = () => {
 												// setrooms(_filter_rooms);
 											}}>
 										{' '}
-										ค้นหา<SearchIcon />{' '}
+										ค้นหา<SearchIcon className={styles.icon_search}/>{' '}
 									</button>
 								</div>
 							</div>

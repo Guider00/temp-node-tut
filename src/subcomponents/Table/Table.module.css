@@ -5,8 +5,17 @@
     justify-content: center;
     max-height: 800px;
 }
+.input_body_1{
+    border: none;
+}
+.input_body_2{
+    border: none;
+}
+.input_body_3{
+    margin: 0.5rem;
+}
 .table{
-    
+    width: 100%;
     border: 1px solid rgb(255, 255, 255);
     margin: 1em;
     max-width: 800px;

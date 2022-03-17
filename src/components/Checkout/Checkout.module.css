@@ -94,8 +94,21 @@
 }
 
 
-
-
+.button_search{
+    margin: 0.1rem;
+    border-radius: 5px;
+    display: flex;
+    padding: 2px;
+    
+}
+.icon_search{
+    margin: 0.5rem auto;
+}
+@media screen  and (max-width:1210px){
+    .icon_search{
+        margin: 0;
+    }
+}
 
 .tableroomselect{
     display: flex;

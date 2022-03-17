@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 import { Floormodal } from '../Setting/Floor/Floormodal'
 
 
-import { API_queryroomprice, API_queryBuildings, API_queryFloors, API_updateRoom, API_deleteRoom, API_queryMembers, API_queryRooms, API_createRoom} from '../../API/index'
+import { API_queryroomprice, API_queryBuildings, API_queryFloors, API_updateRoom, API_deleteRoom, API_queryMembers, API_queryRooms, API_createRoom } from '../../API/index'
 
 
 import {
@@ -23,7 +23,7 @@ import {
     API_GET_MeterRooms
 } from '../../API/Schema/MeterRoom/MeterRoom';
 
-import { useQuery} from '@apollo/client';
+import { useQuery } from '@apollo/client';
 
 
 import { Inputconfig, drowdownmenuroomconfig, option_status_room } from './config'
@@ -442,14 +442,14 @@ export const Overview = () => {
                 let building = [], floor = [], member = [], meterroom = [], type = [], status = [], _RoomType = {}
                 let res_building = await API_queryBuildings()
                 if (res_building && res_building.status === 200) {
-    
+
                     building = res_building.data.Buildings.map(e => ({ label: e.name, value: e.id }))
                 }
                 let res_floor = await API_queryFloors()
                 if (res_floor && res_floor.status === 200) {
                     floor = res_floor.data.Floors.map(e => ({ label: e.name, value: e.id, building: e.building }))
                 }
-    
+
                 let res_member = await API_queryMembers()
                 if (res_member && res_member.status === 200) {
                     member = res_member.data.Members.map(e => ({ label: e.name, value: e.id }))
@@ -460,27 +460,27 @@ export const Overview = () => {
                     type = type.map(e => ({ label: e, value: e }))
                     console.log(type)
                 }
-    
+
                 // let res_meterroom = await API_queryMeterRooms()
-    
+
                 // if(res_meterroom && res_meterroom.status === 200){
                 //     meterroom =  res_meterroom.data.MeterRooms.map(e =>  ({label:e.name , value:e.id})  )
-    
+
                 // }
-    
+
                 if (MeterRooms && MeterRooms.data && MeterRooms.data.length > 0) {
-    
+
                     meterroom = [...MeterRooms.data.MeterRooms.map(e => ({ label: e.name, value: e.id }))]
-    
+
                 }
-    
+
                 let res_roomtype = await GET_RoomType.refetch();
                 console.log('res_roomtype', res_roomtype)
                 if (res_roomtype && res_roomtype.data) {
                     _RoomType = res_roomtype.data.RoomTypes.map(e => ({ label: e.name, value: e.id }))
-    
+
                 }
-    
+
                 // set Option form input
                 status = option_status_room
                 resolve({ 'building': building, 'floor': floor, 'member': member, 'meterroom': meterroom, 'RoomType': _RoomType, status: status })
@@ -557,7 +557,7 @@ export const Overview = () => {
         }
         inital_data()
 
-    }, [_load,GET_RoomType,MeterRooms])
+    }, [_load, GET_RoomType, MeterRooms])
     return (
         <>
             {_showmodal ? <Floormodal onClose={() => setshowmodal(false)}
@@ -588,47 +588,48 @@ export const Overview = () => {
             <div className={styles.body}>
                 {_optionbuilding && _optionfloor && _optionRoomType ?
                     <div className={styles.rowmenu}>
-                        <div className={styles.option}>
-                            <label> อาคาร</label>
-                            <select onchange={(e) => { console.log(e.target.value) }}>
-                                <option> All </option>
-                                {_optionbuilding.map((item, index) => <option key={index}>{item.label}</option>)}
-                            </select>
+                        <div className={styles.select_type}>
+                            <div className={styles.option}>
+                                <label> อาคาร</label>
+                                <select onchange={(e) => { console.log(e.target.value) }}>
+                                    <option> All </option>
+                                    {_optionbuilding.map((item, index) => <option key={index}>{item.label}</option>)}
+                                </select>
+                            </div>
+                            <div className={styles.option}>
+                                <label> ชั้น</label>
+                                <select onchange={(e) => { console.log(e.target.value) }}>
+                                    <option> All </option>
+                                    {_optionfloor.map((item, index) => <option key={index}>{item.label}</option>)}
+                                </select>
+                            </div>
+
+                            <div className={styles.option} >
+                                <label> ประเภทห้อง </label>
+                                <select onchange={(e) => { console.log(e.target.value) }}>
+                                    <option> All </option>
+                                    {_optionRoomType && _optionRoomType.length ? _optionRoomType.map((item, index) => <option key={index}>{item.label}</option>) : null}
+                                </select>
+                            </div>
+
+                            <div className={styles.option} >
+                                <label> สถานะห้อง </label>
+                                <select onchange={(e) => { console.log(e.target.value) }}>
+                                    <option> All </option>
+                                    {get_option(Rooms, 'status').map((build, index) => <option key={index}>{build}</option>)}
+                                </select>
+                            </div>
+
                         </div>
-                        <div className={styles.option}>
-                            <label> ชั้น</label>
-                            <select onchange={(e) => { console.log(e.target.value) }}>
-                                <option> All </option>
-                                {_optionfloor.map((item, index) => <option key={index}>{item.label}</option>)}
-                            </select>
+                        <div className={styles.create_button}>
+                            <div className={styles.optionbtn} >
+                                <button onClick={() => Onclick_create()}>
+                                    <div> สร้างห้อง </div>
+                                    <div><Add /> </div>
+                                </button>
+                            </div>
+
                         </div>
-
-                        <div className={styles.option} >
-                            <label> ประเภทห้อง </label>
-                            <select onchange={(e) => { console.log(e.target.value) }}>
-                                <option> All </option>
-                                {_optionRoomType && _optionRoomType.length ? _optionRoomType.map((item, index) => <option key={index}>{item.label}</option>) : null}
-                            </select>
-                        </div>
-
-                        <div className={styles.option} >
-                            <label> สถานะห้อง </label>
-                            <select onchange={(e) => { console.log(e.target.value) }}>
-                                <option> All </option>
-                                {get_option(Rooms, 'status').map((build, index) => <option key={index}>{build}</option>)}
-                            </select>
-                        </div>
-
-
-                        <div className={styles.optionbtn} >
-                            <button onClick={() => Onclick_create()}>
-                                <div> สร้างห้อง </div>
-                                <div><Add /> </div>
-                            </button>
-                        </div>
-
-
-
                     </div>
                     :
                     null}
