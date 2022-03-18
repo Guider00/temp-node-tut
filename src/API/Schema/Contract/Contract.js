@@ -49,6 +49,33 @@ query{
                 
             }
         }
+
+        typerent
+        mounthly_cost
+        insurance_cost
+        depositrent_cost
+
+        mounthly_type_electrical_cost
+        mounthly_rate_electrical
+        mounthly_minimum_cost_electrical
+        mounthly_buffet_cost_electrical
+        mounthly_type_water_cost
+        mounthly_rate_water
+        mounthly_minimum_cost_water
+        mounthly_buffet_cost_water
+        
+        daily_cost
+        daily_type_electrical_cost
+        daily_rate_electrical
+        daily_minimum_cost_electrical
+        daily_buffet_cost_electrical
+        daily_type_water_cost
+        daily_rate_water
+        daily_minimum_cost_water
+        daily_buffet_cost_water
+
+        filecontract
+
     }
 }
 

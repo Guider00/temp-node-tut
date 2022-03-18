@@ -9,10 +9,11 @@ import CalendarPicker from '../../subcomponents/Calendar/Calendar.js';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import PrintIcon from '@mui/icons-material/Print';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-
+import DeleteIcon from '@mui/icons-material/Delete';
 import {
     API_GET_Contract,
-    API_DELETE_Contract
+    API_DELETE_Contract,
+    API_UPDATE_Contract
 } from '../../API/Schema/Contract/Contract'
 import {
     API_GET_RoomType
@@ -21,7 +22,7 @@ import { API_GET_Rooms } from '../../API/Schema/Room/Room'
 // import { export_Contract } from '../../general_functions/pdf/export/export_pdf';
 
 import { FileUploader } from './FileUploader/FileUploader'
-import { filter_rooms, Rooms_to_table, ChangeRadio, FormFilter } from './function';
+import { filter_rooms, Rooms_to_table,  FormFilter } from './function';
 
 
 import { toBase64 } from '../../general_functions/convert'
@@ -56,7 +57,8 @@ export const Contract = () => {
     const getRooms = useQuery(API_GET_Rooms)
     const Contract = useQuery(API_GET_Contract);
     const [deleteContract] = useMutation(API_DELETE_Contract);
-        // const updateContract = useMutation(API_UPDATE_Contract);
+    const [updateContract] = useMutation(API_UPDATE_Contract);
+
     const query_RoomType = useQuery(API_GET_RoomType);
     const [roomtypes, setroomtypes] = useState([])
     const [loadingpage, setloadingpage] = useState(false)
@@ -69,26 +71,125 @@ export const Contract = () => {
     const [getEnd, setgetEnd] = useState([]);
     const [tbsortingstyle_newmetoold, settbsortingstyle_newmetoold] = useState(true);
     const [selectedcontract, setselectedcontract] = useState(null)
-    const { handleChangeRadio, disabled } = ChangeRadio();
     const { handleChangedformfilter, formfilter, hadleChangedformfilterTodefault, setformfilter } = FormFilter();
+        const promiseconfirmcontract = async (contract) =>{
+            return new Promise( async (resolve,rej)=>{
+                try{
+                let res =  await  updateContract({
+                    variables:{
+                        id:`${contract.id}`,
+                        input: {
+                            status:"สำเร็จ"
+                        }
+                     } })
+                resolve(res)
+                }catch(e){
+                    resolve(null)
+                }
+               
 
-    // const [formContract , setformContract] = useState({
-    //      typeroom:"",
-    //      typerent:"",
-    //      rentprince:"",
-    //      daysprice:"",
-    //      rate_electrical:"",
-    //      minimumrateprice_electrical:"",
-    //      buffetprice_electrical:"",
-    //      rate_water:"",
-    //      minimumrateprice_water:"",
-    //      buffetprice_water:"",
-    //      file_Contract:""
-    // })
+            }).catch(e =>{
+                return null 
+            })
+        }
+        const handlerConfirmcontract = async (contracts) =>{
+            try{
+                console.log('contracts',contracts)
+                let primus_funcs =contracts.map( contract =>{
+                    return promiseconfirmcontract(contract)
+                })
+                
+                let list_res =  await  Promise.all ( (primus_funcs) )
+                console.log('list_res',list_res)
+                list_res = list_res.filter(item => item)
+                if(contracts && contracts.length &&contracts.length === list_res.length ){
+                    Contract.refetch()
+                }else{
+                    console.error('เปลี่ยน สถานะล้มเหลว')
+                }
+            }catch(e){
+                console.log(e)
+            }
+        }
+        const promisedeletecontract = async (contract) =>{
+            return new Promise( async (resolve,rej)=>{
+                try{
+                let res =  await  deleteContract({
+                    variables:{
+                        id:`${contract.id}`
+                     } })
+                resolve(res)
+                }catch(e){
+                    resolve(null)
+                }
+               
 
-        // const hanlderSaveContract = async (contract) =>{
+            }).catch(e =>{
+                return null 
+            })
+        }
+        const handlerDeleteContracts  =async (contracts) =>{
+            try{
+                let primus_funcs =contracts.map( contract =>{
+                    return  promisedeletecontract(contract)
+                })
+                
+                let list_res =  await  Promise.all ( (primus_funcs) )
+              
+                list_res = list_res.filter(item => item)
+                if(contracts && contracts.length &&contracts.length === list_res.length ){
+                    Contract.refetch()
+                }else{
+                    console.error('ยกเลิกสัญญา สถานะล้มเหลว')
+                }
+            }catch(e){
+                console.log(e)
+            }
+        }
 
-        // }
+        const handlderSaveContract = async (contract) =>{
+            try{
+                console.log('update contract ',contract)
+              let res =  await  updateContract({
+                variables:{
+                    id:`${contract.id}`,
+                    input: {
+
+                        typerent:contract.typerent,
+                        mounthly_cost:contract.mounthly_cost,
+                        insurance_cost:contract.insurance_cost,
+                        depositrent_cost:contract.depositrent_cost,
+                    
+                        mounthly_type_electrical_cost:contract.mounthly_type_electrical_cost,
+                        mounthly_rate_electrical:contract.mounthly_rate_electrical,
+                        mounthly_minimum_cost_electrical:contract.mounthly_minimum_cost_electrical,
+                        mounthly_buffet_cost_electrical:contract.mounthly_buffet_cost_electrical,
+                        mounthly_type_water_cost:contract.mounthly_type_water_cost,
+                        mounthly_rate_water:contract.mounthly_rate_water,
+                        mounthly_minimum_cost_water:contract.mounthly_minimum_cost_water,
+                        mounthly_buffet_cost_water:contract.mounthly_buffet_cost_water,
+                        
+                        daily_cost:contract.daily_cost,
+                        daily_type_electrical_cost:contract.daily_type_electrical_cost,
+                        daily_rate_electrical:contract.daily_rate_electrical,
+                        daily_minimum_cost_electrical:contract.daily_minimum_cost_electrical,
+                        daily_buffet_cost_electrical:contract.daily_buffet_cost_electrical,
+                        daily_type_water_cost:contract.daily_type_water_cost,
+                        daily_rate_water:contract.daily_rate_water,
+                        daily_minimum_cost_water:contract.daily_minimum_cost_water,
+                        daily_buffet_cost_water:contract.daily_buffet_cost_water,
+                    
+                        filecontract:contract.filecontract
+                    }
+                }
+            })
+            if(res && res.data){
+                Contract.refetch()
+            }
+            }catch(error){
+
+            }
+        }
 
         const handlerEditContract = async (e,callback) =>{
             if(e && e.target && e.target.value && e.target.name ){
@@ -110,23 +211,9 @@ export const Contract = () => {
 
         }
 
-        const handlerDeleteContract = async (contract) => {
-            try {
-                console.log(contract.id)
-                let res = await deleteContract({
-                    variables: {
-                        id: `${contract.id}`
-                    }
-                })
-                if (res && res.data) {
-                    Contract.refetch() //<<
-                } else {
-                    // <<
-                }
-            } catch (e) {
-                console.log(e)
-            }
-        }
+        
+
+        
 
     const selectAll = () => {
             // let myCheckboxId = document.querySelector('#myCheckboxId')
@@ -307,7 +394,7 @@ export const Contract = () => {
 
             if (state) {
 
-                handlerDeleteContract(selectedcontract)
+                handlerDeleteContracts([...IDrooms])
                 handleConfirm('', false)
             } else {
                 handleConfirm('', false)
@@ -525,7 +612,7 @@ return (
 
                                                 }} />
                                         </td>
-                                        <td>{item && item.Contractnumber ? item.Contractnumber : "---"}</td>
+                                        <td>{item && item.id ? item.id.substring(item.id.length - 5) : "---"}</td>
                                         <td>{item && item.Room && item.Room.RoomType && item.Room.RoomType.name  ?  item.Room.RoomType.name :  "---"}</td>
                                         <td>{item && item.Room && item.Room.name ? item.Room.name : "---"}</td>
                                         <td>{item && item.Room && item.Room.checkin && item.Room.checkin.checkin_type ? item.Room.checkin.checkin_type : "---"}</td>
@@ -533,7 +620,10 @@ return (
                                         <td>{item && item.Room && item.Room.members && item.Room.members.length > 0 && item.Room.members[0].lastname ? item.Room.members[0].lastname : "---"}</td>
                                         <td>{item && item.Room && item.Room.checkin && item.Room.checkin.checkin_date ? item.Room.checkin.checkin_date : "---"}</td>
                                         <td>{item && item.status ? item.status : "---"}</td>
-                                        <td>{"-- link เอกสาร --"}</td>
+                                        <td>{item && item.filecontract? 
+                                        <input type="image" src={item.filecontract}  alt="contract"  height={50} width={50} />
+                                        
+                                        :"---"}</td>
                                         <td>{item && item.Room && item.Room.checkout && item.Room.checkout.checkout_date ? item.Room.checkout.checkout_date : "---"}</td>
                                         
                                     </tr>
@@ -550,49 +640,30 @@ return (
                 <div className={styles.button}>
                         <button className={styles.print}
                             onClick={async ()=>{
-                                try{
-                                  
-                                    if( IDrooms && IDrooms.length > 0 ){
-                                      //    export_Contract(IDrooms,defaultData)
-                                     let res = await  Promise.all(IDrooms).then(  (IDrooms) =>{
-                                        let listres = IDrooms.map( async contract=>{
-                                            try{
-                                            let res = await  deleteContract({
-                                                                                variables: { 
-                                                                                    id:`${contract.id}`
-                                                                                }
-                                                                            })
-                                                 if(res && res.data){
-                                                     return res
-                                                 }else{
-                                                      return ("ลบสัญญา Error ")
-                                                 }
-                                            }catch(e){
-                                                return e
-                                            }
-                                         } )
-                                        
-                                         return listres;
-                                     })
-                                     console.log(res)
-                                   
-                                         Contract.refetch()
-                                  
-                     
-    
-                                    }
-                                }catch(e){
-                                    console.error(e)
-
-                                }
+                                //TODO: Export PDF สัญญาณ หลายๆ หน้า 
                         }}
                     > <PrintIcon/> พิมพ์</button>
                      <button className={styles.confirm}
                         onClick={()=>{
-
+                      
+                            handlerConfirmcontract([...IDrooms]  )
                         }}
                      >
                          <CheckCircleIcon/> ยืนยันสถานะสัญญา
+                    </button>
+
+                    <button className={styles.confirm}
+                        onClick={()=>{
+                            if (IDrooms && IDrooms.length > 0) {
+                                handleConfirm('Are you sure to Delete?', true)
+
+                            } else {
+                                console.log('No select ID')
+                            }
+                           // handlerConfirmcontract([...IDrooms]  )
+                        }}
+                     >
+                         <DeleteIcon/> ยกเลิกสัญญา
                     </button>
                 </div>
 
@@ -622,9 +693,9 @@ return (
                     </select>
                     <button 
                         disabled={selectedcontract ? false:true }
-                        onClick={()=>{
-                             //     let  _contract = selectedcontract
-                             // TODO: set default value form room 
+                        onClick={ () => {
+
+                          
                         }}
                     >
                             ตั้งค่าจากประเภทห้อง
@@ -636,57 +707,58 @@ return (
                     <div className={styles.month}>
                         <label className={styles.month}>รายเดือน :</label>
                         <input
-                            id='month'
-                            name='month'
+                            name='typerent'
                             type='radio'
                             className={styles.check}
-                            onChange={handleChangeRadio}
-                            checked={selectedcontract && selectedcontract.Room && selectedcontract.Room.RoomType && selectedcontract.Room.RoomType.type &&
-                                selectedcontract.Room.RoomType.type === "รายเดือน" ?
-                                true : false
-                            }
+                            
+                            onClick={ ()=>{
+
+                                handlerEditContract({target:{
+                                    name:'typerent',
+                                    value:'รายเดือน'
+                                }})
+                            }}
+                            checked={ selectedcontract && selectedcontract.typerent === "รายเดือน"  ? true:false   }
+                          
                         />
                         <div className={styles.input1}>
                             <label className={styles.inputtext1}>ค่าเช่าห้อง :</label>
                             <input
                                 placeholder='0.00'
-                                disabled={disabled.disabledMonth}
+                                disabled={  (  selectedcontract &&  selectedcontract.typerent === "รายเดือน")  ? false:true }
                                 className={styles.inputbox1}
 
-                                name='mounthlyprice'
+                                name='mounthly_cost'
                                 value={
-                                    selectedcontract && selectedcontract.mounthlyprice ? selectedcontract.mounthlyprice :"0"
+                                    selectedcontract && selectedcontract.mounthly_cost ? selectedcontract.mounthly_cost :"0"
                                 }
                                 onChange={handlerEditContract}
 
-                                defaultValue={selectedcontract && selectedcontract.Room && selectedcontract.Room.RoomType &&
-                                    selectedcontract.Room.RoomType.monthlyprice ? selectedcontract.Room.RoomType.monthlyprice : ""}
+                               
                            
                             ></input>
                             <label className={styles.inputtext2}>ค่าประกัน :</label>
                             <input
                                 placeholder='0.00'
-                                disabled={disabled.disabledMonth}
+                                disabled={  (  selectedcontract &&  selectedcontract.typerent === "รายเดือน")  ? false:true }
                                 className={styles.inputbox2}
 
-                                name='Insurance'
+                                name='insurance_cost'
                                 value={
-                                    selectedcontract && selectedcontract.Insurance ? selectedcontract.Insurance :"0"
+                                    selectedcontract && selectedcontract.insurance_cost ? selectedcontract.insurance_cost :"0"
                                 }
                                 onChange={handlerEditContract}
 
-                                defaultValue={selectedcontract && selectedcontract.Room && selectedcontract.Room.checkin &&
-                                    selectedcontract.Room.checkin.rental_deposit ? selectedcontract.Room.checkin.rental_deposit : ""}
                             ></input>
                             <br />
                             <label className={styles.inputtext3}>ค่าเช่าล่วงหน้า :</label>
                             <input
-                                disabled={disabled.disabledMonth}
+                                disabled={  (  selectedcontract &&  selectedcontract.typerent === "รายเดือน")  ? false:true }
                                 placeholder='0.00'
-                                name='deposit_rent'
+                                name='depositrent_cost'
 
                                 value={
-                                    selectedcontract && selectedcontract.deposit_rent ? selectedcontract.deposit_rent :"0"
+                                    selectedcontract && selectedcontract.depositrent_cost ? selectedcontract.depositrent_cost :"0"
                                 }
                                 onChange={handlerEditContract}
 
@@ -701,15 +773,15 @@ return (
                             <br />
                             <label className={styles.inputtext5}>ไฟฟ้า :</label>
                             <input
-                                disabled={disabled.disabledMonth}
+                                disabled={  (  selectedcontract &&  selectedcontract.typerent === "รายเดือน")  ? false:true }
                                 placeholder='0.00'
                                 className={styles.inputtext6}
-                                name="type_electrical_cost"
-                                checked={selectedcontract && selectedcontract.type_electrical_cost === 'type_perunit'? true:false }
+                                name="mounthly_type_electrical_cost"
+                                checked={selectedcontract && selectedcontract.mounthly_type_electrical_cost === 'type_perunit'? true:false }
                                 onChange={()=>handlerEditContract(
                                     {
                                         target:{
-                                        name:"type_electrical_cost",
+                                        name:"mounthly_type_electrical_cost",
                                         value:"type_perunit",
                                         type:"checkbox"
                                         }
@@ -720,39 +792,38 @@ return (
                             />
                          
                             <input
-                                disabled={disabled.disabledMonth}
+                                disabled={  (  selectedcontract &&  selectedcontract.typerent === "รายเดือน")  ? false:true }
                                 placeholder='0.00'
                                 className={styles.inputbox1}
-                                name='rate_electrical'
+                                name='mounthly_rate_electrical'
                                 value={
-                                    selectedcontract && selectedcontract.rate_electrical ? selectedcontract.rate_electrical :"0"
+                                    selectedcontract && selectedcontract.mounthly_rate_electrical ? selectedcontract.mounthly_rate_electrical :"0"
                                 }
                                 onChange={handlerEditContract}
-                                defaultValue={selectedcontract && selectedcontract.Room && selectedcontract.Room.RoomType &&
-                                    selectedcontract.Room.RoomType.rate_electrical ? selectedcontract.Room.RoomType.rate_electrical : ""}
+                               
                             ></input>
 
                             <input
-                                disabled={disabled.disabledMonth}
+                                disabled={  (  selectedcontract &&  selectedcontract.typerent === "รายเดือน")  ? false:true }
                                 placeholder='0.00'
                                 
-                                name='minimum_cost_electrical'
+                                name='mounthly_minimum_cost_electrical'
                                 value={
-                                    selectedcontract && selectedcontract.minimum_cost_electrical ? selectedcontract.minimum_cost_electrical :"0"
+                                    selectedcontract && selectedcontract.mounthly_minimum_cost_electrical ? selectedcontract.mounthly_minimum_cost_electrical :"0"
                                 }
                                 onChange={handlerEditContract}
 
                                 className={styles.inputbox2} />
                             <label>บาท</label>
                             <input
-                                disabled={disabled.disabledMonth}
+                                disabled={  (  selectedcontract &&  selectedcontract.typerent === "รายเดือน")  ? false:true }
                                 placeholder='0.00'
-                                name="type_electrical_cost"
-                                checked={selectedcontract && selectedcontract.type_electrical_cost === 'type_buffet'? true:false }
+                                name="mounthly_type_electrical_cost"
+                                checked={selectedcontract && selectedcontract.mounthly_type_electrical_cost === 'type_buffet'? true:false }
                                 onChange={()=>handlerEditContract(
                                     {
                                         target:{
-                                        name:"type_electrical_cost",
+                                        name:"mounthly_type_electrical_cost",
                                         value:"type_buffet",
                                         type:"checkbox"
                                         }
@@ -761,27 +832,26 @@ return (
                                 
                                 className={styles.checkbox2} type='checkbox' />
                             <input
-                                disabled={disabled.disabledMonth}
-                                name="buffet_cost_electrical"
-                                value={selectedcontract && selectedcontract.buffet_cost_electrical ? selectedcontract.buffet_cost_electrical :'0' }
+                                disabled={  (  selectedcontract &&  selectedcontract.typerent === "รายเดือน")  ? false:true }
+                                name="mounthly_buffet_cost_electrical"
+                                value={selectedcontract && selectedcontract.mounthly_buffet_cost_electrical ? selectedcontract.mounthly_buffet_cost_electrical :'0' }
                                 onChange={handlerEditContract}
 
                                 placeholder='0.00' className={styles.inputbox3}
-                                defaultValue={selectedcontract && selectedcontract.Room && selectedcontract.Room.RoomType &&
-                                    selectedcontract.Room.RoomType.totalprice_electrical ? selectedcontract.Room.RoomType.totalprice_electrical : ""}
+                               
                             />
                             <label>บาท</label>
                             <br />
                             <label className={styles.inputtext7}>น้ำ :</label>
                             <input
-                                disabled={disabled.disabledMonth}
+                                disabled={  (  selectedcontract &&  selectedcontract.typerent === "รายเดือน")  ? false:true }
                                 placeholder='0.00'
-                                name="type_water_cost"
-                                checked={selectedcontract && selectedcontract.type_water_cost === 'type_perunit'? true:false }
+                                name="mounthly_type_water_cost"
+                                checked={selectedcontract && selectedcontract.mounthly_type_water_cost === 'type_perunit'? true:false }
                                 onChange={()=>handlerEditContract(
                                     {
                                         target:{
-                                        name:"type_water_cost",
+                                        name:"mounthly_type_water_cost",
                                         value:"type_perunit",
                                         type:"checkbox"
                                         }
@@ -790,36 +860,32 @@ return (
 
                                 className={styles.inputtext6} type='checkbox' />
                             <input
-                                disabled={disabled.disabledMonth}
+                                disabled={  (  selectedcontract &&  selectedcontract.typerent === "รายเดือน")  ? false:true }
                                 placeholder='0.00'
                                 className={styles.inputbox1}
                                 
-                                name="rate_water"
-                                value={selectedcontract && selectedcontract.rate_water ?  selectedcontract.rate_water :'0'}
+                                name="mounthly_rate_water"
+                                value={selectedcontract && selectedcontract.mounthly_rate_water ?  selectedcontract.mounthly_rate_water :'0'}
                                 onChange={handlerEditContract}
-
-                                defaultValue={selectedcontract && selectedcontract.Room && selectedcontract.Room.RoomType &&
-                                    selectedcontract.Room.RoomType.rate_water ? selectedcontract.Room.RoomType.rate_water : ""}
                             />
                             <input
-                                disabled={disabled.disabledMonth}
+                                disabled={  (  selectedcontract &&  selectedcontract.typerent === "รายเดือน")  ? false:true }
                                 placeholder='0.00'
                                
-                                name="minimum_cost_water"
-                                value={selectedcontract && selectedcontract.minimum_cost_water ?  selectedcontract.minimum_cost_water :'0'}
+                                name="mounthly_minimum_cost_water"
+                                value={selectedcontract && selectedcontract.mounthly_minimum_cost_water ?  selectedcontract.mounthly_minimum_cost_water :'0'}
                                 onChange={handlerEditContract}
-                           
-
                                 className={styles.inputbox2}></input>
+
                             <label>บาท</label>
                             <input
-                                
-                                name="type_water_cost"
-                                checked={selectedcontract && selectedcontract.type_water_cost === 'type_buffet'? true:false }
+                                disabled={  (  selectedcontract &&  selectedcontract.typerent === "รายเดือน")  ? false:true }
+                                name="mounthly_type_water_cost"
+                                checked={selectedcontract && selectedcontract.mounthly_type_water_cost === 'type_buffet'? true:false }
                                 onChange={()=>handlerEditContract(
                                     {
                                         target:{
-                                        name:"type_water_cost",
+                                        name:"mounthly_type_water_cost",
                                         value:"type_buffet",
                                         type:"checkbox"
                                         }
@@ -827,16 +893,14 @@ return (
                                 }
     
 
-                                placeholder='0.00' className={styles.checkbox2} type='checkbox' />
+                                 className={styles.checkbox2} type='checkbox' />
                             <input
-                                disabled={disabled.disabledMonth}
-                                name="buffet_cost_water"
-                                value={selectedcontract && selectedcontract.buffet_cost_water? selectedcontract.buffet_cost_water:'0' }
+                                disabled={  (  selectedcontract &&  selectedcontract.typerent === "รายเดือน")  ? false:true }
+                                name="mounthly_buffet_cost_water"
+                                value={selectedcontract && selectedcontract.mounthly_buffet_cost_water? selectedcontract.mounthly_buffet_cost_water:'0' }
                                 onChange={handlerEditContract}
-                              
                                 placeholder='0.00' className={styles.inputbox3}
-                                defaultValue={selectedcontract && selectedcontract.Room && selectedcontract.Room.RoomType &&
-                                    selectedcontract.Room.RoomType.totalprice_water ? selectedcontract.Room.RoomType.totalprice_water : ""}
+                               
                             />
                             <label>บาท</label>
                         </div>
@@ -846,28 +910,38 @@ return (
                     <div className={styles.day}>
                         <label className={styles.day}>รายวัน :</label>
                         <input
-                            id='day'
+                           
                             name='day'
                             type='radio'
                             className={styles.check}
-                            onChange={handleChangeRadio}
-                            checked={selectedcontract && selectedcontract.Room && selectedcontract.Room.RoomType && selectedcontract.Room.RoomType.type &&
-                                selectedcontract.Room.RoomType.type === "รายวัน" ? true : false}
+
+                            onClick={ ()=>{
+
+                                handlerEditContract({target:{
+                                    name:'typerent',
+                                    value:'รายวัน'
+                                }})
+                            }}
+                            checked={ selectedcontract && selectedcontract.typerent === "รายวัน"  ? true:false   }
+
+                            // onChange={handleChangeRadio}
+                            // checked={selectedcontract && selectedcontract.Room && selectedcontract.Room.RoomType && selectedcontract.Room.RoomType.type &&
+                            //     selectedcontract.Room.RoomType.type === "รายวัน" ? true : false}
 
                         />
                         <div className={styles.input1}>
                             <label className={styles.inputtext1}>ค่าเช่าห้อง :</label>
                             <input
-                                disabled={disabled.disabledDay}
+                            
+                                disabled={  (  selectedcontract &&  selectedcontract.typerent === "รายวัน")  ? false:true }
                                 placeholder='0.00'
                                 className={styles.inputbox1}
-
-                                name="dailyprice"
+                                
+                                name="daily_cost"
                                 onChange={handlerEditContract}
-                                value={selectedcontract && selectedcontract.dailyprice ? selectedcontract.dailyprice : '0'}
+                                value={selectedcontract && selectedcontract.daily_cost ? selectedcontract.daily_cost : '0'}
 
-                                defaultValue={selectedcontract && selectedcontract.Room && selectedcontract.Room.RoomType &&
-                                    selectedcontract.Room.RoomType.dailyprice ? selectedcontract.Room.RoomType.dailyprice : ""}
+                           
                             />
                         </div>
                         <label className={styles.subday}>ค่าสาธารณูปโภค</label>
@@ -879,7 +953,7 @@ return (
                                 <br />
                                 <label className={styles.inputtext5}>ไฟฟ้า :</label>
                                 <input
-                                    disabled={disabled.disabledDay}
+                                    disabled={  (  selectedcontract &&  selectedcontract.typerent === "รายวัน")  ? false:true }
                                  
                                     name="daily_type_electrical_cost"
                                     checked={selectedcontract && selectedcontract.daily_type_electrical_cost === 'type_perunit'? true:false }
@@ -896,14 +970,14 @@ return (
                                     className={styles.inputtext6} 
                                     type='checkbox' />
                                 <input
-                                    disabled={disabled.disabledDay}
+                                    disabled={  (  selectedcontract &&  selectedcontract.typerent === "รายวัน")  ? false:true }
                                     placeholder='0.00'
                                     name="daily_rate_electrical"
                                     value={selectedcontract && selectedcontract.daily_rate_electrical ? selectedcontract.daily_rate_electrical : '0'}
                                     onChange={handlerEditContract}
                                     className={styles.inputbox1}></input>
                                 <input
-                                    disabled={disabled.disabledDay}
+                                    disabled={  (  selectedcontract &&  selectedcontract.typerent === "รายวัน")  ? false:true }
                                     name="daily_minimum_cost_electrical"
                                     value={selectedcontract && selectedcontract.daily_minimum_cost_electrical ? selectedcontract.daily_minimum_cost_electrical : '0'}
                                     onChange={handlerEditContract}
@@ -912,7 +986,7 @@ return (
                                     className={styles.inputbox2}></input>
                                 <label>บาท</label>
                                 <input
-                                    disabled={disabled.disabledDay}
+                                    disabled={  (  selectedcontract &&  selectedcontract.typerent === "รายวัน")  ? false:true }
                                     checked={selectedcontract && selectedcontract.daily_type_electrical_cost === 'type_buffet'? true:false }
                                     onChange={()=>handlerEditContract(
                                         {
@@ -926,7 +1000,7 @@ return (
                                     className={styles.checkbox2}
                                     type='checkbox' />
                                 <input
-                                    disabled={disabled.disabledDay}
+                                    disabled={  (  selectedcontract &&  selectedcontract.typerent === "รายวัน")  ? false:true }
                                     placeholder='0.00'
 
                                     name ="daily_buffet_cost_electrical"
@@ -938,7 +1012,7 @@ return (
                                 <br />
                                 <label className={styles.inputtext7}>น้ำ :</label>
                                 <input
-                                    disabled={disabled.disabledDay}
+                                    disabled={  (  selectedcontract &&  selectedcontract.typerent === "รายวัน")  ? false:true }
                                     checked={selectedcontract && selectedcontract.daily_type_water_cost === 'type_perunit'? true:false }
                                     onChange={()=>handlerEditContract(
                                         {
@@ -951,7 +1025,7 @@ return (
                                     }
                                     className={styles.inputtext6} type='checkbox' />
                                 <input
-                                    disabled={disabled.disabledDay}
+                                    disabled={  (  selectedcontract &&  selectedcontract.typerent === "รายวัน")  ? false:true }
                                     placeholder='0.00'
                                     name = "daily_rate_water"
                                     value ={selectedcontract && selectedcontract.daily_rate_water? selectedcontract.daily_rate_water:'0' }
@@ -960,7 +1034,7 @@ return (
 
                                     className={styles.inputbox1}></input>
                                 <input
-                                    disabled={disabled.disabledDay}
+                                    disabled={  (  selectedcontract &&  selectedcontract.typerent === "รายวัน")  ? false:true }
                                     placeholder='0.00'
                                     
                                     name = "daily_minimum_cost_water"
@@ -970,7 +1044,7 @@ return (
                                     className={styles.inputbox2}></input>
                                 <label>บาท</label>
                                 <input
-                                    disabled={disabled.disabledDay}
+                                    disabled={  (  selectedcontract &&  selectedcontract.typerent === "รายวัน")  ? false:true }
 
                                     checked={selectedcontract && selectedcontract.daily_type_water_cost === 'type_buffet'? true:false }
                                     onChange={()=>handlerEditContract(
@@ -986,7 +1060,7 @@ return (
                                     className={styles.checkbox2}
                                     type='checkbox' />
                                 <input
-                                    disabled={disabled.disabledDay}
+                                    disabled={  (  selectedcontract &&  selectedcontract.typerent === "รายวัน")  ? false:true }
                                     placeholder='0.00'
 
                                     name ="daily_buffet_cost_water"
@@ -999,7 +1073,9 @@ return (
                       
                             <div className={styles.input3} >
                                
-                                <FileUploader name="filecontract" handleFile={ async (file) =>{
+                                <FileUploader 
+                                 disabled={  (  selectedcontract)  ? false:true }
+                                 name="filecontract" handleFile={ async (file) =>{
                                     
                                     let data  = await toBase64(file)
                                     handlerEditContract({target:{
@@ -1020,7 +1096,7 @@ return (
 
                             <button className={styles.save} disabled={(selectedcontract ? false : true)}
                                 onClick={()=>{
-
+                                    handlderSaveContract(selectedcontract)
                                 }}
                              >
                                 <SaveIcon />
@@ -1032,19 +1108,12 @@ return (
 
                             <button className={styles.cancel} disabled={(selectedcontract ? false : true)}
                                 onClick={() => {
-                                    if (selectedcontract) {
-                                        handleConfirm('Are you sure to Delete?', true)
-
-                                    } else {
-                                        console.log('No select ID')
-                                    }
-
-
+                                    setselectedcontract(null)
                                 }}
                             >
                                 <CancelIcon />
                                 <br />
-                                ยกเลิกสัญญา
+                                ย้อนกลับ
                             </button>
 
                         </div>
