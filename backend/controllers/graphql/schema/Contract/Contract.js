@@ -25,9 +25,34 @@ type Contract{
     Check_in: String
     status: String
     Check_out: String
-
     Room:Room
+
+    typerent:String
+    mounthly_cost:String
+    insurance_cost:String
+    depositrent_cost:String
+
+    mounthly_type_electrical_cost:String
+    mounthly_rate_electrical:String
+    mounthly_minimum_cost_electrical:String
+    mounthly_buffet_cost_electrical:String
+    mounthly_type_water_cost:String
+    mounthly_rate_water:String
+    mounthly_minimum_cost_water:String
+    mounthly_buffet_cost_water:String
     
+    daily_cost:String
+    daily_type_electrical_cost:String
+    daily_rate_electrical:String
+    daily_minimum_cost_electrical:String
+    daily_buffet_cost_electrical:String
+    daily_type_water_cost:String
+    daily_rate_water:String
+    daily_minimum_cost_water:String
+    daily_buffet_cost_water:String
+
+    filecontract:String 
+
 }
 
 input ContractInput{
@@ -43,6 +68,38 @@ input ContractInput{
     Check_out: String
 
     roomid:String
+
+
+
+    typerent:String
+    mounthly_cost:String
+    insurance_cost:String
+    depositrent_cost:String
+
+    mounthly_type_electrical_cost:String
+    mounthly_rate_electrical:String
+    mounthly_minimum_cost_electrical:String
+    mounthly_buffet_cost_electrical:String
+    mounthly_type_water_cost:String
+    mounthly_rate_water:String
+    mounthly_minimum_cost_water:String
+    mounthly_buffet_cost_water:String
+    
+    daily_cost:String
+    daily_type_electrical_cost:String
+    daily_rate_electrical:String
+    daily_minimum_cost_electrical:String
+    daily_buffet_cost_electrical:String
+    daily_type_water_cost:String
+    daily_rate_water:String
+    daily_minimum_cost_water:String
+    daily_buffet_cost_water:String
+
+    filecontract:String 
+
+
+
+
 
 }
 `

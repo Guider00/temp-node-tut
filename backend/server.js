@@ -17,6 +17,7 @@ const { schema, rootValue } = require('./controllers/graphql/schema')
 
 const { mqtt_server_aedes_initial , mqtt_server_mosca_initial  } = require('./MQTT/server')
 
+const bodyParser =  require('body-parser')
 
 
 const  { router_auth }  = require('./controllers/passport/auth')
@@ -38,7 +39,11 @@ app.use('/',router_auth)
 let path = require('path')
 app.use(express.static(path.join(__dirname, '/public/build')));
 
+
+
 app.use('uploadimages',express.static(path.join(__dirname, '../public/uploadimages')));
+
+app.use('/graphql', bodyParser.json({ limit: '50mb' }))
 
 
 app.use(

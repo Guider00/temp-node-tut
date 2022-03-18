@@ -18,7 +18,7 @@ export const FileUploader = props => {
   return (
     <div >
       <label  onClick={handleClick} >{filename} </label>
-      <button onClick={handleClick} style={{marginLeft:"1.5rem"}}>
+      <button disabled={props.disabled} onClick={handleClick} style={{marginLeft:"1.5rem"}}>
        <FileUploadIcon/>  อัพโหลด เอกสาร 
       </button>
       <input type="file"
