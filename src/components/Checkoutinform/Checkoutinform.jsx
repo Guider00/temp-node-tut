@@ -15,7 +15,8 @@ import { filter_rooms , getRooms } from './function';
 
 import { useMediaQuery } from 'react-responsive'
 
-
+//confirmDialog
+import Dialog from '../../subcomponents/ConfirmAlert/ConfirmAlert';
 
 
 
@@ -30,6 +31,55 @@ export const Checkoutinform = () => {
         query: "(max-width: 1224px)"
     });
 
+    //State Confirm
+    const [isConfirm , setIsConfirm] = useState({
+        isLoad:false ,
+        message: ''
+    })
+    const [ selectID , setSelectID ] = useState([])
+    const handleIsConfirm = (isLoad , message) => {
+        setIsConfirm({
+            isLoad:isLoad ,
+            message:message
+        })
+
+    }
+
+    const handleDelete = (ID) =>{
+        try{
+            console.log(ID)
+            let _res = updateStatus({
+                                                        
+                variables: {
+                    id:`${ID}`,
+                    input:{
+                        checkout_date: ``
+                        }
+                    }});
+
+            if(_res){
+                Checkoutinform.refetch()
+            }
+
+        }
+        catch(err){
+            console.log(err)
+        }
+
+
+
+    }
+    const checkstate = async (state) => {
+
+        if (state) {
+
+            handleDelete(selectID)
+            handleIsConfirm('', false)
+        } else {
+            handleIsConfirm('', false)
+        }
+
+    }
     
     // const [ checkboxs_select , setcheckboxs_select] = useState([])
     const [ options_search  ,setoptions_search] = useState({
@@ -78,7 +128,7 @@ export const Checkoutinform = () => {
         
         
             <div className= {styles.container}>
-            
+                {isConfirm.isLoad && <Dialog message={isConfirm.message} onDialog={checkstate}/>}
                 <div className= {styles.mainbox}>
                     <div className= {styles.headerstyles}>
                         <h1 className= {styles.header} style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }} >รายการห้องเช่า</h1>
@@ -185,25 +235,9 @@ export const Checkoutinform = () => {
                                                     <td width={'50px'} >
                                                         <button 
                                                         className={styles.cancelButton}
-                                                        onClick={()=>{
-                                                            try{
-                                                                let _res = updateStatus({
-                                                        
-                                                                    variables: {
-                                                                        id:`${room.id}`,
-                                                                        input:{
-                                                                            checkout_date: ``
-                                                                            }
-                                                                        }});
-    
-                                                                if(_res){
-                                                                    Checkoutinform.refetch()
-                                                                }
-
-                                                            }catch(error){
-                                                                console.log(error)
-                                                            }
-
+                                                        onClick={ async ()=>{
+                                                            await setSelectID(room.id)
+                                                            await handleIsConfirm( true , 'Are you sure to delete ?')
                                                         }}
                                                         ><ClearIcon/></button>
                                                     </td>

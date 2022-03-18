@@ -116,6 +116,7 @@ a>button{
 
 .container{
     max-height: 100px;
+    max-width: 1150px;
     text-align: center;
 
 }
@@ -173,14 +174,14 @@ a>button{
     margin: 0.5rem;
     max-height: 100px;
     max-width: 1500px;
-    height:90px;
+    height:87px;
     font-size: 0.9rem;
 }
 .dropdownSetting{
     max-width: 1500px;
     max-height: 100px;
     margin-right: 0.5rem;
-    height:90px;
+    height:87px;
     font-size: 0.9rem;
     margin-right: 1rem;
 }

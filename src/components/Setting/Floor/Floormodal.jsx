@@ -53,7 +53,7 @@ export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs, Mo
                                             {e.form.displayform === "textbox" ?
                                                 <div className={styles.input}>
                                                
-                                                    <input type={e.form.type ? e.form.type : "text"}
+                                                    <input className={styles.input_style} type={e.form.type ? e.form.type : "text"}
                                                      value={  
                                                          e.form.value
                                                     }

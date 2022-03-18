@@ -16,9 +16,9 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
 
-import {  export_Receipts_pdf, export_taxinvoices_pdf } from '../../general_functions/pdf/export/export_pdf';
+import { export_Receipts_pdf, export_taxinvoices_pdf } from '../../general_functions/pdf/export/export_pdf';
 
-import {  list_to_show } from './function'
+import { list_to_show } from './function'
 import { toYYMM, toYYMMDD, getlaststring } from '../../general_functions/convert';
 export const Receipt = () => {
 
@@ -235,7 +235,7 @@ export const Receipt = () => {
 
 
 
-    }, [Receipt, Receipt.data ,receipt])
+    }, [Receipt, Receipt.data, receipt])
 
 
 
@@ -250,7 +250,7 @@ export const Receipt = () => {
 
     return (
         <>
-         {Confirm.isLoading && <Dialog onDialog={checkstate} message={Confirm.message} />}
+            {Confirm.isLoading && <Dialog onDialog={checkstate} message={Confirm.message} />}
 
             <div className={styles.main}>
 
@@ -264,18 +264,26 @@ export const Receipt = () => {
 
                             <div className={styles.cardbody}>
                                 <div className={styles.row} >
-                                    <label> วันที่ </label>
-                                    <input className={styles.spaceonerem} id="startdate" type="date" value={formsearch.startdate} onChange={handleChangeformsearch}></input>
+                                    <div className={styles.container_input}>
+                                        <div>
+                                            <label> วันที่ </label>
+                                            <input id="startdate" type="date" value={formsearch.startdate} onChange={handleChangeformsearch}></input>
+                                        </div>
+                                        <div>
+                                            <label> ถึง </label>
+                                            <input id="enddate" type="date" value={formsearch.enddate} onChange={handleChangeformsearch} ></input>
+                                        </div>
+                                        <div>
+                                            <label > แสดงผล </label>
+                                            <input id="lenghthdispaly" value={formsearch.lenghthdispaly} onChange={handleChangeformsearch} ></input>
+                                        </div>
+                                        <div>
+                                            <label> รอบบิล </label>
+                                            <input id="duedate" type="date" value={formsearch.duedate} onChange={handleChangeformsearch} ></input>
 
-                                    <label className={styles.spaceonerem}> ถึง </label>
-                                    <input className={styles.spaceonerem} id="enddate" type="date" value={formsearch.enddate} onChange={handleChangeformsearch} ></input>
-                                    <label className={styles.spaceonerem}> แสดงผล </label>
-                                    <input className={styles.spaceonerem} id="lenghthdispaly" value={formsearch.lenghthdispaly} onChange={handleChangeformsearch} ></input>
-                                </div>
-                                <div>
-                                    <label> รอบบิล </label>
-                                    <input className={styles.spaceonerem} id="duedate" type="date" value={formsearch.duedate} onChange={handleChangeformsearch} ></input>
+                                        </div>
 
+                                    </div>
                                 </div>
                                 <p>
                                     <label >อาคาร</label>
@@ -286,15 +294,15 @@ export const Receipt = () => {
 
                                     <thead className={styles.header}>
                                         <tr >
-                                            <td onClick={handlerchangesortingstyle}> {tbsortingstyle_newmetoold ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}  </td>
+                                            <td style={{width:'30px'}} onClick={handlerchangesortingstyle}> {tbsortingstyle_newmetoold ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}  </td>
                                             <td>{header_table[1]}</td>
                                             <td>{header_table[2]}</td>
                                             <td>{header_table[3]}</td>
                                             <td>{header_table[4]}</td>
-                                            <td>{header_table[5]}</td>
-                                            <td>{header_table[6]}</td>
-                                            <td>{header_table[7]}</td>
-                                            <td>{header_table[8]}</td>
+                                            <td style={{width:'10%'}}>{header_table[5]}</td>
+                                            <td style={{width:'10%'}}>{header_table[6]}</td>
+                                            <td style={{width:'14%'}}>{header_table[7]}</td>
+                                            <td style={{width:'10%'}}>{header_table[8]}</td>
                                         </tr>
                                     </thead>
                                     <tbody className={styles.body}>
@@ -406,14 +414,14 @@ export const Receipt = () => {
                                     }} >สร้างใบเสร็จ <NoteAddIcon /></button>
                                     <button className={styles.press}
                                         onClick={() => {
-                                            console.log('IDrooms',IDrooms)
-                                            if(IDrooms.length > 0){
-                                                handleConfirm('Are you sure to Delete?',true)
+                                            console.log('IDrooms', IDrooms)
+                                            if (IDrooms.length > 0) {
+                                                handleConfirm('Are you sure to Delete?', true)
 
-                                            }else{
+                                            } else {
                                                 console.log('No selcet ID')
                                             }
-                                    
+
                                         }}
                                     >ยกเลิกใบเสร็จ <DeleteIcon /></button>
                                 </div>

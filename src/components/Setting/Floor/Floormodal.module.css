@@ -115,6 +115,14 @@
         display: flex;
         justify-content: flex-end;
     }
+
+    @media screen  and (max-width:900px){
+        .modal>.body>.card>.footer{
+            display: flex;
+            justify-content: center;
+        }
+        
+    }
     .modal>.body>.card>.footer>.menubtn{
         margin: 0.5em;
         background-color: #ddd;
@@ -146,4 +154,24 @@
         margin-left: 0.5em;
     }
     
-    
+    .btnclose{
+        border-radius: 5px;
+        padding: 3px;
+    }
+    .closebtn>button{
+        font-size: 1.5rem;
+        border-radius: 5px;
+        height: 40px;
+        width: 35px;
+        margin: 0.2rem;
+    }
+    .btnclose>.icon{
+        font-weight: bolder;
+    }
+    .btnsave{
+        border-radius: 5px;
+        padding: 3px;
+    }
+    .input_style{
+        max-width: 100px;
+    }
