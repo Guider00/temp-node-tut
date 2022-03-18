@@ -10,7 +10,21 @@
     ;
     
 }
-
+.container_input{
+    padding: 5px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.container_input>div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    
+}
+.container_input>div>label{
+    margin: 0.5rem;
+}
 .zone1>.bigbox{
     flex: 1 1 40%;
     margin: 1.5rem;
@@ -133,9 +147,8 @@
     overflow: auto;
 }
 
-.card>.cardbody>.box>.table{
+.card>.cardbody>.table{
     width: 100%;
-
     font-size: medium;
     border-collapse: collapse;
     overflow: auto;
@@ -144,7 +157,6 @@
 
 .Building{
     margin-left:1rem;
-    margin-top:1rem;
     
 }
 .spaceonerem{
@@ -155,8 +167,9 @@
 
 
 
-.card>.cardbody>.zonetable>.table>.header{
+.card>.cardbody>.table>.header{
     margin-top:5rem;
+    background-color: darkgray;
 }
 
 .card>.cardbody>.box>.table>.header{

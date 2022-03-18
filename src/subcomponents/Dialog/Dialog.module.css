@@ -68,14 +68,13 @@
     transition: 0.3s;
     font-size: 1rem;
     color: white;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.35);
    }
 
 
    .containerDialog>.footer>a>.confirm:hover{
-    transform: scale(1.1);
-    cursor: pointer;
-    font-size: 1.2rem;
-    
+    transform: scale(1.05);
+    box-shadow: 0px 0px 5px royalblue;
    
    }
    .containerDialog>.footer>.cancel{
@@ -89,11 +88,11 @@
     border-radius: 10px;
     transition: 0.3s;
     color: white;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.35);
    }
    .containerDialog>.footer>.cancel:hover{
-    transform: scale(1.1);
-    cursor: pointer;
-    font-size: 1.2rem;
+    transform: scale(1.05);
+    box-shadow: 0px 0px 5px crimson;
    }
   
 .span{
