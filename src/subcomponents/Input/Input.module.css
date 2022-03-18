@@ -62,3 +62,79 @@
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
   }
+
+  .container_icon{
+      display: flex;
+      justify-content: space-around;
+      width: 35%;
+      padding: 5px;
+      margin-right: 1rem;
+  }
+  .container_icon>.icon_styles{
+      font-size: 45px;
+      color: rgb(70, 197, 236);
+
+  }
+  .button_icon{
+      margin: 0.5rem;
+      max-height: 35px;
+      max-width: 100px;
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.35);
+      color: white;
+      background-color: rgb(41, 184, 41);
+      border: none;
+      padding: 5px;
+      border-radius: 5px;
+      font-size: medium;
+  }
+  
+  .button_icon:hover{
+      transform: scale(1.05);
+}
+  .container_icon_isShow{
+        min-width: 400px;
+        width:25%;
+        position: fixed;
+        left: 45%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        z-index: 999;
+        border-radius: 5px;
+        background-color:#eeeded;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    }
+
+    .container_icon_isShow>.body{
+        display: flex;
+        justify-content: space-around;
+        padding: 5px;
+    }
+    .container_icon_isShow>.body>.Topic{
+        margin-top: 0.5rem;
+    }
+    .container_icon_isShow>.body>.Select{
+        margin-top: 1rem;
+    }
+    .container_icon_isShow>.footer{
+        display: flex;
+        justify-content: center;
+        padding: 5px;
+    }
+    .container_icon_isShow>.footer>button{
+        margin: 0.5rem;
+        border-radius: 5px;
+        padding: 5px;
+        border: none;
+    }
+    .container_icon_isShow>.footer>button:hover{
+        transform: scale(1.1);
+    }
+    .container_icon_isShow>.footer>button:nth-child(1){
+        background-color: rgb(8, 177, 8);
+        color: white;
+    }
+    .container_icon_isShow>.footer>button:nth-child(2){
+        background-color: red;
+        color: white;
+        border: none;
+    }

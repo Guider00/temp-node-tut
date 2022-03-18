@@ -279,6 +279,7 @@ export const Checkout = () => {
 											<option> สถานะ</option>
 										</select>
 										<button 
+										className={styles.button_search}
 										style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 										onClick={async () => {
 											try {
@@ -291,7 +292,8 @@ export const Checkout = () => {
 											}
 										}}>
 											{' '}
-											ค้นหา<SearchIcon />{' '}
+											<span>ค้นหา</span>
+											<SearchIcon className={styles.icon_search}/>{' '}
 										</button>
 									</div>
 								</div>

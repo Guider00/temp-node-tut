@@ -1,5 +1,9 @@
 
-
+.menu{
+    background-color: rgb(244, 249, 253);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.3);
+}
 .optionright{
    
     float: right;
@@ -91,6 +95,7 @@
     display: flex;
     margin-left: auto;
     align-items: center;
+    min-width: 450px;
 }
 
 .menu_right>.db_status >div{
@@ -101,24 +106,53 @@
 
 
 a>button{
-   height: 100%;
+   height: 50%;
 }
 
 .logout{
     margin-left: 0.5rem;
 }
 
+
 .container{
+    max-height: 100px;
     text-align: center;
 
 }
 .md{
+    max-height: 100px;
     border: 1px solid black;
     margin: 0.2rem;
     background-color: azure;
     border-radius: 5px;
     font-size: 0.9rem;
 
+}
+.md_receipt{
+    max-height: 100px;
+    border: 1px solid black;
+    margin: 0.2rem;
+    background-color: azure;
+    border-radius: 5px;
+    font-size: 0.9rem;
+
+}
+
+@media screen and (max-width:1499px) {
+    .md_receipt{
+        width: 90px;
+    
+    }
+    
+}
+@media screen and (max-width:1499px) {
+    .md{
+        
+        margin: 0.1rem;
+        
+    
+    }
+    
 }
 .md:hover{
     background-color: rgb(203, 252, 252);
@@ -137,60 +171,58 @@ a>button{
 
 .dropdownReport{
     margin: 0.5rem;
+    max-height: 100px;
+    max-width: 1500px;
     height:90px;
     font-size: 0.9rem;
 }
 .dropdownSetting{
+    max-width: 1500px;
+    max-height: 100px;
     margin-right: 0.5rem;
     height:90px;
     font-size: 0.9rem;
     margin-right: 1rem;
 }
+@media screen and (max-width:1597px) {
+
+    .dropdownSetting{
+    height:100px;
+    margin: 0.1rem;
+    
+}
+    .dropdownReport{
+        height:100px;
+        margin: 0.1rem;
+        
+        
+    }
+}
 @media screen and (max-width: 1670px) {
     .optionright{
         display: grid;
         grid-gap: 0.3rem;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
         margin: 0.5rem auto;
     }
     .menu{
         display: flex;
         flex-direction: column;
     }
-    .dropdownReport{
-        margin: 0.5rem;
-        height:90px;
-    }
-    .dropdownSetting{
-        margin-right: 0.5rem;
-        height:90px;
-    }
+    
     .menu>.menu_right>.db_status{
         display: none;
       }
 }
-@media screen and (max-width: 1460px) {
-    .dropdownReport{
-        margin: 0.5rem;
-        height:140px;
-    }
-    .dropdownSetting{
-        margin-right: 0.5rem;
-        height:140px;
-    }
-   
-}
+
 @media screen and (max-width: 991px) {
     .dropdownReport{
-        margin-left: 0;
         height:40px;
+        margin-left: 0;
     }
     .dropdownSetting{
         height:40px;
-    }
-    
-    .menu_right{
-        width: 100%;
+        margin-left: 0;
     }
     .none{
         display: none;
@@ -198,6 +230,19 @@ a>button{
     .db_status{
         display: none;
     }
+}
+@media screen and (max-width:1400px) {
+    .container{
+        max-height: none;
+    }
+    
+    
+}
+@media screen and (max-width: 1499px) {
+    .menu_right{
+        width: 100%;
+    }
+
 }
 
 @media screen and (max-width: 1000px) {
@@ -217,3 +262,4 @@ a>button{
         margin: 0.5rem auto;
     }
 }
+

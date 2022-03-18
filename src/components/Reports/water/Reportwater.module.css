@@ -242,7 +242,7 @@ select{
     margin: 0.5rem auto;
     border-bottom: 1px solid black;
     overflow: auto;
-    height: 24rem;
+    height: 20rem;
     
 }
 .container>.cardMain>.cardSelect>.cardBox>.body>.tableContent>table{

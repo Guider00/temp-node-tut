@@ -14,45 +14,74 @@
 }
 .rowmenu{
     display: flex;
-    flex-wrap: wrap;
-   
+    justify-content: space-between;
     margin: 0.5em;
     padding: 0.5em;
     background-color: rgba(200,200,200);
     border-radius: 10px;
 
 }
-.rowmenu >.option{
+.rowmenu>.select_type{
+    width: 80%;
     display: flex;
-    margin: 0.5em;
-    align-items: center;
+    
+
 }
-.rowmenu >.option>label{
-    margin-left: 0.5em;
-    margin-right: 0.5em;
-}
-.rowmenu >.option>select{
-    margin-left: 0.5em;
-    margin-right: 0.5em;
-}
-.rowmenu >.optionbtn{
-    float: right;
-    margin-left: auto;
-    margin-right: 1em;
-  
+.rowmenu>.select_type>.option{
+    width: 35%;
     display: flex;
+    margin: 0.5rem;
+    width: 100%;
+    
+    
+
 }
-.rowmenu >.optionbtn>button{
-    width: 7.5rem;
-    display: flex;
-}
-.rowmenu >.optionbtn>button>div{
-    height: 100%;
-    margin-left: 0.5em;
-    margin-right: 0.5em;
-    display: flex;
-    align-items: center;
+.rowmenu>.select_type>.option>label:nth-child(1){
     text-align: center;
+    width: 100%;
+    
+    
+
+}
+.rowmenu>.create_button{
+    padding: 5px;
+}
+.rowmenu>.create_button>.optionbtn>button{
+    padding: 2px;
+    margin: 0.1rem ;
+}
+.rowmenu>.select_type>.option>label{
+    margin:0.2rem;
+    min-width: 80px;
+    width: 100%;
+}
+.rowmenu>.select_type>.option>select{
+    max-height: 30px;
+    margin:0.2rem;
+    min-width: 80px;
+    width: 100%;
+}
+
+@media screen and (max-width:900px) {
+    .rowmenu{
+        align-items: center;
+        flex-direction: column;
+    }
+    .rowmenu>.select_type{
+        align-items: center;
+        flex-direction: column;
+    
+    }
+    .rowmenu>.select_type>.option{
+        
+    
+    }
+    .rowmenu>.create_button>.optionbtn>button{
+        width: 100%;
+        display: flex;
+        border-radius: 5px;
+    }
+    
 }
 .rowmenu >.optionright{
     float: right;

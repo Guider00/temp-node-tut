@@ -8,7 +8,7 @@ import styles from './Booking.module.css';
 import SearchIcon from '@material-ui/icons/Search';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
- import EditIcon from '@material-ui/icons/Edit';
+import EditIcon from '@material-ui/icons/Edit';
 
 import { ModalAlert } from '../../subcomponents/ModalAlert/ModalAlert';
 
@@ -41,19 +41,22 @@ import {
 } from '../../API/Schema/Room/Room'
 
 import {
- toYYYYMMDD
+	toYYYYMMDD
 } from '../../general_functions/convert'
+
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 
 const filter_rooms = (rooms, options_search) => {
 	let _filter_table = []
 	if (rooms && options_search) {
 		_filter_table = rooms.filter(room => {
-				console.log('debug',(options_search.text === ''),room,options_search.keyword)
+			console.log('debug', (options_search.text === ''), room, options_search.keyword)
 			if (room) {
 				if (options_search.keyword === 'ทั้งหมด') {
 					return (room.name && room.name.search(options_search.text) !== -1) ||
-						( room.floor && room.floor.building && room.floor.building.name && room.floor.building.name.search(options_search.text) !== -1) ||
-						(room.floor && room.floor.name  &&room.floor.name.search(options_search.text) !== -1) ||
+						(room.floor && room.floor.building && room.floor.building.name && room.floor.building.name.search(options_search.text) !== -1) ||
+						(room.floor && room.floor.name && room.floor.name.search(options_search.text) !== -1) ||
 						(room.RoomType && room.RoomType.name && room.RoomType.name.search(options_search.text) !== -1) ||
 						(options_search.text === '')
 						;
@@ -62,7 +65,7 @@ const filter_rooms = (rooms, options_search) => {
 						(options_search.text === '')
 					)
 				} else if (options_search.keyword === 'อาคาร') {
-					return (room.floor && room.floor.building &&  room.floor.building.name.search(options_search.text) !== -1) ||
+					return (room.floor && room.floor.building && room.floor.building.name.search(options_search.text) !== -1) ||
 						(options_search.text === '')
 				} else if (options_search.keyword === 'ชั้น') {
 					return (room.floor && room.floor.name.search(options_search.text) !== -1) ||
@@ -235,9 +238,9 @@ export const Booking = () => {
 	const handleChangedALLformroom = (room) => {
 		if (room) {
 			let _formroom = formroom;
-			console.log('debug change form room',room)
+			console.log('debug change form room', room)
 			for (const property in _formroom) {
-				if (property === 'building' && room['floor']['building'] ) {
+				if (property === 'building' && room['floor']['building']) {
 					_formroom[property] = room['floor']['building']['name'];
 				} else if (property === 'floor') {
 					_formroom[property] = room['floor']['name'];
@@ -353,11 +356,11 @@ export const Booking = () => {
 	const [defaultCalendar, setdefaultCalendar] = useState({
 		isLoading: false
 	});
-	const [DateStart, setDateStart] = useState( toYYYYMMDD ( (new Date()) ) )
-	const [DateEnd, setDateEnd] = useState(     toYYYYMMDD (   (new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) ))  )
+	const [DateStart, setDateStart] = useState(toYYYYMMDD((new Date())))
+	const [DateEnd, setDateEnd] = useState(toYYYYMMDD((new Date(Date.now() + 7 * 24 * 60 * 60 * 1000))))
 	const [DateRange, setDateRange] = useState([])
 
-	console.log('debug DateEnd',DateEnd)
+	console.log('debug DateEnd', DateEnd)
 	const handleCalendar = (isLoading) => {
 		setdefaultCalendar({
 			isLoading: isLoading,
@@ -454,21 +457,21 @@ export const Booking = () => {
 		[loadingpage, DateRange]
 	);
 	useEffect(() => {
-		console.log('debug',api_rooms)
+		console.log('debug', api_rooms)
 		if (api_rooms.data) {
-		
+
 			if (api_rooms.data.Rooms && api_rooms.data.Rooms.length) {
 
 				let start_date = DateStart ? new Date(DateStart) : new Date()
 				let end_date = DateEnd ? new Date(DateStart) : new Date()
 				start_date = start_date.getTime()
 				end_date = end_date.getTime()
-			
+
 				let roomschedules = api_rooms.data.Rooms.map((room) => {
 					let { bookings, checkin } = room
-						console.log("debug bookings", bookings)
+					console.log("debug bookings", bookings)
 					let _schbooking = bookings.map((booking) => {
-						if(booking){
+						if (booking) {
 							let { checkin_date, checkin_date_exp, checkin_type } = booking;
 
 							return ({
@@ -477,8 +480,8 @@ export const Booking = () => {
 								"checkin_type": checkin_type,
 								booking: booking
 							})
-						}else{
-							return null 
+						} else {
+							return null
 						}
 					}).filter(item => item)
 
@@ -497,11 +500,11 @@ export const Booking = () => {
 				console.log('debug roomschedules', roomschedules)
 				let room_support = roomschedules.map((roomschedule) => {
 					let { room } = roomschedule
-					console.log('room',room)
+					console.log('room', room)
 
 					// console.log(`debug roomschedule`,roomschedule)
 					let condition = roomschedule.sch.map(({ checkin_date_exp, checkin_date, checkin_type }) => {
-							 console.log(`debug roomschedule`,checkin_date_exp , end_date , ( checkin_date_exp === null  || (end_date <  checkin_date &&    end_date < checkin_date_exp ) ))
+						console.log(`debug roomschedule`, checkin_date_exp, end_date, (checkin_date_exp === null || (end_date < checkin_date && end_date < checkin_date_exp)))
 
 						if (roomType_search.roomtype === 'ทั้งหมด') {
 							if (
@@ -597,7 +600,7 @@ export const Booking = () => {
 				let _rooms = room_support.map(({ room }) => {
 					return room
 				})
-				console.log('debug room_support',options_search, _rooms)
+				console.log('debug room_support', options_search, _rooms)
 				let _filter_rooms = filter_rooms(_rooms, options_search)
 				setrooms([..._filter_rooms]);
 
@@ -605,10 +608,10 @@ export const Booking = () => {
 
 
 		}
-	}, [api_rooms, api_rooms.data,api_rooms.loading, DateStart, DateEnd, roomType_search,options_search])
+	}, [api_rooms, api_rooms.data, api_rooms.loading, DateStart, DateEnd, roomType_search, options_search])
 
 
-	 console.log('debug rooms', rooms);
+	console.log('debug rooms', rooms);
 	// console.log('selectedroom', selectedroom);
 
 
@@ -684,16 +687,16 @@ export const Booking = () => {
 										<option>รายเดือน</option>
 									</select>
 
-									 <input 
-									className={styles.roomType}
-									value={options_search.roomtype}
-									type='text' 
-									name="input_roomtype" 
-									onChange={(e) => {
-										let _options_search = options_search
-										_options_search.roomtype = e.target.value 
-										setoptions_search({..._options_search})
-									}}
+									<input
+										className={styles.roomType}
+										value={options_search.roomtype}
+										type='text'
+										name="input_roomtype"
+										onChange={(e) => {
+											let _options_search = options_search
+											_options_search.roomtype = e.target.value
+											setoptions_search({ ..._options_search })
+										}}
 									/>
 
 									<label> วันที่เข้าพัก </label>
@@ -714,16 +717,19 @@ export const Booking = () => {
 										value={DateEnd ? DateEnd : ''}
 										onChange={(e) => {
 											let { value } = e.target
-											console.log('debug set end date',value)
+											console.log('debug set end date', value)
 											setDateEnd(value)
 										}} />
-									<button
-										onClick={() => {
-											setdefaultCalendar({
-												isLoading: true
-											})
-										}}
-									><EventNoteIcon /></button>
+									<Tippy content='เลื่อกช่วงเวลาที่ต้องการเข้าพัก'>
+										<button
+											onClick={() => {
+												setdefaultCalendar({
+													isLoading: true
+												})
+											}}
+										><EventNoteIcon /></button>
+
+									</Tippy>
 								</div>
 							</div>
 							<div className={styles.input}>
@@ -740,7 +746,7 @@ export const Booking = () => {
 								</div>
 								<div className={styles.zonebtn} >
 									<select value={options_search.keyword}
-									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
+										style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 										onChange={(e) => {
 
 											let _options_search = options_search
@@ -756,20 +762,21 @@ export const Booking = () => {
 										<option>ประเภทห้อง</option>
 
 									</select>
-									<button 
-									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
-									onClick={
-										async () => {
-										// let Rooms = await getRooms();
+									<button
+										className={styles.button_search}
+										style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
+										onClick={
+											async () => {
+												// let Rooms = await getRooms();
 
-										// let _filter_rooms = []
-										// console.log('DateStart,DateEnd', DateStart, DateEnd)
-										// _filter_rooms = filter_rooms(Rooms, options_search, DateStart, DateEnd)
+												// let _filter_rooms = []
+												// console.log('DateStart,DateEnd', DateStart, DateEnd)
+												// _filter_rooms = filter_rooms(Rooms, options_search, DateStart, DateEnd)
 
-										// setrooms(_filter_rooms);
-									}}>
+												// setrooms(_filter_rooms);
+											}}>
 										{' '}
-										ค้นหา<SearchIcon />{' '}
+										ค้นหา<SearchIcon className={styles.icon_search}/>{' '}
 									</button>
 								</div>
 							</div>
@@ -788,38 +795,38 @@ export const Booking = () => {
 										</tr>
 									</thead>
 									<tbody>{rooms.filter(
-											(room) => (room && room && room.status === 'ย้ายออก') || room.status === 'ห้องว่าง'
-										).map(
-											(room, index) =>
-												room ? (
+										(room) => (room && room && room.status === 'ย้ายออก') || room.status === 'ห้องว่าง'
+									).map(
+										(room, index) =>
+											room ? (
 
-													<tr key={index}
-														onClick={() => {
-															setselectedroom(room);
-															handleChangedALLformroom(room);
+												<tr key={index}
+													onClick={() => {
+														setselectedroom(room);
+														handleChangedALLformroom(room);
 
-															console.log('bookingnumber', formbooking,)
-															let _formbooking = formbooking
-															if (_formbooking.booking_number) {
-															} else {
-																_formbooking.booking_number = `${Math.random().toString(36).slice(2, 15)}`
+														console.log('bookingnumber', formbooking,)
+														let _formbooking = formbooking
+														if (_formbooking.booking_number) {
+														} else {
+															_formbooking.booking_number = `${Math.random().toString(36).slice(2, 15)}`
 
-															}
-															setformbooking(JSON.parse(JSON.stringify(formbooking)))
+														}
+														setformbooking(JSON.parse(JSON.stringify(formbooking)))
 
-														}}
-														style={{
-															background: selectedroom && selectedroom.id === room.id ? 'lightgray' : 'none' ,
-															fontSize: isDesktop ? '' : isTablet ? '15px' : '' 
-														}}>
-														<td>{room && room.name ? room.name : '---'}</td>
-														<td>{room && room.floor && room.floor.building ? room.floor.building.name : '---'}</td>
-														<td>{room && room.floor ? room.floor.name : '---'}</td>
-														<td>{room && room.RoomType ? room.RoomType.name : '---'}</td>
-														<td>{room && room.status ? room.status : '---'}</td>
-													</tr>
-												) : null
-										)}</tbody>
+													}}
+													style={{
+														background: selectedroom && selectedroom.id === room.id ? 'lightgray' : 'none',
+														fontSize: isDesktop ? '' : isTablet ? '15px' : ''
+													}}>
+													<td>{room && room.name ? room.name : '---'}</td>
+													<td>{room && room.floor && room.floor.building ? room.floor.building.name : '---'}</td>
+													<td>{room && room.floor ? room.floor.name : '---'}</td>
+													<td>{room && room.RoomType ? room.RoomType.name : '---'}</td>
+													<td>{room && room.status ? room.status : '---'}</td>
+												</tr>
+											) : null
+									)}</tbody>
 								</table>
 							</div>
 						</div>
@@ -1128,86 +1135,92 @@ export const Booking = () => {
 							</div>
 							<div className={styles.footer_inputroom}>
 								<div>
-									<button
-										onClick={async () => {
-											console.log('send update', formbooking);
-											let _res = null
-											try {
-												if (formbooking.id) {
+									<Tippy content='SAVE'>
+										<button
+											onClick={async () => {
+												console.log('send update', formbooking);
+												let _res = null
+												try {
+													if (formbooking.id) {
 
-													_res = await updateBooking({
-														variables: {
-															id: formbooking.id,
-															input: {
-																booking_number: formbooking.booking_number,
-																customer_name: formbooking.customer_name,
-																customer_lastname: formbooking.customer_lastname,
-																customer_tel: formbooking.customer_tel,
-																customer_address: formbooking.customer_address,
-																taxnumber: formbooking.taxnumber,
-																payment_method: formbooking.payment_method,
-																deposit: formbooking.deposit,
-																checkin_type: formbooking.checkin_type,
-																checkin_date: formbooking.checkin_date,
-																checkin_date_exp: formbooking.checkin_date_exp,
-																note: formbooking.note,
-																status: formbooking.status ? formbooking.status : 'รอการชำระเงิน',
-																confirm_booking: formbooking.confirm_booking ? formbooking.confirm_booking : '---',
-																receipt_number: formbooking.receipt_number,
-																Room: selectedroom.id // << id room 
+														_res = await updateBooking({
+															variables: {
+																id: formbooking.id,
+																input: {
+																	booking_number: formbooking.booking_number,
+																	customer_name: formbooking.customer_name,
+																	customer_lastname: formbooking.customer_lastname,
+																	customer_tel: formbooking.customer_tel,
+																	customer_address: formbooking.customer_address,
+																	taxnumber: formbooking.taxnumber,
+																	payment_method: formbooking.payment_method,
+																	deposit: formbooking.deposit,
+																	checkin_type: formbooking.checkin_type,
+																	checkin_date: formbooking.checkin_date,
+																	checkin_date_exp: formbooking.checkin_date_exp,
+																	note: formbooking.note,
+																	status: formbooking.status ? formbooking.status : 'รอการชำระเงิน',
+																	confirm_booking: formbooking.confirm_booking ? formbooking.confirm_booking : '---',
+																	receipt_number: formbooking.receipt_number,
+																	Room: selectedroom.id // << id room 
+																}
 															}
-														}
-													});
-												} else {
-													_res = await createBooking({
-														variables: {
-															input: {
-																booking_number: formbooking.booking_number,
-																customer_name: formbooking.customer_name,
-																customer_lastname: formbooking.customer_lastname,
-																customer_tel: formbooking.customer_tel,
-																customer_address: formbooking.customer_address,
-																taxnumber: formbooking.taxnumber,
-																payment_method: formbooking.payment_method,
-																deposit: formbooking.deposit,
-																checkin_type: formbooking.checkin_type,
-																checkin_date: formbooking.checkin_date,
-																checkin_date_exp: formbooking.checkin_date_exp,
-																note: formbooking.note,
-																status: 'รอการชำระเงิน',
-																confirm_booking: formbooking.confirm_booking,
-																receipt_number: '',
-																Room: selectedroom.id  //<< id room 
+														});
+													} else {
+														_res = await createBooking({
+															variables: {
+																input: {
+																	booking_number: formbooking.booking_number,
+																	customer_name: formbooking.customer_name,
+																	customer_lastname: formbooking.customer_lastname,
+																	customer_tel: formbooking.customer_tel,
+																	customer_address: formbooking.customer_address,
+																	taxnumber: formbooking.taxnumber,
+																	payment_method: formbooking.payment_method,
+																	deposit: formbooking.deposit,
+																	checkin_type: formbooking.checkin_type,
+																	checkin_date: formbooking.checkin_date,
+																	checkin_date_exp: formbooking.checkin_date_exp,
+																	note: formbooking.note,
+																	status: 'รอการชำระเงิน',
+																	confirm_booking: formbooking.confirm_booking,
+																	receipt_number: '',
+																	Room: selectedroom.id  //<< id room 
+																}
 															}
-														}
-													});
-												}
+														});
+													}
 
-												//>>   communication note <<//
-												if (_res && _res.data) {
-													console.log('record sucess ')
-													setdefault_forminput();
-													api_rooms.refetch();
-													booking.refetch();
-												} else {
-													console.log('record Error ')
+													//>>   communication note <<//
+													if (_res && _res.data) {
+														console.log('record sucess ')
+														setdefault_forminput();
+														api_rooms.refetch();
+														booking.refetch();
+													} else {
+														console.log('record Error ')
+													}
+												} catch (e) {
+													console.error("can't save booking data ", e)
 												}
-											} catch (e) {
-												console.error("can't save booking data ", e)
-											}
-										}}
-									>
-										{' '}
-										<SaveIcon />{' '}
-									</button>
-								 <button onClick={() => {}}>
-										{' '}
-										<EditIcon />{' '}
-									</button> 
-									<button onClick={() => { setdefault_forminput(); }}>
-										{' '}
-										<DeleteIcon />{' '}
-									</button>
+											}}
+										>
+											{' '}
+											<SaveIcon />{' '}
+										</button>
+									</Tippy>
+									<Tippy content='EDIT'>
+										<button onClick={() => { }}>
+											{' '}
+											<EditIcon />{' '}
+										</button>
+									</Tippy>
+									<Tippy content='DELETE'>
+										<button onClick={() => { setdefault_forminput(); }}>
+											{' '}
+											<DeleteIcon />{' '}
+										</button>
+									</Tippy>
 								</div>
 							</div>
 						</div>

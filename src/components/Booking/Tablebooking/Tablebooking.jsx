@@ -29,15 +29,17 @@ import { useMediaQuery } from 'react-responsive'
 //dialog
 //Dialog
 
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 
 export const Tablebooking = (props) => {
 
     const isDesktop = useMediaQuery({
-		query: "(min-width: 1224px)"
-	});
-	const isTablet = useMediaQuery({
-		query: "(max-width: 1224px)"
-	});
+        query: "(min-width: 1224px)"
+    });
+    const isTablet = useMediaQuery({
+        query: "(max-width: 1224px)"
+    });
     const [loading, setloading] = useState(false)
     const [showmodal, setmodal] = useState(false)
     const [modalbooking, setmodalbooking] = useState(null)
@@ -89,7 +91,7 @@ export const Tablebooking = (props) => {
                             <tr key={index} style={{
                                 backgroundColor:
                                     formatDate(new Date(Number(booking.checkin_date))) === formatDate(new Date()) || new Date(Number(booking.checkin_date)) <= new Date()
-                                        ? "darkgray" : "white" , fontSize: isDesktop ? '' : isTablet ? '15px' : '' 
+                                        ? "darkgray" : "white", fontSize: isDesktop ? '' : isTablet ? '15px' : ''
                             }}>
                                 <td>{booking && booking.Room && booking.Room.name ? booking.Room.name : "---"}</td>
                                 <td>{booking && booking.customer_name ? booking.customer_name : '---'}</td>
@@ -106,62 +108,79 @@ export const Tablebooking = (props) => {
                                     <a href={booking.receipt_number ? booking.receipt_number : ''}>{booking.receipt_number ? booking.receipt_number : '---'}</a>
                                 </td>
                                 <td>
-                                    <button onClick={() => props.handleUpdateconfirm_booking(booking)}>
-                                        {(booking.confirm_booking && booking.confirm_booking === 'ยืนยันการเข้าพัก') ? <CheckIcon /> : "---"}
-                                    </button>
-
+                                    <Tippy content='CONFIRM'>
+                                        <button onClick={() => props.handleUpdateconfirm_booking(booking)}>
+                                            {(booking.confirm_booking && booking.confirm_booking === 'ยืนยันการเข้าพัก') ? <CheckIcon /> : "---"}
+                                        </button>
+                                    </Tippy>
                                 </td>
                                 <td>
 
+                                    <Tippy content={(formatDate(new Date(Number(booking.checkin_date))) === formatDate(new Date()) ||
+                                        new Date(Number(booking.checkin_date)) <= new Date()) && booking.confirm_booking !== 'ยืนยันการเข้าพัก' ? 'ยังไม่ยืนยันการเข้าพัก' : 'ยืนยันการเข้าพักเรียบร้อย'}>
+                                        <button
 
-                                    <button
+                                            className={
+                                                (formatDate(new Date(Number(booking.checkin_date))) === formatDate(new Date()) ||
+                                                    new Date(Number(booking.checkin_date)) <= new Date()) && booking.confirm_booking !== 'ยืนยันการเข้าพัก' ? styles.blink_me : null
+                                            }
+                                        >
+                                            <NotificationsIcon />
+                                        </button>
 
-                                        className={
-                                            (formatDate(new Date(Number(booking.checkin_date))) === formatDate(new Date()) ||
-                                                new Date(Number(booking.checkin_date)) <= new Date()) && booking.confirm_booking !== 'ยืนยันการเข้าพัก' ? styles.blink_me : null
-                                        }
-                                    >
-                                        <NotificationsIcon />
-                                    </button>
+                                    </Tippy>
                                 </td>
                                 <td>
-
-                                    <button onClick={props.handleredit ? () => props.handleredit(booking) : () => { console.log('edit', booking) }} > <EditIcon /> </button>
-                                    <button onClick={() => {
-                                        setmodal(true)
-                                        setmodalbooking(booking)
-                                    }
-                                    } > <UploadFileIcon />
-                                    </button>
-                                    <button onClick={() => props.handleUpdatecompletestatus(booking)}>
-                                        {
-                                            (booking.status === 'สำเร็จ') ?
-                                                <CancelIcon /> :
-                                                <CheckCircleOutlineIcon />
+                                    <Tippy content='EDIT'>
+                                        <button onClick={props.handleredit ? () => props.handleredit(booking) : () => { console.log('edit', booking) }} > <EditIcon /> </button>
+                                    </Tippy>
+                                    <Tippy content='UPLOAD IMAGE'>
+                                        <button onClick={() => {
+                                            setmodal(true)
+                                            setmodalbooking(booking)
                                         }
-                                    </button>
-                                    <button onClick={() => {
-                                        if (booking.status === 'สำเร็จ') {
-                                            props.handleExportformbooking(booking)
+                                        } > <UploadFileIcon />
+                                        </button>
 
-                                        } else {
-                                            alert('รอการชำระเงิน')
-                                        }
-                                    }}>
-                                        <AssignmentIcon />
-                                    </button>
-                                    <button onClick={() => {
-                                        if (booking.status === 'สำเร็จ') {
-                                            handleDialog("The request was successful !!!!! Go Check-in page?", true)
-                                            props.handleExportReceipt(booking)
+                                    </Tippy>
+                                    <Tippy content={(booking.status === 'สำเร็จ') ? 'CANCEL' : 'CONFIRM'}>
+                                        <button onClick={() => props.handleUpdatecompletestatus(booking)}>
+                                            {
+                                                (booking.status === 'สำเร็จ') ?
+                                                    <CancelIcon /> :
+                                                    <CheckCircleOutlineIcon />
+                                            }
+                                        </button>
+                                    </Tippy>
+                                    <Tippy content='EXPORT CONTRACT'>
+                                        <button onClick={() => {
+                                            if (booking.status === 'สำเร็จ') {
+                                                props.handleExportformbooking(booking)
 
-                                        } else {
-                                            alert('รอการชำระเงิน')
-                                        }
-                                    }}>
-                                        <ReceiptIcon />
-                                    </button>
-                                    <button onClick={props.handlerdelete ? () => props.handlerdelete(booking) : () => { console.log('delete', booking) }}> <DeleteIcon /> </button>
+                                            } else {
+                                                alert('รอการชำระเงิน')
+                                            }
+                                        }}>
+                                            <AssignmentIcon />
+                                        </button>
+                                    </Tippy>
+                                    <Tippy content='EXPORT RECEIPT'>
+                                        <button onClick={() => {
+                                            if (booking.status === 'สำเร็จ') {
+                                                handleDialog("The request was successful !!!!! Go Check-in page?", true)
+                                                props.handleExportReceipt(booking)
+
+                                            } else {
+                                                alert('รอการชำระเงิน')
+                                            }
+                                        }}>
+                                            <ReceiptIcon />
+                                        </button>
+                                    </Tippy>
+                                    <Tippy content='DELETE'>
+                                        <button onClick={props.handlerdelete ? () => props.handlerdelete(booking) : () => { console.log('delete', booking) }}> <DeleteIcon /> </button>
+
+                                    </Tippy>
 
                                 </td>
 

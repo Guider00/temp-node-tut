@@ -5,11 +5,7 @@ import { Table } from "../../../subcomponents/Table/Table"
 import { Topic } from '../../../subcomponents/Topic/Topic'
 import { EndButton } from "../../../subcomponents/EndButton/EndButton"
 import { Loader } from "../../../subcomponents/loader/loader"
-
-
 import Add from '@material-ui/icons/Add';
-
-
 import styles from "./RoomPrice.module.css"
 
 import {
@@ -272,11 +268,12 @@ export const RoomPrice = () => {
     const [modelistoption, setmodelistoption] = useState('add')
     const [otheroptionnname, setotheroptionnname] = useState('');
     const [otheroptionprice, setotheroptionprice] = useState('');
-
+    const [isshowIcon , setIsShowIcon] = useState(true)
 
     const [_load, setload] = useState(false);
 
-
+    const [_initial,setinitial] = useState(false);
+    console.log('_initial',_initial)
 
     const [_showedit, setshowedit] = useState(false);
 
@@ -309,6 +306,7 @@ export const RoomPrice = () => {
         }
 
         setload(false)
+        setinitial(false)
     }
     const onClickEditRoomPrice = async (id, data) => {
 
@@ -407,6 +405,7 @@ export const RoomPrice = () => {
                 }
 
                 // setload(false)
+                setinitial(false)
             }
         },
         {
@@ -425,9 +424,7 @@ export const RoomPrice = () => {
 
 
     useEffect(() => {
-
-
-        console.log('run useEffect update roomtype')
+        console.log('do this')
         if (GET_RoomType.loading === false && GET_Rooms.loading === false) {
             let table = []
             if (GET_RoomType && GET_RoomType.data && GET_RoomType.data.RoomTypes) {
@@ -442,25 +439,24 @@ export const RoomPrice = () => {
                 })
             }
             console.log('table', table)
-            setroomtype( prestate => {
-                let roomtype =prestate
-                roomtype.body = [...table]
-                if (_id) {
-                    console.log('update table option')
-                    roomtype.body.map(room => {
-                        if (room && room.id === _id) {
-                        //  onClickEditRoomPrice(_id, room.data)
-                        }
-        
-                        return null;
-                    })
-                }
-                return ({ ...prestate,...roomtype })
-            })
-            setload(true)
 
+            let roomtype = _roomtype
+            roomtype.body = [...table]
+            if (_id) {
+                console.log('update table option')
+                roomtype.body.map(room => {
+                    if (room && room.id === _id) {
+                      //  onClickEditRoomPrice(_id, room.data)
+                    }
+
+                    return null;
+                })
+            }
+            setroomtype(JSON.parse(JSON.stringify(roomtype)))
+            setload(true)
+            setinitial(true)
         }
-    }, [GET_RoomType, GET_Rooms ,_id  ])
+    }, [GET_RoomType, GET_Rooms ])
 
 
 
@@ -534,8 +530,10 @@ export const RoomPrice = () => {
                         </>
                         <Topic label="การแสดงผล" />
                         <>
-                            <Input label="Select icon" type="icon" value={_totalprice_water} onChange={(e) => { settotalprice_water(e.target.value) }}  ></Input>
+                            <Input label="Interface icon" type="icon" value={_totalprice_water} onChange={(e) => { settotalprice_water(e.target.value) }}  ></Input>
                         </>
+                        
+                       
 
                         <div className={styles.topic}>
                             <label>รายการอื่นๆ</label>
@@ -582,7 +580,9 @@ export const RoomPrice = () => {
 
 
 
-                        <Table Data={tableoption}
+                        <Table 
+                        className={styles.tablestyle}
+                        Data={tableoption}
                             onClickEdit={(payload) => {
 
                                 setotheroptionnname("")
