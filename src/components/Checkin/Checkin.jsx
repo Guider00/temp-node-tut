@@ -625,7 +625,7 @@ export const Checkin = () => {
 
 
 	useEffect(() => {
-
+		console.log('debug update',GET_Rooms.data,reselectedroom)
 		if (GET_Rooms.data) {
 
 
@@ -780,25 +780,34 @@ export const Checkin = () => {
 		if (reselectedroom) {
 			if (selectedroom.id) {
 
-
+				console.log('debug',GET_Rooms.data.Rooms)
 				let updateroom = GET_Rooms.data.Rooms.find(room => room.id === selectedroom.id)
 
-				let _selectedroom = selectedroom
-				console.log('update new member');
-				console.log(_selectedroom, updateroom)
+			//	let _selectedroom = selectedroom
+			//	console.log('update new member');
+			//	console.log(_selectedroom, updateroom)
 				// อย่างลืมแก้ไขให้มีการ update พร้อมกัน //
-				_selectedroom.data = updateroom // status checkin ,
-				_selectedroom.members = updateroom.members // update member 
-				setselectedroom({ ..._selectedroom })
+			//	_selectedroom.data = updateroom // status checkin ,
+			//	_selectedroom.members = updateroom.members // update member 
+			//	setselectedroom({ ..._selectedroom })
 
+				setselectedroom((prevState =>(
+					{...prevState ,
+					 data:updateroom,
+					 members:updateroom.members
+					}
+					)
+				))
 
 				setreselectedroom(false)
-
-				console.log('RoomType')
-
 			}
 		}
-	}, [GET_Rooms, loading, DateStart, DateEnd, roomType_search , reselectedroom , selectedroom , options_search])
+	}, [GET_Rooms, loading, DateStart, DateEnd, roomType_search , reselectedroom , options_search])
+
+
+
+
+
 	console.log('GET_Rooms', GET_Rooms)
 	return (
 		<div>	{defaultCalendar.isLoading && <CalendarPicker onCalendar={CalendarDate} start={handleStart}
