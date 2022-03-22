@@ -3,7 +3,7 @@ const { jsPDF } = require('jspdf')
 const { AddTH_font } = require('../AddFont/AddFont.js')
 const { formatDate, toHHMMSS, } = require('../../convert.js')
 
-
+const { calculate_price , calculate_Amount  } = require('./functions')
 
 
 
@@ -863,7 +863,10 @@ export const export_Invoices_pdf = (Invoices, defaultData) => {
             let _total_price = 0
             let _total_vat = 0
             _table_prices.map(item => {
-                let _price = (item && item.price) ? (item.type_price === "ราคารวมvat" ? Number(item.price * 100.0 / 107.0) : Number(item.price)) : 0
+                let _price = (item && item.price) ? (item.type_price === "ราคารวมvat" ?
+                 Number(item.price * 100.0 / 107.0) * Number(item.number_item ?  item.number_item :`0`)
+                 : Number(item.price) * Number(item.number_item ?  item.number_item :`0`)
+                 ) : 0
                 _total_price += _price;
                 _total_vat += (item.selectvat === "คิดvat" ? _price * (Vat / 100) : 0)
                 return 1;
@@ -874,14 +877,10 @@ export const export_Invoices_pdf = (Invoices, defaultData) => {
 
             const names = _table_prices.map(_table_prices => _table_prices.name);
             const Units = _table_prices.map(_table_prices => (_table_prices.number_item !== undefined) ? `${_table_prices.number_item}` : '1');
-            let Price = 0
-            let Amount = 0
+          
 
-
-            Price = _table_prices.map(_table_prices => `${(_table_prices.type_price === "ราคารวมvat" ? Number(_table_prices.price * 100.0 / 107.0).toFixed(2) : Number(_table_prices.price).toFixed(2))
-                }`);
-            Amount = _table_prices.map(_table_prices => `${(_table_prices.type_price === "ราคารวมvat" ? Number(_table_prices.price * 100.0 / 107.0).toFixed(2) : Number(_table_prices.price).toFixed(2))
-                * Number((_table_prices.number_item !== undefined) ? `${_table_prices.number_item}` : '1')}`);
+            const Price =  _table_prices.map(list =>  (calculate_price(list.price ,list.type_price , list.selectvat  )  )  ) 
+            const Amount =    _table_prices.map( list =>  (calculate_Amount(list.price,list.number_item,list.type_price ,list.selectvat)) ) 
 
 
 
@@ -1003,14 +1002,20 @@ export const export_Invoices_pdf = (Invoices, defaultData) => {
 
             doc.text("หมายเหตุ :", 22, 170, { align: 'left' })
             doc.text(note, 40, 170, { align: 'left' })
-            doc.text(`รวมทั้งหมด/Total`, 168, 170, { align: 'left' })
-            doc.text(Grandtotal, 250, 170, { align: 'center' })
+            
+            doc.text("รวมเงินทั้งสิ้น/Grand Total", 168, 170, { align: 'left' })
+            doc.text(`${Number(End_Grandtotal).toFixed(2)}`, 250, 170, { align: 'center' })
+
+
 
             doc.text(`Vat  ${Vat} %`, 168, 180, { align: 'left' })
             doc.text(`${Number(Vat_Grandtotal).toFixed(2)}`, 250, 180, { align: 'center' })
 
-            doc.text("รวมเงินทั้งสิ้น/Grand Total", 168, 191, { align: 'left' })
-            doc.text(`${Number(End_Grandtotal).toFixed(2)}`, 250, 191, { align: 'center' })
+            doc.text(`ราคาก่อน Vat`, 168, 190, { align: 'left' })
+            doc.text(Grandtotal, 250, 190, { align: 'center' })
+
+
+        
 
             doc.setFontSize(14)
             doc.text("เขียนโดย", 200, 208, { align: 'left' })
@@ -1104,10 +1109,8 @@ export const export_Receipt_pdf = (booking: Booking, type, table_prices) => {
 
     const names = _table_prices.map(_table_prices => _table_prices.name);
     const Units = _table_prices.map(_table_prices => (_table_prices.unit !== undefined) ? `${_table_prices.unit}` : '1');
-    const Price = _table_prices.map(_table_prices => `${(_table_prices.type_price === "ราคารวมvat" ? Number(_table_prices.price * 100.0 / 107.0).toFixed(2) : Number(_table_prices.price).toFixed(2))
-        }`);
-    const Amount = _table_prices.map(_table_prices => `${(_table_prices.type_price === "ราคารวมvat" ? Number(_table_prices.price * 100.0 / 107.0).toFixed(2) : Number(_table_prices.price).toFixed(2))
-        * Number((_table_prices.unit !== undefined) ? `${_table_prices.unit}` : '1')}`);
+    const Price =  _table_prices.map(list =>  (calculate_price(list.price ,list.type_price , list.selectvat  )  )  ) 
+    const Amount =    _table_prices.map( list =>  (calculate_Amount(list.price,list.number_item,list.type_price ,list.selectvat)) ) 
 
     const doc = new jsPDF('l', 'mm', [297, 230]);
 
@@ -1321,10 +1324,17 @@ export const export_Receipts_pdf = (Receipts) => {
 
             const names = _table_prices.map(_table_prices => _table_prices.name);
             const Units = _table_prices.map(_table_prices => (_table_prices.unit !== undefined) ? `${_table_prices.unit}` : '1');
-            const Price = _table_prices.map(_table_prices => `${(_table_prices.type_price === "ราคารวมvat" ? Number(_table_prices.price * 100.0 / 107.0).toFixed(2) : Number(_table_prices.price).toFixed(2))
-                }`);
-            const Amount = _table_prices.map(_table_prices => `${(_table_prices.type_price === "ราคารวมvat" ? Number(_table_prices.price * 100.0 / 107.0).toFixed(2) : Number(_table_prices.price).toFixed(2))
-                * Number((_table_prices.unit !== undefined) ? `${_table_prices.unit}` : '1')}`);
+            //const Price = _table_prices.map(_table_prices => `${ (Number(_table_prices.price).toFixed(2) ) }`);
+         //   const Price = _table_prices.map(_table_prices => `${ Number(_table_prices.price).toFixed(2)}`);
+
+            // const Price = _table_prices.map(_table_prices => `${(_table_prices.type_price === "ราคารวมvat" ? 
+            // Number(_table_prices.price).toFixed(2) :
+            // Number(_table_prices.price).toFixed(2))
+            //     }`);
+            const Price =  _table_prices.map(list =>  (calculate_price(list.price ,list.type_price , list.selectvat  )  )  ) 
+            const Amount =    _table_prices.map( list =>  (calculate_Amount(list.price,list.number_item,list.type_price ,list.selectvat)) ) 
+
+          
 
 
 
@@ -1455,12 +1465,18 @@ export const export_Receipts_pdf = (Receipts) => {
             doc.setFontSize(16)
             doc.text("ชำระโดย", 22, 170, { align: 'left' })
 
-            doc.text(`Vat ${Vat}%`, 168, 171, { align: 'left' })
-            doc.text(`${Number(Vat_Grandtotal).toFixed(2)}`, 250, 171, { align: 'left' })
+
+            
+            doc.text("รวมเงินทั้งสิ้น/Grand Total", 168, 171, { align: 'left' })
+            doc.text(`${Number(End_Grandtotal).toFixed(2)}`, 250, 171, { align: 'left' })
 
 
-            doc.text("รวมเงินทั้งสิ้น/Grand Total", 168, 181, { align: 'left' })
-            doc.text(`${Number(End_Grandtotal).toFixed(2)}`, 250, 181, { align: 'left' })
+            doc.text(`ราคาก่อน Vat ${Vat}%`, 168, 181, { align: 'left' })
+            doc.text(`${Number(End_Grandtotal - Vat_Grandtotal).toFixed(2)}`, 250, 181, { align: 'left' })
+
+            doc.text(`Vat ${Vat}%`, 168, 191, { align: 'left' })
+            doc.text(`${Number(Vat_Grandtotal).toFixed(2)}`, 250, 191, { align: 'left' })
+
 
 
             doc.text("..................................................................................", 50, 209, { align: 'left' })
@@ -1550,11 +1566,13 @@ export const export_Reimbursement_pdf = (booking, type, table_price, defaultData
 
     const names = _table_prices.map(_table_prices => _table_prices.name);
     const Units = _table_prices.map(_table_prices => _table_prices.unit);
-    const Price = _table_prices.map(_table_prices => `${(_table_prices.type_price === "ราคารวมvat" ? Number(_table_prices.price * 100.0 / 107.0).toFixed(2) : Number(_table_prices.price).toFixed(2))
-        }`);
-    const Amount = _table_prices.map(_table_prices => `${(_table_prices.type_price === "ราคารวมvat" ? Number(_table_prices.price * 100.0 / 107.0).toFixed(2) : Number(_table_prices.price).toFixed(2))
-        * Number((_table_prices.unit !== undefined) ? `${_table_prices.unit}` : '1')}`);
 
+    // const Price = _table_prices.map(_table_prices => `${(_table_prices.type_price === "ราคารวมvat" ? Number(_table_prices.price * 100.0 / 107.0).toFixed(2) : Number(_table_prices.price).toFixed(2))
+    //     }`);
+
+
+    const Price =  _table_prices.map(list =>  (calculate_price(list.price ,list.type_price , list.selectvat  )  )  ) 
+    const Amount =    _table_prices.map( list =>  (calculate_Amount(list.price,list.number_item,list.type_price ,list.selectvat)) ) 
 
 
     const doc = new jsPDF('l', 'mm', [297, 230]);
@@ -1777,7 +1795,9 @@ export const export_taxinvoice_pdf = (room, table_price, defaultData) => {
     let Grandtotal = `${_total_price}`
     const names = table_prices.map(table_prices => table_prices.name);
     const Units = table_prices.map(table_prices => (table_prices.unit !== undefined) ? `${table_prices.unit}` : '1');
-    const Price = table_prices.map(table_prices => `${table_prices.price}`);
+   // const Price = table_prices.map(table_prices => `${table_prices.price}`);
+    const Price = table_prices.map(_table_prices => `${ Number(_table_prices.price).toFixed(2)}`);
+
     const Amount = table_prices.map(table_prices => `${Number(table_prices.price) * Number((table_prices.unit !== undefined) ? `${table_prices.unit}` : '1')}`);
 
     const doc = new jsPDF('l', 'mm', [297, 220]);
@@ -2026,8 +2046,7 @@ export const export_taxinvoices_pdf = (Receipts) => {
 
             const names = _table_prices.map(_table_prices => _table_prices.name);
             const Units = _table_prices.map(_table_prices => (_table_prices.unit !== undefined) ? `${_table_prices.unit}` : '1');
-            const Price = _table_prices.map(_table_prices => `${(_table_prices.type_price === "ราคารวมvat" ? Number(_table_prices.price * 100.0 / 107.0).toFixed(2) : Number(_table_prices.price).toFixed(2))
-                }`);
+            const Price = _table_prices.map(_table_prices => `${ Number(_table_prices.price).toFixed(2)}`);
             const Amount = _table_prices.map(_table_prices => `${(_table_prices.type_price === "ราคารวมvat" ? Number(_table_prices.price * 100.0 / 107.0).toFixed(2) : Number(_table_prices.price).toFixed(2))
                 * Number((_table_prices.unit !== undefined) ? `${_table_prices.unit}` : '1')}`);
 
