@@ -369,7 +369,7 @@ export const Invoice = () => {
     }, [Invoice, Invoice.data])
 
 
-    let header_table = ["", "เลขที่ใบแจ้งหนี้", "ชื่อห้อง", "วันที่ออก", "สถานะ", "สถานะการพิมพ์", "รอบบิล"]
+    let header_table = ["", "เลขที่ใบแจ้งหนี้", "ชื่อห้อง","ชื่อผู้อยู่อาศัย", "วันที่ออก", "สถานะ", "สถานะการพิมพ์", "รอบบิล"]
     // let sim_table = [{ "": "", "เลขที่ใบแจ้งหนี้": "INMV20190030000097", "ชื่อห้อง": "201", "วันที่ออก": "30/12/2021", "สถานะ": "รอชำระเงิน", "สถานะการพิมพ์": "ยังไม่พิมพ์", "รอบบิล": "04/2562" }]
 
     let header_table2 = ["รายการ", "ชื่อรายการค่าใช้จ่าย", "จำนวน", "จำนวนเงิน", "ราคา", "ภาษีมูลค่าเพิ่ม", "ผลรวม","ราคารวมvat", "vat"]
@@ -505,6 +505,7 @@ export const Invoice = () => {
                                             <td>{header_table[4]}</td>
                                             <td>{header_table[5]}</td>
                                             <td>{header_table[6]}</td>
+                                            <td>{header_table[7]}</td>
                                         </tr>
                                     </thead>
 
@@ -551,6 +552,7 @@ export const Invoice = () => {
                                                 </td>
                                                 <td>{data && data.id}</td>
                                                 <td>{data && data.Room && data.Room.name ? data.Room.name : '---'}</td>
+                                                <td>{data && data.Room && data.Room.members && data.Room.members[0] && data.Room.members[0].name ? data.Room.members[0].name : '---'}</td>
                                                 <td>{data && data.duedateinvoice ? toYYMMDD(data.duedateinvoice) : '---'}</td>
                                                 <td>{data && data.status ? data.status : '---'}</td>
                                                 <td>{data && data.printstatus ? data.printstatus : '---'}</td>

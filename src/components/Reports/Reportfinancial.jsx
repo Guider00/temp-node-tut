@@ -31,27 +31,42 @@ export const Data_to_table = (e) => {
 
 export const Reportfinancial = () => {
 
+    const convert_to_mounth = (now:Date,time:Number)=>{
+        const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+        
+        let labels_mounth = []
+        if(time < 12 ){
+            for(let count = 0 ; count<time;count++){
+              let   _now  = new Date(now)
+              const end_ago_mounth =  new Date(_now.setMonth(_now.getMonth() - count)); 
+              labels_mounth = [  `${month.at(end_ago_mounth.getMonth()  )} -${end_ago_mounth.getFullYear()}` , ...labels_mounth,]
+            }
+        }
+        console.log('labels_mounth',labels_mounth)
+        return labels_mounth
+   }
 
     const [DataChart, setDataChart] = useState({
-        labels: [],
+        labels:[...convert_to_mounth(new Date(),1)], //<< mounth
         datasets: [
             {
                 label: 'ยอดรวม',
-                data: [12, 19, 3, 15, 1, 9],
+                data: [1,2,1],
                 backgroundColor: ' #63e5ac',
             }, {
                 label: 'รายรับ',
-                data: [6, 11, 10, 20, 6, 19],
+                data: [1,1,1],
                 backgroundColor: '#62d2ce',
 
             }, {
                 label: 'จำนวนใบแจ้งหนี้',
-                data: [17, 10, 10, 10, 5, 5],
+                data: [1,1,1],
                 backgroundColor: '#cf57c1',
             },
             {
                 label: 'ยอดค้างชำระ',
-                data: [17, 10, 10, 10, 5, 5],
+                data: [1,1,1],
                 backgroundColor: 'red',
                 borderColor: 'red',
                 borderWidth: 1
@@ -63,147 +78,196 @@ export const Reportfinancial = () => {
     const receipt = useQuery(API_GET_Receipt)
 
 
-    const [Data, setData] = useState([])
 
     const [DataReceipt, setDataReceipt] = useState([])
     const [DataInvoice, setDataInvoice] = useState([])
 
-    const [TotalValue, setTotalValue] = useState([])
+
+    const [monthselected , setmonthselected] = useState(new Date())
+    const [timelength,settimelength] = useState('ALL')
 
 
-    const getMonthName = (month) => {
-        let d = new Date()
-        d.setMonth(month - 1);
-        let monthName = d.toLocaleDateString('default', { month: 'long' });
-        return monthName
 
+
+
+
+    const Number_invoice = (selectedmounth:Date , selectedtime:Number ) =>{
+     
+      
+        
+        if(invoice && invoice.data && invoice.data.Invoices &&  invoice.data.Invoices.length){
+            let  invoices_unpaid  = [...invoice.data.Invoices]
+            if(selectedmounth  !== undefined && selectedtime !== undefined ){
+                invoices_unpaid =   invoices_unpaid.filter(item => {
+                    let invoices_mounth =  new Date(item.duedateinvoice)
+                    let end_mounth =  new Date ( selectedmounth )
+                    let _end_mounth =  new Date ( selectedmounth )
+                    let end_mounth_ago = new Date ( _end_mounth.setMonth(_end_mounth.getMonth() - selectedtime)  )
+                    if(  invoices_mounth.getTime()  <= end_mounth.getTime()  && 
+                    invoices_mounth.getTime() >=  end_mounth_ago.getTime()   ){
+                           return true;  
+                      }else{
+                          return false;
+                      }
+                  })
+                return  invoices_unpaid.length
+            }else{
+                return invoices_unpaid.length
+            }
+
+          
+        }   
+        else{
+            return   '---'
+        }
     }
-    const ConvertData = (list) => {
-        let Data = list.price
-        let priceInNumber = parseInt(Data.replace(/,/g, ''), 10);
-        let _price = Number(priceInNumber ? (priceInNumber) * 107 / 100 : 0).toFixed(2)
-        let _profit = list.status === 'ชำระเงินแล้ว' ? Number(priceInNumber ? (priceInNumber) * 107 / 100 : 0).toFixed(2) : 0
-        let _amountInvoice = (list.data.Invoice === null || list.data.Invoice) || (list.data.Room === null || list.data.Room) ? 1 : 0
-        let _unpaidAmount = list.status === 'รอการชำระเงิน' ? 1 : 0
+    const updatedatachart =( selectedmounth:Date , selectedtime:Number) =>{
+        let data_total = []
+        let data_incom = []
+        let data_number_invoice = []
+        let data_unpaid = []
+        console.log('selectedmounth',selectedmounth ,selectedtime )
+        for(let count  =0 ; count < selectedtime ; count++){
+            let  _selectedmounth =  new Date(selectedmounth)
+            
+            data_total = [ invoice_summary('ยอดรวม',_selectedmounth.setMonth(_selectedmounth.getMonth()-count),1) , ...data_total]
+        }
+        for(let count  =0 ; count <selectedtime ; count++){
+            let  _selectedmounth =  new Date(selectedmounth)
+            data_incom = [ invoice_summary('รายรับ',_selectedmounth.setMonth(_selectedmounth.getMonth()-count),1) , ...data_incom]
+        }
+        for(let count  =0 ; count <selectedtime ; count++){
+            let  _selectedmounth =  new Date(selectedmounth)
+            data_number_invoice = [ Number_invoice( _selectedmounth.setMonth(_selectedmounth.getMonth()-count)  , 1 ) , ...data_number_invoice]
+        }
+        for(let count  =0 ; count <selectedtime ; count++){
+            let  _selectedmounth =  new Date(selectedmounth)
+            data_unpaid = [ invoice_summary('ยอดค้างชำระ', _selectedmounth.setMonth(_selectedmounth.getMonth()-count) ,1) , ...data_unpaid]
+        }
+        
+        // console.log('data_total',data_total)
+        // console.log('data_incom',data_incom)
+        // console.log('data_number_invoice',data_number_invoice)
+        // console.log('data_unpaid',data_unpaid)
+      
+        return {
+            
+            labels:[...convert_to_mounth(selectedmounth ,selectedtime)], //<< mounth
+            datasets: [
+                {
+                    label: 'ยอดรวม',
+                    data: data_total,
+                    backgroundColor: ' #63e5ac',
+                }, {
+                    label: 'รายรับ',
+                    data: data_incom,
+                    backgroundColor: '#62d2ce',
+
+                }, 
+                {
+                    label: 'ยอดค้างชำระ',
+                    data: data_unpaid,
+                    backgroundColor: 'red',
+                    borderColor: 'red',
+                    borderWidth: 1
+                }
+            ]
+        }
+    }
+    const invoice_summary =(status,selectedmounth:Date,selectedtime:Number) =>{
+        if(invoice && invoice.data && invoice.data.Invoices &&  invoice.data.Invoices.length){
+            let  invoices_unpaid = []
+
+            switch (status) {
+                case 'ยอดค้างชำระ':
+                    invoices_unpaid =  invoice.data.Invoices.filter(item => item.status === 'รอชำระเงิน').slice()
+                    break;
+                case 'รายรับ':
+                    invoices_unpaid =  invoice.data.Invoices.filter(item => item.status === 'สำเร็จ').slice()
+                    break;
+                case 'ยอดรวม':
+                    invoices_unpaid =  invoice.data.Invoices.filter(item => item.status).slice()
+                    break;
+                default:
+                    invoices_unpaid =   invoice.data.Invoices.filter(item => item.status).slice()
+                    break;
+            }
+            if(selectedmounth !== undefined && selectedtime !== undefined ){
+                
+                invoices_unpaid =   invoices_unpaid.filter(item => {
+                  let invoices_mounth =  new Date(item.duedateinvoice)
+                  let end_mounth =  new Date ( selectedmounth )
+                  let _end_mounth =  new Date ( selectedmounth )
+                  let end_mounth_ago = new Date ( _end_mounth.setMonth(_end_mounth.getMonth() - selectedtime)  )
+                  if(  invoices_mounth.getTime()  <= end_mounth.getTime()  && 
+                  invoices_mounth.getTime() >=  end_mounth_ago.getTime()   ){
+                         return true;  
+                    }else{
+                        return false;
+                    }
+                })
+              
+            }
+        
+          
+            const total_price = (invoice) =>{
+             return  Number( 
+                invoice.lists.reduce(
+                    (current,next) => {
+                        
+                        if(current !== undefined && next !== undefined){
+                            return  {price: Number(current.price)  + Number( next.price)} 
+                        }else{
+                            return {price: Number(current.price)  }
+                        }
+                    }
+                ).price )
+            }
+   
+           
+            if(invoices_unpaid && invoices_unpaid.length > 0 ){
 
 
+                invoices_unpaid =  invoices_unpaid.map((invoice) => ({...invoice,total_price:total_price(invoice)}) ) 
+              
+                const costunpaid =  invoices_unpaid.reduce( (current,next ) => 
+                 ({ total_price :  ( Number(current.total_price) +  Number(next.total_price)  )  })
+                 ).total_price 
+                
 
-        return ({ price: _price, profit: _profit, amountInvoice: _amountInvoice, unpaidAmount: _unpaidAmount })
-
-
+                return  costunpaid
+            }else{
+                return Number(0)
+            }
+        }
+        else{
+            return   '---'
+        }
     }
 
-
-    // labels = ["March-2022","February-2022","April-2022","February-2012"]
-
-
-
-
-
+    useEffect (()=>{
+         let now  = new Date(monthselected)
+         now = new Date(new Date( now.setMonth(now.getMonth()+1)).getTime()-1 )
+         now.setDate(0)
+         console.log('monthselected',now,timelength )
+        let time = timelength === 'ALL' ? Number(3) :Number(timelength)
+ 
+       setDataChart( updatedatachart(now , time) )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[DataInvoice,DataReceipt , timelength,monthselected])
     useEffect(() => {
 
         if (invoice.data) {
-            let _Invoice = Data
-            _Invoice = Data_to_table(invoice.data.Invoices)
-            setDataInvoice([..._Invoice])
-
+            setDataInvoice([...Data_to_table(invoice.data.Invoices)])
         }
 
         if (receipt.data) {
-            let _Receipt = Data
-            _Receipt = Data_to_table(receipt.data.Receipts)
-            setDataReceipt([..._Receipt])
-
+            setDataReceipt([...Data_to_table(receipt.data.Receipts)])
         }
+       
+        
 
-    }, [invoice, receipt , Data])
-
-
-    useEffect(() => {
-        if ((DataInvoice.length > 0) && (DataReceipt.length > 0)) {
-            console.log('ready to set data')
-            setData([...DataInvoice, ...DataReceipt])
-
-
-        }
-    }, [DataInvoice, DataReceipt])
-
-
-
-    useEffect(() => {
-        const validateTotal = (lists, DataChart) => {
-            console.log('lists',lists)
-    
-    
-            if ((lists && lists.length > 0) && (DataChart && DataChart.labels.length > 0)) {
-                let _totalprice = 0
-                let _profit = 0
-                let _amountInvoice = 0
-                let _unpaid = 0
-                let _unpaidAmount = 0
-                let data = []
-                let data2 = []
-                // let y = []
-                
-    
-                lists.map(list => {
-                    let date = (new Date(list.duedate));
-                    let dateM = `${date.getMonth() + 1}`;
-                    let trueDay = getMonthName(dateM) + -`${date.getFullYear()}`
-                    let i = DataChart.labels.length
-                    
-                    for(let e = 0 ; e < i ; e++){
-                        if (trueDay === DataChart.labels[e]) {
-                            _totalprice += (Number(ConvertData(list).price) ? Number(ConvertData(list).price) : 0)
-                            _profit += (Number(ConvertData(list).profit) ? Number(ConvertData(list).profit) : 0)
-                            _amountInvoice += (Number(ConvertData(list).amountInvoice) ? Number(ConvertData(list).amountInvoice) : 0)
-                            _unpaidAmount += (Number(ConvertData(list).unpaidAmount) ? Number(ConvertData(list).unpaidAmount) : 0)
-                            data = [...data,Number(ConvertData(list).price),DataChart.labels[e] ]
-                            
-                        }
-    
-                    }
-    
-                    
-                    return null;
-                })
-    
-                _unpaid = _totalprice - _profit
-    
-    
-                    
-                return ({
-                    data2:data2,data:data,totalprice: Number(_totalprice).toFixed(0), profit: Number(_profit).toFixed(0),
-                    amountInvoice: Number(_amountInvoice).toFixed(0), unpaid: Number(_unpaid).toFixed(0),
-                    unpaidAmount: Number(_unpaidAmount).toFixed(0)
-                })
-    
-            }
-            else {
-                return ({ totalprice: 0, profit: 0, amountInvoice: 0, invoice: 0, unpaid: 0, unpaidAmount: 0 })
-            }
-        }
-
-        if (Data) {
-            let _allMonth = [...new Set(Data.map((item) => {
-                let date = new Date(item.duedate);
-                let dateM = `${date.getMonth() + 1}`;
-                return getMonthName(dateM) + -`${date.getFullYear()}`
-
-            }))]
-            let _DataChart = JSON.parse(JSON.stringify(DataChart))
-            _DataChart.labels = _allMonth
-            setDataChart(_DataChart)
-
-            if (_DataChart.labels.length > 0) {
-                let _TotalValue = TotalValue
-                _TotalValue = validateTotal(Data, _DataChart)
-                setTotalValue(_TotalValue)
-                console.log('_DataChart', _TotalValue.data)
-                
-            }
-        }
-    }, [Data,DataChart,TotalValue])
+    }, [invoice, receipt ])
 
 
 
@@ -217,53 +281,71 @@ export const Reportfinancial = () => {
 
                     <div className={styles.header}>
                         <h2>Financial report</h2>
+                        <div className={styles.headerinput} >
+                            <input type='month'
+                             
+                                value={`${monthselected.getFullYear()}-${monthselected.getMonth()+1<10?0:""}${monthselected.getMonth()+1 }`}
+                                onChange={(e)=>{
+                                    setmonthselected( new Date( e.target.value)  )
+                                }}
+                             />
+                             <select onChange={(e)=>{ settimelength( e.target.value) }}>
+                                 <option>1</option>
+                                 <option>2</option>
+                                 <option>3</option>
+                                 <option>5</option>
+                            </select>
+                            <button
+                                onClick={()=>{
+                                    console.log('click search')
+                                    invoice.refetch()
+                                    receipt.refetch()
+                                } }
+                             >
+                                search
+                            </button>
+                        </div>
                     </div>
                     <div className={styles.body}>
                         <div className={styles.profit}>
                             <h3 className={styles.headtext}>ยอดรวม</h3>
                             <div className={styles.result}>
-                                <h1>{TotalValue.totalprice}</h1>
+                                <h1>{invoice_summary('ยอดรวม')}</h1>
                             </div>
                             <div className={styles.detail}>
                                 <label></label>
                                 <br />
-                                <label>vs. previous period</label>
+                              
                             </div>
 
                         </div>
                         <div className={styles.incomes}>
                             <h3 className={styles.headtext}>รายรับ</h3>
                             <div className={styles.result}>
-                                <h1>{TotalValue.profit}</h1>
+                                <h1>{invoice_summary('รายรับ')}</h1>
                             </div>
                             <div className={styles.detail}>
-                                <label>90%</label>
-                                <br />
-                                <label>vs. previous period</label>
+                               
                             </div>
 
                         </div>
                         <div className={styles.expenses}>
                             <h3 className={styles.headtext}>จำนวนใบแจ้งหนี้</h3>
                             <div className={styles.result}>
-                                <h1>{TotalValue.amountInvoice}</h1>
+                                <h1>{Number_invoice()}</h1>
                             </div>
                             <div className={styles.detail}>
-                                <label>90%</label>
-                                <br />
-                                <label>vs. previous period</label>
+                               
                             </div>
 
                         </div>
                         <div className={styles.wageExpenses}>
                             <h3 className={styles.headtext}>ยอดค้างชำระ</h3>
                             <div className={styles.result}>
-                                <h1>{TotalValue.unpaid}</h1>
+                                <h1>{invoice_summary('ยอดค้างชำระ')}</h1>
                             </div>
                             <div className={styles.detail}>
-                                <label></label>
-                                <br />
-                                <label>vs. previous period</label>
+                                
                             </div>
 
                         </div>

@@ -14,9 +14,38 @@
 }
 .container>.card>.header{
     margin: 1rem;
-    
-   
 }
+
+.container>.card>.header>.headerinput{
+    margin: 1rem;
+    
+}
+.container>.card>.header>.headerinput>input{
+    margin: 1rem;
+    
+}
+.container>.card>.header>.headerinput>select{
+    margin: 1rem;
+    
+}
+.container>.card>.header>.headerinput>button{
+    margin: 0.5rem;
+    border-radius: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+   
+    
+}
+.container>.card>.header>.headerinput>button:hover{
+    background-color: #0d6efd;
+    box-shadow: 1px 1px 5px rgb(0 0 0 / 30%);
+}
+
+
+
+
+
+
 .container>.card>.header>h2{
     font-size: xx-large;
     margin: 0.5rem;

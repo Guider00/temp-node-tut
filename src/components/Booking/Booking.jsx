@@ -168,7 +168,7 @@ export const Booking = () => {
 		roomtype: "ทั้งหมด",
 	})
 	const [roomType_search, setRoomType_search] = useState({
-		roomtype: "ทั้งหมด",
+		roomtype: "รายวัน",
 	})
 
 	// const [action, setaction] = useState('create');
@@ -457,13 +457,13 @@ export const Booking = () => {
 		[loadingpage, DateRange]
 	);
 	useEffect(() => {
-		console.log('debug', api_rooms)
+		console.log('debug , api_rooms ', api_rooms)
 		if (api_rooms.data) {
-
+			console.log('debug , api_rooms ', api_rooms)
 			if (api_rooms.data.Rooms && api_rooms.data.Rooms.length) {
 
 				let start_date = DateStart ? new Date(DateStart) : new Date()
-				let end_date = DateEnd ? new Date(DateStart) : new Date()
+				let end_date = DateEnd ? new Date(DateEnd) : new Date()
 				start_date = start_date.getTime()
 				end_date = end_date.getTime()
 
@@ -499,35 +499,43 @@ export const Booking = () => {
 
 				console.log('debug roomschedules', roomschedules)
 				let room_support = roomschedules.map((roomschedule) => {
-					let { room } = roomschedule
-					console.log('room', room)
+				
+					console.log('debug roomschedule', roomschedule)
 
-					// console.log(`debug roomschedule`,roomschedule)
+					
 					let condition = roomschedule.sch.map(({ checkin_date_exp, checkin_date, checkin_type }) => {
-						console.log(`debug roomschedule`, checkin_date_exp, end_date, (checkin_date_exp === null || (end_date < checkin_date && end_date < checkin_date_exp)))
-
-						if (roomType_search.roomtype === 'ทั้งหมด') {
+					//	console.log(`debug roomschedule`, checkin_date_exp, end_date, (checkin_date_exp === null || (end_date < checkin_date && end_date < checkin_date_exp)))
+						console.log(`debug roomschedule time  ${roomschedule.room.name}= `,
+						"start_date",new Date(start_date) ,'end_date',new Date(end_date),
+						'checkin_date',new Date(checkin_date)  ,'checkin_date_exp',new Date(checkin_date_exp) ,
+						roomType_search.roomtype,
+						"condition",(start_date < checkin_date && start_date < checkin_date_exp),
+						(end_date < checkin_date && end_date < checkin_date_exp),
+						)
+						 if (roomType_search.roomtype === 'รายวัน') {
 							if (
-								//       [จอง] ____________
-								//       ________ [วันที่เลือก ]
+								//      [จอง รายวัน] ____________
+								//       _______________[วันที่เลือก รายวัน ]
+								checkin_type === 'รายวัน' && 
 								(start_date > checkin_date && start_date > checkin_date_exp) &&
 								(end_date > checkin_date && end_date > checkin_date_exp)
-								&& checkin_type === 'รายวัน') {
+								) {
 								return true
 							} else if (
-								//        ____________[จอง]
-								//       [วันที่เลือก ]________
+								//        ________________[ถูกจอง รายวัน]
+								//       [วันที่เลือก รายวัน]________
+								checkin_type === 'รายวัน' &&
 								(start_date < checkin_date && start_date < checkin_date_exp) &&
-								(end_date < checkin_date && end_date < checkin_date_exp) &&
-								checkin_type === 'รายวัน'
+								(end_date < checkin_date && end_date < checkin_date_exp) 
+								
 							) {
 								return true
 							} else if (
-								//       _____________[จอง รายเดือน]_
-								//       _[วันที่เลือก ]______________
+								//       __________________[ถูกจอง รายเดือน]_
+								//       _[วันที่เลือก รายวัน]______________
+								checkin_type === 'รายเดือน' &&
 								(start_date < checkin_date && (start_date < checkin_date_exp || checkin_date_exp === null)) &&
-								(checkin_date_exp === null || (end_date < checkin_date && end_date < checkin_date_exp)) &&
-								checkin_type === 'รายเดือน'
+								(checkin_date_exp === null || (end_date < checkin_date && end_date < checkin_date_exp)) 
 							) {
 								return true
 							} else if (
@@ -535,48 +543,26 @@ export const Booking = () => {
 								checkin_date_exp === null && checkin_date === null && checkin_type === null
 							) {
 								return true
-							}
-							else {
+							}else {
+								
 								return false
 							}
 
-						} else if (roomType_search.roomtype === 'รายวัน') {
-							if (
-								//       [จอง] ____________
-								//       ________ [วันที่เลือก ]
-								(start_date > checkin_date && start_date > checkin_date_exp) &&
-								(end_date > checkin_date && end_date > checkin_date_exp)
-								&& checkin_type === 'รายวัน') {
+						} else if (roomType_search.roomtype === 'รายเดือน' && 
+								   roomschedule.room.status !== 'ห้องมีคนอยู่' 
+							 ) {
+							 if(
+								// [จอง รายวัน]
+								//  ___________[วันที่เลือก รายเดือน]
+								checkin_type === 'รายวัน' && 
+								start_date > checkin_date && start_date > checkin_date_exp &&
+								end_date > checkin_date &&  end_date > checkin_date_exp  
+								
+							){
 								return true
-							} else if (
-								//        ____________[จอง]
-								//       [วันที่เลือก ]________
-								(start_date < checkin_date && start_date < checkin_date_exp) &&
-								(end_date < checkin_date && end_date < checkin_date_exp) &&
-								checkin_type === 'รายวัน'
-							) {
-								return true
-							} else if (
-								// new room 
-								checkin_date_exp === null && checkin_date === null && checkin_type === null
-							) {
-								return true
-							}
-							else {
-								return false
-							}
-
-						} else if (roomType_search.roomtype === 'รายเดือน') {
-							if (
-								//       _____________[จอง รายเดือน]_
-								//       _[วันที่เลือก ]______________
-								(start_date < checkin_date && (start_date < checkin_date_exp || checkin_date_exp === null)) &&
-								(checkin_date_exp === null || (end_date < checkin_date && end_date < checkin_date_exp)) &&
-								checkin_type === 'รายเดือน'
-							) {
-								return true
-							} else if (
-								// new room 
+							
+							}else if (
+								//  ห้องว่าง new room 
 								checkin_date_exp === null && checkin_date === null && checkin_type === null
 							) {
 								return true
@@ -591,7 +577,7 @@ export const Booking = () => {
 
 					})
 
-					//console.log(`debug ${roomschedule.room.name}`,condition)
+					console.log(`debug condition  ${roomschedule.room.name}`,condition)
 
 					roomschedule.condition = Boolean(condition.reduce((previousValue, currentValue) => previousValue & currentValue))
 
@@ -610,6 +596,23 @@ export const Booking = () => {
 		}
 	}, [api_rooms, api_rooms.data, api_rooms.loading, DateStart, DateEnd, roomType_search, options_search])
 
+
+	useEffect(()=>{
+		
+		handleChangedformbooking({target:{
+			id:"checkin_date_exp",
+			value:DateEnd
+		}})
+		handleChangedformbooking({target:{
+			id:"checkin_date",
+			value:DateStart
+		}})
+		handleChangedformbooking({target:{
+			id:"checkin_type",
+			value:roomType_search.roomtype
+		}})
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	},[DateEnd,DateStart , roomType_search])
 
 	console.log('debug rooms', rooms);
 	// console.log('selectedroom', selectedroom);
@@ -682,12 +685,12 @@ export const Booking = () => {
 											setRoomType_search({ ..._roomType_search })
 										}}
 									>
-										<option>ทั้งหมด</option>
+										
 										<option>รายวัน</option>
 										<option>รายเดือน</option>
 									</select>
 
-									<input
+									{/* <input
 										className={styles.roomType}
 										value={options_search.roomtype}
 										type='text'
@@ -697,9 +700,9 @@ export const Booking = () => {
 											_options_search.roomtype = e.target.value
 											setoptions_search({ ..._options_search })
 										}}
-									/>
+									/> */}
 
-									<label> วันที่เข้าพัก </label>
+									<label > วันที่เข้าพัก </label>
 									<input
 										type='date'
 										name="input_searchdatecheckin"
@@ -708,8 +711,11 @@ export const Booking = () => {
 										onChange={(e) => {
 											let { value } = e.target
 											setDateStart(value)
+									
+
+											
 										}} />
-									<label> วันที่เข้าย้ายออก </label>
+									<label > วันที่เข้าย้ายออก </label>
 									<input
 										type='date'
 										name="input_searchdatecheckout"
@@ -719,6 +725,8 @@ export const Booking = () => {
 											let { value } = e.target
 											console.log('debug set end date', value)
 											setDateEnd(value)
+											
+										
 										}} />
 									<Tippy content='เลื่อกช่วงเวลาที่ต้องการเข้าพัก'>
 										<button
@@ -768,7 +776,7 @@ export const Booking = () => {
 										onClick={
 											async () => {
 												// let Rooms = await getRooms();
-
+												api_rooms.refetch()
 												// let _filter_rooms = []
 												// console.log('DateStart,DateEnd', DateStart, DateEnd)
 												// _filter_rooms = filter_rooms(Rooms, options_search, DateStart, DateEnd)
@@ -795,7 +803,8 @@ export const Booking = () => {
 										</tr>
 									</thead>
 									<tbody>{rooms.filter(
-										(room) => (room && room && room.status === 'ย้ายออก') || room.status === 'ห้องว่าง'
+										(room) => (room && room && room.status === 'ย้ายออก') || room.status === 'ห้องว่าง' 
+									 	|| room.status === 'มีคนอยู่' ||  room.status === 'จอง'
 									).map(
 										(room, index) =>
 											room ? (
@@ -856,7 +865,8 @@ export const Booking = () => {
 										<label> รูปแบบการจอง </label>
 									</div>
 									<div className={styles.input}>
-										<select
+										<select 
+											disabled={true}
 											style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 											id="checkin_type"
 											value={formbooking.checkin_type}
@@ -993,6 +1003,7 @@ export const Booking = () => {
 									</div>
 									<div>
 										<input
+											disabled={true}
 											style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 											id="checkin_date"
 											type="date"
@@ -1007,6 +1018,7 @@ export const Booking = () => {
 									</div>
 									<div>
 										<input
+											disabled={true}
 											style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 											id="checkin_date_exp"
 											type="date"
@@ -1021,6 +1033,7 @@ export const Booking = () => {
 									</div>
 									<div>
 										<input
+										
 											style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 											id="note"
 											type="text"

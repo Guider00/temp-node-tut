@@ -508,7 +508,7 @@ export const Receipt = () => {
 
                                 </p>
 
-                                <div className={styles.header}>รายการใบแจ้งหนี้</div>
+                                <div className={styles.header}>รายการใบเสร็จ</div>
                                 <div className={styles.zonetable}>
                                     <table className={styles.table}>
 

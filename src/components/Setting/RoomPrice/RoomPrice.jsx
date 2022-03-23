@@ -268,7 +268,7 @@ export const RoomPrice = () => {
     const [modelistoption, setmodelistoption] = useState('add')
     const [otheroptionnname, setotheroptionnname] = useState('');
     const [otheroptionprice, setotheroptionprice] = useState('');
-    const [isshowIcon , setIsShowIcon] = useState(true)
+    //const [isshowIcon , setIsShowIcon] = useState(true)
 
     const [_load, setload] = useState(false);
 
@@ -456,6 +456,7 @@ export const RoomPrice = () => {
             setload(true)
             setinitial(true)
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [GET_RoomType, GET_Rooms ])
 
 

@@ -1,6 +1,6 @@
 import styles from './Input.module.css'
 // import theme from '../../theme/themes.module.css'
-import { useRef, useState } from 'react'
+import {  useState } from 'react'
 import { Menudropdown } from './menudropdown/menudropdown'
 import Icon from '@material-ui/core/Icon'
 
@@ -11,7 +11,7 @@ export const Input = ({ label, type, key, onChange, defaultValue, value }) => {
     const [isShow, setIsShow] = useState(false)
     const [icon, setIcon] = useState('')
     const [icons, setIcons] = useState('')
-    const inputRef = useRef(null)
+  //  const inputRef = useRef(null)
     const handlefileChange = (event) => {
         setuploadimg(URL.createObjectURL(event.target.files[0]))
 
