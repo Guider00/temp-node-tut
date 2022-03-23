@@ -19,12 +19,13 @@ function CalendarPicker({onCalendar,start, selectedStartDate , selectedEndDate }
     //   ];
 
       useEffect(()=>{
-           console.log( 'debug-calendar ',selectedStartDate , selectedEndDate)
-        let _selectedDayRange =  JSON.parse( JSON.stringify(selectedDayRange ) ) 
+        //    console.log( 'debug-calendar ',selectedStartDate , selectedEndDate)
+ 
         if( selectedStartDate === null ||  selectedEndDate === null  || selectedStartDate === ''  || selectedEndDate === ''){
            
         }else{
-            _selectedDayRange ={
+
+            setSelectedDayRange(prevState =>({...prevState , 
                 from:{ 
                         day: selectedStartDate.getDate(),
                         month: selectedStartDate.getMonth()+1,
@@ -35,11 +36,11 @@ function CalendarPicker({onCalendar,start, selectedStartDate , selectedEndDate }
                         month: selectedEndDate.getMonth()+1,
                         year: selectedEndDate.getFullYear()
                 }
-            }
-        }
 
-        setSelectedDayRange(_selectedDayRange)
-      },[selectedStartDate , selectedEndDate ,selectedDayRange]);
+            }))
+        }
+      
+      },[selectedStartDate , selectedEndDate ]);
   return <div className={styles.container}>
             <div className={styles.mainCalendar}>
                 <div className={styles.titleClose}>
