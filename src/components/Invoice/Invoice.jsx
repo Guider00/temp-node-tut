@@ -204,6 +204,28 @@ export const Invoice = () => {
     const [selectroom, setselectroom] = useState(null)
     const [editselectroom, seteditselectroom] = useState(false)
 
+    const [formaddressinvoice , setformaddressinvoice]  = useState({
+        name:"",
+        lastname:"",
+        personalid:"",
+        texinvoice:"",
+        address:"",
+    })
+    const handlerformaddressinvoice =(e) =>{
+        if(e && e.target){
+            let {value,name} = e.target
+            if(formaddressinvoice.hasOwnProperty(name)){
+                let _formaddressinvoice = {...formaddressinvoice}
+                _formaddressinvoice[name]=value
+                setformaddressinvoice(_formaddressinvoice)
+            }else{
+                console.error('formaddressinvoice with out  property')
+            }
+        }else{
+            console.error('handlerformaddressinvoice input undefiend')
+        }
+    }
+
     const defaultformter = ({
         inmemory_kwh: "",
         inmemory_kwh_date: "",
@@ -698,60 +720,63 @@ export const Invoice = () => {
                                 <h3 style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }} >บันทึกมิเตอร์</h3>
                             </div>
                             <div className={styles.topzone} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
+                                 {/* //TODO: ทำเป็น form ที่อยู่ใบแจ้งหนี้แยก  */}
+                                 <div className={styles.top}>
+                                    <div className={styles.textX} >
+                                        <h4 style={{ fontSize: isDesktop ? '' : isTablet ? '20px' : '' }} >ข้อมูลใบแจ้งหนี้</h4>
+                                    </div>
+                                 </div>
                                 <div className={styles.top}>
+
                                     <div className={styles.textX} >ชื่อ</div>
                                     <div className={styles.inputX}>
-                                        <input></input>
+                                        <input 
+                                            name="name"
+                                            value={formaddressinvoice.name} onChange={handlerformaddressinvoice}>
+                                        </input>
                                     </div>
                                 </div>
                                 <div className={styles.top}>
                                     <div className={styles.textX} >นามสกุล</div>
                                     <div className={styles.inputX}>
-                                        <input></input>
+                                        <input  
+                                            name="lastname"
+                                            value={formaddressinvoice.lastname} onChange={handlerformaddressinvoice} >
+                                        </input>
                                     </div>
                                 </div>
                                 <div className={styles.top}>
                                     <div className={styles.textX} >บัตรประชาชน</div>
                                     <div className={styles.inputX}>
-                                        <input></input>
+                                        <input 
+                                            name="personalid"
+                                            value={formaddressinvoice.personalid} onChange={handlerformaddressinvoice} >
+                                        </input>
                                     </div>
                                 </div>
                                 <div className={styles.top}>
                                     <div className={styles.textX} >เลขประจำตัวผู้เสียภาษี</div>
                                     <div className={styles.inputX}>
-                                        <input></input>
+                                        <input 
+                                            name="texinvoice"
+                                            value={formaddressinvoice.texinvoice} onChange={handlerformaddressinvoice}>
+                                        </input>
                                     </div>
                                 </div>
                                 <div className={styles.top}>
                                     <div className={styles.textX} >ที่อยู่ตามบัตรประชาชน</div>
                                     <div className={styles.inputX}>
-                                        <input></input>
+                                        <input 
+                                            name="address"
+                                            value={formaddressinvoice.address} onChange={handlerformaddressinvoice}>
+                                        </input>
                                     </div>
                                 </div>
 
-                                <br />
-                                <button name="readmeter" className={styles.btnreadmeter}
-                                    disabled={!editselectroom}
-                                    onClick={() => {
-                                        let _invoice = { ...selectroom }
-                                        let _formmeter = JSON.parse(JSON.stringify(formmeter))
-                                        if (_invoice && _invoice.Room && _invoice.Room.meterroom) {
-                                            let { inmemory_kwh, inmemory_kwh_date, inmemory_water, inmemory_water_date,
-                                                inmemory_finished_kwh, inmemory_finished_kwh_date, inmemory_finished_water, inmemory_finished_water_date
-                                            } = _invoice.Room.meterroom
-                                            _formmeter['inmemory_kwh'] = inmemory_kwh
-                                            _formmeter['inmemory_kwh_date'] = inmemory_kwh_date
-                                            _formmeter['inmemory_water'] = inmemory_water
-                                            _formmeter['inmemory_water_date'] = inmemory_water_date
-                                            _formmeter['inmemory_finished_kwh'] = inmemory_finished_kwh
-                                            _formmeter['inmemory_finished_kwh_date'] = inmemory_finished_kwh_date
-                                            _formmeter['inmemory_finished_water'] = inmemory_finished_water
-                                            _formmeter['inmemory_finished_water_date'] = inmemory_finished_water_date
-                                        }
-
-                                        setformmeter(_formmeter)
-                                    }}>อ่านจาก Meter</button>
+                               
+    
                             </div>
+                 
                             <div className={styles.display} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
 
                                 <div className={styles.topic2}>
@@ -790,6 +815,29 @@ export const Invoice = () => {
                                 <label className={styles.text2} >วันที่สิ้นสุด</label>
                                 <label className={styles.text3} >ค่าโทรศัพท์</label>
                                 <div className={styles.input}>
+                             
+                                    <button name="readmeter" className={styles.btnreadmeter}
+                                            disabled={!editselectroom}
+                                            onClick={() => {
+                                                let _invoice = { ...selectroom }
+                                                let _formmeter = JSON.parse(JSON.stringify(formmeter))
+                                                if (_invoice && _invoice.Room && _invoice.Room.meterroom) {
+                                                    let { inmemory_kwh, inmemory_kwh_date, inmemory_water, inmemory_water_date,
+                                                        inmemory_finished_kwh, inmemory_finished_kwh_date, inmemory_finished_water, inmemory_finished_water_date
+                                                    } = _invoice.Room.meterroom
+                                                    _formmeter['inmemory_kwh'] = inmemory_kwh
+                                                    _formmeter['inmemory_kwh_date'] = inmemory_kwh_date
+                                                    _formmeter['inmemory_water'] = inmemory_water
+                                                    _formmeter['inmemory_water_date'] = inmemory_water_date
+                                                    _formmeter['inmemory_finished_kwh'] = inmemory_finished_kwh
+                                                    _formmeter['inmemory_finished_kwh_date'] = inmemory_finished_kwh_date
+                                                    _formmeter['inmemory_finished_water'] = inmemory_finished_water
+                                                    _formmeter['inmemory_finished_water_date'] = inmemory_finished_water_date
+                                                }
+
+                                                setformmeter(_formmeter)
+                                            }}>อ่านจาก Meter</button>
+                                  
                                     <label className={styles.text4} >โทรศัพท์</label>
                                     <input name="inmemory_phone_date" value={formmeter.inmemory_phone_date} onChange={handlerChangeformmeter} className={styles.input1} type='date' />
                                     <input name="inmemory_finished_phone_date" value={formmeter.inmemory_finished_phone_date} onChange={handlerChangeformmeter} className={styles.input2} type='date' />
@@ -846,9 +894,6 @@ export const Invoice = () => {
                                         setselectroom(_invoice)
                                         console.log(formmeter)
                                     }}> เพิ่มรายการ มิเตอร์</button>
-                            </div>
-                            <div className={styles.topic} style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}>
-                                รายการใช้จ่าย
                             </div>
                             <div className={styles.table}>
                                 <table >

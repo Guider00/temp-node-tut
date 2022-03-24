@@ -33,22 +33,22 @@ export const Reportfinancial = () => {
 
     const convert_to_mounth = (now:Date,time:Number)=>{
         const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-
-        
+     
+       
         let labels_mounth = []
         if(time < 12 ){
-            for(let count = 0 ; count<time;count++){
-              let   _now  = new Date(now)
-              const end_ago_mounth =  new Date(_now.setMonth(_now.getMonth() - count)); 
-              labels_mounth = [  `${month.at(end_ago_mounth.getMonth()  )} -${end_ago_mounth.getFullYear()}` , ...labels_mounth,]
+            for(let countaa = 0 ; countaa< time; countaa++){
+                let  end_ago_mounth  = new Date(now.valueOf())
+                end_ago_mounth.setMonth(  end_ago_mounth.getMonth() - Number(countaa)); 
+                labels_mounth = [  `${month.at(end_ago_mounth.getMonth()  )}-${end_ago_mounth.getFullYear()}` , ...labels_mounth,]
             }
         }
-        console.log('labels_mounth',labels_mounth)
+        console.log('debug labels_mounth',labels_mounth)
         return labels_mounth
    }
 
     const [DataChart, setDataChart] = useState({
-        labels:[...convert_to_mounth(new Date(),1)], //<< mounth
+        labels:[], //<< mounth
         datasets: [
             {
                 label: 'ยอดรวม',
@@ -84,7 +84,7 @@ export const Reportfinancial = () => {
 
 
     const [monthselected , setmonthselected] = useState(new Date())
-    const [timelength,settimelength] = useState('ALL')
+    const [timelength,settimelength] = useState('1')
 
 
 
@@ -126,33 +126,30 @@ export const Reportfinancial = () => {
         let data_incom = []
         let data_number_invoice = []
         let data_unpaid = []
-        console.log('selectedmounth',selectedmounth ,selectedtime )
+
+      
         for(let count  =0 ; count < selectedtime ; count++){
-            let  _selectedmounth =  new Date(selectedmounth)
-            
+            let  _selectedmounth =   new Date(selectedmounth.valueOf())
             data_total = [ invoice_summary('ยอดรวม',_selectedmounth.setMonth(_selectedmounth.getMonth()-count),1) , ...data_total]
         }
         for(let count  =0 ; count <selectedtime ; count++){
-            let  _selectedmounth =  new Date(selectedmounth)
-            data_incom = [ invoice_summary('รายรับ',_selectedmounth.setMonth(_selectedmounth.getMonth()-count),1) , ...data_incom]
+            let  _selectedmounth =   new Date(selectedmounth.valueOf())
+             data_incom = [ invoice_summary('รายรับ',_selectedmounth.setMonth(_selectedmounth.getMonth()-count),1) , ...data_incom]
         }
         for(let count  =0 ; count <selectedtime ; count++){
-            let  _selectedmounth =  new Date(selectedmounth)
-            data_number_invoice = [ Number_invoice( _selectedmounth.setMonth(_selectedmounth.getMonth()-count)  , 1 ) , ...data_number_invoice]
+            let  _selectedmounth =   new Date(selectedmounth.valueOf())
+             data_number_invoice = [ Number_invoice( _selectedmounth.setMonth(_selectedmounth.getMonth()-count)  , 1 ) , ...data_number_invoice]
         }
         for(let count  =0 ; count <selectedtime ; count++){
-            let  _selectedmounth =  new Date(selectedmounth)
-            data_unpaid = [ invoice_summary('ยอดค้างชำระ', _selectedmounth.setMonth(_selectedmounth.getMonth()-count) ,1) , ...data_unpaid]
+            let  _selectedmounth =   new Date(selectedmounth.valueOf())
+             data_unpaid = [ invoice_summary('ยอดค้างชำระ', _selectedmounth.setMonth(_selectedmounth.getMonth()-count) ,1) , ...data_unpaid]
         }
         
-        // console.log('data_total',data_total)
-        // console.log('data_incom',data_incom)
-        // console.log('data_number_invoice',data_number_invoice)
-        // console.log('data_unpaid',data_unpaid)
-      
+        let ndate = new Date(selectedmounth)
+        let  label_mounth =  convert_to_mounth(ndate,selectedtime);
         return {
             
-            labels:[...convert_to_mounth(selectedmounth ,selectedtime)], //<< mounth
+            labels:[...label_mounth], //<< mounth
             datasets: [
                 {
                     label: 'ยอดรวม',
@@ -193,14 +190,13 @@ export const Reportfinancial = () => {
                     break;
             }
             if(selectedmounth !== undefined && selectedtime !== undefined ){
+                 let _selectedmounth = new Date(selectedmounth.valueOf())
+                 let first_date_of_mounth = new Date(_selectedmounth.getFullYear() , _selectedmounth.getMonth()+1 - selectedtime,1)
+                 let end_date_of_mounth =   new Date(  new Date(_selectedmounth.getFullYear() , _selectedmounth.getMonth()+1,1).getTime() -1  ) 
                 
                 invoices_unpaid =   invoices_unpaid.filter(item => {
                   let invoices_mounth =  new Date(item.duedateinvoice)
-                  let end_mounth =  new Date ( selectedmounth )
-                  let _end_mounth =  new Date ( selectedmounth )
-                  let end_mounth_ago = new Date ( _end_mounth.setMonth(_end_mounth.getMonth() - selectedtime)  )
-                  if(  invoices_mounth.getTime()  <= end_mounth.getTime()  && 
-                  invoices_mounth.getTime() >=  end_mounth_ago.getTime()   ){
+                  if(  invoices_mounth.getTime() <= end_date_of_mounth.getTime()  && invoices_mounth.getTime() >= first_date_of_mounth.getTime()){
                          return true;  
                     }else{
                         return false;
@@ -246,12 +242,8 @@ export const Reportfinancial = () => {
     }
 
     useEffect (()=>{
-         let now  = new Date(monthselected)
-         now = new Date(new Date( now.setMonth(now.getMonth()+1)).getTime()-1 )
-         now.setDate(0)
-         console.log('monthselected',now,timelength )
-        let time = timelength === 'ALL' ? Number(3) :Number(timelength)
- 
+        let now  = new Date(monthselected)
+        let time = Number(timelength)
        setDataChart( updatedatachart(now , time) )
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[DataInvoice,DataReceipt , timelength,monthselected])
@@ -289,7 +281,7 @@ export const Reportfinancial = () => {
                                     setmonthselected( new Date( e.target.value)  )
                                 }}
                              />
-                             <select onChange={(e)=>{ settimelength( e.target.value) }}>
+                             <select onChange={(e)=>{ settimelength( e.target.value) }} value={timelength}>
                                  <option>1</option>
                                  <option>2</option>
                                  <option>3</option>

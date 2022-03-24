@@ -498,7 +498,7 @@ return (
                             id='checkin_date_exp'
                             min={DateStart}
                             type='date'
-                            value={DateEnd ? DateStart : ''}
+                            value={DateEnd ? DateEnd : ''}
                             className={styles.inputdate}
                             onChange={(e) => {
                                 let { value } = e.target
@@ -641,6 +641,14 @@ return (
                         <button className={styles.print}
                             onClick={async ()=>{
                                 //TODO: Export PDF สัญญาณ หลายๆ หน้า 
+                                console.log('IDrooms',...IDrooms)
+                                try{
+                                let resulte = IDrooms.map(room =>{
+
+                                })
+                            }catch(e){
+                                console.log('')
+                            }
                         }}
                     > <PrintIcon/> พิมพ์</button>
                      <button className={styles.confirm}
