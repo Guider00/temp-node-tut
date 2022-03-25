@@ -19,7 +19,7 @@ import {
     API_GET_RoomType
 } from '../../API/Schema/RoomType/RoomType'
 import { API_GET_Rooms } from '../../API/Schema/Room/Room'
-// import { export_Contract } from '../../general_functions/pdf/export/export_pdf';
+ import {  export_Contract } from '../../general_functions/pdf/export/export_pdf';
 
 import { FileUploader } from './FileUploader/FileUploader'
 import { filter_rooms, Rooms_to_table,  FormFilter } from './function';
@@ -643,9 +643,11 @@ return (
                                 //TODO: Export PDF สัญญาณ หลายๆ หน้า 
                                 console.log('IDrooms',...IDrooms)
                                 try{
-                                let resulte = IDrooms.map(room =>{
-
-                                })
+                                    export_Contract(IDrooms)
+                                // let resulte = IDrooms.map(room =>{
+                                
+                                    
+                                // })
                             }catch(e){
                                 console.log('')
                             }

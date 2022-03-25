@@ -372,26 +372,87 @@ const numbertothailanguage = (number) => {
     return null
 }
 
+
+
+ // function  export contract  // 
+const getTypeelectrical = (contract) =>{
+    if(contract && contract ){
+
+     //   return 'ยูนิตละ'
+        return 'เหมาจ่าย'
+    }else{
+        return ''
+    }
+}
+const getCheckin_exp_date =  (contract) =>{
+    if(contract && contract.Room && contract.Room.checkin && contract.Room.checkin.checkin_date_exp){
+        return contract.Room.checkin.checkin_date_exp
+    }else{
+        return '____ / ____ / _______' 
+    }
+}
+const getDepositcost = (contract) =>{
+    if(contract && contract.typerent ){
+        if(contract.typerent  === 'รายเดือน'  && contract.depositrent_cost !== null && contract.depositrent_cost !== undefined){
+            return Number(contract.depositrent_cost).toFixed(2)
+        }else{
+            return 'ไม่มีเงินประกัน'
+        }
+    }else{
+        return 'ไม่มีเงินประกัน'        
+    }
+}
+const getrentcost = (contract) =>{
+    if(contract && contract.typerent ){
+        if(contract.typerent  === 'รายเดือน'  && contract.mounthly_cost !== null && contract.mounthly_cost !== undefined){
+            return Number(contract.mounthly_cost).toFixed(2)
+        }else if(contract.typerent  === 'รายวัน'  && contract.daily_cost !== null && contract.daily_cost !== undefined){
+            return Number(contract.daily_cost).toFixed(2)
+        }else{
+            return 'ไม่มีเงินค่าเช่า'
+        }
+    }else{
+        return 'ไม่มีเงินค่าเช่า'        
+    }
+}
+
+// if (contract && contract.Room && contract.Room.checkin && contract.Room.checkin.checkin_type) {
+//     price_rent = (contract.Room.checkin.checkin_type === 'รายเดือน' ? contract.Room.RoomType.monthlyprice : contract.Room.RoomType.dailyprice)
+//     text_price3 = numbertothailanguage(Number(price_rent)) + 'บาท'
+// }
+
 export const export_Contract = (contracts, defaultData) => {
 
     let AddressForm = defaultData
     const document_name = 'เอกสารสัญญา'
-
-
+   
     if (contracts && Array.isArray(contracts)) {
         const doc = new jsPDF('mm', 'mm', [210, 297]);
+      
+
         contracts.map((contract, index) => {
             console.log('contract', index, contract)
-            let location = "213ข.6 หมูบ้านรมรื่น ถนนราชพฤกษ์ ข.28 แขวงตลิ่งชัน เขตตลิ่งชัน"
-            let date = "12/12/2564"
-            let between = "10/11/2564 - 10/12/2564"
+            
+            let nextline_size = 8
+            let indexline_body = 0;
+            let offset_body = 45;
 
-            let No = AddressForm.no ? AddressForm.no : '---'
-            let district = AddressForm.district ? AddressForm.district : '---'
-            let boundary = AddressForm.boundary ? AddressForm.boundary : '---'
-            let province = AddressForm.province ? AddressForm.province : '---'
-            let name = "xxxxxxxxxxxxx xxxxxxxxxxxxxxxxxx"
-
+            let location = "213ข.6 หมูบ้านรมรื่น ถนนราชพฤกษ์ ข.28 แขวงตลิ่งชัน เขตตลิ่งชัน" // TODO: สถานที่ทำสัญญา
+            let date = "12/12/2564" // TODO: วันที่ทำสัญญาญ
+            let between = "ผู้ให้เช้า และ ผู้้เช่า"
+            console.log('export contracts',contract)
+        
+             // ข้อมูลผู้ให้เช่า
+            let name_owner = "นาย ชื่อผู้ให้เช่า"   // << 
+            let lastname_owner = " นามสกุลผู้ให้เช่า"
+            let No =  AddressForm && AddressForm.no ? AddressForm.no : '---'
+            let district =  AddressForm && AddressForm.district ? AddressForm.district : '---'
+            let boundary =  AddressForm && AddressForm.boundary ? AddressForm.boundary : '---'
+            let province =  AddressForm && AddressForm.province ? AddressForm.province : '---'
+            
+            // ข้อมูลผู้เช่า
+            let name = "นาย ชื่่อผู้เช่า"   // << 
+            let lastname = " นามสกุลผู้เช่า"
             let No2 = "444/96"
             let district2 = "ดินแดง"
             let boundary2 = "ดินแดง"
@@ -399,40 +460,33 @@ export const export_Contract = (contracts, defaultData) => {
 
             let Number_room = "4444"
             let floor_room = "2"
+            let building_name = "1"
             let location_room = "213ข.6 หมูบ้านรมรื่น ถนนราชพฤกษ์ ข.28 แขวงตลิ่งชัน เขตตลิ่งชัน"
             let district3 = "ดินแดง"
             let boundary3 = "ดินแดง"
             let province3 = "กรุงเทพมหานคร"
-
-
+            //TODO: ต้องแยกระหว่าง สัญญาญ รายวันกับ สัญญา รายเดือน 
             let result_date = "5"
             let start_rent = (contract && contract.Room && contract.Room.checkin) ? contract.Room.checkin.checkin_date : "--/--/----"
-            let end_rent = "12/12/2555"  // วันสิ้นสุดสัญญา
+            let end_rent = getCheckin_exp_date(contract) // วันสิ้นสุดสัญญา
             let round_rent = "12/12/2555"  // รอบสัญญา
             let Electricity_bill = (contract.Room && contract.Room.RoomType && contract.Room.RoomType.rate_electrical) ? contract.Room.RoomType.rate_electrical : "..........."
             let Water_bill = (contract.Room && contract.Room.RoomType && contract.Room.RoomType.rate_water) ? contract.Room.RoomType.rate_water : "..........."
-            let Phone_bill = "1234"
+            let Phone_bill = ".........." // ราคาค่าโทรศัพท์
+            // TODO: ค่ามัดจำรายวันไม่มี  มีแต่รายเดือน 
+            let deposit =   getDepositcost(contract)
+            let text_price2 =  deposit !== 'ไม่มีเงินประกัน' ? numbertothailanguage(Number(deposit)): '..........'
 
-            let deposit = contract.Room.checkin.rental_deposit ? contract.Room.checkin.rental_deposit : "..........."
-            let text_price2 = deposit !== "..........." ? numbertothailanguage(Number(deposit)) + 'บาท' : '....................................'
-
-
-
-            let price_rent = "..........."
-            let text_price3 = '....................................'
-            if (contract && contract.Room && contract.Room.checkin && contract.Room.checkin.checkin_type) {
-                price_rent = (contract.Room.checkin.checkin_type === 'รายเดือน' ? contract.Room.RoomType.monthlyprice : contract.Room.RoomType.dailyprice)
-                text_price3 = numbertothailanguage(Number(price_rent)) + 'บาท'
-            }
-
-
-
+           
+             // TODO: ค่าเช่าห้อง รายเดือน  
+            let price_rent = getrentcost(contract)
+            let text_price3 = price_rent !== 'ไม่มีค่าเช่า'? numbertothailanguage(Number(price_rent)) + 'บาท' : '..........'
 
             AddTH_font(doc, 'yourCustomFont.ttf')
             doc.addFont('yourCustomFont.ttf', 'yourCustomFont', 'normal');
             doc.setFont('yourCustomFont');
 
-
+           
             //header
             doc.setFontSize(16)
             doc.text("แบบฟอร์มสัญญา เมื่อกดพิมพ์", 5, 5, { align: 'left' })
@@ -449,110 +503,57 @@ export const export_Contract = (contracts, defaultData) => {
             doc.setFontSize(15)
 
             //body
-            doc.text("สัญญานี้ทำขึ้นที่", 25, 55)
-            doc.text(location, 49, 55)
-            doc.text("เมื่อวันที่", 146, 55)
-            doc.text(date, 161, 55)
-            doc.text("ระหว่าง", 10, 63)
-            doc.text(between, 23, 63)
-            doc.text("อยู่บ้านเลขที่", 65, 63)
-            doc.text(No, 85, 63)
-            doc.text("ตำบล/แขวง", 98, 63)
-            doc.text(district, 118, 63)
-            doc.text("อำเภอ/เขต", 130, 63)
-            doc.text(boundary, 148, 63)
-            doc.text("จังหวัด", 10, 71)
-            doc.text(province, 22, 71)
-            doc.text("ซึ่งต่อไปในสัญญานี้จะเรียกว่า ผู้ให้เช่า ฝ่ายหนึ่งกับ", 50, 71)
-            doc.text(name, 120, 71)
-            doc.text("อยู่บ้านเลขที่", 10, 79)
-            doc.text(No2, 29, 79)
-            doc.text("ตำบล/แขวง", 42, 79)
-            doc.text(district2, 62, 79)
-            doc.text("อำเภอ/เขต", 74, 79)
-            doc.text(boundary2, 92, 79)
-            doc.text("จังหวัด", 105, 79)
-            doc.text(province2, 117, 79)
-            doc.text("ซึ่งต่อไปในสัญญานี้จะเรียกว่า ผู้เช่า", 143, 79)
-            doc.text("อีกฝ่ายหนึ่ง", 10, 87)
-            doc.text("ทั้งสองฝั่งตกลงทำสัญญากันโดยมีข้อความดังต่อไปนี้", 25, 95)
-            doc.text("ข้อ ๑ ผู้ให้เช่าตกลงเช่าและผู้ให้เช่าตกลงให้เช่าห้องพักอาศัยห้องเลขที่", 25, 103)
-            doc.text(Number_room, 125, 103)
-            doc.text("ชั้นที่", 10, 111)
-            doc.text(floor_room, 20, 111)
-            doc.text("ของ (ระบุชื่อของอพาร์ทเม้นท์) ซึ่งตั้งอยู่ที่", 27, 111)
-            doc.text(location_room, 86, 111)
-            doc.text("ตำบล/แขวง", 10, 119)
-            doc.text(district3, 30, 119)
-            doc.text("อำเภอ/เขต", 42, 119)
-            doc.text(boundary3, 60, 119)
-            doc.text("จังหวัด", 73, 119)
-            doc.text(province3, 85, 119)
-            doc.text("เพื่อให้เป็นที่พักอาศัย ในอัตราค่าเช่าเดือนละ", 110, 119)
-            doc.text(price_rent, 10, 127)
-            doc.text("บาท", 23, 127)
-            doc.text("(", 30, 127)
-            doc.text(text_price3, 32, 127)
-            doc.text(")", 95, 127)
-            doc.text("ส่วนนี้ไม่รวมค่าไฟฟ้า", 97, 127)
-            doc.text("ค่าน้ำประปา ค่าน้ำโทรศัพท์ ซึ่งผู้เช่าต้องชำระให้แก่ผู้ให้เช่าตามอัพตราที่กำหนดไว้ในสัญญาข้อที่ ๑", 10, 135)
-            doc.text("ข้อ ๒ ผู้เช้าต้องเช่าห้องพักตามสัญญาข้อที่ ๑ กำหนดเวลา", 25, 143)
-            doc.text(result_date, 105, 143)
-            doc.text("ปี", 110, 143)
-            doc.text("นับตั้งแต่วันที่", 115, 143)
-            doc.text(start_rent, 135, 143)
-            doc.text("ถึงวันที่", 155, 143)
-            doc.text(end_rent, 166, 143)
-            doc.text("ข้อ ๓ การชำระค่าเช่า ผู้เช่าควชำระค่าเช่าให้แก่ผู้เช่าเป็นการล่วงหน้า โดยชำระภายในวันที่", 25, 151)
-            doc.text(round_rent, 150, 151)
-            doc.text("ของทุกเดือน", 170, 151)
-            doc.text("ตลอดอายุการเช่า", 10, 159)
-            doc.text("ข้อ ๔ ผู้ให้เช่าคิดค่าไฟฟ้า ค่าน้ำประปา ค่าโทรศัพท์ในราคาดังนี้", 25, 167)
-            doc.text(" {๑} ค่าไฟฟ้ายูนิตละ", 35, 175)
-            doc.text(Electricity_bill, 70, 175)
-            doc.text("บาท", 100, 175)
-            doc.text(" {๒} ค่าน้ำประปาลูกบาศก์เมตรละ", 35, 183)
-            doc.text(Water_bill, 95, 183)
-            doc.text("บาท", 120, 183)
-            doc.text(" {๓} ค่าโทรศัพท์(โทร ออก)ครั้งละ", 35, 191)
-            doc.text(Phone_bill, 95, 191)
-            doc.text("บาท", 120, 191)
-            doc.text("ข้อ ๕ ผู้เช่าต้องชำระค่าไฟฟ้า ค่าน้ำ ค่าโทศัพท์ตามจำนวนหน่วยที่ใช้ในแต่ละเดือนและต้องชำระก่อนชำระค่าเช่าเดือนถัดไป", 25, 199)
+            doc.text(`สัญญานี้ทำขึ้นที่ ${location} เมื่อวันที่ ${date}`, 25, ((indexline_body++*nextline_size)+ offset_body) )
+            doc.text(`ระหว่าง ${between} โดย ${name_owner} ${lastname_owner} อยู่บ้านเลขที่ ${No} ตำบล/แขวง ${district} `, 10, ((indexline_body++*nextline_size)+ offset_body) )
+            doc.text(`อำเภอ/เขต ${boundary} จังหวัด ${province} ซึ่งต่อไปในสัญญานี้จะเรียกว่า ผู้ให้เช่า ฝ่ายหนึ่งกับ ${name} ${lastname}`, 10, ((indexline_body++*nextline_size)+ offset_body))
+            doc.text(`อยู่บ้านเลขที่ ${No2} ตำบล/แขวง ${district2} อำเภอ/เขต ${boundary2} จังหวัด ${province2} ซึ่งต่อไปในสัญญานี้จะเรียกว่า ผู้เช่า อีกฝ่ายหนึ่ง`, 10, ((indexline_body++*nextline_size)+ offset_body) )
+            
+            doc.text("ทั้งสองฝั่งตกลงทำสัญญากันโดยมีข้อความดังต่อไปนี้", 10,  ((indexline_body++*nextline_size)+ offset_body) )
+            doc.text(`ข้อ ๑ ผู้เช่าตกลงเช่าและผู้ให้เช่าตกลงให้เช่าห้องพักอาศัยห้องเลขที่ ${Number_room} ชั้นที่ ${floor_room} อาคาร ${building_name}`, 25, ((indexline_body++*nextline_size)+ offset_body)) 
+            doc.text(`ซึ่งตั้งอยู่ที่ ${location_room} ตำบล/แขวง ${district3} อำเภอ/เขต ${boundary3}`, 10, ((indexline_body++*nextline_size)+ offset_body) )
+            doc.text(`จังหวัด ${province3}  เพื่อให้เป็นที่พักอาศัย ในอัตราค่าเช่าเดือนละ ${price_rent} บาท (${text_price3}) ส่วนนี้ไม่รวมใช้จ่ายอื่นๆ`, 10,  ((indexline_body++*nextline_size)+ offset_body) )
+            doc.text(`ซึ่งผู้เช่าต้องชำระให้แก่ผู้ให้เช่าตามอัพตราที่กำหนดไว้ในสัญญาข้อที่ ๑`, 10, ((indexline_body++*nextline_size)+ offset_body) )
+            doc.text(`ข้อ ๒ ผู้เช้าต้องเช่าห้องพักตามสัญญาข้อที่ ๑ กำหนดเวลา ${result_date} ปี นับตั้งแต่วันที่ ${start_rent} ถึงวันที่ ${end_rent}`, 25,  ((indexline_body++*nextline_size)+ offset_body) )
+   
 
-            doc.text("ข้อ ๖ เพื่อเป็นการปฏิบัติตามสัญญาเช่า ผู้เช่าต้องมอบเงินประกันให้แก่ผู้เช้าเป็นจำนวน", 25, 207)
-            doc.text(deposit, 150, 207)
-            doc.text("บาท", 176, 207)
-            doc.text("(", 10, 215)
-            doc.text(text_price2, 12, 215)
-            doc.text(")", 75, 215)
-            doc.text("เงินประกันนี้จะคือให้แก่ผู้เช่าเมื่อผู้เช่ามิได้ ผิดสัญญาและมิได้ค้างชำระเงินต่างๆตามสัญญานี้", 77, 215)
-            doc.text("ข้อ ๗ ผู้เช่าต้องเป็นนชำระเงินค่าเช่าเดือนละ", 25, 223)
-            doc.text(price_rent, 90, 223)
-            doc.text("บาท", 105, 223)
-            doc.text("(", 112, 223)
-            doc.text(text_price3, 114, 223)
-            doc.text(")", 179, 223)
-            doc.text("ข้อ ๘ ผู้เช่าต้องเป็นผู้ดูแลรักษาความสะอาดบริเวณส่วนกลางหน้าที่ของเป็นหน้าที่ของผู้เช่าและผู้เช่าต้องไม่นำของใดๆ", 25, 231)
-            doc.text("ไปวางบริเวณทางเดินดังกล่าว", 10, 239)
-            doc.text("ข้อ ๙ ผู้เช่าต้องดูแลห้องพักอาศัยและทรพท์สินต่างๆ ในห้องดังกล่างเหมือนเป็นทรพท์สินของตัวเอง และต้องรักษาความสะอาด", 25, 247)
-            doc.text("ความเรียบร้อยไม่ก่อให้เกิดควมเดือนร้อนรำคาญแก่ผู้ห้องพักอาศัยข้างเคียง", 10, 255)
-            doc.text("ข้อ ๑๐ ผู้เช่าต้องเป็นผู้รับผิดชอบในบรรดาความสูญหาย เสียหาย หรือบุบสลายอย่างใดๆ อันเกิดแก่ห้องพักอาศัยและทรัพท์สิน", 25, 263)
-            doc.text("ต่างๆ ในห้องดังกล่าว", 10, 271)
+            doc.text(`ข้อ ๓ การชำระค่าเช่า ผู้เช่าควชำระค่าเช่าให้แก่ผู้เช่าเป็นการล่วงหน้า โดยชำระภายในวันที่ ${round_rent} ของทุกเดือน`, 25, ((indexline_body++*nextline_size)+ offset_body) )
+
+            doc.text("ตลอดอายุการเช่า", 10, ((indexline_body++*nextline_size)+ offset_body) )
+            doc.text("ข้อ ๔ ผู้ให้เช่าคิดค่าไฟฟ้า ค่าน้ำประปา ค่าโทรศัพท์ในราคาดังนี้", 25, ((indexline_body++*nextline_size)+ offset_body) )
+            doc.text(` {๑} ค่าไฟฟ้า ${true ?"ยูนิตละ":"เหมาจ่าย"}  ${Electricity_bill}  บาท`, 35, ((indexline_body++*nextline_size)+ offset_body) )
+            doc.text(` {๒} ค่าน้ำประปา ${ true ?"ลูกบาศก์เมตรละ":"เหมาจ่าย"} ${Water_bill}  บาท`, 35,  ((indexline_body++*nextline_size)+ offset_body) )
+
+            // doc.text(" {๓} ค่าโทรศัพท์(โทร ออก)ครั้งละ", 35, 191)
+            // doc.text(Phone_bill, 95, 191)
+            // doc.text("บาท", 120, 191)
+
+            doc.text(`ข้อ ๕ ผู้เช่าต้องชำระค่าไฟฟ้า ค่าน้ำ ค่าโทศัพท์ตามจำนวนหน่วยที่ใช้ในแต่ละเดือนและต้องชำระก่อนชำระค่าเช่าเดือนถัดไป`, 25, ((indexline_body++*nextline_size)+ offset_body) )
+            doc.text(`ข้อ ๖ เพื่อเป็นการปฏิบัติตามสัญญาเช่า ผู้เช่าต้องมอบเงินประกันให้แก่ผู้ให้เช่าเป็นจำนวน ${deposit} บาท`, 25, ((indexline_body++*nextline_size)+ offset_body) )
+
+            doc.text(` (${text_price2})  บาท เงินประกันนี้จะคืนให้แก่ผู้เช่าเมื่อผู้เช่ามิได้ ผิดสัญญาและมิได้ค้างชำระเงินต่างๆตามสัญญานี้`,10, ((indexline_body++*nextline_size)+ offset_body) )
+            doc.text(`ข้อ ๗ ผู้เช่าต้องเป็นนชำระเงินค่าเช่าเดือนละ ${price_rent} บาท ( ${text_price3} ) `, 25, ((indexline_body++*nextline_size)+ offset_body) )
+      
+            doc.text("ข้อ ๘ ผู้เช่าต้องเป็นผู้ดูแลรักษาความสะอาดบริเวณส่วนกลางหน้าที่ของเป็นหน้าที่ของผู้เช่าและผู้เช่าต้องไม่นำของใดๆ", 25, ((indexline_body++*nextline_size)+ offset_body) )
+            doc.text("ไปวางบริเวณทางเดินดังกล่าว", 10,  ((indexline_body++*nextline_size)+ offset_body) )
+            doc.text("ข้อ ๙ ผู้เช่าต้องดูแลห้องพักอาศัยและทรพท์สินต่างๆ ในห้องดังกล่าวเหมือนเป็นทรพท์สินของตัวเอง และต้องรักษาความสะอาด", 25,  ((indexline_body++*nextline_size)+ offset_body) )
+            doc.text("ความเรียบร้อยไม่ก่อให้เกิดควมเดือนร้อนรำคาญแก่ผู้อาศัยห้องพักข้างเคียง", 10, ((indexline_body++*nextline_size)+ offset_body) )
+            doc.text("ข้อ ๑๐ ผู้เช่าต้องเป็นผู้รับผิดชอบในบรรดาความสูญหาย เสียหาย หรือบุบสลายอย่างใดๆ อันเกิดแก่ห้องพักอาศัยและทรัพท์สิน", 25,  ((indexline_body++*nextline_size)+ offset_body) )
+            doc.text("ต่างๆ ในห้องดังกล่าว", 10, ((indexline_body++*nextline_size)+ offset_body) )
 
 
             doc.addPage()
 
             doc.text("ข้อ ๑๑ ผู้เช่าต้องมอบให้ผู้ให้เช่า หรือตัวแทนของผู้ให้เช่าเข้าตรวจห้องพักอาศัยเป็นครั้งราวในระยะเวลาอันสมควร", 25, 20)
             doc.text("ข้อ ๑๒ ผู้เช่าต้องไม่ทำการดัดแปลง ต่อเติม หรือรื้อถอนห้องพักอาศัยและทรัพท์สินต่างๆ ในห้องพักดังกล่าวไม่ว่าทั้งหมด", 25, 28)
-            doc.text("หรือบางส่วนหากฝ่าฝืนให้ผู้เช่าเรียกให้ผู้เช่าทำทรัพท์สินดังกล่าวให้อยู่ในสภาพเดิม และเรียกให้ผู้เช่าใช้ค่าเสียหายอันเกิดความสูยเสีย ", 10, 36)
-            doc.text("สูญหาย หรือบุบสบายใดๆ อันเนื่องจากการดัดแปลงต่อเติม หรือรื้อถอนดังกล่าว ", 10, 44)
+            doc.text("หรือบางส่วนหากฝ่าฝืนให้ผู้ให้เช่าเรียกให้ผู้เช่าทำทรัพท์สินดังกล่าวให้อยู่ในสภาพเดิม และเรียกให้ผู้เช่าใช้ค่าเสียหายอันเกิดความสูญเสีย ", 10, 36)
+            doc.text("สูญหาย หรือบุบสลายใดๆ อันเนื่องจากการดัดแปลงต่อเติม หรือรื้อถอนดังกล่าว ", 10, 44)
             doc.text("ข้อ ๑๓ ให้ผู้เช่าต้องไม่นำบุคคลอื่นนอกจากบุคคลในครอบครัวของผู้เช่าเข้าพักอาศัย", 25, 52)
             doc.text("ข้อ ๑๔ ผู้เช่าสัญญาว่าจะปฏิบัติตนตามระเบียบข้อบังคับของอพาร์ทเม้นท์ด้วยสัญญานี้ ซึ่งคู่สัญญาทั้งสองฝ่ายให้ถือระเบียบ", 25, 60)
-            doc.text("ข้อบังตับดังกล่าวเป็นส่วนหนึ่งของสัญญานี้ด้วย ผู้เช่าระเมิดแล้วผู้ให้เช่าย่อมให้สิทธิตามข้อ ๑๗ และข้อ ๑๘ แห่งสัญญานี้", 10, 68)
+            doc.text("ข้อบังคับดังกล่าวเป็นส่วนหนึ่งของสัญญานี้ด้วย ผู้เช่าละเมิดแล้วผู้ให้เช่าย่อมให้สิทธิตามข้อ ๑๗ และข้อ ๑๘ แห่งสัญญานี้", 10, 68)
             doc.text("ข้อ ๑๕ ผู้ให้เช่าไม่ต้องรับผิดชอบในความสูญหายหรือสูญเสียอย่างใดๆในรถยนต์ รวมทั้งทรัพย์สินต่างๆในรถยนต์ของผู้เช่า", 25, 76)
-            doc.text("จึงได้นำมาบอกไว้ในที่จอดรถที่ทางผู้เช่าได้จัดไว้ให้", 10, 84)
+            doc.text("ที่ได้นำมาจอดไว้ในที่จอดรถที่ทางผู้ให้เช่าได้จัดไว้ให้", 10, 84)
             doc.text("ข้อ ๑๖ ผู้เช่าตกลงว่าการผิดสัญญาเช่าเครื่องเรือนซึ่งผู้เช่าได้ทำไว้กับผู้ให้เช่าต่างหากจากสัญญานี้ ถือเป็นการผิดสัญญานี้ด้วย", 25, 92)
-            doc.text("และโดยนัยเดียวกัน การผิดสัญญานี้ย่อมถือว่าเป็นการผิดต่อสัญญาเช่าเครื่องเรือนด้วยย", 10, 100)
+            doc.text("และโดยนัยเดียวกัน การผิดสัญญานี้ย่อมถือว่าเป็นการผิดต่อสัญญาเช่าเครื่องเรือนด้วย", 10, 100)
             doc.text("ข้อ ๑๗ หาผู้เช่าประพฤติผิดสัญญาข้อหนึ่งข้อใด หรือหลายข้อก็ด้วย ผู้เช่าตกลงให้ผู้ให้เช่าใช้สิทธิดังต่อไปนี้ ข้อใดข้อหนึ่งหรือ ", 25, 108)
             doc.text("หลายข้อ รวมกันก็ได้คือ", 10, 116)
             doc.text(" {๑} บอกเลิกสัญญาเช่า", 35, 124)
@@ -560,8 +561,8 @@ export const export_Contract = (contracts, defaultData) => {
             doc.text(" {๓} บอกกล่าวให้ผู้เช่าปฏิบัติตามข้อกำหนดในสัญญาภายในกำหนดเวลาที่ผู้ให้เช่าเห็นควร", 35, 140)
             doc.text(" {๔} ตัดกระแสไฟฟ้า,น้ำประปา และค่าโทรศัพท์ได้ทันทีโดยไม่ต้องบอกล่วงหน้าแก่ผู้เช่า", 35, 148)
             doc.text("ข้อ ๑๘ ในกรณีที่สัญญาให้เช่าระงับสิ้นลง ไม่ว่าด้วยเหตุใดๆก็ตามผู้เช่าต้องส่งมอบห้องพักอาศัยคืนให้แก่ผู้ให้เช่าทันที ", 25, 156)
-            doc.text(" หากผู้เช่าไม่ปฏิบัติ ผู้ให้เช่ามีสิทธิเข้าครอบครองห้องพักอาศัยที่ให้เช่าและขนย้ายบุคคลและศรัพย์สินของผู้เช่าออกจากห้องพักดังกล่าวได้", 10, 164)
-            doc.text("โดยผ้เช่าเป็นผู้รับผิดชอบในความสูญเสียหรือความเสียหายอย่างใดๆอันเกิดขึ้นแก่ทรัพย์สินของผู้เช่า ทั้งนี้ผู้ให้เช่ามีสิทธิริบเงินประกัน", 10, 172)
+            doc.text(" หากผู้เช่าไม่ปฏิบัติ ผู้ให้เช่ามีสิทธิเข้าครอบครองห้องพักอาศัยที่ให้เช่าและขนย้ายบุคคลและทรัพย์สินของผู้เช่าออกจากห้องพักดังกล่าวได้", 10, 164)
+            doc.text("โดยผู้เช่าเป็นผู้รับผิดชอบในความสูญเสียหรือความเสียหายอย่างใดๆอันเกิดขึ้นแก่ทรัพย์สินของผู้เช่า ทั้งนี้ผู้ให้เช่ามีสิทธิริบเงินประกัน", 10, 172)
             doc.text("การเช่าตามที่ระบุไว้ในสัญญาข้อ ๒ ได้ด้วย", 10, 180)
             doc.text("ข้อ ๑๙ ในวันทำสัญญานี้ ผู้เช่าได้ตรวจสอบห้องพักอาศัยที่เช่าตลอดจนทรัพย์สินต่างๆ ในห้องพักดังกล่าว", 25, 188)
             doc.text("แล้วเห็นว่ามีสภาพปกติทุกประการ และผู้ให้เช่าได้ส่งมอบห้องพักและทรัพย์สินต่างๆ ในห้องพักแก่ผู้เช่าแล้ว", 10, 196)
@@ -580,11 +581,11 @@ export const export_Contract = (contracts, defaultData) => {
             }
             return null;
         })
+   
 
 
 
-
-
+       
 
         let src_pdf = doc.output('datauristring');
         const iframe = `
@@ -599,9 +600,11 @@ export const export_Contract = (contracts, defaultData) => {
         console.log('Error contracts', contracts)
     }
 
-    //  openInNewTab(`http://jaelfaulconinsurance${Math.floor(Math.random() * 10) + 1}.com`)
+   //  openInNewTab(`http://jaelfaulconinsurance${Math.floor(Math.random() * 10) + 1}.com`)
 
 }
+
+
 // function openInNewTab(href) {
 //     Object.assign(document.createElement('a'), {
 //         target: '_blank',
