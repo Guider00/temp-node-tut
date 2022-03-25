@@ -388,13 +388,15 @@ export const Checkin = () => {
 	const handleAddmembertoroom = async (e) => {
 		let _selectedroom = selectedroom
 		let _formmember = formmember
-		console.log('add member to room ', _selectedroom, _formmember)
+		console.log('debug add member to room ', _selectedroom, _formmember)
 		let res = {
 			updatemember: null,
 			createmember: null,
 			addmembertoroom: null
 		};
+		console.log('debug res',_selectedroom)
 		if (_selectedroom) {  // << not ID create new member 
+			
 			if (_formmember.id === "" && modeformmember === null) {
 				res.createmember = await createMember({
 					variables: {
@@ -411,9 +413,10 @@ export const Checkin = () => {
 						}
 					}
 				})
+				
 			}
 			if (_formmember && _formmember.id && modeformmember === 'select') {
-				console.log('select mode')
+				console.log(' debug select mode')
 				res.updatemember = await updateMember({
 					variables: {
 						id: _formmember.id,
@@ -489,9 +492,6 @@ export const Checkin = () => {
 			refetch_roomMember() // << refect data room 
 			setmodeformmember(null) // <<
 		}
-
-
-		// _res = await updateBooking({
 
 	}
 	// const handlerselectrooms = (e) => {
