@@ -54,6 +54,13 @@ export const API_GET_Invoice = gql`
 				type_price
                 vat
 			}
+			customer{
+				name
+				lastname
+				taxnumber
+				address
+				personalid
+			}
 		}
 	}
 `;

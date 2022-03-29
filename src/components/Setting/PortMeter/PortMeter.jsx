@@ -97,14 +97,17 @@ export const Portmeter = () => {
 
         if (res && res.status === 200) {
             setshowmodal(false)
+            Portmeters.refetch()
         } else {
             setshowmodal(false) // Alert
         }
         setload(false)
+       
     }
 
     const Delete = (id) => {
         API_deletePortmeter(id)
+        Portmeters.refetch()
         setload(false)
     }
 
@@ -136,12 +139,15 @@ export const Portmeter = () => {
     useEffect(() => {
         const getAPI = async () => {
 
-           // let table = await API_query()
+          
            let  table = [] 
             if(Portmeters.data){
-                table = [...Portmeters.data.Portmeters]
+              
+                table = [...Portmeters.data.Portmeters ]
+                table = table.map(item=>{
+                    return {...item,data:item}
+                })
             }
-
 
 
             setportmeters({
@@ -176,8 +182,9 @@ export const Portmeter = () => {
                                 {value:`Modbus_Serial`,label:"Modbus_Serial"},
                                 {value:`Modbus_TCP/IP`,label:`Modbus_TCP/IP`},
                                 {value:`MQTT/Lora`,label:`MQTT/Lora`},
+                                {value:`Simulator`,label:`Simulator`},
                              ],
-                            value: "Modbus_TCP/IP"
+                            value: "Simulator"
                         }
                     },
                     {

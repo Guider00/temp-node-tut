@@ -9,11 +9,11 @@ query{
         RoomType
         RoomName
         RentType
-        name
-        surname
-        Check_in
+        tenantname
+        tenantlastname
+        checkin_date
         status
-        Check_out
+        checkout_date
         Room{
             id
             name

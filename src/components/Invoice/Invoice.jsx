@@ -208,7 +208,7 @@ export const Invoice = () => {
         name:"",
         lastname:"",
         personalid:"",
-        texinvoice:"",
+        taxnumber:"",
         address:"",
     })
     const handlerformaddressinvoice =(e) =>{
@@ -536,11 +536,26 @@ export const Invoice = () => {
                                             <tr
                                                 onClick={() => {
 
-                                                    let _selectroom = selectroom
-                                                    _selectroom = data
+                                                   
+                                                    let  _selectroom = data
                                                     setselectroom(_selectroom)
                                                     setformmeter({ ...defaultformter })
                                                     seteditselectroom(false)
+                                                    console.log(  _selectroom.customer )
+                                                    if( _selectroom.customer.name !== "")
+                                                    {
+                                                       
+                                                        setformaddressinvoice({ ..._selectroom.customer })
+                                           
+                                                    }else{
+                                                        setformaddressinvoice({
+                                                            name:_selectroom.Room.members[0].name,
+                                                            lastname:_selectroom.Room.members[0].lastname,
+                                                            personalid:_selectroom.Room.members[0].personalid,
+                                                            taxnumber:_selectroom.Room.members[0].taxnumber,
+                                                            address:_selectroom.Room.members[0].address,
+                                                        })
+                                                    }
 
                                                 }}
                                                 style={{
@@ -613,7 +628,7 @@ export const Invoice = () => {
                                                             }
                                                         }
                                                     })
-                                                    if (_res) {
+                                                    if (_res && _res.data) {
                                                         console.log('เปลี่ยนสถานะการพิมพ์สำเร็จ')
                                                         Invoice.refetch();
 
@@ -655,7 +670,17 @@ export const Invoice = () => {
                                                                 vat: option.vat,
                                                                 type_price: option.type_price,
                                                                 selectvat: option.selectvat
-                                                            }))
+                                                            })),
+                                                            customer:{
+                                                                name: invoice.customer.name,
+                                                                lastname: invoice.customer.lastname,
+                                                                personalid: invoice.customer.personalid,
+                                                                taxnumber: invoice.customer.taxnumber,
+                                                                address: invoice.customer.address,
+                                                                tel: invoice.customer.tel,
+                                                                email: invoice.customer.email
+                                                            },
+                                                            monthlybilling:invoice.monthlybilling
                                                         }
                                                     }
                                                 })
@@ -731,6 +756,7 @@ export const Invoice = () => {
                                     <div className={styles.textX} >ชื่อ</div>
                                     <div className={styles.inputX}>
                                         <input 
+                                            disabled={ (selectroom)?false:true}
                                             name="name"
                                             value={formaddressinvoice.name} onChange={handlerformaddressinvoice}>
                                         </input>
@@ -740,6 +766,7 @@ export const Invoice = () => {
                                     <div className={styles.textX} >นามสกุล</div>
                                     <div className={styles.inputX}>
                                         <input  
+                                            disabled={ (selectroom)?false:true}
                                             name="lastname"
                                             value={formaddressinvoice.lastname} onChange={handlerformaddressinvoice} >
                                         </input>
@@ -749,6 +776,7 @@ export const Invoice = () => {
                                     <div className={styles.textX} >บัตรประชาชน</div>
                                     <div className={styles.inputX}>
                                         <input 
+                                            disabled={ (selectroom)?false:true}
                                             name="personalid"
                                             value={formaddressinvoice.personalid} onChange={handlerformaddressinvoice} >
                                         </input>
@@ -758,8 +786,9 @@ export const Invoice = () => {
                                     <div className={styles.textX} >เลขประจำตัวผู้เสียภาษี</div>
                                     <div className={styles.inputX}>
                                         <input 
+                                            disabled={ (selectroom)?false:true}
                                             name="texinvoice"
-                                            value={formaddressinvoice.texinvoice} onChange={handlerformaddressinvoice}>
+                                            value={formaddressinvoice.taxnumber} onChange={handlerformaddressinvoice}>
                                         </input>
                                     </div>
                                 </div>
@@ -767,6 +796,7 @@ export const Invoice = () => {
                                     <div className={styles.textX} >ที่อยู่ตามบัตรประชาชน</div>
                                     <div className={styles.inputX}>
                                         <input 
+                                            disabled={ (selectroom)?false:true}
                                             name="address"
                                             value={formaddressinvoice.address} onChange={handlerformaddressinvoice}>
                                         </input>
@@ -1056,11 +1086,20 @@ export const Invoice = () => {
                                                         vat: option.vat,
                                                         type_price: option.type_price,
                                                         selectvat: option.selectvat
-                                                    }))
+                                                    })),
+                                                    customer:{
+                                                        name: formaddressinvoice.name,
+                                                        lastname: formaddressinvoice.lastname,
+                                                        personalid: formaddressinvoice.personalid,
+                                                        taxnumber: formaddressinvoice.taxnumber,
+                                                        address: formaddressinvoice.address,
+                                                        tel: "",
+                                                        email: ""
+                                                    }
                                                 }
                                             }
                                         })
-                                        if (_res) {
+                                        if (_res && _res.data) {
                                             console.log('เปลี่ยนสถานะการพิมพ์สำเร็จ')
                                             Invoice.refetch();
 

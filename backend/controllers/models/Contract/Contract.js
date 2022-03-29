@@ -5,13 +5,13 @@ const schemaDefinition = new mongoose.Schema({
     RoomType: {type:String},
     RoomName: {type:String},
     RentType: {type:String},
-    name: {type:String},
-    surname: {type:String},
+    tenantname: {type:String},
+    tenantlastname: {type:String},
     status: {type:String ,default:"สัญญารอการยืนยัน"},
 
 
-    Check_in: {type:String},
-    Check_out: {type:String},
+    checkin_date: {type:String},
+    checkout_date: {type:String},
     checkinid:{type:String},
     roomid:{type:String} , 
     

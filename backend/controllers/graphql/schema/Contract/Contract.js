@@ -16,16 +16,17 @@ const _Contractschema =
 type Contract{
 
     id:String
+    Room:Room
     Contractnumber: String
     RoomType: String
     RoomName: String
     RentType: String
-    name: String
-    surname: String
-    Check_in: String
+    tenantname: String
+    tenantlastname: String
+    checkin_date: String
     status: String
-    Check_out: String
-    Room:Room
+    checkout_date: String
+    
 
     typerent:String
     mounthly_cost:String
@@ -56,18 +57,18 @@ type Contract{
 }
 
 input ContractInput{
-
+    roomid:String
     Contractnumber: String
     RoomType: String
     RoomName: String
     RentType: String
-    name: String
-    surname: String
-    Check_in: String
+    tenantname: String
+    tenantlastname: String
+    checkin_date: String
     status: String
-    Check_out: String
+    checkout_date: String
 
-    roomid:String
+
 
 
 

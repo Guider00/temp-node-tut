@@ -91,8 +91,11 @@ export const Table = ({ Data, onClickDelete, onClickEdit, maxWidth }) => {
                                                             <div>
                                                                 {
                                                                     input.idtolabel ?
-                                                                        <input className={styles.input_body_1} disabled={true} value={input.idtolabel(data_display(ele_body, input.property))} type="text" /> :
-                                                                        <input className={styles.input_body_2} disabled={true} value={data_display(ele_body, input.property)} type="text" />
+                                                                        <input className={styles.input_body_1} disabled={true} 
+                                                                        value={input.idtolabel(data_display(ele_body, input.property))} type="text" /> :
+                                                                        <input className={styles.input_body_2}
+                                                                         disabled={true} 
+                                                                        value={data_display(ele_body, input.property)} type="text" />
                                                                 }
 
                                                             </div>
@@ -118,7 +121,7 @@ export const Table = ({ Data, onClickDelete, onClickEdit, maxWidth }) => {
                                                         </button>
 
                                                         <button onClick={() => {
-
+                                                            console.log(ele_body['id'], ele_body['data'])
                                                             onClickEdit ?
                                                                 onClickEdit(ele_body['id'], ele_body['data']) : console.log('edit', ele_body['id'])
                                                         }}     ><SettingsIcon /></button>

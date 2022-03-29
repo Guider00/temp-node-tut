@@ -43,8 +43,8 @@ export const CreateInvoic = () => {
 
 
     const [defination_invoice, setdefination_invoice] = useState({
-        monthlybilling: "",
-        duedateinvoice: "",
+        monthlybilling: null,
+        duedateinvoice: null,
         typerestinvoice: false,
         ratemonthlyprice: "",
 
@@ -154,7 +154,7 @@ export const CreateInvoic = () => {
 
     //DatePicker
 
-    const [startDate, setStartDate] = useState();
+    const [startDate, setStartDate] = useState(null);
 
 
 
@@ -363,7 +363,9 @@ export const CreateInvoic = () => {
                 </div>
 
                 <div className={styles.lastbutton} style={{ fontSize: isDesktop ? '' : isTablet ? '12px' : '' }}>
-                    <button className={styles.button} onClick={() => {
+                    <button className={styles.button} 
+                        disabled={ (defination_invoice.duedateinvoice || startDate)  && (IDrooms && IDrooms.length > 0 )   ? false :true}
+                        onClick={() => {
                         let _data = IDrooms.length > 0 ? true : false
                         handleDialog(defaultDialog.message, _data)
                         console.log('IDrooms', IDrooms)
@@ -380,6 +382,7 @@ export const CreateInvoic = () => {
 
                             try {
                                 console.log('สร้าง defination invoice', _bymonthly, _bydefinition)
+                               
                                 let _res = {}
                                 if (_bymonthly === true) {
                                     _res = await addInvoice({
@@ -389,13 +392,16 @@ export const CreateInvoic = () => {
                                                     if (option.calculate_mode === 'ครั้งเดียว') {
                                                         return null
                                                     } else {
-                                                        return { name: option.name, price: option.price, number_item: option.number_item, type_price: option.type_price, selectvat: option.selectvat }
+                                                        return { name: option.name, 
+                                                            price: option.price, number_item: option.number_item, type_price: option.type_price, selectvat: option.selectvat }
                                                     }
 
                                                 }).filter(item => item),
 
                                                 roomid: `${room.id}`,
-                                                monthlybilling: `${date === '' ? Date.now() : date}`,
+                                                monthlybilling: `${defination_invoice.monthlybilling   ?  new Date(defination_invoice.monthlybilling)  : Date.now()}`,
+                                                dudateinvoice: `${defination_invoice.duedateinvoice   ?  new Date(defination_invoice.duedateinvoice)  : Date.now()}`,
+
 
                                             }
 
@@ -417,8 +423,8 @@ export const CreateInvoic = () => {
                                                 // }).filter(item=>item),
 
                                                 roomid: `${room.id}`,
-                                                monthlybilling: `${defination_invoice.monthlybilling === '' ? Date.now() : date}`,
-
+                                                monthlybilling: `${startDate  ?  new Date(startDate)  : Date.now()}`,
+                                             
                                             }
 
                                         }

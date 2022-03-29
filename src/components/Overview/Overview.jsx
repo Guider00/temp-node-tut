@@ -12,6 +12,8 @@ import { useEffect, useState } from 'react';
 import { Floormodal } from '../Setting/Floor/Floormodal'
 
 
+
+
 import { API_queryroomprice, API_queryBuildings, API_queryFloors, API_updateRoom, API_deleteRoom, API_queryMembers, API_queryRooms, API_createRoom } from '../../API/index'
 
 
@@ -223,17 +225,7 @@ export const Overview = () => {
 
     const GET_RoomType = useQuery(API_GET_RoomType)
     const MeterRooms = useQuery(API_GET_MeterRooms)
-    useEffect(() => {
-        // let option_roomtype = [];
 
-        // if(GET_RoomType.loading === false){
-
-        //         option_roomtype =  GET_RoomType.data.RoomTypes.map(e =>  ({label:e.name , value:e.id})  )
-        //        console.log('option_roomtype',option_roomtype)
-        //         setoptionRoomType(option_roomtype)
-        // }
-
-    }, [GET_RoomType.data, MeterRooms.data])
 
 
     const [_optionbuilding, setoptionbuilding] = useState([])
@@ -498,9 +490,22 @@ export const Overview = () => {
             setoptionfloor(option.floor)
             setoptionmember(option.member)
             setoptionstatus(option.status)
-            setoptionmeterroom(option.meterroom)
-            setoptionRoomType(option.RoomType)
+       
+           // setoptionRoomType(option.RoomType)
 
+            if(MeterRooms.data){
+               
+                let _option_meterrooms  = MeterRooms.data.MeterRooms.map( _meter => {
+                 return ( {'value': _meter.id.toString() ,'label': _meter.name , } )
+                 })
+                 option.meterroom = ([..._option_meterrooms])
+              }
+            if(GET_RoomType.data){
+                let _option_roomtypes  = GET_RoomType.data.RoomTypes.map( _roomtype => {
+                    return ( {'value': _roomtype.id.toString() ,'label': _roomtype.name , } )
+                    })
+                    option.RoomType = ([..._option_roomtypes])
+            }
 
             let inputconfig = Inputconfig();
             console.log('inputconfig', inputconfig)

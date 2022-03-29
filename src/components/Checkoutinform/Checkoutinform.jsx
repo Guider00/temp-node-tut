@@ -53,7 +53,8 @@ export const Checkoutinform = () => {
                 variables: {
                     id:`${ID}`,
                     input:{
-                        checkout_date: ``
+                        checkout_date: ``,
+                        status:"มีคนอยู่"
                         }
                     }});
 
@@ -219,7 +220,8 @@ export const Checkoutinform = () => {
                                                                         variables: {
                                                                             id:`${room.id}`,
                                                                             input:{
-                                                                                checkout_date: `${e.target.value}`
+                                                                                checkout_date: `${e.target.value}`,
+                                                                                status:"ย้ายออก"
                                                                                 }
                                                                             }});
         

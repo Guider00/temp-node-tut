@@ -6,7 +6,9 @@ import { API_GET_Reimbursement, API_DELETE_Reimbursement, API_UPDATE_Reimburseme
 import { export_Reimbursement_pdf } from '../../general_functions/pdf/export/export_pdf';
 import { toYYMMDD } from '../../general_functions/convert';
 // import { Rooms_to_table, filter_rooms } from "./function";
-
+import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CheckIcon from '@mui/icons-material/Check';
 //address
 import { AddressData } from "../../subcomponents/AddressData/AddressData";
 
@@ -340,7 +342,7 @@ export const Reimbursement = () => {
 
 
                         }}
-                    >คืนเงินประกันภัย</button>
+                    ><CheckIcon/>คืนเงินประกันภัย</button>
 
                     <button className={styles.button}
                         style={{ fontSize: isDesktop ? '' : isTablet ? '12px' : '' }}
@@ -354,7 +356,7 @@ export const Reimbursement = () => {
 
 
                         }}
-                    >Export pdf</button>
+                    ><LocalPrintshopIcon/> พิมพ์ </button>
 
 
                     <button className={styles.buttonDelete}
@@ -370,7 +372,7 @@ export const Reimbursement = () => {
 
 
                         }}
-                    >ลบที่เลือก</button>
+                    ><DeleteIcon/>ลบที่เลือก</button>
                 </div>
 
                 <div className={styles.footer}>

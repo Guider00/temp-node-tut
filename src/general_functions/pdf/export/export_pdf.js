@@ -840,9 +840,24 @@ export const export_Invoices_pdf = (Invoices, defaultData) => {
         const doc = new jsPDF('l', 'mm', [297, 210]);
         Invoices.map((Invoice, index) => {
             console.log(Invoice)
-            let Name = Invoice && Invoice.Room && Invoice.Room.members && Invoice.Room.members.length > 0
+            let Name = ""
+            let Address1 = ""
+            console.log('export Invoice' , Invoice)
+            if( Invoice && Invoice.customer && Invoice.customer.name === ""){
+                 //  ดึงข้อมูลจาก member [0] 
+               
+                Name = Invoice && Invoice.Room && Invoice.Room.members && Invoice.Room.members.length > 0
                 ? `${Invoice.Room.members[0].name}  ${Invoice.Room.members[0].lastname} ` : '--------'
-            let Address1 = Invoice && Invoice.Room && Invoice.Room.members && Invoice.Room.members.length > 0 && Invoice.Room.members[0].address ? Invoice.Room.members[0].address : "........................................."   // ที่อยู่ ของผู้รับบิล
+                Address1 =  Invoice && Invoice.Room && Invoice.Room.members && Invoice.Room.members.length > 0 && Invoice.Room.members[0].address
+                ? Invoice.Room.members[0].address : "........................................."   // ที่อยู่ ของผู้รับบิล
+
+            }else{
+                 //  ดึงข้อมูลจาก ตาม invoice 
+                Name = Invoice && Invoice.customer && Invoice.customer.name ? `${Invoice.customer.name}  ${Invoice.customer.lastname} ` : '--------'
+                Address1 =  Invoice && Invoice.customer && Invoice.customer.address 
+                ? Invoice.customer.address  : "........................................."   // ที่อยู่ ของผู้รับบิล
+            }
+
 
             let No = (Invoice && Invoice && Invoice.id) ? Invoice.id : "---"
             let _Date = formatDate(new Date())
