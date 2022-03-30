@@ -6,7 +6,9 @@ import { API_GET_Reimbursement, API_DELETE_Reimbursement, API_UPDATE_Reimburseme
 import { export_Reimbursement_pdf } from '../../general_functions/pdf/export/export_pdf';
 import { toYYMMDD } from '../../general_functions/convert';
 // import { Rooms_to_table, filter_rooms } from "./function";
-
+import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CheckIcon from '@mui/icons-material/Check';
 //address
 import { AddressData } from "../../subcomponents/AddressData/AddressData";
 
@@ -285,12 +287,16 @@ export const Reimbursement = () => {
                                                 }
                                             }}></input>
                                     </td>
-                                    <td>{reimbursements.Invoice && reimbursements.Invoice.Room.floor.building.name ? reimbursements.Contract.Room.floor.building.name : '---'}</td>
-                                    <td>{reimbursements.Invoice && reimbursements.Invoice.Room.name ? reimbursements.Contract.Room.name : '---'}</td>
+                                    <td>{reimbursements.Contract && reimbursements.Contract.Room &&  reimbursements.Contract.Room.floor && 
+                                    reimbursements.Contract.Room.floor.building.name ? reimbursements.Contract.Room.floor.building.name : '---'}</td>
+                                    <td>{reimbursements.Contract &&  reimbursements.Contract.Room &&reimbursements.Contract.Room.name ?
+                                     reimbursements.Contract.Room.name : '---'}</td>
                                     <td>{reimbursements.Contract && reimbursements.Contract.id ? reimbursements.Contract.id : 'null'}</td>
                                     <td>{reimbursements.Invoice && reimbursements.Invoice.id ? reimbursements.Invoice.id : '---'}</td>
-                                    <td>{reimbursements.Contract && reimbursements.Contract.Room.members[0].name ? reimbursements.Contract.Room.members[0].name : '---'}</td>
-                                    <td>{reimbursements.Contract && reimbursements.Contract.Room.members[0].lastname ? reimbursements.Contract.Room.members[0].lastname : '---'}</td>
+                                    <td>{reimbursements.Contract &&  reimbursements.Contract.Room &&
+                                         reimbursements.Contract.Room.members[0].name ? reimbursements.Contract.Room.members[0].name : '---'}</td>
+                                    <td>{reimbursements.Contract &&  reimbursements.Contract.Room && 
+                                        reimbursements.Contract.Room.members[0].lastname ? reimbursements.Contract.Room.members[0].lastname : '---'}</td>
                                     <td>{reimbursements.cashback ? reimbursements.cashback : '0'}</td>
                                     <td>{reimbursements.status ? reimbursements.status : '---'}</td>
                                     <td>{reimbursements.cashback_date ? toYYMMDD(reimbursements.cashback_date) : '---'}</td>
@@ -340,7 +346,7 @@ export const Reimbursement = () => {
 
 
                         }}
-                    >คืนเงินประกันภัย</button>
+                    ><CheckIcon/>คืนเงินประกันภัย</button>
 
                     <button className={styles.button}
                         style={{ fontSize: isDesktop ? '' : isTablet ? '12px' : '' }}
@@ -354,7 +360,7 @@ export const Reimbursement = () => {
 
 
                         }}
-                    >Export pdf</button>
+                    ><LocalPrintshopIcon/> พิมพ์ </button>
 
 
                     <button className={styles.buttonDelete}
@@ -370,7 +376,7 @@ export const Reimbursement = () => {
 
 
                         }}
-                    >ลบที่เลือก</button>
+                    ><DeleteIcon/>ลบที่เลือก</button>
                 </div>
 
                 <div className={styles.footer}>

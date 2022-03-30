@@ -49,7 +49,7 @@ export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs, Mo
                                                 </div> : null
                                             }
 
-
+                                           
                                             {e.form.displayform === "textbox" ?
                                                 <div className={styles.input}>
                                                
@@ -64,10 +64,18 @@ export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs, Mo
                                                             e.form.fn_compare === undefined)
                                                             ? false : e.form.disablecondition(
                                                                 (e.form.compaer_property) ?
-                                                               
-                                                                 Inputs.find(x =>   {console.log('x',x.property);return (x.property === e.form.compaer_property)}).form.value : null
+                                                             
+                                                                 Inputs.find(x =>{
+                                                                    
+                                                                 if( Array.isArray (x.property) ){
 
-                                                                , e.form.fn_compare))
+                                                                    return (x.property.indexOf(e.form.compaer_property) !== -1)
+                                                                 }else{
+                                                                    return (x.property === e.form.compaer_property)
+                                                                 }
+                                                                 
+                                                                }).form.value :
+                                                                 null, e.form.fn_compare))
                                                    
                                                         
                                                         ?"":" 1px solid #FF0000" : "")   }}
@@ -77,7 +85,15 @@ export const Floormodal = ({ Data, onSave, onClose, onchange, Action, Inputs, Mo
                                                             ((e.form.disablecondition === undefined ||
                                                                 e.form.fn_compare === undefined)
                                                                 ? false : e.form.disablecondition(
-                                                                    (e.form.compaer_property) ? Inputs.find(x => x.property === e.form.compaer_property).form.value : null
+                                                                    (e.form.compaer_property) ? Inputs.find(x => {
+                                                                            if( Array.isArray (x.property) ){
+
+                                                                                return (x.property.indexOf(e.form.compaer_property) !== -1)
+                                                                            }else{
+                                                                                return (x.property === e.form.compaer_property)
+                                                                            }
+                                                                        }
+                                                                    ).form.value : null
                                                                     , e.form.fn_compare))
                                                         }
                                                         onChange={(event) => {  onchange(event.target.value, index  , e.property  ) }

@@ -10,6 +10,7 @@ import EventNoteIcon from '@mui/icons-material/EventNote';
 import PrintIcon from '@mui/icons-material/Print';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
+import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
 import {
     API_GET_Contract,
     API_DELETE_Contract,
@@ -19,7 +20,7 @@ import {
     API_GET_RoomType
 } from '../../API/Schema/RoomType/RoomType'
 import { API_GET_Rooms } from '../../API/Schema/Room/Room'
-// import { export_Contract } from '../../general_functions/pdf/export/export_pdf';
+ import {  export_Contract } from '../../general_functions/pdf/export/export_pdf';
 
 import { FileUploader } from './FileUploader/FileUploader'
 import { filter_rooms, Rooms_to_table,  FormFilter } from './function';
@@ -72,6 +73,45 @@ export const Contract = () => {
     const [tbsortingstyle_newmetoold, settbsortingstyle_newmetoold] = useState(true);
     const [selectedcontract, setselectedcontract] = useState(null)
     const { handleChangedformfilter, formfilter, hadleChangedformfilterTodefault, setformfilter } = FormFilter();
+        const promiseendcontract = async (contract) =>{
+            return new Promise( async (resolve,rej)=>{
+                try{
+                let res =  await  updateContract({
+                    variables:{
+                        id:`${contract.id}`,
+                        input: {
+                            status:"สิ้นสุดสัญญา"
+                        }
+                    } })
+                resolve(res)
+                }catch(e){
+                    resolve(null)
+                }
+            
+
+            }).catch(e =>{
+                return null 
+            })
+        }
+        const handlerEndcontract = async  (contracts) =>{
+            try{
+                console.log('contracts',contracts)
+                let primus_funcs =contracts.map( contract =>{
+                    return promiseendcontract(contract)
+                })
+                
+                let list_res =  await  Promise.all ( (primus_funcs) )
+                console.log('list_res',list_res)
+                list_res = list_res.filter(item => item)
+                if(contracts && contracts.length &&contracts.length === list_res.length ){
+                    Contract.refetch()
+                }else{
+                    console.error('เปลี่ยน สถานะล้มเหลว')
+                }
+            }catch(e){
+                console.log(e)
+            }
+        }
         const promiseconfirmcontract = async (contract) =>{
             return new Promise( async (resolve,rej)=>{
                 try{
@@ -159,7 +199,7 @@ export const Contract = () => {
                         mounthly_cost:contract.mounthly_cost,
                         insurance_cost:contract.insurance_cost,
                         depositrent_cost:contract.depositrent_cost,
-                    
+
                         mounthly_type_electrical_cost:contract.mounthly_type_electrical_cost,
                         mounthly_rate_electrical:contract.mounthly_rate_electrical,
                         mounthly_minimum_cost_electrical:contract.mounthly_minimum_cost_electrical,
@@ -498,7 +538,7 @@ return (
                             id='checkin_date_exp'
                             min={DateStart}
                             type='date'
-                            value={DateEnd ? DateStart : ''}
+                            value={DateEnd ? DateEnd : ''}
                             className={styles.inputdate}
                             onChange={(e) => {
                                 let { value } = e.target
@@ -613,18 +653,22 @@ return (
                                                 }} />
                                         </td>
                                         <td>{item && item.id ? item.id.substring(item.id.length - 5) : "---"}</td>
-                                        <td>{item && item.Room && item.Room.RoomType && item.Room.RoomType.name  ?  item.Room.RoomType.name :  "---"}</td>
-                                        <td>{item && item.Room && item.Room.name ? item.Room.name : "---"}</td>
-                                        <td>{item && item.Room && item.Room.checkin && item.Room.checkin.checkin_type ? item.Room.checkin.checkin_type : "---"}</td>
-                                        <td>{item && item.Room && item.Room.members && item.Room.members.length > 0 && item.Room.members[0].name ? item.Room.members[0].name : "---"}</td>
-                                        <td>{item && item.Room && item.Room.members && item.Room.members.length > 0 && item.Room.members[0].lastname ? item.Room.members[0].lastname : "---"}</td>
-                                        <td>{item && item.Room && item.Room.checkin && item.Room.checkin.checkin_date ? item.Room.checkin.checkin_date : "---"}</td>
+                       
+                                        <td>{item && item.RoomType ? item.RoomType : "---"}</td>
+                                        <td>{item && item.RoomName ? item.RoomName : "---"}</td>
+                                        <td>{item && item.RentType ? item.RentType  : "---"}</td>
+                                      
+                                        <td>{item && item.tenantname ? item.tenantname : "---"}</td>
+                                        <td>{item && item.tenantlastname ? item.tenantlastname  : "---"}</td>
+                                        <td>{item && item.checkin_date ? item.checkin_date :"---" }</td>
+
+                                       
                                         <td>{item && item.status ? item.status : "---"}</td>
                                         <td>{item && item.filecontract? 
                                         <input type="image" src={item.filecontract}  alt="contract"  height={50} width={50} />
                                         
                                         :"---"}</td>
-                                        <td>{item && item.Room && item.Room.checkout && item.Room.checkout.checkout_date ? item.Room.checkout.checkout_date : "---"}</td>
+                                        <td>{item && item.checkout_date  ? item.checkout_date : "---"}</td>
                                         
                                     </tr>
                                     ) : null)}
@@ -641,6 +685,16 @@ return (
                         <button className={styles.print}
                             onClick={async ()=>{
                                 //TODO: Export PDF สัญญาณ หลายๆ หน้า 
+                                console.log('IDrooms',...IDrooms)
+                                try{
+                                    export_Contract(IDrooms)
+                                // let resulte = IDrooms.map(room =>{
+                                
+                                    
+                                // })
+                            }catch(e){
+                                console.log('')
+                            }
                         }}
                     > <PrintIcon/> พิมพ์</button>
                      <button className={styles.confirm}
@@ -650,6 +704,14 @@ return (
                         }}
                      >
                          <CheckCircleIcon/> ยืนยันสถานะสัญญา
+                    </button>
+                    <button className={styles.confirm}
+                        onClick={()=>{
+                      
+                            handlerEndcontract([...IDrooms]  )
+                        }}
+                     >
+                         <IndeterminateCheckBoxIcon/> สิ้นสุดสัญญา
                     </button>
 
                     <button className={styles.confirm}

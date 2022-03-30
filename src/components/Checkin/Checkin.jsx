@@ -46,6 +46,10 @@ import { DiffDate } from '../../general_functions/time'
 
 import { useMediaQuery } from 'react-responsive'
 
+import {
+	toYYYYMMDD
+} from '../../general_functions/convert'
+
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
@@ -187,7 +191,7 @@ export const Checkin = () => {
 		keyword: "ทั้งหมด"
 	})
 	const [roomType_search, setRoomType_search] = useState({
-		roomtype: "ทั้งหมด",
+		roomtype: "รายวัน",
 	})
 
 	const GET_Rooms = useQuery(API_GET_Rooms);
@@ -388,14 +392,18 @@ export const Checkin = () => {
 	const handleAddmembertoroom = async (e) => {
 		let _selectedroom = selectedroom
 		let _formmember = formmember
-		console.log('add member to room ', _selectedroom, _formmember)
+		console.log('debug add member to room ', _selectedroom, _formmember)
 		let res = {
 			updatemember: null,
 			createmember: null,
 			addmembertoroom: null
 		};
-		if (_selectedroom) {  // << not ID create new member 
-			if (_formmember.id === "" && modeformmember === null) {
+		console.log('debug _selectedroom',_selectedroom)
+		if (_selectedroom ) {  // << not ID create new member 
+			
+			if (_formmember.id === "" && modeformmember === null ) {
+				console.log('debug createMember')
+				try{
 				res.createmember = await createMember({
 					variables: {
 						input: {
@@ -411,25 +419,34 @@ export const Checkin = () => {
 						}
 					}
 				})
+				}catch(error){
+					console.error('createMember Error',error)
+				}
+				
 			}
+			console.log('debug _formmember',_formmember)
 			if (_formmember && _formmember.id && modeformmember === 'select') {
-				console.log('select mode')
-				res.updatemember = await updateMember({
-					variables: {
-						id: _formmember.id,
-						input: {
-							name: _formmember.name,
-							lastname: _formmember.lastname,
-							personalid: _formmember.personalid,
-							taxnumber: _formmember.personalid,
-							address: _formmember.address,
-							tel: _formmember.tel,
-							email: _formmember.email,
-							carid: _formmember.carid,
-							note: _formmember.note
+				console.log(' debug select mode')
+				try{
+					res.updatemember = await updateMember({
+						variables: {
+							id: _formmember.id,
+							input: {
+								name: _formmember.name,
+								lastname: _formmember.lastname,
+								personalid: _formmember.personalid,
+								taxnumber: _formmember.personalid,
+								address: _formmember.address,
+								tel: _formmember.tel,
+								email: _formmember.email,
+								carid: _formmember.carid,
+								note: _formmember.note
+							}
 						}
-					}
-				})
+					})
+				}catch(error){
+					console.error('updateMember Error',error)
+				}
 				if (res.updatemember) {
 					res.createmember = { data: { createMember: { id: _formmember.id } } }
 				}
@@ -437,23 +454,27 @@ export const Checkin = () => {
 			}
 
 			if (_formmember && _formmember.id && modeformmember === 'edit') {
-				res.updatemember = await updateMember({
-					variables: {
-						id: _formmember.id,
-						input: {
-							name: _formmember.name,
-							lastname: _formmember.lastname,
-							personalid: _formmember.personalid,
-							taxnumber: _formmember.taxnumber,
-							address: _formmember.address,
-							tel: _formmember.tel,
-							email: _formmember.email,
-							carid: _formmember.carid,
-							note: _formmember.note
+				try{
+					res.updatemember = await updateMember({
+						variables: {
+							id: _formmember.id,
+							input: {
+								name: _formmember.name,
+								lastname: _formmember.lastname,
+								personalid: _formmember.personalid,
+								taxnumber: _formmember.taxnumber,
+								address: _formmember.address,
+								tel: _formmember.tel,
+								email: _formmember.email,
+								carid: _formmember.carid,
+								note: _formmember.note
 
+							}
 						}
-					}
-				})
+					})
+				}catch(error){
+					console.error('edit updateMember',error)
+				}
 			}
 
 
@@ -474,9 +495,10 @@ export const Checkin = () => {
 				}
 			})
 			if (res.addmembertoroom.data) {
-				console.log('update new member complete ')
+				console.log('debug update new member complete ')
 				refetch_roomMember() // << refect data room 
 				setmodeformmember(null) // <<
+				handleClerformmember()
 				// GET_Rooms.refetch() 
 				// setreselectedroom(true)
 				// _selectedroom.id
@@ -484,19 +506,18 @@ export const Checkin = () => {
 			}
 		} else {
 			if (_selectedroom === null) {
-				console.log('with out room id')
+				console.error('debug with out room id')
 			}
-			refetch_roomMember() // << refect data room 
-			setmodeformmember(null) // <<
+			
+				refetch_roomMember() // << refect data room 
+				setmodeformmember(null) // <<
+				handleClerformmember()
+			
+
 		}
 
-
-		// _res = await updateBooking({
-
 	}
-	// const handlerselectrooms = (e) => {
 
-	// }
 	const handlerchangeformroomtype = (e) => {
 		let _formroomtype = formroomtype
 		if (e.target.id && _formroomtype.hasOwnProperty(e.target.id)) {
@@ -539,8 +560,8 @@ export const Checkin = () => {
 	const [defaultCalendar, setdefaultCalendar] = useState({
 		isLoading: false
 	});
-	const [DateStart, setDateStart] = useState(null)
-	const [DateEnd, setDateEnd] = useState(null)
+	const [DateStart, setDateStart] =  useState(toYYYYMMDD((new Date())))
+	const [DateEnd, setDateEnd] = useState(toYYYYMMDD((new Date(Date.now() + 7 * 24 * 60 * 60 * 1000))))
 	const [DateRange, setDateRange] = useState([])
 
 
@@ -642,20 +663,21 @@ export const Checkin = () => {
 				let roomschedules = Rooms.map((room) => {
 
 					let { bookings, checkin } = room.data
-					let _schbooking = bookings.map((booking) => {
-						if(booking){
-							let { checkin_date, checkin_date_exp, checkin_type } = booking;
+					let _schbooking = [];
+					// let _schbooking = bookings.map((booking) => {
+					// 	if(booking){
+					// 		let { checkin_date, checkin_date_exp, checkin_type } = booking;
 
-							return ({
-								"checkin_date": checkin_date ? new Date(Number(checkin_date)).getTime() : checkin_date,
-								"checkin_date_exp": checkin_date_exp ? new Date(Number(checkin_date_exp)).getTime() : checkin_date_exp,
-								"checkin_type": checkin_type,
-								booking: booking
-							})
-						}else{
-							return null 
-						}
-					}).filter(item => item)
+					// 		return ({
+					// 			"checkin_date": checkin_date ? new Date(Number(checkin_date)).getTime() : checkin_date,
+					// 			"checkin_date_exp": checkin_date_exp ? new Date(Number(checkin_date_exp)).getTime() : checkin_date_exp,
+					// 			"checkin_type": checkin_type,
+					// 			booking: booking
+					// 		})
+					// 	}else{
+					// 		return null 
+					// 	}
+					// }).filter(item => item)
 
 
 					let _schcheckin = {
@@ -673,79 +695,45 @@ export const Checkin = () => {
 				})
 
 
-				console.log('roomschedules', roomschedules)
+				console.log('debug roomschedules', roomschedules)
 
 				let room_support = roomschedules.map((roomschedule) => {
 					let { room } = roomschedule
-					console.log('room',room)
+					console.log('debug roomschedule',room , roomschedule , start_date,end_date )
 					let condition = roomschedule.sch.map(({ checkin_date_exp, checkin_date, checkin_type }) => {
+					
+						console.log(`debug roomschedule time  ${roomschedule.room.name}= `,
+						"start_date",new Date(start_date) ,'end_date',new Date(end_date),
+						'checkin_date',new Date(checkin_date)  ,'checkin_date_exp',new Date(checkin_date_exp) ,
+						roomType_search.roomtype,
+						"condition",(start_date < checkin_date && start_date < checkin_date_exp),
+						(end_date < checkin_date && end_date < checkin_date_exp),
+						)
 
-						if (roomType_search.roomtype === 'ทั้งหมด') {
-
+							 if (roomType_search.roomtype === 'รายวัน') {
 							if (
+								//      [จอง รายวัน] ____________
+								//       _______________[วันที่เลือก รายวัน ]
+								checkin_type === 'รายวัน' && 
 								(start_date > checkin_date && start_date > checkin_date_exp) &&
 								(end_date > checkin_date && end_date > checkin_date_exp)
-								&& checkin_type === 'รายวัน'
-
-							) {
+								) {
 								return true
-
 							} else if (
+								//        ________________[ถูกจอง รายวัน]
+								//       [วันที่เลือก รายวัน]________
+								checkin_type === 'รายวัน' &&
 								(start_date < checkin_date && start_date < checkin_date_exp) &&
-								(end_date < checkin_date && end_date < checkin_date_exp)
-								&& checkin_type === 'รายวัน'
+								(end_date < checkin_date && end_date < checkin_date_exp) 
+								
 							) {
-
 								return true
 							} else if (
-
+								//       __________________[ถูกจอง รายเดือน]_
+								//       _[วันที่เลือก รายวัน]______________
+								checkin_type === 'รายเดือน' &&
 								(start_date < checkin_date && (start_date < checkin_date_exp || checkin_date_exp === null)) &&
-								(checkin_date_exp === null || (end_date < checkin_date && end_date < checkin_date_exp)) &&
-								checkin_type === 'รายเดือน'
-							) {
-								return true
-							} else if (
-
-								checkin_date_exp === null && checkin_date === null && checkin_type === null
-							) {
-								return true
-							} else {
-								return false
-							}
-
-						} else if (roomType_search.roomtype === 'รายวัน') {
-
-							if (
-								(start_date > checkin_date && start_date > checkin_date_exp) &&
-								(end_date > checkin_date && end_date > checkin_date_exp)
-								&& checkin_type === 'รายวัน'
-
-							) {
-								return true
-
-							} else if (
-								(start_date < checkin_date && start_date < checkin_date_exp) &&
-								(end_date < checkin_date && end_date < checkin_date_exp)
-								&& checkin_type === 'รายวัน'
-							) {
-
-								return true
-							} else if (
-								// new room 
-								checkin_date_exp === null && checkin_date === null && checkin_type === null
-							) {
-								return true
-							} else {
-								return false
-							}
-
-						} else if (roomType_search.roomtype === 'รายเดือน') {
-
-							if (
-
-								(start_date < checkin_date && (start_date < checkin_date_exp || checkin_date_exp === null)) &&
-								(checkin_date_exp === null || (end_date < checkin_date && end_date < checkin_date_exp)) &&
-								checkin_type === 'รายเดือน'
+								(checkin_date_exp === null || (end_date < checkin_date && end_date < checkin_date_exp)) 
 							) {
 								return true
 							} else if (
@@ -753,17 +741,43 @@ export const Checkin = () => {
 								checkin_date_exp === null && checkin_date === null && checkin_type === null
 							) {
 								return true
-							} else {
+							}else {
+								
 								return false
 							}
+
+						} else if (roomType_search.roomtype === 'รายเดือน' && 
+								   roomschedule.room.status !== 'ห้องมีคนอยู่' 
+							 ) {
+							 if(
+								// [จอง รายวัน]
+								//  ___________[วันที่เลือก รายเดือน]
+								checkin_type === 'รายวัน' && 
+								start_date > checkin_date && start_date > checkin_date_exp &&
+								end_date > checkin_date &&  end_date > checkin_date_exp  
+								
+							){
+								return true
+							
+							}else if (
+								//  ห้องว่าง new room 
+								checkin_date_exp === null && checkin_date === null && checkin_type === null
+							) {
+								return true
+							}
+							else {
+								return false
+							}
+
+						} else {
+							return false
 						}
-
-						return null;
-
-
 					})
 
+					console.log(`debug condition  ${roomschedule.room.name}`,condition)
+
 					roomschedule.condition = Boolean(condition.reduce((previousValue, currentValue) => previousValue & currentValue))
+
 					return roomschedule
 				}).filter(item => item.condition === true)
 				let _rooms = room_support.map(({ room }) => {
@@ -777,33 +791,29 @@ export const Checkin = () => {
 			setloading(true);
 
 		}
-		if (reselectedroom) {
-			if (selectedroom.id) {
 
-				console.log('debug',GET_Rooms.data.Rooms)
-				let updateroom = GET_Rooms.data.Rooms.find(room => room.id === selectedroom.id)
-
-			//	let _selectedroom = selectedroom
-			//	console.log('update new member');
-			//	console.log(_selectedroom, updateroom)
-				// อย่างลืมแก้ไขให้มีการ update พร้อมกัน //
-			//	_selectedroom.data = updateroom // status checkin ,
-			//	_selectedroom.members = updateroom.members // update member 
-			//	setselectedroom({ ..._selectedroom })
-
-				setselectedroom((prevState =>(
-					{...prevState ,
-					 data:updateroom,
-					 members:updateroom.members
-					}
-					)
-				))
-
-				setreselectedroom(false)
-			}
-		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [GET_Rooms, loading, DateStart, DateEnd, roomType_search , reselectedroom , options_search])
+	}, [GET_Rooms, loading, DateStart, DateEnd, roomType_search  , options_search])
+
+	useEffect(()=>{
+		if( GET_Rooms.data && GET_Rooms.data.Rooms){
+
+		
+			let updateroom = GET_Rooms.data.Rooms.find(room => (selectedroom &&  room.id === selectedroom.id) )
+		
+			setselectedroom((prevState =>(
+				{...prevState ,
+				data:updateroom,
+				members:updateroom && updateroom.members ? updateroom.members : [] 
+				}
+				)
+			))
+
+		setreselectedroom(false)
+		}
+	
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	},[GET_Rooms,reselectedroom])
 
 
 
@@ -863,9 +873,15 @@ export const Checkin = () => {
 											_roomType_search.roomtype = e.target.value
 											setRoomType_search({ ..._roomType_search })
 											console.log('setRoomType_search', _roomType_search)
+											
+											setformcheckin(prevState=>({
+												...prevState,
+												checkin_type:e.target.value
+											}))
 										}}
+										value={roomType_search.roomtype}
 									>
-										<option>ทั้งหมด</option>
+										
 										<option>รายวัน</option>
 										<option>รายเดือน</option>
 									</select>
@@ -1048,13 +1064,13 @@ export const Checkin = () => {
 															setformcheckin({
 																id_contact: "",
 																checkin_date: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 && room.data.bookings[0] &&
-																	room.data.bookings[0].checkin_date ? formatDate(new Date(Number(room.data.bookings[0].checkin_date))) : "2021-12-08",
+																	room.data.bookings[0].checkin_date ? formatDate(new Date(Number(room.data.bookings[0].checkin_date))) : DateStart,
 																checkin_date_exp: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 && room.data.bookings[0] &&
-																	room.data.bookings[0].checkin_date ? formatDate(new Date(Number(room.data.bookings[0].checkin_date_exp))) : "2021-12-08",
+																	room.data.bookings[0].checkin_date ? formatDate(new Date(Number(room.data.bookings[0].checkin_date_exp))) : DateEnd,
 																checkin_type: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 && room.data.bookings[0] && 
-																	room.data.bookings[0].checkin_type ? room.data.bookings[0].checkin_type : "",
+																	room.data.bookings[0].checkin_type ? room.data.bookings[0].checkin_type : "รายวัน",
 																rental_period: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 && room.data.bookings[0] && 
-																	room.data.bookings[0].checkin_date && room.data.bookings[0].checkin_date_exp ?
+																	room.data.bookings[0].checkin_date && room.data.bookings[0].checkin_date_exp ? 
 																	DiffDate(new Date(Number(room.data.bookings[0].checkin_date)), new Date(Number(room.data.bookings[0].checkin_date_exp))) : "",
 																rental_deposit: room && room.data && room.data.hasOwnProperty('bookings') && room.data.bookings.length > 0 && room.data.bookings[0] && 
 																	room.data.bookings[0].deposit ? room.data.bookings[0].deposit : "",
@@ -1171,7 +1187,9 @@ export const Checkin = () => {
 									<label>ประเภทการเช่า</label>
 								</div>
 								<div className={styles.input}>
-									<select value={formcheckin.checkin_type} id="checkin_type" onChange={handlechangeformcheckin} >
+									<select 
+									disabled={true}
+									value={formcheckin.checkin_type} id="checkin_type" onChange={handlechangeformcheckin} >
 										<option>รายวัน</option>
 										<option>รายเดือน</option>
 									</select>
@@ -1223,7 +1241,9 @@ export const Checkin = () => {
 								<div className={styles.label}>
 								</div>
 								<div className={styles.input} >
-									<button onClick={handleSelectMember}> เลือกผู้เช่า</button>
+									<button 
+									disabled={selectedroom && selectedroom.id  ? false : true}
+									onClick={handleSelectMember}> เลือกผู้เช่า</button>
 								</div>
 							</div>
 							{/* <div className={styles.row}>
@@ -1243,7 +1263,9 @@ export const Checkin = () => {
 									<label>ชื่อ</label>
 								</div>
 								<div className={styles.input}>
-									<input id="name" type="text" value={formmember.name} onChange={handlechangeformmember} />
+									<input
+											disabled={selectedroom && selectedroom.id  ? false : true}
+									 id="name" type="text" value={formmember.name} onChange={handlechangeformmember} />
 								</div>
 							</div>
 							<div className={styles.row}>
@@ -1251,7 +1273,9 @@ export const Checkin = () => {
 									<label>นามสกุล</label>
 								</div>
 								<div className={styles.input}>
-									<input type="text" id="lastname" value={formmember.lastname} onChange={handlechangeformmember} />
+									<input 
+									disabled={selectedroom && selectedroom.id  ? false : true}
+									type="text" id="lastname" value={formmember.lastname} onChange={handlechangeformmember} />
 								</div>
 							</div>
 							<div className={styles.row}>
@@ -1259,7 +1283,9 @@ export const Checkin = () => {
 									<label>บัตรประชาชน</label>
 								</div>
 								<div className={styles.input}>
-									<input type="text" id="personalid" value={formmember.personalid} onChange={handlechangeformmember} />
+									<input 
+									disabled={selectedroom && selectedroom.id  ? false : true}
+									type="text" id="personalid" value={formmember.personalid} onChange={handlechangeformmember} />
 								</div>
 							</div>
 							<div className={styles.row}>
@@ -1267,7 +1293,9 @@ export const Checkin = () => {
 									<label>เลขประจำตัวผู้เสียภาษี</label>
 								</div>
 								<div className={styles.input}>
-									<input type="text" id="taxnumber" value={formmember.taxnumber} onChange={handlechangeformmember} />
+									<input
+									disabled={selectedroom && selectedroom.id  ? false : true}
+									type="text" id="taxnumber" value={formmember.taxnumber} onChange={handlechangeformmember} />
 								</div>
 							</div>
 							<div className={styles.row}>
@@ -1276,6 +1304,7 @@ export const Checkin = () => {
 								</div>
 								<div className={styles.input}>
 									<textarea
+										disabled={selectedroom && selectedroom.id  ? false : true}
 										cols="25"
 										rows="3"
 										type="text" id="address" value={formmember.address} onChange={handlechangeformmember} />
@@ -1286,7 +1315,9 @@ export const Checkin = () => {
 									<label>Email</label>
 								</div>
 								<div className={styles.input}>
-									<input type="text" id="email" value={formmember.email} onChange={handlechangeformmember} />
+									<input 
+									disabled={selectedroom && selectedroom.id  ? false : true}
+									type="text" id="email" value={formmember.email} onChange={handlechangeformmember} />
 								</div>
 							</div>
 							<div className={styles.row}>
@@ -1294,7 +1325,9 @@ export const Checkin = () => {
 									<label>เบอร์ติดต่อ</label>
 								</div>
 								<div className={styles.input}>
-									<input type="text" id="tel" value={formmember.tel} onChange={handlechangeformmember} />
+									<input 
+									disabled={selectedroom && selectedroom.id  ? false : true}
+									type="text" id="tel" value={formmember.tel} onChange={handlechangeformmember} />
 								</div>
 							</div>
 							<div className={styles.row}>
@@ -1302,7 +1335,9 @@ export const Checkin = () => {
 									<label>ทะเบียนรถ</label>
 								</div>
 								<div className={styles.input}>
-									<input type="text" id="carid" value={formmember.carid} onChange={handlechangeformmember} />
+									<input
+									 disabled={selectedroom && selectedroom.id  ? false : true}
+									 type="text" id="carid" value={formmember.carid} onChange={handlechangeformmember} />
 								</div>
 							</div>
 							<div className={styles.row}>
@@ -1310,11 +1345,14 @@ export const Checkin = () => {
 									<label>หมายเหตุ</label>
 								</div>
 								<div className={styles.input}>
-									<input type="text" id="note" value={formmember.note} onChange={handlechangeformmember} />
+									<input 
+									disabled={selectedroom && selectedroom.id  ? false : true}
+									type="text" id="note" value={formmember.note} onChange={handlechangeformmember} />
 								</div>
 							</div>
 							<div className={styles.rowmenu}>
 								<button 
+								disabled={selectedroom && selectedroom.id  ? false : true}
 								style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 								onClick={handleAddmembertoroom}>
 									{
@@ -1334,7 +1372,10 @@ export const Checkin = () => {
 
 
 								</button>
-								<button style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }} onClick={handleClerformmember}>ยกเลิก </button>
+								<button 
+								disabled={selectedroom && selectedroom.id  ? false : true}
+								style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }} 
+								onClick={handleClerformmember}>ยกเลิก </button>
 							</div>
 
 
@@ -1350,23 +1391,44 @@ export const Checkin = () => {
 									<TableRoomMember 
 									data={JSON.parse(JSON.stringify(selectedroom))}
 										handlerdelete={async (member) => {
-											console.log('member id = ', member.id)
-											let _selectedroom = selectedroom
-											if (_selectedroom.id) {
-												let res_deletememberinRoom = await deletememberinRoom({
-													variables: {
-														id: _selectedroom.id,
-														input: {
-															id: member.id
-														},
-													}
-												})
+											if(member && member.id){
+												let _selectedroom = selectedroom
+												if (_selectedroom.id) {
+													let res_deletememberinRoom = await deletememberinRoom({
+														variables: {
+															id: _selectedroom.id,
+															input: {
+																id: member.id
+															},
+														}
+													})
 
-												if (res_deletememberinRoom && res_deletememberinRoom.data) {
-													console.log('res_deletememberinRoom', res_deletememberinRoom)
-													refetch_roomMember()
+													if (res_deletememberinRoom && res_deletememberinRoom.data) {
+														console.log('res_deletememberinRoom', res_deletememberinRoom)
+														refetch_roomMember()
+													}
 												}
+											}else{
+												 // แก้ไข กรณี  member  โดนลบ
+												console.error('member with out id ')
+												try{
+													let _res = await updateRoom({
+														variables: {
+															id: selectedroom.id,
+															input: {
+																members:[]
+															}
+														}
+													});
+													if(_res && _res.data){
+														refetch_roomMember()
+													}
+												}catch(e){
+													console.log('error clear member ')
+												}
+												
 											}
+
 										}}
 										handleredit={(member) => {
 											let _member = JSON.parse(JSON.stringify(member))
@@ -1541,8 +1603,8 @@ export const Checkin = () => {
 										value={formroomtype.rate_electrical}
 										onChange={handlerchangeformroomtype}
 									></input>
-									<button>
-										อ่านค่าจาก Meter
+									<button className={styles.btnreadmeter} >
+										อ่านค่าจาก Meter ปัจจุบัน
 									</button>
 								</div>
 							</div>
@@ -1568,8 +1630,8 @@ export const Checkin = () => {
 										value={formroomtype.rate_water}
 										onChange={handlerchangeformroomtype}
 									></input>
-									<button>
-										อ่านค่าจาก Meter
+									<button className={styles.btnreadmeter}>
+										อ่านค่าจาก Meter ปัจจุบัน
 									</button>
 								</div>
 							</div>
@@ -1649,7 +1711,7 @@ export const Checkin = () => {
 							<div className={styles.rowmenu}>
 								<button
 									style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
-									disabled={(selectedroom === null)}
+									disabled={ selectedroom  && selectedroom.members && selectedroom.members.length  ? false:true}
 									onClick={async () => {
 										// ส่ง table option ไปบันทึกไว้ใน ห้อง 
 										// upload Room status
@@ -1776,7 +1838,14 @@ export const Checkin = () => {
 													let _res = await createContract({
 														variables: {
 															input: {
-																roomid: _room.id
+																roomid: _room.id,
+																RoomName:_room.name,
+																RoomType:_room.data.RoomType.name,
+																RentType:_room.data.checkin.checkin_type,
+																tenantname:_room.data.members && _room.members[0].name,
+																tenantlastname:_room.data.members && _room.members[0].lastname,
+																checkin_date:_room.data.checkin.checkin_date,
+																checkout_date:_room.data.checkin.checkin_date_exp
 															}
 														}
 													})

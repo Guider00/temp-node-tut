@@ -10,6 +10,15 @@ query{
                 printstatus
                 status
                 note
+                customer{
+                    name
+                    lastname
+                    taxnumber
+                    personalid
+                    tel
+                    email
+                    address
+                }
                 lists
                 {
                     id
@@ -47,6 +56,8 @@ query{
                             name
                             lastname
                             address
+                            taxnumber
+                            personalid
                         }
                     }
                 }

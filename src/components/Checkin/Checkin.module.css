@@ -281,3 +281,16 @@
     margin-left: 2rem;
     margin-right: 2rem;
 }
+
+.btnreadmeter{
+    margin-left:  1rem ;
+    border-radius: 0.25rem;
+
+}
+.btnreadmeter:hover{
+    color: orange;
+    border-color: orange;
+}
+.btnreadmeter:active{
+    background-color: dimgray
+}

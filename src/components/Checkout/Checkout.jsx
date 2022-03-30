@@ -749,19 +749,24 @@ export const Checkout = () => {
 															<button 
 															style={{ fontSize: isDesktop ? '' : isTablet ? '15px' : '' }}
 															disabled={
-																(selectedroom === null) ||  ( ( formdetailroom.rental_deposit -  formdetailroom.total_cost ) < 0)
+																( 
+																	(selectedroom === null) ||  ( ( formdetailroom.rental_deposit -  formdetailroom.total_cost ) < 0)
+																)
+																 ||  invoicecheckout === "" 
 															} 
 															onClick={ async ()=>{ 
 																// create ใบคืนเงินประกัน 
-																console.log('selectedroom',)
+																console.log('debug selectedroom',selectedroom , invoicecheckout)
 																try{
 																//	 console.log(`invoiceid':${ invoiceid }+ 'contractid: ${ contractid } `)
-																let res =  await createReimbursement({
+																if(invoicecheckout ) {
+																	let res =  await createReimbursement({
 																		variables:{
 																			input:{
 																				invoiceid: invoicecheckout,
 																				cashback : ( formdetailroom.rental_deposit -  formdetailroom.total_cost ).toString(),
-																				//  contractid: selectedroom.data.Contract.id
+																				contractid: selectedroom.data &&  selectedroom.data.Contract && selectedroom.data.Contract.id ?
+																				selectedroom.data.Contract.id : null 
 																			}
 																		}
 																	})
@@ -772,6 +777,10 @@ export const Checkout = () => {
 																	}else{
 																		console.error('data',res)
 																	}
+																}else{
+																	alert('ไม่มี invoice check out ')
+																}
+													
 																
 																}catch(e){
 																		console.error(" สร้าง ใบคืนเงินประกัน Error ");
@@ -812,8 +821,9 @@ export const Checkout = () => {
 																					}
 																				}
 																			})
-																	if(_res && _res.data){
-																		setinvoicecheckout(_res.data.id)
+																	if(_res && _res.data &&  _res.data.addInvoice){
+																
+																		setinvoicecheckout(_res.data.addInvoice.id)
 																		handleChangePath('/invoice')
 																		handleDialog("The request was successful !!!!! Go invoice page?", true)
 
@@ -873,7 +883,15 @@ export const Checkout = () => {
 															id: _room.id,
 															input: {
 																status: "ห้องว่าง",
-																checkout_date: ""
+																checkout_date: "",
+																checkin_date:"",
+																checkinid:null,
+																members:[],
+																checkinInvoiceid:null,
+																checkinReceiptid:null,
+																contractid:null,
+																checkoutInvoiceid:null,
+																checkoutReceiptid:null
 															}
 														}
 													});

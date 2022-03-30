@@ -10,26 +10,26 @@ export const API_GET_Reimbursement = gql`
                 cashback
                 Invoice {
                         id
-                duedateinvoice
+                        duedateinvoice
                         printstatus
                         status
                         Room {
-                            id
-                            name
-                    members{
-                            id
-                            name
-                            lastname
-                    }
-                    floor{
-                        id
-                        name
-                        building{
-                          id
-                          name
+                                id
+                                 name
+                                members{
+                                        id
+                                        name
+                                        lastname
+                                }
+                                floor{
+                                id
+                                name
+                                building{
+                                        id
+                                        name
+                                        }
+                                }
                         }
-                      }
-                }
                         lists {
                                 id
                                 name
@@ -39,37 +39,37 @@ export const API_GET_Reimbursement = gql`
                                 type_price
                                 vat
                         }
-                    }
+                }
                 
                 Contract{
             
-                id
-                Contractnumber
-                RoomType
-                RoomName
-                RentType
-                name
-                surname
-                Check_in
-                status
-                Check_out
-                
-                Room{
                         id
-                        name
-                        members{
-                                name
-                                lastname
-                        }
-                        floor{
-                                building{
-                                        name
-                                }
-                        }
-                }
+                        # Contractnumber
+                        # RoomType
+                        # RoomName
+                        # RentType
+                        # tenantname
+                        # tenantlastname
+                        # checkin_date
+                        # status
+                        # checkout_date
+                
+                        # Room{
+                        # id
+                        # name
+                        # members{
+                        #         name
+                        #         lastname
+                        # }
+                        # floor{
+                        #         building{
+                        #                 name
+                        #         }
+                        # }       
+                        # }
             
                 
-            }
+                }
                 
             }
             

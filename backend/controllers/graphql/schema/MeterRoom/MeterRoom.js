@@ -89,7 +89,8 @@ const _queryMeterRoomByid = async (payload) =>{
         if(!resulted) { return null}
         
         let data  = resulted._doc
-        data.id = data._id
+        data.id = payload.id
+        data.portmeter  = await queryPortmeterByid({id:data.portmeter })
 
         return (data)
     } catch (error) {

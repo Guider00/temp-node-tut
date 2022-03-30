@@ -254,6 +254,17 @@ export const API_GET_Rooms = gql`
                 inmemory_water_date
                 inmemory_finished_water
                 inmemory_finished_water_date
+                device_address
+                appeui
+                appkey
+                portmeter{
+                    id
+                    name
+                    protocol
+                    readtimeout
+                    writetimeout
+                    autoreconnect
+                }
 
             }
             RoomType{

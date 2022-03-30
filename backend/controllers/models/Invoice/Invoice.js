@@ -26,6 +26,7 @@ const schemaDefinition = new mongoose.Schema({
         tel: {type:String ,  default: ""},
         email: {type:String ,  default: ""}, 
     }
+    
 })
 module.exports = {
     db : mongoose.model("invoice", schemaDefinition)

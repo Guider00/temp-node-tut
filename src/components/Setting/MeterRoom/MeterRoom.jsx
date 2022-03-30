@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import styles from "./MeterRoom.module.css"
 import Add from '@material-ui/icons/Add';
 import Table from '../../../subcomponents/Table/Table'
+import {  useQuery } from '@apollo/client';
 
 import { Floormodal } from '../Floor/Floormodal'
 
@@ -12,10 +13,14 @@ import { Validate } from '../../../subcomponents/Regex/Regex'
 import {  API_createMeterRoom, API_updateMeterRoom, API_deleteMeterRoom,   API_queryMeterRooms } from '../../../API/index'
 import {  API_queryPortmeters } from "../../../API/index";
 
+import {   API_GET_Portmeters   } from '../../../API/Schema/PortMeter/PortMeter'
+
+import {   API_GET_MeterRooms   } from '../../../API/Schema/MeterRoom/MeterRoom'
+
 
 
 export const MeterRoom = () => {
-    const [_members, setmeterrooms] = useState({
+    const [meterrooms, setmeterrooms] = useState({
         topic: [],
         body: [],
         inputs: []
@@ -25,14 +30,14 @@ export const MeterRoom = () => {
 
     const handleronchange = (value, index) => {
         console.log('on change')
-        _members.inputs = _members.inputs.map((item, _index) => {
+        meterrooms.inputs = meterrooms.inputs.map((item, _index) => {
             if (_index === index) {
                 console.log(value)
                 return { ...item, form: { ...item.form, "value": value } }; //gets everything that was already in item, and updates "done"
             }
             return item; // else return unmodified item 
         });
-        let catch_value = _members
+        let catch_value = meterrooms
         setmeterrooms({ ...catch_value })
 
     }
@@ -42,6 +47,9 @@ export const MeterRoom = () => {
     const [_showmodal, setshowmodal] = useState(false);
     const [_modaldata, setmodaldata] = useState({});
     const [_modalaction, setmodalaction] = useState("");
+
+    const MeterRooms   = useQuery(API_GET_MeterRooms);
+    const Portmeters = useQuery(API_GET_Portmeters);
 
 
     const OnClickCreate = (data) => {
@@ -54,33 +62,36 @@ export const MeterRoom = () => {
 
     const onClickEdit = (id, data) => {
         console.log("Update", id, data)
-       
-        _members.inputs = _members.inputs.map((item, _index) => {
-            if (item.property && data.hasOwnProperty(item.property)) {
-                if (data[item.property] && typeof data[item.property] === 'object' && data[item.property].hasOwnProperty("id")) {
-                    
-                    return { ...item, form: { ...item.form, "value": data[item.property].id } }; //gets everything that was already in item, and updates "done"
-                } else {
-                  
-                    return { ...item, form: { ...item.form, "value": data[item.property] } }; //gets everything that was already in item, and updates "done"
+        if(id && data) {
+            meterrooms.inputs = meterrooms.inputs.map((item, _index) => {
+          
+                if (item.property && data.hasOwnProperty(item.property)) {
+                    if (data[item.property] && typeof data[item.property] === 'object' && data[item.property].hasOwnProperty("id")) {
+                        
+                        return { ...item, form: { ...item.form, "value": data[item.property].id } }; //gets everything that was already in item, and updates "done"
+                    } else {
+                      
+                        return { ...item, form: { ...item.form, "value": data[item.property] } }; //gets everything that was already in item, and updates "done"
+                    }
+                } else if(  typeof item.property === 'object'  && item.property.length > 0 &&  data.hasOwnProperty(item.property[0])){
+                     // cause multiple property 
+                    if (data[item.property[0]] && typeof data[item.property[0]] === 'object' && data[item.property[0]].hasOwnProperty("id")) {
+                        return { ...item, form: { ...item.form, "value": data[item.property[0]].id } }; //gets everything that was already in item, and updates "done"
+                    }else{
+                        return { ...item, form: { ...item.form, "value": data[item.property[0]] } }; //gets everything that was already in item, and updates "done"
+    
+                    }
+                }else {
+                    return { ...item, }
                 }
-            } else if(  typeof item.property === 'object'  && item.property.length > 0 &&  data.hasOwnProperty(item.property[0])){
-                 // cause multiple property 
-                if (data[item.property[0]] && typeof data[item.property[0]] === 'object' && data[item.property[0]].hasOwnProperty("id")) {
-                    return { ...item, form: { ...item.form, "value": data[item.property[0]].id } }; //gets everything that was already in item, and updates "done"
-                }else{
-                    return { ...item, form: { ...item.form, "value": data[item.property[0]] } }; //gets everything that was already in item, and updates "done"
+            });
+            let catch_value = meterrooms
+            setmeterrooms({ ...catch_value })
+            setmodaldata({ ...data })  // <<set id input
+            setmodalaction("Update") // << action type
+            setshowmodal(true)
+        }
 
-                }
-            }else {
-                return { ...item, }
-            }
-        });
-        let catch_value = _members
-        setmeterrooms({ ...catch_value })
-        setmodaldata({ ...data })  // <<set id input
-        setmodalaction("Update") // << action type
-        setshowmodal(true)
     }
     const onClose = () => {
         setshowmodal(false)
@@ -109,6 +120,7 @@ export const MeterRoom = () => {
 
         if (res && res.status === 200) {
             setshowmodal(false)
+            MeterRooms.refetch()
         } else {
             setshowmodal(false) // Alert
         }
@@ -117,6 +129,7 @@ export const MeterRoom = () => {
 
     const Delete = (id) => {
         API_deleteMeterRoom(id)
+        MeterRooms.refetch()
         setload(false)
     }
 
@@ -134,6 +147,7 @@ export const MeterRoom = () => {
      
                 console.log('data',table)
                 resolve (table)
+                MeterRooms.refetch()
             }else{
                 resolve(table)
             }
@@ -146,20 +160,36 @@ export const MeterRoom = () => {
     }
 
 
+
+
     useEffect(() => {
         const getAPI = async () => {
 
-            let table = await API_query()
-            console.log('table',table)
-
-        
-            let  { data }           = await  API_queryPortmeters()
-            let  { Portmeters }  = data ? data :{Portmeters:[] }
-            let _option_ports  = Portmeters.map( _port => {
-               return ( {'value': _port.id.toString() ,'label': _port.name , } )
-            })
-            _option_ports = [ {'value': "" ,'label':"" } , ..._option_ports ]
-            console.log('_option_ports',_option_ports)
+            let table  = [] 
+     
+            if(MeterRooms.data){
+                table =    [...MeterRooms.data.MeterRooms]
+                table = table.map(item=>{
+                    return {...item,data:item}
+                })
+            }
+            let _option_ports= [] ;
+            if(Portmeters.data){
+             //   let  { Portmeters }  = data && data.Portmeters ? data :{Portmeters:[] }
+                 _option_ports  = Portmeters.data.Portmeters.map( _port => {
+                    return ( {'value': _port.id.toString() ,'label': _port.name , } )
+                })
+                console.log('_option_ports',_option_ports)
+            }
+            
+            // let  { data }   = await  API_queryPortmeters()
+           
+            // let  { Portmeters }  = data && data.Portmeters ? data :{Portmeters:[] }
+            // let _option_ports  = Portmeters.map( _port => {
+            //    return ( {'value': _port.id.toString() ,'label': _port.name , } )
+            // })
+            // _option_ports = [ {'value': "" ,'label':"" } , ..._option_ports ]
+           
             setmeterrooms({
                 showindex: true,
                 topic: [ 
@@ -183,7 +213,7 @@ export const MeterRoom = () => {
                     },
                     {
                         label: "port",
-                        property: "portmeter",
+                        property: ['portmeter','name'],
                         form: {
                             displayform: "select",
                             type: "text",
@@ -215,8 +245,8 @@ export const MeterRoom = () => {
                             compaer_property : 'portmeter',
                             disablecondition: (x, fn)  =>( fn(x) ),
                             fn_compare: (id_portmeter)=>{   return(  
-                                 Portmeters.find(x => x.id === id_portmeter ) &&  
-                             Portmeters.find(x => x.id === id_portmeter ).protocol === 'MQTT/Lora' )},
+                                 Portmeters.data.Portmeters.find(x => x.id === id_portmeter ) &&  
+                                 Portmeters.data.Portmeters.find(x => x.id === id_portmeter ).protocol === 'MQTT/Lora' )},
                        
 
                             validate :  (x)=>( typeof x === 'string' && Validate('device_address',x) ),
@@ -233,8 +263,8 @@ export const MeterRoom = () => {
                             compaer_property : 'portmeter',
                             disablecondition: (x, fn)  =>( fn(x) ),
                             fn_compare: (id_portmeter)=>{   return(  
-                                 Portmeters.find(x => x.id === id_portmeter ) &&  
-                             Portmeters.find(x => x.id === id_portmeter ).protocol !== 'MQTT/Lora' )},
+                                Portmeters.data.Portmeters.find(x => x.id === id_portmeter ) &&  
+                                Portmeters.data.Portmeters.find(x => x.id === id_portmeter ).protocol !== 'MQTT/Lora' )},
 
                             validate :   (x)=>( typeof x === 'string' && Validate('deveui',x) ),
                             type: "text",
@@ -249,8 +279,8 @@ export const MeterRoom = () => {
                             compaer_property : 'portmeter',
                             disablecondition: (x, fn)  =>( fn(x) ),
                             fn_compare: (id_portmeter)=>{   return(  
-                            Portmeters.find(x => x.id === id_portmeter ) &&  
-                            Portmeters.find(x => x.id === id_portmeter ).protocol !== 'MQTT/Lora' )},
+                                Portmeters.data.Portmeters.find(x => x.id === id_portmeter ) &&  
+                                Portmeters.data.Portmeters.find(x => x.id === id_portmeter ).protocol !== 'MQTT/Lora' )},
 
                             validate :  (x)=>( typeof x === 'string' && Validate('appeui',x) ),
                             type: "text",
@@ -266,8 +296,8 @@ export const MeterRoom = () => {
                             compaer_property : 'portmeter',
                             disablecondition: (x, fn)  =>( fn(x) ),
                             fn_compare: (id_portmeter)=>{   return(  
-                            Portmeters.find(x => x.id === id_portmeter ) &&  
-                             Portmeters.find(x => x.id === id_portmeter ).protocol !== 'MQTT/Lora' )},
+                                Portmeters.data.Portmeters.find(x => x.id === id_portmeter ) &&  
+                                Portmeters.data.Portmeters.find(x => x.id === id_portmeter ).protocol !== 'MQTT/Lora' )},
                              
                             validate :  (x)=>( typeof x === 'string' && Validate('appkey',x) ),
                             type: "text",
@@ -286,7 +316,7 @@ export const MeterRoom = () => {
                         }
                     },
                     {
-                        label: "date",
+                        label: "kwh date start",
                         property: "inmemory_kwh_date",
                         form: {
                             displayform: "textbox",
@@ -305,7 +335,7 @@ export const MeterRoom = () => {
                         }
                     },
                     {
-                        label: "date finished",
+                        label: "kwh date finished",
                         property: "inmemory_finished_kwh_date",
                         form: {
                             displayform: "textbox",
@@ -335,7 +365,7 @@ export const MeterRoom = () => {
                         }
                     },
                     {
-                        label: "date",
+                        label: "water date start",
                         property: "inmemory_water_date",
                         form: {
                             displayform: "textbox",
@@ -354,7 +384,7 @@ export const MeterRoom = () => {
                         }
                     },
                     {
-                        label: "date finished",
+                        label: "water date finished",
                         property: "inmemory_finished_water_date",
                         form: {
                             displayform: "textbox",
@@ -380,14 +410,14 @@ export const MeterRoom = () => {
             setload(true)
         }
         getAPI()
-    }, [_load])
+    }, [_load, MeterRooms,Portmeters])
 
 
 
 
     return (
         <>
-            {_showmodal ? <Floormodal  Data={_modaldata} onSave={onSave} onClose={onClose} onchange={handleronchange} Action={_modalaction} Inputs={_members.inputs} fontsize={0.5}></Floormodal> : null}
+            {_showmodal ? <Floormodal  Data={_modaldata} onSave={onSave} onClose={onClose} onchange={handleronchange} Action={_modalaction} Inputs={meterrooms.inputs} fontsize={0.5}></Floormodal> : null}
             <div className={styles.main} >
                 <div className={styles.header}>
                     <lable> Meter Room  </lable>
@@ -407,7 +437,7 @@ export const MeterRoom = () => {
                         </div>
                     </div>
                     <div className={styles.row}  >
-                        <Table Data={_members} onClickDelete={Delete} onClickEdit={onClickEdit}></Table>
+                        <Table Data={meterrooms} onClickDelete={Delete} onClickEdit={onClickEdit}></Table>
                     </div>
 
                 </div>
