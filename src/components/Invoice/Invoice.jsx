@@ -851,6 +851,7 @@ export const Invoice = () => {
                                             onClick={() => {
                                                 let _invoice = { ...selectroom }
                                                 let _formmeter = JSON.parse(JSON.stringify(formmeter))
+                                                console.log('debug inmemory_finished_water_date',_invoice.Room.meterroom)
                                                 if (_invoice && _invoice.Room && _invoice.Room.meterroom) {
                                                     let { inmemory_kwh, inmemory_kwh_date, inmemory_water, inmemory_water_date,
                                                         inmemory_finished_kwh, inmemory_finished_kwh_date, inmemory_finished_water, inmemory_finished_water_date

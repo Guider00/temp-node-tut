@@ -316,7 +316,7 @@ export const MeterRoom = () => {
                         }
                     },
                     {
-                        label: "date",
+                        label: "kwh date start",
                         property: "inmemory_kwh_date",
                         form: {
                             displayform: "textbox",
@@ -335,7 +335,7 @@ export const MeterRoom = () => {
                         }
                     },
                     {
-                        label: "date finished",
+                        label: "kwh date finished",
                         property: "inmemory_finished_kwh_date",
                         form: {
                             displayform: "textbox",
@@ -365,7 +365,7 @@ export const MeterRoom = () => {
                         }
                     },
                     {
-                        label: "date",
+                        label: "water date start",
                         property: "inmemory_water_date",
                         form: {
                             displayform: "textbox",
@@ -384,7 +384,7 @@ export const MeterRoom = () => {
                         }
                     },
                     {
-                        label: "date finished",
+                        label: "water date finished",
                         property: "inmemory_finished_water_date",
                         form: {
                             displayform: "textbox",

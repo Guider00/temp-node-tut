@@ -30,7 +30,7 @@ export const API_GET_Invoice = gql`
 					inmemory_water
 					inmemory_water_date
 					inmemory_finished_water
-					inmemory_finished_kwh_date
+					inmemory_finished_water_date
 					realtime_water
 				}
                 members{

@@ -22,12 +22,12 @@ import { list_to_show } from './function'
 import { toYYMM, toYYMMDD, getlaststring } from '../../general_functions/convert';
 export const Receipt = () => {
 
-    const Receipt = useQuery(API_GET_Receipt,)
+    const Receipt = useQuery(API_GET_Receipt)
     console.log('Receipt', Receipt)
 
     const [receipt, setreceipt] = useState([])
     const [IDrooms, setIDrooms] = useState([])
-    const [selectrooms, setselectrooms] = useState([])
+    const [selectroom, setselectroom] = useState(null)
 
     const [createReceipt] = useMutation(API_CREATE_Receipt)
 
@@ -35,6 +35,38 @@ export const Receipt = () => {
 
     const [updateReceipt] = useMutation(API_UPDATE_Receipt)
 
+    const [formaddressreceipt , setformaddressreceipt]  = useState({
+        name:"",
+        lastname:"",
+        personalid:"",
+        taxnumber:"",
+        address:"",
+    })
+    const handleChangeformaddressreceipt =(e) =>{
+        if(e && e.target && e.target.name){
+            let _formaddressreceipt = {...formaddressreceipt}
+            _formaddressreceipt[ e.target.name] = e.target.value
+            setformaddressreceipt(_formaddressreceipt)
+        }
+    }
+    const sumlists_to_show = (lists) => {
+        if (lists && lists.length > 0) {
+            let _totalprice = 0
+            let _totalvat = 0
+            let _grandtotal = 0
+            lists.map(list => {
+                _totalprice += Number(list_to_show(list).price)
+                _totalvat += Number(list_to_show(list).vat)
+                _grandtotal += Number(list_to_show(list).total)
+
+                return null;
+            })
+
+            return ({ totalprice: Number(_totalprice).toFixed(2), totalvat: Number(_totalvat).toFixed(2), grandtotal: Number(_grandtotal).toFixed(2) })
+        } else {
+            return ({ totalprice: 0, totalvat: 0, grandtotal: 0 })
+        }
+    }
 
     const Inputdatenow = () => {
         let date = new Date();
@@ -88,22 +120,28 @@ export const Receipt = () => {
     const handlerChangereceiptinformation = (e) => {
         if (e && e.target) {
             let { name, value } = e.target
-            let _selectrooms = JSON.parse(JSON.stringify(selectrooms))
-            console.log(`value ${name}`, _selectrooms,)
-            if (_selectrooms.hasOwnProperty(name)) {
+            let _selectroom = JSON.parse(JSON.stringify(selectroom))
+            console.log(`value ${name}`, _selectroom,)
+            if (_selectroom.hasOwnProperty(name)) {
                 if (name === 'editmode') {
-                    _selectrooms[name] = !_selectrooms[name]
+                    if( _selectroom.hasOwnProperty('editmode')  ){
+                        _selectroom[name] =  _selectroom[name]? false:true
+                    }else{
+                        _selectroom[name] = true;
+                    }
+                   
+
                 } else {
 
-                    _selectrooms[name] = value
+                    _selectroom[name] = value
                 }
-                setselectrooms(_selectrooms)
+                setselectroom(_selectroom)
             }
 
         }
     }
     const handlerchangelist = (e, index) => {
-        let _selectroom = JSON.parse(JSON.stringify(selectrooms))
+        let _selectroom = JSON.parse(JSON.stringify(selectroom))
         if (e.target.name === 'name') {
             // console.log(e.target.value)
         } else if (e.target.name === 'number_item') {
@@ -112,7 +150,7 @@ export const Receipt = () => {
             // validate data 
         }
         _selectroom.lists[index][e.target.name] = e.target.value
-        setselectrooms(_selectroom)
+        setselectroom(_selectroom)
     }
 
     //confirmDialog
@@ -178,7 +216,9 @@ export const Receipt = () => {
                         id: receipt.id,
                         input: {
                             lists: receipt.lists.map(option => ({ name: option.name, price: option.price, number_item: option.number_item, vat: option.vat, type_price: option.type_price, selectvat: option.selectvat }))
-                        }
+                        },
+                        printstatus:receipt.printstatus,
+                        monthlybilling:receipt.monthlybilling
                     }
                 })
                 if (_res && _res.data) {
@@ -309,16 +349,27 @@ export const Receipt = () => {
                                         {(tbsortingstyle_newmetoold ? receipt : [...receipt].reverse()).map((data) =>
                                             <tr onClick={() => {
 
-                                                let _selectrooms = selectrooms
-                                                _selectrooms = data
-                                                _selectrooms = { ..._selectrooms, editmode: false }
-                                                setselectrooms(_selectrooms)
-                                                console.log(_selectrooms)
-
-
+                                                // let _selectrooms = selectroom
+                                                let _selectroom = data
+                                                _selectroom = { ..._selectroom, editmode: false }
+                                                setselectroom(_selectroom)
+                                                console.log(_selectroom)
+                                                if(_selectroom && _selectroom.customer && _selectroom.customer.name){
+                                                    setformaddressreceipt({ ..._selectroom.customer })
+    
+                                                }else{
+                                                    setformaddressreceipt({
+                                                        name:_selectroom.Invoice.Room.members[0].name,
+                                                        lastname:_selectroom.Invoice.Room.members[0].lastname,
+                                                        personalid:_selectroom.Invoice.Room.members[0].personalid,
+                                                        taxnumber:_selectroom.Invoice.Room.members[0].taxnumber,
+                                                        address:_selectroom.Invoice.Room.members[0].address,
+                                                    })
+                                                }
+                                           
 
                                             }} style={{
-                                                background: selectrooms.id === data.id ? 'lightgray' : 'none'
+                                                background: selectroom && selectroom.id === data.id ? 'lightgray' : 'none'
                                             }}>
                                                 <td>
                                                     <input type="checkbox"
@@ -442,31 +493,56 @@ export const Receipt = () => {
                                 <div className={styles.top}>
                                     <div className={styles.text1} >ชื่อ</div>
                                     <div className={styles.input1}>
-                                        <input></input>
+                                        <input 
+                                         name="name"
+                                        disabled={selectroom ? false :true}
+                                        value={formaddressreceipt.name}
+                                        onChange={handleChangeformaddressreceipt}
+                                        ></input>
                                     </div>
                                 </div>
                                 <div className={styles.top}>
                                     <div className={styles.text1} >นามสกุล</div>
                                     <div className={styles.input1}>
-                                        <input></input>
+                                        <input
+                                        name="lastname"
+                                          disabled={selectroom ? false :true}
+                                          value={formaddressreceipt.lastname}
+                                          onChange={handleChangeformaddressreceipt}
+                                        ></input>
                                     </div>
                                 </div>
                                 <div className={styles.top}>
                                     <div className={styles.text1} >บัตรประชาชน</div>
                                     <div className={styles.input1}>
-                                        <input></input>
+                                        <input
+                                         name="personalid"
+                                         disabled={selectroom ? false :true}
+                                         value={formaddressreceipt.personalid}
+                                         onChange={handleChangeformaddressreceipt}
+                                        ></input>
                                     </div>
                                 </div>
                                 <div className={styles.top}>
                                     <div className={styles.text1} >เลขประจำตัวผู้เสียภาษี</div>
                                     <div className={styles.input1}>
-                                        <input></input>
+                                        <input
+                                          name="taxnumber"
+                                         disabled={selectroom ? false :true}
+                                         value={formaddressreceipt.taxnumber}
+                                         onChange={handleChangeformaddressreceipt}
+                                        ></input>
                                     </div>
                                 </div>
                                 <div className={styles.top}>
                                     <div className={styles.text1} >ที่อยู่ตามบัตรประชาชน</div>
                                     <div className={styles.input1}>
-                                        <input></input>
+                                        <input
+                                         name="address"
+                                         disabled={selectroom ? false :true}
+                                         value={formaddressreceipt.address}
+                                         onChange={handleChangeformaddressreceipt}
+                                        ></input>
                                     </div>
                                 </div>
 
@@ -476,33 +552,35 @@ export const Receipt = () => {
                             <div className={styles.cardbody}>
                                 <p className={styles.row} >
                                     <label > รอบบิล </label>
-                                    {console.log('_selectrooms', selectrooms)}
-                                    <input className={styles.spaceonerem} name="monthlybilling" type="date" value={selectrooms ? toYYMMDD(selectrooms.monthlybilling) : ""}
-                                        disabled={!selectrooms.editmode}
-
+                                    {console.log('_selectrooms', selectroom)}
+                                    <input className={styles.spaceonerem} type="month" value={selectroom ? toYYMMDD(selectroom.monthlybilling) : ""}
+                                        disabled={ selectroom && selectroom.editmode ? false:true}
+                                        name="monthlybilling"
+                                        value={selectroom && selectroom.monthlybilling? toYYMM(selectroom.monthlybilling):"" }
                                         onChange={handlerChangereceiptinformation}></input>
 
                                 </p>
                                 <p>
                                     <label> สถานะใบเสร็จ </label>
-                                    <select className={styles.spaceonerem} name="status"
-                                        disabled={!selectrooms.editmode}
-                                        value={selectrooms.status}
+                                    <select className={styles.spaceonerem} 
+                                        disabled={ selectroom && selectroom.editmode ? false:true}
+                                        name="printstatus"
+                                        value={selectroom && selectroom.printstatus? selectroom.printstatus:'รอการพิมพ์' }
                                         onChange={handlerChangereceiptinformation}
                                     >
                                         <option>รอการพิมพ์</option>
                                         <option>สำเร็จ</option>
                                     </select>
                                     {/* <input className ={styles.spaceonerem} name = "status" 
-                                 disabled={!selectrooms.editmode}
-                                 value={selectrooms.status} 
+                                 disabled={!selectroom.editmode}
+                                 value={selectroom.status} 
                                  onChange={handlerChangereceiptinformation} ></input> */}
                                 </p>
                                 <p>
                                     <label>รายละเอียดใบเสร็จ</label>
                                     <input name="note"
-                                        disabled={!selectrooms.editmode}
-                                        value={selectrooms.note}
+                                        disabled={ selectroom && selectroom.editmode ? false:true}
+                                      
                                         onChange={handlerChangereceiptinformation}
                                         className={styles.text} />
 
@@ -522,31 +600,31 @@ export const Receipt = () => {
                                                 <td>{header_table2[5]}</td>
                                                 <td>{header_table2[6]}</td>
                                                 <td>{header_table2[7]}</td>
-                                                {selectrooms.editmode ? <td> </td> : null}
+                                                {selectroom && selectroom.editmode ? <td> </td> : null}
 
                                             </tr>
                                         </thead>
                                         <tbody className={styles.body}>
-                                            {selectrooms && selectrooms.lists ? selectrooms.lists.map((list, index) =>
+                                            {selectroom && selectroom.lists ? selectroom.lists.map((list, index) =>
                                                 <tr>
 
                                                     <td>{index + 1}</td>
                                                     <td>
                                                         <input className={styles.inputtext}
                                                             type='text' name="name" onChange={(e) => handlerchangelist(e, index)}
-                                                            disabled={!selectrooms.editmode}
+                                                            disabled={!selectroom.editmode}
                                                             value={list && list.name ? list.name : ""} />
                                                     </td>
                                                     <td>
                                                         <input className={styles.inputtext}
                                                             type='text' name="number_item" onChange={(e) => handlerchangelist(e, index)}
-                                                            disabled={!selectrooms.editmode}
+                                                            disabled={!selectroom.editmode}
                                                             value={list && list.number_item ? list.number_item : 1} />
                                                     </td>
                                                     <td>
                                                         <input className={styles.inputtext}
                                                             type='text' name="price" onChange={(e) => handlerchangelist(e, index)}
-                                                            disabled={!selectrooms.editmode}
+                                                            disabled={!selectroom.editmode}
                                                             value={list && list.price ? list.price : 1} />
                                                     </td>
                                                     <td>{list_to_show(list).price}</td>
@@ -557,21 +635,21 @@ export const Receipt = () => {
                                                     <td>
                                                         <input type="checkbox" name="myCheckboxName" id="myCheckboxId"
                                                             onChange={(e) => {
-                                                                let _receipt = JSON.parse(JSON.stringify(selectrooms))
+                                                                let _receipt = JSON.parse(JSON.stringify(selectroom))
                                                                 _receipt.lists[index].selectvat = _receipt.lists[index].selectvat === 'คิดvat' ? "ไม่คิดvat" : 'คิดvat'
-                                                                setselectrooms(_receipt)
+                                                                setselectroom(_receipt)
                                                             }}
                                                             checked={list && list.selectvat && list.selectvat === 'คิดvat' ? true : false}
                                                         ></input>
                                                     </td>
-                                                    {selectrooms.editmode ?
+                                                    {selectroom.editmode ?
                                                         <td>
                                                             <button
                                                                 onClick={async () => {
-                                                                    let _receipt = JSON.parse(JSON.stringify(selectrooms))
+                                                                    let _receipt = JSON.parse(JSON.stringify(selectroom))
 
                                                                     _receipt.lists.splice(index, 1)
-                                                                    setselectrooms(_receipt)
+                                                                    setselectroom(_receipt)
                                                                 }}
                                                             ><DeleteIcon style={{
                                                                 'maxHeight': "1rem",
@@ -589,33 +667,42 @@ export const Receipt = () => {
                                 <div className={styles.button}>
                                     <button className={styles.press}
                                         name="addlist"
-                                        disabled={!selectrooms.editmode}
+                                        disabled={selectroom && selectroom.editmode ? false :true}
                                         onClick={() => {
-                                            let _selectrooms = JSON.parse(JSON.stringify(selectrooms));
-                                            if (Array.isArray(_selectrooms.lists)) {
-                                                _selectrooms.lists = [...selectrooms.lists, { name: "", number_item: "1", price: "0", vat: "7", selectvat: "คิดvat" }]
+                                            let _selectroom = JSON.parse(JSON.stringify(selectroom));
+                                            if (Array.isArray(_selectroom.lists)) {
+                                                _selectroom.lists = [...selectroom.lists, { name: "", number_item: "1", price: "0", vat: "7", selectvat: "คิดvat" }]
                                             }
-                                            setselectrooms(_selectrooms)
+                                            setselectroom(_selectroom)
                                         }}
                                     >เพิ่ม</button>
 
                                 </div>
+
+                            
+
                                 <div className={styles.result}>
                                     <p>
                                         <label>รวม : </label>
-                                        <input></input>
+                                        <input 
+                                         value = {sumlists_to_show( selectroom && selectroom.lists ? selectroom.lists : []).totalprice}
+                                        ></input>
                                         <label> บาท</label>
 
                                     </p>
                                     <p>
                                         <label>ภาษีมูลค่าเพิ่ม 7.00% : </label>
-                                        <input></input>
+                                        <input className={styles.onerem}   
+                                        value = {sumlists_to_show( selectroom && selectroom.lists ? selectroom.lists : [] ).totalvat}></input>
                                         <label> บาท</label>
 
                                     </p>
                                     <p>
                                         <label>รวมยอดเงินสุทธิ : </label>
-                                        <input></input>
+                                        <input 
+                                        value={sumlists_to_show(  selectroom && selectroom.lists ? selectroom.lists : [] ).grandtotal}
+
+                                        ></input>
                                         <label> บาท</label>
 
 
@@ -625,13 +712,15 @@ export const Receipt = () => {
 
                                 </div>
                                 <div className={styles.menu}>
-                                    <button className={styles.editbutton} name="editmode" onClick={handlerChangereceiptinformation}>
-                                        {selectrooms.editmode ? <>
-                                            ยกเลิก<CancelIcon /></>
-                                            : <>แก้ไข<EditIcon /></>}
+                                    <button className={styles.editbutton}
+                                     name="editmode"
+                                     onClick={handlerChangereceiptinformation}>
+
+                                    {selectroom && selectroom.editmode ?  <CancelIcon  />: <EditIcon />}
+                                    {selectroom && selectroom.editmode ?'แก้ไข' :'ยกเลิก'}
                                     </button>
                                     <button className={styles.savebutton} name="savereceiptinformation"
-                                        onClick={() => { handlerSavereceipt(selectrooms) }}
+                                        onClick={() => { handlerSavereceipt(selectroom) }}
                                     >บันทึก <SaveIcon /> </button>
                                 </div>
 

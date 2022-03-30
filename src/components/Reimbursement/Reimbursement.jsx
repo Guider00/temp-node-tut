@@ -287,12 +287,16 @@ export const Reimbursement = () => {
                                                 }
                                             }}></input>
                                     </td>
-                                    <td>{reimbursements.Invoice && reimbursements.Invoice.Room.floor.building.name ? reimbursements.Contract.Room.floor.building.name : '---'}</td>
-                                    <td>{reimbursements.Invoice && reimbursements.Invoice.Room.name ? reimbursements.Contract.Room.name : '---'}</td>
+                                    <td>{reimbursements.Contract && reimbursements.Contract.Room &&  reimbursements.Contract.Room.floor && 
+                                    reimbursements.Contract.Room.floor.building.name ? reimbursements.Contract.Room.floor.building.name : '---'}</td>
+                                    <td>{reimbursements.Contract &&  reimbursements.Contract.Room &&reimbursements.Contract.Room.name ?
+                                     reimbursements.Contract.Room.name : '---'}</td>
                                     <td>{reimbursements.Contract && reimbursements.Contract.id ? reimbursements.Contract.id : 'null'}</td>
                                     <td>{reimbursements.Invoice && reimbursements.Invoice.id ? reimbursements.Invoice.id : '---'}</td>
-                                    <td>{reimbursements.Contract && reimbursements.Contract.Room.members[0].name ? reimbursements.Contract.Room.members[0].name : '---'}</td>
-                                    <td>{reimbursements.Contract && reimbursements.Contract.Room.members[0].lastname ? reimbursements.Contract.Room.members[0].lastname : '---'}</td>
+                                    <td>{reimbursements.Contract &&  reimbursements.Contract.Room &&
+                                         reimbursements.Contract.Room.members[0].name ? reimbursements.Contract.Room.members[0].name : '---'}</td>
+                                    <td>{reimbursements.Contract &&  reimbursements.Contract.Room && 
+                                        reimbursements.Contract.Room.members[0].lastname ? reimbursements.Contract.Room.members[0].lastname : '---'}</td>
                                     <td>{reimbursements.cashback ? reimbursements.cashback : '0'}</td>
                                     <td>{reimbursements.status ? reimbursements.status : '---'}</td>
                                     <td>{reimbursements.cashback_date ? toYYMMDD(reimbursements.cashback_date) : '---'}</td>

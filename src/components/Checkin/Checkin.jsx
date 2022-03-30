@@ -1603,8 +1603,8 @@ export const Checkin = () => {
 										value={formroomtype.rate_electrical}
 										onChange={handlerchangeformroomtype}
 									></input>
-									<button>
-										อ่านค่าจาก Meter
+									<button className={styles.btnreadmeter} >
+										อ่านค่าจาก Meter ปัจจุบัน
 									</button>
 								</div>
 							</div>
@@ -1630,8 +1630,8 @@ export const Checkin = () => {
 										value={formroomtype.rate_water}
 										onChange={handlerchangeformroomtype}
 									></input>
-									<button>
-										อ่านค่าจาก Meter
+									<button className={styles.btnreadmeter}>
+										อ่านค่าจาก Meter ปัจจุบัน
 									</button>
 								</div>
 							</div>

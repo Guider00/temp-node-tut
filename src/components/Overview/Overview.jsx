@@ -362,7 +362,7 @@ export const Overview = () => {
                         floor: data.floor ? data.floor.name : '---',
                         name: data.name,
                         status: data.status ? data.status : '---',
-                        member: data.member ? data.member.name : '---',
+                        member: data && data.members && data.members[0] && data.members[0].name ? data.members[0].name : '---',
                         metername: data.meterroom ? data.meterroom.name : '---'
                     }
                 })
@@ -508,7 +508,7 @@ export const Overview = () => {
             }
 
             let inputconfig = Inputconfig();
-            console.log('inputconfig', inputconfig)
+            console.log('table',table)
             inputconfig.inputs = inputconfig.inputs.map((ele, _index) => {
                 switch (ele.property) {
                     case "building":
