@@ -63,6 +63,8 @@ input MeterRoomInput {
     appeui:String,
     appkey:String,
 
+    index:String,
+
     version: String
  }
        `
@@ -78,7 +80,12 @@ const _MeterRoomschema_mutation =`
     deleteMeterRoom(id:ID!):MessageDelete
 `
 
-
+/*
+const _MoveMeterRoom_query =`
+    MeterRooms :[MeterRoom]
+    queryMoveMeterRoom: MeterRoom
+`
+*/
 
 const _queryMeterRoomByid = async (payload) =>{
     try {
@@ -174,6 +181,22 @@ const _updateMeterRoomwater = async (payload) => {
     }
 }
 
+/*
+const _MoveMeterRoom = async (payload) => {
+    try {
+        if (!payload) { return null }
+        if (!payload.id) { return null }
+        if (!payload.id.match(/^[0-9a-fA-F]{24}$/)) { return "Error Format ID"}
+        let resulted = await db.updateOne({ _id: payload.id }, payload.input)
+        return resulted
+    } catch (error) {
+        return error
+    }
+}
+*/
+
+
+
 
 exports.queryMeterRoomByid      = _queryMeterRoomByid
 exports.MeterRooms         = _MeterRooms
@@ -193,5 +216,7 @@ exports.MeterRoomschema_query   = _MeterRoomschema_query
 exports.MeterRoomschema_mutation = _MeterRoomschema_mutation
 
 exports.MeterRoomschema         = _MeterRoomschema
+
+//export.MoveMeterRoom     = _MoveMeterRoom
 
 

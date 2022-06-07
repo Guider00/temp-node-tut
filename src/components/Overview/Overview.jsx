@@ -643,72 +643,79 @@ export const Overview = () => {
                         <div key={`floor_${index}}`} className={styles.line}> ชั้น {group_floor[0]['floor']} </div>
                         <div className={styles.row}>
                             {group_floor.map((room, index) =>
-                                <div key={`room_${index}`} className={styles.card}>
-                                    <div>
-                                        <div className={styles.topic} style={{
-                                            backgroundColor: color_roomstatur(room.status)
-                                        }}>
-                                            <div className={styles.front} >
-                                                <div className={styles.btn} onClick={() => {
-                                                    setdropdownmenu(_dropdowmmenu === null ? room.id : _dropdowmmenu !== room.id ? room.id : null);
-                                                    console.log("Room ID ", room.id, room.data)
-                                                    console.log(" Room index", index, _dropdowmmenu)
-                                                }} >
-                                                    <ArrowDropDownIcon />
+                                 
+                                 <>
+                                    <div key={`room_${index}`} className={styles.card}>
+                                        <div>
+                                            <div className={styles.topic} style={{
+                                                backgroundColor: color_roomstatur(room.status)
+                                            }}>
+                                                <div className={styles.front} >
+                                                    <div className={styles.btn} onClick={() => {
+                                                        setdropdownmenu(_dropdowmmenu === null ? room.id : _dropdowmmenu !== room.id ? room.id : null);
+                                                        console.log("Room ID ", room.id, room.data)
+                                                        console.log(" Room index", index, _dropdowmmenu)
+                                                    }} >
+                                                        <ArrowDropDownIcon />
 
-                                                </div  >
-                                                {_dropdowmmenu === room.id ? <div className={styles.dropdownmenu}>
-                                                    {
-                                                        drowdownmenuroomconfig.map((menu, index) =>
-                                                        (
-                                                            <div key={index} onClick={() => { window.location.href = `/${menu.link}` }}>
-                                                                <span>{menu.label}</span>
-                                                            </div>
-                                                        )
-                                                        )
-                                                    }
+                                                    </div  >
+                                                    {_dropdowmmenu === room.id ? <div className={styles.dropdownmenu}>
+                                                        {
+                                                            drowdownmenuroomconfig.map((menu, index) =>
+                                                            (
+                                                                <div key={index} onClick={() => { window.location.href = `/${menu.link}` }}>
+                                                                    <span>{menu.label}</span>
+                                                                </div>
+                                                            )
+                                                            )
+                                                        }
 
-                                                </div> : null}
-
-
-                                            </div>
-                                            <div className={styles.text} >{room.name} </div>
+                                                    </div> : null}
 
 
-                                            <div className={styles.back}   >
-                                                <div className={styles.btn} onClick={() => { onClickEdit(room.id, room.data) }} >
-                                                    <SettingsIcon />
-                                                </div  >
+                                                </div>
+                                                <div className={styles.text} >{room.name} </div>
 
 
-                                                <div className={styles.btn} onClick={() => { onClick_Delete(room.id) }} >
-                                                    <DeleteIcon />
+                                                <div className={styles.back}   >
+                                                    <div className={styles.btn} onClick={() => { onClickEdit(room.id, room.data) }} >
+                                                        <SettingsIcon />
+                                                    </div  >
+
+
+                                                    <div className={styles.btn} onClick={() => { onClick_Delete(room.id) }} >
+                                                        <DeleteIcon />
+                                                    </div>
+
                                                 </div>
 
                                             </div>
 
-                                        </div>
+                                            <div className={styles.body} >
+                                                <div className={styles.image}>
+                                                    <img src="./image/powermeter.jpg" alt="Trulli" width="60" height="60" />
+                                                </div>
 
-                                        <div className={styles.body} >
-                                            <div className={styles.image}>
-                                                <img src="./image/powermeter.jpg" alt="Trulli" width="60" height="60" />
+                                                <div className={styles.text}>
+                                                    {room.metername}
+                                                </div>
+
                                             </div>
+                                            <div className={styles.footer}>
+                                                <div className={styles.front}> {(room.type === "fan") ?
 
-                                            <div className={styles.text}>
-                                                {room.metername}
+                                                    null : <img src="./image/powermeter.jpg" alt="Trulli" width="24" height="24" />}
+                                                </div>
+                                                <div className={styles.text} ></div>
+                                                <div className={styles.back} > <MonetizationOnIcon /></div>
                                             </div>
-
                                         </div>
-                                        <div className={styles.footer}>
-                                            <div className={styles.front}> {(room.type === "fan") ?
-
-                                                null : <img src="./image/powermeter.jpg" alt="Trulli" width="24" height="24" />}
-                                            </div>
-                                            <div className={styles.text} ></div>
-                                            <div className={styles.back} > <MonetizationOnIcon /></div>
-                                        </div>
+                                    
+                                    
                                     </div>
-                                </div>
+                                    <div className={styles.card}>
+                                    </div>  
+                                 </>                            
                             )}
                         </div>
                     </>)

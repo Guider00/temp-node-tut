@@ -357,6 +357,8 @@ const _createRoom = async ( payload ,payload2) =>{
                 roomprice : await queryRoomPriceByid({id:data.roomprice}),
                 RoomType : await queryRoomTypeByid({id:data.RoomType}),
 
+                //index : await MoveMeterRoom({MeterRoom}),
+
                 version :data.version 
             }
             
